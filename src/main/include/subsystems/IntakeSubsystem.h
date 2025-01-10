@@ -6,6 +6,19 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
+#include <frc/motorcontrol/VictorSP.h>
+
+//Port Numbers
+const int kMotorIntakeArmPort = 2;
+const int kMotorIntakeWheelPort = 3;
+
+//Motor Speed Constants
+const double intakeArmRetractSpeed = 0.4;
+const double intakeArmExtendSpeed = -0.4;
+
+const double intakeWheelInSpeed = 0.6;
+const double intakeWheelOutSpeed = -7.0;
+
 
 class IntakeSubsystem : public frc2::SubsystemBase {
  public:
@@ -35,4 +48,6 @@ class IntakeSubsystem : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
+    frc::VictorSP m_motorIntakeWheel{kMotorIntakeWheelPort};
+    frc::VictorSP m_motorIntakeArm{kMotorIntakeArmPort};
 };
