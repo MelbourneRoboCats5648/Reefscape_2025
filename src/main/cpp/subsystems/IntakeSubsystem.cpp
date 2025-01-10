@@ -30,7 +30,7 @@ frc2::CommandPtr IntakeSubsystem::RetractCommand() {
   return Run([this] {
         m_motorIntakeArm.Set(intakeArmRetractSpeed);
     }).FinallyDo([this]{
-        m_motorIntakeWheel.Set(0);
+        m_motorIntakeArm.Set(0);
     });
 }
 
@@ -40,7 +40,7 @@ frc2::CommandPtr IntakeSubsystem::ExtendCommand() {
   return Run([this] {
         m_motorIntakeArm.Set(intakeArmExtendSpeed);
     }).FinallyDo([this]{
-        m_motorIntakeWheel.Set(0);
+        m_motorIntakeArm.Set(0);
     });
 }
 
