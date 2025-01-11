@@ -6,7 +6,7 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
-#include <frc/Joystick.h>
+#include <frc2/command/button/CommandJoystick.h>
 
 #include "Constants.h"
 #include "subsystems/ExampleSubsystem.h"
@@ -28,10 +28,9 @@ class RobotContainer {
 
  private:
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  frc2::CommandXboxController m_driverController{
-      OperatorConstants::kDriverControllerPort};
-  frc::Joystick m_joystick{
-      OperatorConstants::kdriveJoystickPort};
+  frc2::CommandXboxController m_driverController{OperatorConstants::kDriverControllerPort};
+  frc2::CommandJoystick m_joystick{OperatorConstants::kDriveJoystickPort};
+
   // The robot's subsystems are defined here...
   ExampleSubsystem m_subsystem;
   IntakeSubsystem m_intakeSubsystem;
