@@ -10,7 +10,8 @@ frc2::CommandPtr ShooterSubsystem::ShooterSpeakerCommand() {
   return Run([this] { 
     m_motorShooterLeft.Set(speakerShooterSpeed);
     m_motorShooterRight.Set(-1.0*speakerShooterSpeed);
-   }).FinallyDo([this]{ 
+   })
+   .FinallyDo([this]{ 
    m_motorShooterLeft.Set(0.0);
    m_motorShooterRight.Set(0.0);
   });
@@ -22,7 +23,8 @@ frc2::CommandPtr ShooterSubsystem::ShooterAmpCommand() {
   return Run([this] { 
      m_motorShooterLeft.Set(ampShooterSpeed);
      m_motorShooterRight.Set(-1.0*ampShooterSpeed);
-   }).FinallyDo ([this]{
+   })
+   .FinallyDo ([this]{
     m_motorShooterLeft.Set(0.0);
     m_motorShooterRight.Set(0.0);
    }); 
