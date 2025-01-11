@@ -23,8 +23,8 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.RightBumper().OnTrue(m_intakeSubsystem.EjectCommand());
   m_driverController.B().OnTrue(m_intakeSubsystem.RetractCommand());
   m_driverController.X().OnTrue(m_intakeSubsystem.ExtendCommand());
-  m_joystick.Button(rightUpButton).OnTrue(m_rightClimbSubsystem.RightClimbUpCommand());
-  m_joystick.Button(rightDownButton).OnTrue(m_rightClimbSubsystem.RightClimbDownCommand());
+  m_joystick.Button(rightUpButton).WhileTrue(m_rightClimbSubsystem.RightClimbUpCommand());
+  m_joystick.Button(rightDownButton).WhileTrue(m_rightClimbSubsystem.RightClimbDownCommand());
 
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
