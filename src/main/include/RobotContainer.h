@@ -11,6 +11,8 @@
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
+#include "subsystems/IntakeAndShootSubsystem.h"
+
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -34,6 +36,7 @@ class RobotContainer {
   ExampleSubsystem m_subsystem;
   IntakeSubsystem m_intakeSubsystem;
   ShooterSubsystem m_shooterSubsystem;
+  IntakeAndShootSubsystem m_intakeAndShootSubsystem;
 
   void ConfigureBindings();
 };

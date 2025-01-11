@@ -1,0 +1,31 @@
+#pragma once
+
+#include "subsystems/IntakeSubsystem.h"
+#include "subsystems/ShooterSubsystem.h"
+
+#include <frc/XboxController.h>
+#include <frc/motorcontrol/VictorSP.h>
+//#include <frc/Timer.h>
+
+#include <frc2/command/CommandPtr.h>
+#include <frc2/command/SubsystemBase.h>
+
+class IntakeAndShootSubsystem : public frc2::SubsystemBase {
+ public:
+  IntakeAndShootSubsystem();
+
+  /**
+   @param IntakeSubsystem The subsystem used by this command.
+   @param ShooterSubsystem
+   */
+
+  frc2::CommandPtr IntakeAndShootCommand();
+  
+  void Periodic() override;
+  void SimulationPeriodic() override;
+
+ private:
+  IntakeSubsystem m_intakeSubsystem;
+  ShooterSubsystem m_shootersubsystem;
+
+};
