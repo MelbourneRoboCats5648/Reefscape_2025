@@ -23,8 +23,8 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   /** 
    * Example command factory method.
    */
-  frc2::CommandPtr ShooterAmpCommand();
   frc2::CommandPtr ShooterSpeakerCommand();
+  frc2::CommandPtr ShooterAmpCommand();
   
   /**
    * An example method querying a boolean state of the subsystem (for example, a
