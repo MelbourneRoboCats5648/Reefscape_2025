@@ -7,7 +7,9 @@
 #include <frc2/command/button/Trigger.h>
 
 #include "commands/Autos.h"
+
 #include "commands/ExampleCommand.h"
+#include "commands/ShooterCommand.h"
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
@@ -23,7 +25,8 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.RightBumper().OnTrue(m_intakeSubsystem.EjectCommand());
   m_driverController.B().OnTrue(m_intakeSubsystem.RetractCommand());
   m_driverController.X().OnTrue(m_intakeSubsystem.ExtendCommand());
-
+  m_driverController.Y().WhileTrue(m_shooterSubsystem.ShooterSpeakerCommand());
+  m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.
   m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
