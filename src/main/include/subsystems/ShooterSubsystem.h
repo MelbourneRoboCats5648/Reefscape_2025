@@ -26,13 +26,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr ShooterSpeakerCommand();
   frc2::CommandPtr ShooterAmpCommand();
   
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a
-   * digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  bool ExampleCondition();
+  
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
