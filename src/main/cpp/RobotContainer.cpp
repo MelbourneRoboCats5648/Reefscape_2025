@@ -9,7 +9,6 @@
 #include "commands/Autos.h"
 
 #include "commands/ExampleCommand.h"
-#include "commands/ShooterCommand.h"
 
 RobotContainer::RobotContainer() 
 {

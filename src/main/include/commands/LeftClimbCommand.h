@@ -6,7 +6,7 @@
 #include "subsystems/LeftClimbSubsystem.h"
 
 /**
- * An example command that uses an example subsystem.
+ * An LeftClimb command that uses an LeftClimb subsystem.
  *
  * <p>Note that this extends CommandHelper, rather extending Command
  * directly; this is crucially important, or else the decorator functions in
@@ -16,7 +16,7 @@ class LeftClimbCommand
     : public frc2::CommandHelper<frc2::Command, LeftClimbCommand> {
  public:
   /**
-   * Creates a new ExampleCommand.
+   * Creates a new LeftClimbCommand.
    *
    * @param LeftClimbSubsystem The subsystem used by this command.
    */

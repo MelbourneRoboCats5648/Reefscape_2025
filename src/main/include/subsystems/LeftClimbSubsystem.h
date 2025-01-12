@@ -9,14 +9,14 @@
 #include <frc/Joystick.h>
 #include <frc/motorcontrol/VictorSP.h>
 
-// ports (from old code)
+// Ports
 const int motorClimbLeftPort = 1;
 
 // Speeds
 const double climbUpSpeed = 1.0; //was 0.25
 const double climbDownSpeed = -1.0;
 
-// Joystick buttons - TODO Check
+// Joystick buttons
 const int leftUpButton = 5;
 const int leftDownButton = 3;
 
@@ -25,7 +25,7 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
   LeftClimbSubsystem();
 
   /**
-   * Example command factory method.
+   * LeftClimb command factory method.
    */
   frc2::CommandPtr LeftClimbUpCommand();
   frc2::CommandPtr LeftClimbDownCommand();
