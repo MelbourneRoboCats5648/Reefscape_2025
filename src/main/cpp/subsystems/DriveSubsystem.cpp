@@ -12,6 +12,13 @@ void DriveSubsystem::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.
 }
 
+units::degree_t DriveSubsystem::GetHeading() const {
+  return m_gyro.GetAngle();
+}
+
+void DriveSubsystem::ZeroHeading() {
+  m_gyro.Reset();
+}
 
 void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
                            units::meters_per_second_t ySpeed,
@@ -34,6 +41,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   m_backRightModule.SetModule(br);
 }
 
+/*
 void DriveSubsystem::SetModuleStates(
     wpi::array<frc::SwerveModuleState, 4> desiredStates) {
   kinematics.DesaturateWheelSpeeds(&desiredStates,
@@ -43,15 +51,8 @@ void DriveSubsystem::SetModuleStates(
   m_backLeftModule.SetModule(desiredStates[2]);
   m_backRightModule.SetModule(desiredStates[3]);
 }
+*/
 
-
-units::degree_t DriveSubsystem::GetHeading() const {
-  m_gyro.GetAngle();
-}
-
-void DriveSubsystem::ZeroHeading() {
-  m_gyro.Reset();
-}
 
 //The following stuff I've copied over from crescendo and am unsure about the necessity
 
