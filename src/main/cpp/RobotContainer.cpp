@@ -9,9 +9,9 @@
 #include "commands/Autos.h"
 
 #include "commands/ExampleCommand.h"
-#include "commands/ShooterCommand.h"
 
-RobotContainer::RobotContainer() {
+RobotContainer::RobotContainer() 
+{
   // Initialize all of your commands and subsystems here
 
   // Configure the button bindings
@@ -27,9 +27,10 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.X().WhileTrue(m_intakeSubsystem.ExtendCommand());
   m_driverController.Y().WhileTrue(m_shooterSubsystem.ShooterSpeakerCommand());
   m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
+  m_joystick.Button(leftUpButton).WhileTrue(m_leftClimbSubsystem.LeftClimbUpCommand());
+  m_joystick.Button(leftDownButton).WhileTrue(m_leftClimbSubsystem.LeftClimbDownCommand());
   m_joystick.Button(rightUpButton).WhileTrue(m_rightClimbSubsystem.RightClimbUpCommand());
   m_joystick.Button(rightDownButton).WhileTrue(m_rightClimbSubsystem.RightClimbDownCommand());
-
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.
   m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
