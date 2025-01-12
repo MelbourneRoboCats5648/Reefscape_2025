@@ -12,24 +12,19 @@ void DriveSubsystem::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.
 }
 
-// frc2::CommandPtr ExampleSubsystem::ExampleMethodCommand() {
-//   // Inline construction of command goes here.
-//   // Subsystem::RunOnce implicitly requires `this` subsystem.
-//   return RunOnce([/* this */] { /* one-time action goes here */ });
-// }
 
-void DriveSubsystem::Drive(frc::ChassisSpeeds chassisSpeed) {
-//   auto states =
-//       kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
-//           fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-//                               xSpeed, ySpeed, rot, GetHeading())
-//                         : frc::ChassisSpeeds{xSpeed, ySpeed, rot},
-//           period));
+void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
+                           units::meters_per_second_t ySpeed,
+                           units::radians_per_second_t rot, bool fieldRelative,
+                           units::second_t period) {
+   auto states =
+       kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
+           fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
+                               xSpeed, ySpeed, rot, m_gyro.GetAngle())
+                         : frc::ChassisSpeeds{xSpeed, ySpeed, rot},
+           period));
 
-    auto states = kinematics.ToSwerveModuleStates(chassisSpeed);
-
-    const units::meters_per_second_t kMaxSpeedMPS = 5.0_mps;
-    kinematics.DesaturateWheelSpeeds(&states, kMaxSpeedMPS);
+  kinematics.DesaturateWheelSpeeds(&states, DriveConstants::kMaxSpeed);
 
   auto [fl, fr, bl, br] = states;
 
@@ -37,6 +32,24 @@ void DriveSubsystem::Drive(frc::ChassisSpeeds chassisSpeed) {
   m_frontRightModule.SetModule(fr);
   m_backLeftModule.SetModule(bl);
   m_backRightModule.SetModule(br);
+}
+
+void DriveSubsystem::SetModuleStates(
+    wpi::array<frc::SwerveModuleState, 4> desiredStates) {
+  kinematics.DesaturateWheelSpeeds(&desiredStates,
+                                         DriveConstants::kMaxSpeed);
+  m_frontLeftModule.SetModule(desiredStates[0]);
+  m_frontRightModule.SetModule(desiredStates[1]);
+  m_backLeftModule.SetModule(desiredStates[2]);
+  m_backRightModule.SetModule(desiredStates[3]);
+}
+
+units::degree_t DriveSubsystem::GetHeading() const {
+  return m_gyro.GetAngle();
+}
+
+void DriveSubsystem::ZeroHeading() {
+  m_gyro.Reset();
 }
 
 //The following stuff I've copied over from crescendo and am unsure about the necessity

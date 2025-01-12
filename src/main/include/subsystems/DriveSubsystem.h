@@ -10,26 +10,18 @@
 #include <frc/geometry/Translation2d.h>
 #include <frc/controller/ProfiledPIDController.h>
 
+#include <frc/geometry/Rotation2d.h>
+
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/Commands.h>
 
 #include "utilities/DriveModule.h"
 
-const int FRONT_LEFT_SPEED_MOTOR_ID = 4;
-const int FRONT_RIGHT_SPEED_MOTOR_ID = 2;
-const int BACK_LEFT_SPEED_MOTOR_ID = 6;
-const int BACK_RIGHT_SPEED_MOTOR_ID = 7;
+#include "Constants.h"
 
-const int FRONT_LEFT_DIRECTION_MOTOR_ID = 3;
-const int FRONT_RIGHT_DIRECTION_MOTOR_ID = 5;
-const int BACK_LEFT_DIRECTION_MOTOR_ID = 1;
-const int BACK_RIGHT_DIRECTION_MOTOR_ID = 8;
+using namespace DriveConstants;
 
-const int FRONT_LEFT_DIRECTION_ENCODER_ID = 9;
-const int FRONT_RIGHT_DIRECTION_ENCODER_ID = 10;
-const int BACK_LEFT_DIRECTION_ENCODER_ID = 12;
-const int BACK_RIGHT_DIRECTION_ENCODER_ID = 11;
 
 class DriveSubsystem : public frc2::SubsystemBase {
  public:
@@ -38,16 +30,27 @@ class DriveSubsystem : public frc2::SubsystemBase {
     void Periodic() override;
     void SimulationPeriodic() override;
 
-    void Drive(frc::ChassisSpeeds chassisSpeed);
-    
+    void Drive(units::meters_per_second_t xSpeed,
+                           units::meters_per_second_t ySpeed,
+                           units::radians_per_second_t rot, bool fieldRelative,
+                           units::second_t period = DriveConstants::kDrivePeriod);
+
+    void SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
     void StopAllModules();
     double GetPositionDistance();
     void SetPositionToZeroDistance();
+    
+      /**
+   * Returns the heading of the robot.
+   *
+   * @return the robot's heading in degrees, from 180 to 180
+   */
+  units::degree_t GetHeading() const;
 
-
-
-
-  frc2::CommandPtr ExampleMethodCommand();
+  /**
+   * Zeroes the heading of the robot.
+   */
+  void ZeroHeading();
 
 
  private:
