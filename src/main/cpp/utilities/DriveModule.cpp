@@ -21,8 +21,9 @@ DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEn
     // Config CANCoder   
     CANcoderConfiguration cancoderConfig;
     //cancoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue::Signed_PlusMinusHalf; //fixme
+    
     cancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue::CounterClockwise_Positive;
-    //cancoderConfig.MagnetSensor.MagnetOffset = m_magOffset; //fix me
+    cancoderConfig.MagnetSensor.MagnetOffset = units::angle::turn_t(m_magOffset); //fix me
     m_directionEncoder.GetConfigurator().Apply(cancoderConfig);
 
     // Drive motor config
