@@ -31,9 +31,6 @@
 
 using namespace DriveConstants;
 
-  static frc::SlewRateLimiter<units::scalar> xLimiter{2 / 1_s};
-  static frc::SlewRateLimiter<units::scalar> yLimiter{2 / 1_s};
-  static frc::SlewRateLimiter<units::scalar> rotLimiter{2 / 1_s};
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
@@ -47,9 +44,9 @@ RobotContainer::RobotContainer() {
             // Multiply by max speed to map the joystick unitless inputs to
             // actual units. This will map the [-1, 1] to [max speed backwards,
             // max speed forwards], converting them to actual units.
-            xLimiter.Calculate(m_driverController.GetLeftY() * DriveConstants::kMaxSpeed),
-            yLimiter.Calculate(m_driverController.GetLeftX() * DriveConstants::kMaxSpeed),
-            rotLimiter.Calculate(m_driverController.GetRightX() * DriveConstants::kMaxAngularSpeed),
+            m_driverController.GetLeftY() * DriveConstants::kMaxSpeed,
+            m_driverController.GetLeftX() * DriveConstants::kMaxSpeed,
+            m_driverController.GetRightX() * DriveConstants::kMaxAngularSpeed,
             false
             
             //xLimiter.Calculate(m_driverJoystick.GetMagnitude() * DriveConstants::kMaxSpeed),
