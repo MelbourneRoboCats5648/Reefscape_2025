@@ -10,6 +10,7 @@
 
 #include "Constants.h"
 #include "subsystems/ExampleSubsystem.h"
+#include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LeftClimbSubsystem.h"
 
@@ -35,6 +36,7 @@ class RobotContainer {
   ExampleSubsystem m_subsystem;
   IntakeSubsystem m_intakeSubsystem;
   LeftClimbSubsystem m_leftClimbSubsystem;
+  ShooterSubsystem m_shooterSubsystem;
 
   void ConfigureBindings();
 };
