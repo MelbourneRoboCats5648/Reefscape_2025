@@ -26,35 +26,50 @@
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
 
+#include <frc/filter/SlewRateLimiter.h>
+#include <frc/Joystick.h>
+
 using namespace DriveConstants;
+
+  static frc::SlewRateLimiter<units::scalar> xLimiter{2 / 1_s};
+  static frc::SlewRateLimiter<units::scalar> yLimiter{2 / 1_s};
+  static frc::SlewRateLimiter<units::scalar> rotLimiter{2 / 1_s};
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
 
   // Configure the button bindings
   ConfigureBindings();
-}
 
-void RobotContainer::ConfigureBindings() {
-  // Configure your trigger bindings here
-
-
-  m_drive.SetDefaultCommand(frc2::RunCommand(
+    m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {
         m_drive.Drive(
             // Multiply by max speed to map the joystick unitless inputs to
             // actual units. This will map the [-1, 1] to [max speed backwards,
             // max speed forwards], converting them to actual units.
-            m_driverController.GetLeftY() * DriveConstants::kMaxSpeed,
-            m_driverController.GetLeftX() * DriveConstants::kMaxSpeed,
-            m_driverController.GetRightX() * DriveConstants::kMaxAngularSpeed,
-            false);
+            xLimiter.Calculate(m_driverController.GetLeftY() * DriveConstants::kMaxSpeed),
+            yLimiter.Calculate(m_driverController.GetLeftX() * DriveConstants::kMaxSpeed),
+            rotLimiter.Calculate(m_driverController.GetRightX() * DriveConstants::kMaxAngularSpeed),
+            false
+            
+            //xLimiter.Calculate(m_driverJoystick.GetMagnitude() * DriveConstants::kMaxSpeed),
+            //yLimiter.Calculate(m_driverJoystick.GetMagnitude() * DriveConstants::kMaxSpeed),
+            //rotLimiter.Calculate(m_driverJoystick.GetDirection() * DriveConstants::kMaxAngularSpeed),
+            //m_driverJoystick.(whateverbutton()).WhileTrue(false);
+            );
       },
       {&m_drive}));
+      
+}
+
+
+void RobotContainer::ConfigureBindings() {
+  // Configure your trigger bindings here
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.
   m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
+  
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

@@ -20,7 +20,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
    auto states =
        kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
            fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-                               xSpeed, ySpeed, rot, m_gyro.GetAngle())
+                               xSpeed, ySpeed, rot, frc::Rotation2d{GetHeading()})
                          : frc::ChassisSpeeds{xSpeed, ySpeed, rot},
            period));
 
@@ -44,8 +44,9 @@ void DriveSubsystem::SetModuleStates(
   m_backRightModule.SetModule(desiredStates[3]);
 }
 
+
 units::degree_t DriveSubsystem::GetHeading() const {
-  return m_gyro.GetAngle();
+  m_gyro.GetAngle();
 }
 
 void DriveSubsystem::ZeroHeading() {
