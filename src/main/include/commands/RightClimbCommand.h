@@ -6,8 +6,7 @@
 #include "subsystems/RightClimbSubsystem.h"
 
 /**
- * An example command that uses an example subsystem.
- *
+ * An right climb command that uses an right climb subsystem.
  * <p>Note that this extends CommandHelper, rather extending Command
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
@@ -16,7 +15,7 @@ class RightClimbCommand
     : public frc2::CommandHelper<frc2::Command, RightClimbCommand> {
  public:
   /**
-   * Creates a new ExampleCommand.
+   * Creates a new RightClimbCommand.
    *
    * @param RightClimbSubsystem The subsystem used by this command.
    */

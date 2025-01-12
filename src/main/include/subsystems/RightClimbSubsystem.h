@@ -9,14 +9,14 @@
 #include <frc/motorcontrol/VictorSP.h>
 #include <frc/Joystick.h>
 
-// PWM ports - TODO Check
+// PWM ports
 const int motorClimbRightPort = 0;
 
 // Speeds
 const double climbUpSpeed = 1.0; //was 0.25
 const double climbDownSpeed = -1.0;
 
-// Joystick buttons - TODO Check
+// Joystick buttons
 const int rightUpButton = 6;
 const int rightDownButton = 4;
 
@@ -25,7 +25,7 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
   RightClimbSubsystem();
 
   /**
-   * Example command factory method.
+   * Command factory method.
    */
   frc2::CommandPtr RightClimbUpCommand();
   frc2::CommandPtr RightClimbDownCommand();
