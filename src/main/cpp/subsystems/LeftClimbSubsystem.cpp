@@ -7,14 +7,14 @@ LeftClimbSubsystem::LeftClimbSubsystem() {
 frc2::CommandPtr LeftClimbSubsystem::LeftClimbUpCommand() {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem.
-  return Run([this] {m_motorClimbLeft.Set(climbUpSpeed);})
+  return Run([this] {m_motorClimbLeft.Set(leftClimbUpSpeed);})
           .FinallyDo([this]{m_motorClimbLeft.Set(0);});
 }
 
 frc2::CommandPtr LeftClimbSubsystem::LeftClimbDownCommand() {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem.
-  return Run([this] {m_motorClimbLeft.Set(climbDownSpeed);})
+  return Run([this] {m_motorClimbLeft.Set(leftClimbDownSpeed);})
           .FinallyDo([this]{m_motorClimbLeft.Set(0);});
 }
 

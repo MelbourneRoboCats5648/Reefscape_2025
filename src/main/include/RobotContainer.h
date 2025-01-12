@@ -13,6 +13,7 @@
 #include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LeftClimbSubsystem.h"
+#include "subsystems/RightClimbSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -36,6 +37,7 @@ class RobotContainer {
   ExampleSubsystem m_subsystem;
   IntakeSubsystem m_intakeSubsystem;
   LeftClimbSubsystem m_leftClimbSubsystem;
+  RightClimbSubsystem m_rightClimbSubsystem;
   ShooterSubsystem m_shooterSubsystem;
 
   void ConfigureBindings();

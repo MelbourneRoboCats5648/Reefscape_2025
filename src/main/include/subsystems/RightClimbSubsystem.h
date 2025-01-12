@@ -6,34 +6,36 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
-#include <frc/Joystick.h>
 #include <frc/motorcontrol/VictorSP.h>
+#include <frc/Joystick.h>
 
-// PWM Ports
-const int motorClimbLeftPort = 1;
+// PWM ports
+const int motorClimbRightPort = 0;
 
 // Speeds
-const double leftClimbUpSpeed = 1.0; //was 0.25
-const double leftClimbDownSpeed = -1.0;
+const double rightClimbUpSpeed = 1.0; //was 0.25
+const double rightClimbDownSpeed = -1.0;
 
 // Joystick buttons
-const int leftUpButton = 5;
-const int leftDownButton = 3;
+const int rightUpButton = 6;
+const int rightDownButton = 4;
 
-class LeftClimbSubsystem : public frc2::SubsystemBase {
+class RightClimbSubsystem : public frc2::SubsystemBase {
  public:
-  LeftClimbSubsystem();
+  RightClimbSubsystem();
 
   /**
-   * LeftClimb command factory method.
+   * Command factory method.
    */
-  frc2::CommandPtr LeftClimbUpCommand();
-  frc2::CommandPtr LeftClimbDownCommand();
+  frc2::CommandPtr RightClimbUpCommand();
+  frc2::CommandPtr RightClimbDownCommand();
+
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
+
   /**
    * Will be called periodically whenever the CommandScheduler runs during
    * simulation.
@@ -43,7 +45,6 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-      frc::VictorSP m_motorClimbLeft{motorClimbLeftPort};
+          frc::VictorSP m_motorClimbRight{motorClimbRightPort};
 
 };
-
