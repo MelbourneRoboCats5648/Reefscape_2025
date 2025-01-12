@@ -10,6 +10,8 @@
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/controller/ProfiledPIDController.h>
 
+#include "constants.h"
+
 using namespace ctre::phoenix6::hardware;
 
 //Module constants defining
@@ -18,7 +20,6 @@ using namespace ctre::phoenix6::hardware;
 
  static constexpr auto kModuleMaxAngularAcceleration =
     std::numbers::pi * 2_rad_per_s / 1_s;  // radians per second^2
-
 
 class DriveModule{
 public:

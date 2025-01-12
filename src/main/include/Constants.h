@@ -39,12 +39,4 @@ namespace DriveConstants {
 
     inline constexpr units::second_t kDrivePeriod = frc::TimedRobot::kDefaultPeriod;
 
-//Module constants defining
-    inline constexpr auto kModuleMaxAngularVelocity =
-        std::numbers::pi * 1_rad_per_s;  // radians per second
-
-    inline constexpr auto kModuleMaxAngularAcceleration =
-        std::numbers::pi * 2_rad_per_s / 1_s;  // radians per second^2
-
-
 } 
