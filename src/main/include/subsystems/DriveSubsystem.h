@@ -37,6 +37,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     void SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
     void StopAllModules();
+    frc2::CommandPtr StopCommand();
     double GetPositionDistance();
     void SetPositionToZeroDistance();
     
@@ -50,7 +51,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
   /**
    * Zeroes the heading of the robot.
    */
-  void ZeroHeading();
+  void ResetGyro();
 
 
  private:

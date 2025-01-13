@@ -16,7 +16,7 @@ units::degree_t DriveSubsystem::GetHeading() const {
   return m_gyro.GetAngle();
 }
 
-void DriveSubsystem::ZeroHeading() {
+void DriveSubsystem::ResetGyro() {
   m_gyro.Reset();
 }
 
@@ -62,6 +62,15 @@ void DriveSubsystem::StopAllModules()
   m_frontRightModule.StopMotors();
   m_backLeftModule.StopMotors();
   m_backRightModule.StopMotors();
+}
+
+frc2::CommandPtr DriveSubsystem::StopCommand() 
+{
+return Run([this] {m_frontLeftModule.StopMotors();
+                   m_frontRightModule.StopMotors();
+                   m_backLeftModule.StopMotors();
+                   m_backRightModule.StopMotors(); });
+
 }
 
 double DriveSubsystem::GetPositionDistance()
