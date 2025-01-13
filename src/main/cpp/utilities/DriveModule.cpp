@@ -18,9 +18,12 @@ DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEn
 
     {
 
+    m_directionMotor.SetPosition(m_directionEncoder.GetAbsolutePosition().
+                                WaitForUpdate(250_ms).GetValue());
+
     // Config CANCoder   
     CANcoderConfiguration cancoderConfig;
-    //cancoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue::Signed_PlusMinusHalf; //fixme
+    cancoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5_tr; //fixme
     
     cancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue::CounterClockwise_Positive;
     cancoderConfig.MagnetSensor.MagnetOffset = units::angle::turn_t(m_magOffset); //fix me
@@ -37,9 +40,9 @@ DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEn
     speedMotorConfig.Slot0.kD = 0.0;
     speedMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     speedMotorConfig.Slot0.kV = 0.1;
-    //speedMotorConfig.CurrentLimits.SupplyCurrentLimit = 50;      // Amps //fix me
-    //speedMotorConfig.CurrentLimits.SupplyCurrentThreshold = 60;  // Amps //fix me
-    //speedMotorConfig.CurrentLimits.SupplyTimeThreshold = 0.1;    // Seconds //fix me
+    speedMotorConfig.CurrentLimits.SupplyCurrentLimit = 70_A;      // Amps //fix me
+    //speedMotorConfig.CurrentLimits.SupplyCurrentThreshold = 60_A;  // Amps //fix me - this one might be included in previous one
+    //speedMotorConfig.CurrentLimits.SupplyTimeThreshold = 0.1_s;    // Seconds //fix me - this one i dont think exists anymore. - or could be supply current limit lower time.
     speedMotorConfig.MotorOutput.Inverted = true;  // +V should rotate the motor counter-clockwise
     speedMotorConfig.MotorOutput.NeutralMode = NeutralModeValue::Brake;
     m_speedMotor.GetConfigurator().Apply(speedMotorConfig);
@@ -63,13 +66,6 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
     // updates state variable angle to the optimum change in angle
   auto optimizedState = state = frc::SwerveModuleState::Optimize(state, encoderCurrentAngleRadians);
 
-  // Setting Motor Speed
-  ////const units::meters_per_second_t MAX_SPEED_MPS = 5.0_mps;
-  // double normalisedSpeed = state.speed / MAX_SPEED_MPS; // max speed set in DriveTrain::SetAllModules()
-
-  //to find desired wheel speed:
-  // divide desired robot speed (m/s) by wheel circumference (set CIRCUMFERECNE in header file)
-  
   // to set the speed using control onboard the motor, use m_speedMotor.SetControl(ctre::phoenix6::controls::VelocityVoltage{desiredWheelSpeed}); // desiredWheelSpeed in turns per second
   units::angular_velocity::turns_per_second_t desiredWheelSpeed{(state.speed.value())/WHEEL_CIRCUMFERENCE.value()};
   m_speedMotor.SetControl(ctre::phoenix6::controls::VelocityVoltage{desiredWheelSpeed*6.75});
