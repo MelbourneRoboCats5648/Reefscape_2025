@@ -11,6 +11,7 @@
 
 #include "RobotContainer.h"
 
+
 class Robot : public frc::TimedRobot {
  public:
   Robot();
@@ -31,4 +32,5 @@ class Robot : public frc::TimedRobot {
   std::optional<frc2::CommandPtr> m_autonomousCommand;
 
   RobotContainer m_container;
+  DriveSubsystem m_drive;
 };
