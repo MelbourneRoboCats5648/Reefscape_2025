@@ -72,20 +72,3 @@ return Run([this] {m_frontLeftModule.StopMotors();
                    m_backRightModule.StopMotors(); });
 
 }
-
-double DriveSubsystem::GetPositionDistance()
-{
-  return (m_frontLeftModule.GetModulePositionDistance()+
-  m_frontRightModule.GetModulePositionDistance()+
-  m_backLeftModule.GetModulePositionDistance()+
-  m_backRightModule.GetModulePositionDistance())/4;
-}
-
-void DriveSubsystem::SetPositionToZeroDistance()
-{
-  m_frontLeftModule.SetModulePositionToZeroDistance();
-  m_frontRightModule.SetModulePositionToZeroDistance();
-  m_backLeftModule.SetModulePositionToZeroDistance();
-  m_backRightModule.SetModulePositionToZeroDistance();
-}
-

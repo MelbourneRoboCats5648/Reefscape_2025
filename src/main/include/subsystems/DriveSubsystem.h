@@ -30,6 +30,11 @@ class DriveSubsystem : public frc2::SubsystemBase {
     void Periodic() override;
     void SimulationPeriodic() override;
 
+
+  void ResetGyro();
+
+  units::degree_t GetHeading() const;
+
     void Drive(units::meters_per_second_t xSpeed,
                            units::meters_per_second_t ySpeed,
                            units::radians_per_second_t rot, bool fieldRelative,
@@ -38,21 +43,9 @@ class DriveSubsystem : public frc2::SubsystemBase {
     void SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
     void StopAllModules();
     frc2::CommandPtr StopCommand();
-    double GetPositionDistance();
-    void SetPositionToZeroDistance();
+
     
-      /**
-   * Returns the heading of the robot.
-   *
-   * @return the robot's heading in degrees, from 180 to 180
-   */
-  units::degree_t GetHeading() const;
-
-  /**
-   * Zeroes the heading of the robot.
-   */
-  void ResetGyro();
-
+   
 
  private:
     //Gyro
