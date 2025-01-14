@@ -24,7 +24,6 @@ DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEn
     // Config CANCoder   
     CANcoderConfiguration cancoderConfig;
     cancoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5_tr; //fixme
-    
     cancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue::CounterClockwise_Positive;
     cancoderConfig.MagnetSensor.MagnetOffset = units::angle::turn_t(m_magOffset); //fix me
     m_directionEncoder.GetConfigurator().Apply(cancoderConfig);
@@ -77,19 +76,6 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
 
   m_directionMotor.SetVoltage(units::voltage::volt_t{-1.0 * turnOutput});
 }
-
-double DriveModule::GetModulePositionDistance()
-{
-  double distance = m_speedMotor.GetPosition().GetValueAsDouble()*0.3198;  
-  std::cout << m_name << " modulePosition " << distance << std::endl;
-  return distance;
-}
-
-void DriveModule::SetModulePositionToZeroDistance()
-{
-  m_speedMotor.SetPosition(units::angle::turn_t {0.0});
-}
-
 
 
 

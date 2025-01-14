@@ -12,12 +12,13 @@ void DriveSubsystem::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.
 }
 
-units::degree_t DriveSubsystem::GetHeading() const {
-  return m_gyro.GetAngle();
-}
 
 void DriveSubsystem::ResetGyro() {
   m_gyro.Reset();
+}
+
+units::degree_t DriveSubsystem::GetHeading() const {
+  return m_gyro.GetAngle();
 }
 
 void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
@@ -52,9 +53,6 @@ void DriveSubsystem::SetModuleStates(
   m_backRightModule.SetModule(desiredStates[3]);
 }
 */
-
-
-//The following stuff I've copied over from crescendo and am unsure about the necessity
 
 void DriveSubsystem::StopAllModules()
 {
