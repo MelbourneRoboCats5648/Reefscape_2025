@@ -12,7 +12,8 @@
 
 class IntakeAndShootSubsystem : public frc2::SubsystemBase {
  public:
-  IntakeAndShootSubsystem();
+  IntakeAndShootSubsystem(IntakeSubsystem& intakeSub,
+    ShooterSubsystem& shooterSub);
 
   /**
    @param IntakeSubsystem The subsystem used by this command.
@@ -25,7 +26,7 @@ class IntakeAndShootSubsystem : public frc2::SubsystemBase {
   void SimulationPeriodic() override;
 
  private:
-  IntakeSubsystem m_intakeSubsystem;
-  ShooterSubsystem m_shootersubsystem;
+  IntakeSubsystem& m_intakeSubsystem;
+  ShooterSubsystem& m_shooterSubsystem;
 
 };

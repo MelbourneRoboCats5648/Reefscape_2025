@@ -10,7 +10,11 @@
 
 #include "commands/ExampleCommand.h"
 
-RobotContainer::RobotContainer() {
+RobotContainer::RobotContainer() 
+  : m_intakeSubsystem(),
+    m_shooterSubsystem(),
+    m_intakeAndShootSubsystem(m_intakeSubsystem, m_shooterSubsystem)
+{
   // Initialize all of your commands and subsystems here
 
   // Configure the button bindings

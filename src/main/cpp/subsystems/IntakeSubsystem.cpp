@@ -44,6 +44,10 @@ frc2::CommandPtr IntakeSubsystem::ExtendCommand() {
     });
 }
 
+//stops all motors
+void IntakeSubsystem::stopMotors() {
+  m_motorIntakeWheel.Set(0);
+}
 
 void IntakeSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
