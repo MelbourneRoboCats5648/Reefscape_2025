@@ -5,6 +5,10 @@
 #include <frc/motorcontrol/PWMSparkMax.h>
 #include <frc2/command/button/CommandXboxController.h>
 
+// PWM Ports
+const int kMotorControllerPort = 2;
+
+
 class ElevatorSubsystem : public frc2::SubsystemBase {
  public:
   ElevatorSubsystem();
