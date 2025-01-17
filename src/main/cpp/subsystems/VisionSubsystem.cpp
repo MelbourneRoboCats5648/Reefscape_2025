@@ -1,4 +1,4 @@
-#include "VisionSubsystem.h"
+#include "subsystems/VisionSubsystem.h"
 
 
 VisionSubsystem::VisionSubsystem() {
@@ -7,7 +7,7 @@ VisionSubsystem::VisionSubsystem() {
 
 void VisionSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
-  double aprilTagID = LimelightHelpers::getFudicialID();
+  double aprilTagID = LimelightHelpers::getFiducialID();
   frc2::Trigger aprilTagIDTrigger(aprilTagID = 1)
 }
 
