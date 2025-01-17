@@ -39,15 +39,15 @@ DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEn
     speedMotorConfig.Slot0.kD = 0.0;
     speedMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     speedMotorConfig.Slot0.kV = 0.1;
-    speedMotorConfig.CurrentLimits.SupplyCurrentLimit = 70_A;      // Amps //fix me
-    //speedMotorConfig.CurrentLimits.SupplyCurrentThreshold = 60_A;  // Amps //fix me - this one might be included in previous one
-    //speedMotorConfig.CurrentLimits.SupplyTimeThreshold = 0.1_s;    // Seconds //fix me - this one i dont think exists anymore. - or could be supply current limit lower time.
+    speedMotorConfig.CurrentLimits.SupplyCurrentLimit = 50_A;      // Amps
+    speedMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 60_A;  // Amps
+    speedMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1_s;    // Seconds    
     speedMotorConfig.MotorOutput.Inverted = true;  // +V should rotate the motor counter-clockwise
     speedMotorConfig.MotorOutput.NeutralMode = NeutralModeValue::Brake;
     m_speedMotor.GetConfigurator().Apply(speedMotorConfig);
 
     m_turningPIDController.EnableContinuousInput(
-                units::angle::radian_t{-1.0*M_PI},
+                units::angle::radian_t{-1.0*M_PI},  
                 units::angle::radian_t{M_PI});
     }
 
@@ -74,7 +74,7 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
   const auto turnOutput = m_turningPIDController.Calculate(
     encoderCurrentAngleRadians, optimizedState.angle.Radians());
 
-  m_directionMotor.SetVoltage(units::voltage::volt_t{-1.0 * turnOutput});
+  m_directionMotor.SetVoltage(units::voltage::volt_t{1.0 * turnOutput}); // FIX: direction motors were going in the wrong way, possibly due to 2024->2025 API changes - we need to invert the voltage
 }
 
 
