@@ -25,8 +25,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
    */
   frc2::CommandPtr ShooterSpeakerCommand();
   frc2::CommandPtr ShooterAmpCommand();
-  
-  
+  frc2::CommandPtr ShooterSpeakerAmpCommand();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
