@@ -1,42 +1,40 @@
 #include "commands/VisionCommand.h"
 
-VisionCommand::VisionCommand(VisionSubsystem* visionSubsystem)
-    : m_visionSubsystem{visionSubsystem} {
+namespace cmd {
+using namespace frc2::cmd;
+
+VisionCommand::VisionCommand(VisionSubsystem* visionSubsystem
+                                                            /*, DriveSubsystem* driveSubsytem*/)
+    : m_visionSubsystem(visionSubsystem)
+      //m_driveSubsystem{driveSubsystem}
+    
+{
   // Register that this command requires the subsystem.
-  AddRequirements(m_visionSubsystem);
+  AddRequirements(m_visionSubsystem
+                 /*,m_driveSubsystem*/);
+
 }
 
-/*
-frc2::CommandPtr VisionSubsystem::AimRobotToTargetReef(){
+
+
+frc2::CommandPtr VisionCommand::AimRobotToTargetReef(){
     return Run([this] { 
         
-        double tx = LimelightHelpers::getTX("");
-        double ty = LimelightHelpers::getTY("");
-        double targettingAngularVelocity = tx * kP;
+        double targettingAngularVelocity = 1.0;//(//m_visionSubsystem.GetInstance().GetTargetingAngularVelocityReef() *= 1.0
+                                            //*= m_driveTrain.kMaxAngularSpeed
+                                            //);
+        double targettingFowardSpeed = 1.0;//(m_visionSubsystem->GetTargetingForwardSpeedReef() *= 1.0
+                                            //*= m_driveTrain.kMaxFowardSpeed
+                                            //);
+        return targettingAngularVelocity;
+        return targettingFowardSpeed;
 
-        targettingAungularVelocity *= Drivetrain.kMaxAngularSpeed; //need to add the drivetrain code for this
-        
+    }).AndThen
+        ([this]{
+
+        });
+    }
+
     
-    //invert since tx is positive when the target is to the right of the crosshair
-    targetingAngularVelocity *= -1.0;
-
-    return targetingAngularVelocity;
-    
-        
-        double kP = .1;
-        double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
-        targetingForwardSpeed *= Drivetrain.kMaxSpeed;
-        targetingForwardSpeed *= -1.0;
-        return targetingForwardSpeed;
-        
-     })
-
-   .AndThen
-    ([this]{
-        //then replace xspeed with limelight with targetting forward speed and 
-        //rotation with targetting angilar velocity
-        //within drive train
-    }); 
-    */
-
+} //cmd namespace
     

@@ -1,10 +1,14 @@
 #pragma once
 
 #include <frc2/command/Command.h>
+#include <frc2/command/commands.h>
 #include <frc2/command/CommandHelper.h>
+#include <frc2/command/CommandPtr.h>
 
 #include "subsystems/VisionSubsystem.h"
+//#include "subsystems/DriveSubsystem.h"
 
+namespace cmd {
 /**
  * An example command that uses an example subsystem.
  *
@@ -16,12 +20,18 @@ class VisionCommand
     : public frc2::CommandHelper<frc2::Command, VisionCommand> {
  public:
   /**
-   * Creates a new ExampleCommand.
+   * Creates a new VisionCommand.
    *
-   * @param ShooterSubsystem The subsystem used by this command.
+   * @param visionSubsystem The subsystem used by this command.
+   * @ param driveSubsystem The subsystem used by this command.
    */
-  explicit VisionCommand(VisionSubsystem* visionSubsystem);
+  VisionCommand(VisionSubsystem* visionSubsystem/*, DriveSubsystem* driveSubsystem*/);
+
+  frc2::CommandPtr AimRobotToTargetReef();
 
  private:
   VisionSubsystem* m_visionSubsystem;
+  //DriveSubsystem* m_driveSubsystem;
 };
+
+}//namespace cmd
