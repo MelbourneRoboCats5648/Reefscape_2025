@@ -1,10 +1,8 @@
 #include "subsystems/ElevatorSubsystem.h"
 
-#include <frc/smartdashboard/SmartDashboard.h>
 #include <rev/SparkMax.h>
 
 #include <rev/config/SparkBaseConfig.h>
-#include <frc2/command/button/CommandXboxController.h>
 
 ElevatorSubsystem::ElevatorSubsystem() {
   // Implementation of subsystem constructor goes here.
@@ -60,23 +58,6 @@ frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
 
 void ElevatorSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
-    /**
-   * Get forward and rotation values from the joystick. Invert the joystick's
-   * Y value because its forward direction is negative.
-   */
-  double forward = - xboxController.GetLeftY();
-  double rotation = xboxController.GetRightX();
-
-  /*
-   * Apply values to left and right side. We will only need to set the leaders
-   * since the other motors are in follower mode.
-   */
-   m_elevatorLiftMotor.Set(forward + rotation);
-   m_elevatorLiftMotor.Set(forward - rotation);
-
-  // Display the applied output of the left and right side onto the dashboard
-  frc::SmartDashboard::PutNumber("Left Out", m_elevatorLiftMotor.GetAppliedOutput());
-  frc::SmartDashboard::PutNumber("Right Out", m_elevatorLiftMotor.GetAppliedOutput());
 }
 
 void ElevatorSubsystem::SimulationPeriodic() {

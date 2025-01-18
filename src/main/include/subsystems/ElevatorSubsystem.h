@@ -5,12 +5,7 @@
 #include <rev/SparkMax.h>
 #include <Constants.h>
 
-#include <frc2/command/button/CommandXboxController.h>
-
-
 // PWM Ports
-const int kMotorControllerPort = 6;
-
 using namespace rev::spark;
 
 class ElevatorSubsystem : public frc2::SubsystemBase {
@@ -20,9 +15,6 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
   // Initialize the motor
   SparkMax m_elevatorLiftMotor{CAN_Constants::kElevatorMotorCAN_ID, SparkMax::MotorType::kBrushless};
-
-  // Initialize the controller
-  frc2::CommandXboxController xboxController {0}; // need to be fixed - only have one physical xbox controller
 
   public:
   ElevatorSubsystem();
