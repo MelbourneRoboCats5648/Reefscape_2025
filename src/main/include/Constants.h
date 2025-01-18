@@ -18,5 +18,6 @@ namespace OperatorConstants {
 
 inline constexpr int kDriveJoystickPort = 0;
 inline constexpr int kDriverControllerPort = 1;
+inline constexpr int kMotorControllerPort = 2;
 
 }  // namespace OperatorConstants

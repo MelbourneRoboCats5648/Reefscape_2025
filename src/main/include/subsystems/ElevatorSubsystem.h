@@ -19,10 +19,10 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   // declared private and exposed only through public methods.
     frc::PWMSparkMax m_motorController{kMotorControllerPort};
 
-    rev::spark::SparkMaxConfig globalConfig;
-    rev::spark::SparkMaxConfig rightLeaderConfig;
-    rev::spark::SparkMaxConfig leftFollowerConfig;
-    rev::spark::SparkMaxConfig rightFollowerConfig;
+    rev::spark::SparkBaseConfig globalConfig;
+    rev::spark::SparkBaseConfig rightLeaderConfig;
+    rev::spark::SparkBaseConfig leftFollowerConfig;
+    rev::spark::SparkBaseConfig rightFollowerConfig;
 
 
   // Initialize the SPARKs
@@ -32,7 +32,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   SparkMax m_rightFollower{4, SparkMax::MotorType::kBrushless};
 
   // Initialize joystick
-  frc::Joystick joystick{0};
+  frc2::CommandXboxController xboxController{0};
 
   public:
   ElevatorSubsystem();
@@ -40,9 +40,11 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   /**
    * Elevator command factory method.
    */
-  frc2::CommandPtr GoUpToL1Command();
-  frc2::CommandPtr GoUpToL2Command();
-  frc2::CommandPtr GoUpToL3Command();
+  frc2::CommandPtr MoveUpToL1Command();
+  frc2::CommandPtr MoveUpToL2Command();
+  frc2::CommandPtr MoveUpToL3Command();
+  frc2::CommandPtr MoveDownCommand();
+
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -56,6 +58,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   void SimulationPeriodic() override;
 
 };
+
 
 
 
