@@ -12,7 +12,7 @@ class IntakeAndShootCommand
   /**
    * Creates a new ExampleCommand.
    *
-   * @param IntakeAndShootSubsystem The subsystem used by this command.
+   * @param intakeAndShootSubsystem The subsystem used by this command.
    */
   explicit IntakeAndShootCommand(IntakeAndShootSubsystem* intakeAndShootSubsystem);
 

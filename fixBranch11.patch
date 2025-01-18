@@ -1,0 +1,14 @@
+diff --git a/src/main/cpp/subsystems/IntakeAndShootSubsystem.cpp b/src/main/cpp/subsystems/IntakeAndShootSubsystem.cpp
+index 4e847cb..70e5de3 100644
+--- a/src/main/cpp/subsystems/IntakeAndShootSubsystem.cpp
++++ b/src/main/cpp/subsystems/IntakeAndShootSubsystem.cpp
+@@ -9,7 +9,8 @@ IntakeAndShootSubsystem::IntakeAndShootSubsystem(IntakeSubsystem& intakeSub, Sho
+ 
+ frc2::CommandPtr IntakeAndShootSubsystem::IntakeAndShootCommand() {
+   return Run([this] { 
+-        m_intakeSubsystem.EjectCommand().AndThen(m_shooterSubsystem.ShooterAmpCommand());
++        m_intakeSubsystem.EjectCommand()
++        .AndThen(m_shooterSubsystem.ShooterAmpCommand());
+     }).FinallyDo([this]{
+         m_intakeSubsystem.stopMotors();
+         m_shooterSubsystem.stopMotors();

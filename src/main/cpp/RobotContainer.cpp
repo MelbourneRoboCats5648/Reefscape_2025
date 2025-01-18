@@ -29,8 +29,7 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.X().WhileTrue(m_intakeSubsystem.ExtendCommand());
   m_driverController.Y().WhileTrue(m_shooterSubsystem.ShooterSpeakerCommand());
   m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
-  m_driverController.LeftTrigger().WhileTrue(m_intakeAndShootSubsystem.IntakeAndShootCommand());
- 
+  m_driverController.LeftTrigger().WhileTrue(m_intakeAndShootSubsystem.PerformIntakeAndShootCommand()); 
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.

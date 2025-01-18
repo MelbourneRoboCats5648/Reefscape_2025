@@ -20,7 +20,7 @@ class IntakeAndShootSubsystem : public frc2::SubsystemBase {
    @param ShooterSubsystem
    */
 
-  frc2::CommandPtr IntakeAndShootCommand();
+  frc2::CommandPtr PerformIntakeAndShootCommand();
   
   void Periodic() override;
   void SimulationPeriodic() override;

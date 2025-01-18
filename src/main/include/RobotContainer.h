@@ -9,8 +9,8 @@
 
 #include "Constants.h"
 #include "subsystems/ExampleSubsystem.h"
-#include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
+#include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeAndShootSubsystem.h"
 
 
