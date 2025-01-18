@@ -12,7 +12,8 @@ class VisionSubsystem : public frc2::SubsystemBase {
   /** 
    * Example command factory method.
    */
-  frc2::CommandPtr AimRobotToTargetReef();
+  frc2::CommandPtr GetTargetingAngularVelocityReef();
+  frc2::CommandPtr GetTargetingForwardSpeedReef();
   
   
 
@@ -27,7 +28,19 @@ class VisionSubsystem : public frc2::SubsystemBase {
    */
   void SimulationPeriodic() override;
 
+// The order of below is important as trigger needs boolean and boolean needs loop. 
+
  private:
+  frc::EventLoop m_aprilTagLoop;
+  frc::BooleanEvent m_aprilTagIDBoolean;
+  
+ public:
+  frc2::Trigger m_aprilTagIDTrigger;
+
+ public: 
+  //KP Constants
+  double kReefAngularKP = 0.9;
+  double kReefForwardKP = 0.9;
 
 };
 
