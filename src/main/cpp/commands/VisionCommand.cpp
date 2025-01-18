@@ -1,5 +1,11 @@
 #include "commands/VisionCommand.h"
 
+VisionCommand::VisionCommand(VisionSubsystem* visionSubsystem)
+    : m_visionSubsystem{visionSubsystem} {
+  // Register that this command requires the subsystem.
+  AddRequirements(m_visionSubsystem);
+}
+
 /*
 frc2::CommandPtr VisionSubsystem::AimRobotToTargetReef(){
     return Run([this] { 
@@ -32,5 +38,5 @@ frc2::CommandPtr VisionSubsystem::AimRobotToTargetReef(){
         //within drive train
     }); 
     */
-   
+
     
