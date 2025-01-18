@@ -16,7 +16,6 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-    rev::spark::SparkBaseConfig elevatorMotorConfig;
 
   // Initialize the SPARKs
   SparkMax m_elevatorLiftMotor{1, SparkMax::MotorType::kBrushless};

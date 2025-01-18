@@ -7,8 +7,6 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/button/CommandJoystick.h>
-#include <frc/motorcontrol/PWMSparkMax.h>
-#include <rev/SparkMax.h>
 
 #include "Constants.h"
 #include "subsystems/ExampleSubsystem.h"
@@ -38,7 +36,7 @@ class RobotContainer {
   frc2::CommandJoystick m_joystick{OperatorConstants::kDriveJoystickPort};
 
   // Motor used in elevator subsystem
-  frc::PWMSparkMax m_motorController{OperatorConstants::kMotorControllerPort}; 
+  SparkMax m_elevatorLiftMotor{1, SparkMax::MotorType::kBrushless};
 
   // The robot's subsystems are defined here...
   ExampleSubsystem m_subsystem;
