@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include <numbers>
 
+#include <frc/Encoder.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 #include <frc/motorcontrol/VictorSP.h>
@@ -13,6 +13,9 @@
 #include <rev/SparkMax.h>
 #include <frc/controller/PIDController.h>
 
+#include <units/angle.h>
+#include <units/angular_velocity.h>
+#include <units/angular_acceleration.h>
 
 
 using namespace rev::spark;
@@ -21,7 +24,7 @@ using namespace rev::spark;
 // Changed to 1 because 2024 motors have become redundant- plan to delete
 const int motorClimbRightPort= 1;
 
-//Motor ID
+//Spark Motor ID 
 // Plan to change when motors are organised
 const int motorClimbRightID = 1;
 
@@ -38,23 +41,43 @@ const int rightDownButton = 4;
 const int  extendSoftLimit = 50;
 const int  retractSoftLimit= -50;
 
+namespace RightClimbConstants {
 //PID Controller
-const double rightClimbConstants = 0.0;
+const double kP = 0.0;
+const double kI = 0.0;
+const double kD = 0.0;
+
+
+//PID Profile 
+const units::turns_per_second_t maximumVelocity = 1.75_tps;
+const units::turns_per_second_squared_t maximumAccelaration = 0.75_tr_per_s_sq;
+//kDt
+const units::second_t kDt = 20_ms;
+}
 
 
 
 class RightClimbSubsystem : public frc2::SubsystemBase {
  public:
   RightClimbSubsystem();
-
+ 
+         
   /**
    * Command factory method.
    */
   frc2::CommandPtr RightClimbUpCommand();
   frc2::CommandPtr RightClimbDownCommand();
-  
+  frc2::CommandPtr RightClimbCommand();
+
+  /**
+   * Returns a command to shoot the balls currently stored in the robot. Spins
+   * the shooter flywheel up to the specified setpoint, and then runs the feeder
+   * motor.
+   *
+   * @param setpointRotationsPerSecond The desired right climb velocity
+   */
   [[nodiscard]]
-  frc2::CommandPtr RightClimbCommand(units::turns_per_second_t setpoint);
+  frc2::CommandPtr RightClimbCommand(units::turn_t goal);
 
  
 
@@ -79,8 +102,13 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
 // Spark components
 //plan to add motors and hard switches
           SparkMax m_motorController{motorClimbRightID, SparkMax::MotorType::kBrushless};
-          frc::PIDController m_rightClimbFeedback{RightClimbConstants::kP, 0.0, 0.0};
-          ();
+          SparkClosedLoopController m_closedLoopController = m_motorController.GetClosedLoopController();
+
+          // Create a motion profile with the given maximum velocity and maximum
+          // acceleration constraints for the next setpoint.
+          frc::TrapezoidProfile<units::turn_t> m_profile{{RightClimbConstants::maximumVelocity, RightClimbConstants::maximumAccelaration}};
+          
+         
           
 
 };

@@ -1,8 +1,10 @@
 #include <numbers>
 
 #include "subsystems/RightClimbSubsystem.h"
+
 // possibly add smart dashboard from example for hard switches
 #include <rev/config/SparkMaxConfig.h>
+#include <frc2/command/Commands.h>
 
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/trajectory/TrapezoidProfile.h>
@@ -17,13 +19,48 @@
 
 RightClimbSubsystem::RightClimbSubsystem() {
   // Implementation of subsystem constructor goes here.
-  //PID Trapezoidal Controller
-  static constexpr units::second_t kDt = 20_ms;
 
-    // Note: These gains are fake, and will have to be tuned for your robot.
-    m_motorController.SetPID(1.3, 0.0, 0.7);
+  //PID Trapezoidal Controller
+  //static constexpr units::second_t kDt = 20_ms; - fixme not in use
+
+    // Note: These gains are fake, and will have to be tuned for your robot.- using different motor 
+    //m_motor.SetPID(1.3, 0.0, 0.7);
   
   rev::spark::SparkMaxConfig motorConfig;
+/*
+   * Configure the encoder. For this specific example, we are using the
+   * integrated encoder of the NEO, and we don't need to configure it. If
+   * needed, we can adjust values like the position or velocity conversion
+   * factors.
+   */
+  motorConfig.encoder.PositionConversionFactor(1).VelocityConversionFactor(1);
+
+  /*
+   * Configure the closed loop controller. We want to make sure we set the
+   * feedback sensor as the primary encoder.
+   */
+  motorConfig.closedLoop
+      .SetFeedbackSensor(ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
+      // Set PID values for position control. We don't need to pass a closed
+      // loop slot, as it will default to slot 0.
+      .P(0.1)
+      .I(0)
+      .D(0)
+      .OutputRange(-1, 1);
+      /*
+   * Apply the configuration to the SPARK MAX.
+   *
+   * kResetSafeParameters is used to get the SPARK MAX to a known state. This
+   * is useful in case the SPARK MAX is replaced.
+   *
+   * kPersistParameters is used to ensure the configuration is not lost when
+   * the SPARK MAX loses power. This is useful for power cycles that may occur
+   * mid-operation.
+   */
+  m_motorController.Configure(motorConfig, SparkBase::ResetMode::kResetSafeParameters,
+                    SparkBase::PersistMode::kPersistParameters);
+
+
 
 // Set the idle mode to brake to stop immediately when reaching a limit
  motorConfig.SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake); 
@@ -76,45 +113,34 @@ frc2::CommandPtr RightClimbSubsystem::RightClimbDownCommand() {
           .FinallyDo([this]{m_motorClimbRight.Set(0);});
 }
 
+frc2::CommandPtr RightClimbSubsystem::RightClimbCommand(units::turn_t goal) {
+  frc::TrapezoidProfile<units::turn_t>::State goalState = {goal, 0_tps};
+  frc::TrapezoidProfile<units::turn_t>::State setpointState;
+  // Inline construction of command goes here.
+  // Subsystem::RunOnce implicitly requires `this` subsystem.
+  return Run([this, &setpointState, goalState] {
+      setpointState = m_profile.Calculate(RightClimbConstants::kDt, setpointState, goalState);
+
+    // Send setpoint to offboard controller PID
+      m_closedLoopController.SetReference(setpointState.position.value(),
+                                        SparkMax::ControlType::kPosition);
+      
+    })
+    .Until([this, goal]{
+      auto error = goal - m_encoder.GetPosition();
+    return units::math::abs(error)< RightClimbConstants::kGoalThreshold;
+    });
+      
+}
 
 
 void RightClimbSubsystem::Periodic() {
-//override - part of example code 
-  // Implementation of subsystem periodic method goes here.
-  if (m_joystick.GetRawButtonPressed(2)) {
-      m_goal = {5_m, 0_mps};
-    } else if (m_joystick.GetRawButtonPressed(3)) {
-      m_goal = {0_m, 0_mps}
 
-
-    // Retrieve the profiled setpoint for the next timestep. This setpoint moves
-    // toward the goal while obeying the constraints.
-    m_setpoint = m_profile.Calculate(kDt, m_setpoint, m_goal);
-
-    // Send setpoint to offboard controller PID
-    m_motorController.SetSetpoint(SparkMax::PIDMode::kPosition,
-                        m_setpoint.position.value(),
-                        m_feedforward.Calculate(m_setpoint.velocity) / 12_V);
-  
- }
 }
  
 void RightClimbSubsystem::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.
 
-// timed robot code-fixme
-  private:
-  frc::Joystick m_joystick{1};
-  SparkMax m_motorController{1};
-  frc::SimpleMotorFeedforward<units::meters> m_feedforward{
-      // Note: These gains are fake, and will have to be tuned for your robot.
-      1_V, 1.5_V * 1_s / 1_m};
-
-  // Create a motion profile with the given maximum velocity and maximum
-  // acceleration constraints for the next setpoint.
-  frc::TrapezoidProfile<units::meters> m_profile{{1.75_mps, 0.75_mps_sq}};
-  frc::TrapezoidProfile<units::meters>::State m_goal;
-  frc::TrapezoidProfile<units::meters>::State m_setpoint;
   
 }
 
