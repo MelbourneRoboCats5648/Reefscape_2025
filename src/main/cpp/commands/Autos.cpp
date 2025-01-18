@@ -6,17 +6,30 @@
 
 #include <frc2/command/Commands.h>
 
+#include "commands/ExampleCommand.h"
 
+#include "Constants.h"
 
 frc2::CommandPtr autos::ExampleAuto(ExampleSubsystem* subsystem) {
   return frc2::cmd::Sequence(subsystem->ExampleMethodCommand(),
                              ExampleCommand(subsystem).ToPtr());
 }
 
+using namespace DriveConstants;
 
 
 
-frc2::CommandPtr autos::VisionDrive(DriveSubsystem* driveSubsystem, VisionSubsystem* VisionSubsystem) {
-  return frc2::cmd::Sequence(subsystem->ExampleMethodCommand(),
-                             ExampleCommand(subsystem).ToPtr());
+frc2::CommandPtr autos::VisionDrive(DriveSubsystem* driveSubsystem, VisionSubsystem* visionSubsystem) {
+  return frc2::cmd::Run([visionSubsystem, driveSubsystem]
+  {
+    units::meters_per_second_t AngularVelocity = visionSubsystem->GetTargetingAngularVelocityReef() * kMaxSpeed;
+    units::meters_per_second_t ForwardSpeed = visionSubsystem->GetTargetingForwardSpeedReef() * kMaxSpeed;
+
+    driveSubsystem->Drie();
+  }
+  ).AndThen([visionSubsystem, driveSubsystem]
+  {
+//overide x speed and rot within driveSubsystem .And Finally - revert back. Idk how ill go about doing this tho....)
+  });
 }
+

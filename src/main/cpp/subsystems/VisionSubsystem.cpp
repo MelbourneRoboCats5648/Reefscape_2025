@@ -30,21 +30,21 @@ void VisionSubsystem::SimulationPeriodic() {
 }
 
 
-frc2::CommandPtr VisionSubsystem::GetTargetingAngularVelocityReef(){
-    return Run([this] {
+double VisionSubsystem::GetTargetingAngularVelocityReef(){
+
     double tx = LimelightHelpers::getTX("");
-    double targettingAngularVelocity = tx * kReefAngularKP;
+    double targetingAngularVelocity = tx * kReefAngularKP;
     //invert since tx is positive when the target is to the right of the crosshair
     //targetingAngularVelocity *= -1.0;
-    });
+    return targetingAngularVelocity;
 }
 
-frc2::CommandPtr VisionSubsystem::GetTargetingForwardSpeedReef(){
-    return Run([this] {
+double VisionSubsystem::GetTargetingForwardSpeedReef(){
+
     double ty = LimelightHelpers::getTY("");
-    double targettingForwardSpeed = ty * kReefForwardKP;
+    double targetingForwardSpeed = ty * kReefForwardKP;
      //targetingForwardSpeed *= -1.0;
-    });
+    return targetingForwardSpeed;
 }
 
 
