@@ -36,7 +36,7 @@ class RobotContainer {
   frc2::CommandJoystick m_joystick{OperatorConstants::kDriveJoystickPort};
 
   // Motor used in elevator subsystem
-  SparkMax m_elevatorLiftMotor{1, SparkMax::MotorType::kBrushless};
+  SparkMax m_elevatorLiftMotor{CAN_Constants::kElevatorMotorCAN_ID, SparkMax::MotorType::kBrushless};
 
   // The robot's subsystems are defined here...
   ExampleSubsystem m_subsystem;
