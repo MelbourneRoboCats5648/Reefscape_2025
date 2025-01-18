@@ -38,7 +38,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
     void Drive(units::meters_per_second_t xSpeed,
                            units::meters_per_second_t ySpeed,
                            units::radians_per_second_t rot, bool fieldRelative,
-                           units::second_t period = DriveConstants::kDrivePeriod);
+                           units::second_t period = kDrivePeriod);
 
     void SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
     void StopAllModules();

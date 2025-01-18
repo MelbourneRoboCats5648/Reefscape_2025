@@ -25,13 +25,16 @@ class VisionCommand
    * @param visionSubsystem The subsystem used by this command.
    * @ param driveSubsystem The subsystem used by this command.
    */
-  VisionCommand(VisionSubsystem* visionSubsystem/*, DriveSubsystem* driveSubsystem*/);
+  VisionCommand(VisionSubsystem* visionSubsystem, DriveSubsystem* driveSubsystem);
+  
+    double m_targettingAngularVelocity();
+    double m_targettingForwardSpeed(); 
 
   frc2::CommandPtr AimRobotToTargetReef();
 
  private:
   VisionSubsystem* m_visionSubsystem;
-  //DriveSubsystem* m_driveSubsystem;
+  DriveSubsystem* m_driveSubsystem;
 };
 
 }//namespace cmd

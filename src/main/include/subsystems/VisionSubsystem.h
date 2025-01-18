@@ -12,8 +12,8 @@ class VisionSubsystem : public frc2::SubsystemBase {
   /** 
    * Example command factory method.
    */
-  frc2::CommandPtr GetTargetingAngularVelocityReef();
-  frc2::CommandPtr GetTargetingForwardSpeedReef();
+  double GetTargetingAngularVelocityReef();
+  double GetTargetingForwardSpeedReef();
   
   
 

@@ -10,7 +10,7 @@
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/controller/ProfiledPIDController.h>
 
-#include "constants.h"
+#include "Constants.h"
 
 using namespace ctre::phoenix6::hardware;
 

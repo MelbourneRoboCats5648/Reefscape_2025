@@ -24,12 +24,13 @@ frc2::CommandPtr autos::VisionDrive(DriveSubsystem* driveSubsystem, VisionSubsys
   {
     units::meters_per_second_t AngularVelocity = visionSubsystem->GetTargetingAngularVelocityReef() * kMaxSpeed;
     units::meters_per_second_t ForwardSpeed = visionSubsystem->GetTargetingForwardSpeedReef() * kMaxSpeed;
-
-    driveSubsystem->Drie();
+    auto visionRot = AngularVelocity;
+    auto visionXSpeed = ForwardSpeed;
+    //driveSubsystem->Drive(visionXSpeed, visionRot);
   }
-  ).AndThen([visionSubsystem, driveSubsystem]
-  {
-//overide x speed and rot within driveSubsystem .And Finally - revert back. Idk how ill go about doing this tho....)
+  ).FinallyDo([visionSubsystem, driveSubsystem]
+  {  
+
   });
 }
 
