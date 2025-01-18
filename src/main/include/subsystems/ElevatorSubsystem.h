@@ -5,7 +5,7 @@
 #include <frc/motorcontrol/PWMSparkMax.h>
 #include <rev/SparkMax.h>
 
-#include <frc/Joystick.h>
+#include <frc2/command/button/CommandXboxController.h>
 
 
 // PWM Ports

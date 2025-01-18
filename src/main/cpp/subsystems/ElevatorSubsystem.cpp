@@ -3,7 +3,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/motorcontrol/PWMSparkMax.h>
 
-#include <rev/config/SparkMaxConfig.h>
+#include <rev/config/SparkBaseConfig.h>
 #include <frc2/command/button/CommandXboxController.h>
 
 ElevatorSubsystem::ElevatorSubsystem() {
@@ -17,16 +17,16 @@ ElevatorSubsystem::ElevatorSubsystem() {
    * Set parameters that will apply to all SPARKs. We will also use this as
    * the left leader config.
    */
-  SparkBaseConfig globalConfig.SmartCurrentLimit(50).SetIdleMode(SparkMaxConfig::IdleMode::kBrake);
+   globalConfig.SmartCurrentLimit(50).SetIdleMode(SparkBaseConfig::IdleMode::kBrake);
 
   // Apply the global config and invert since it is on the opposite side
-  SparkBaseConfig rightLeaderConfig.Apply(globalConfig).Inverted(true);
+   rightLeaderConfig.Apply(globalConfig).Inverted(true);
 
   // Apply the global config and set the leader SPARK for follower mode
-  SparkBaseConfig leftFollowerConfig.Apply(globalConfig).Follow(m_leftLeader);
+   leftFollowerConfig.Apply(globalConfig).Follow(m_leftLeader);
 
   // Apply the global config and set the leader SPARK for follower mode
-  SparkBaseConfig rightFollowerConfig.Apply(globalConfig).Follow(m_rightLeader);
+   rightFollowerConfig.Apply(globalConfig).Follow(m_rightLeader);
 
   /*
    * Apply the configuration to the SPARKs.
@@ -38,38 +38,12 @@ ElevatorSubsystem::ElevatorSubsystem() {
    * the SPARK MAX loses power. This is useful for power cycles that may occur
    * mid-operation.
    */
-  SparkBaseConfig m_leftLeader.Configure(globalConfig,
+   m_leftLeader.Configure(globalConfig,
                         SparkMax::ResetMode::kResetSafeParameters,
                         SparkMax::PersistMode::kPersistParameters);
-  SparkBaseConfig m_rightLeader.Configure(rightLeaderConfig,
+   m_rightLeader.Configure(rightLeaderConfig,
                         SparkMax::ResetMode::kResetSafeParameters,
                         SparkMax::PersistMode::kPersistParameters);
-}
-
- ElevatorSubsystem::ElevatorSubsystem() {
-  // Display the applied output of the left and right side onto the dashboard
-  frc::SmartDashboard::PutNumber("Left Out", m_leftLeader.GetAppliedOutput());
-  frc::SmartDashboard::PutNumber("Right Out", m_rightLeader.GetAppliedOutput());
-}
-void Robot::AutonomousInit() {}
-void Robot::AutonomousPeriodic() {}
-
-void Robot::TeleopInit() {}
-void Robot::TeleopPeriodic() {
-
-  /**
-   * Get forward and rotation values from the joystick. Invert the joystick's
-   * Y value because its forward direction is negative.
-   */
-  double forward = - xboxController.GetLeftY();
-  double rotation = xboxController.GetRightX();
-
-  /*
-   * Apply values to left and right side. We will only need to set the leaders
-   * since the other motors are in follower mode.
-   */
-  rev::spark::SparkBaseConfig m_leftLeader.Set(forward + rotation);
-  rev::spark::SparkBaseConfig m_rightLeader.Set(forward - rotation);
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveUpToL1Command() {
@@ -104,10 +78,26 @@ frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
 
 void ElevatorSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
+    /**
+   * Get forward and rotation values from the joystick. Invert the joystick's
+   * Y value because its forward direction is negative.
+   */
+  double forward = - xboxController.GetLeftY();
+  double rotation = xboxController.GetRightX();
+
+  /*
+   * Apply values to left and right side. We will only need to set the leaders
+   * since the other motors are in follower mode.
+   */
+   m_leftLeader.Set(forward + rotation);
+   m_rightLeader.Set(forward - rotation);
+
+  // Display the applied output of the left and right side onto the dashboard
+  frc::SmartDashboard::PutNumber("Left Out", m_leftLeader.GetAppliedOutput());
+  frc::SmartDashboard::PutNumber("Right Out", m_rightLeader.GetAppliedOutput());
+
 }
 
 void ElevatorSubsystem::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.
 }
-
-
