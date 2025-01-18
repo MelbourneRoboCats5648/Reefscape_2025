@@ -2,7 +2,6 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
-#include <frc/motorcontrol/PWMSparkMax.h>
 #include <rev/SparkMax.h>
 
 #include <frc2/command/button/CommandXboxController.h>
@@ -17,22 +16,13 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-    frc::PWMSparkMax m_motorController{kMotorControllerPort};
-
-    rev::spark::SparkBaseConfig globalConfig;
-    rev::spark::SparkBaseConfig rightLeaderConfig;
-    rev::spark::SparkBaseConfig leftFollowerConfig;
-    rev::spark::SparkBaseConfig rightFollowerConfig;
-
+    rev::spark::SparkBaseConfig elevatorMotorConfig;
 
   // Initialize the SPARKs
-  SparkMax m_leftLeader{1, SparkMax::MotorType::kBrushless};
-  SparkMax m_leftFollower{2, SparkMax::MotorType::kBrushless};
-  SparkMax m_rightLeader{3, SparkMax::MotorType::kBrushless};
-  SparkMax m_rightFollower{4, SparkMax::MotorType::kBrushless};
+  SparkMax m_elevatorLiftMotor{1, SparkMax::MotorType::kBrushless};
 
-  // Initialize joystick
-  frc2::CommandXboxController xboxController{0};
+  // Initialize the controller
+  frc2::CommandXboxController xboxController {0}; // need to be fixed - only have one physical xbox controller
 
   public:
   ElevatorSubsystem();
