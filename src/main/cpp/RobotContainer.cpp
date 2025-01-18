@@ -33,10 +33,10 @@ void RobotContainer::ConfigureBindings() {
   m_joystick.Button(rightUpButton).WhileTrue(m_rightClimbSubsystem.RightClimbUpCommand());
   m_joystick.Button(rightDownButton).WhileTrue(m_rightClimbSubsystem.RightClimbDownCommand());
 
-  m_driverController.B().WhileTrue(m_elevatorSubsystem.MoveUpToL1Command());
-  m_driverController.X().WhileTrue(m_elevatorSubsystem.MoveUpToL2Command());
-  m_driverController.Y().WhileTrue(m_elevatorSubsystem.MoveUpToL3Command());
-  m_driverController.A().WhileTrue(m_elevatorSubsystem.MoveDownCommand());
+  m_driverController.LeftStick().WhileTrue(m_elevatorSubsystem.MoveUpToL1Command());
+  m_driverController.RightStick().WhileTrue(m_elevatorSubsystem.MoveUpToL2Command());
+  m_driverController.LeftTrigger().WhileTrue(m_elevatorSubsystem.MoveUpToL3Command());
+  m_driverController.RightTrigger().WhileTrue(m_elevatorSubsystem.MoveDownCommand());
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.
