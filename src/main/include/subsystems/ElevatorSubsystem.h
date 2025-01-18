@@ -3,6 +3,7 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 #include <rev/SparkMax.h>
+#include <Constants.h>
 
 #include <frc2/command/button/CommandXboxController.h>
 
@@ -17,8 +18,8 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  // Initialize the SPARKs
-  SparkMax m_elevatorLiftMotor{1, SparkMax::MotorType::kBrushless};
+  // Initialize the motor
+  SparkMax m_elevatorLiftMotor{CAN_Constants::kElevatorMotorCAN_ID, SparkMax::MotorType::kBrushless};
 
   // Initialize the controller
   frc2::CommandXboxController xboxController {0}; // need to be fixed - only have one physical xbox controller
