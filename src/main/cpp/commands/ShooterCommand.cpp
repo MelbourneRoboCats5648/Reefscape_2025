@@ -1,7 +1,7 @@
 #include "commands/ShooterCommand.h"
 
-ShooterCommand::ShooterCommand(ShooterSubsystem* shootersubsystem)
-    : m_shootersubsystem{shootersubsystem} {
+ShooterCommand::ShooterCommand(ShooterSubsystem* shooterSubsystem)
+    : m_shooterSubsystem{shooterSubsystem} {
   // Register that this command requires the subsystem.
-  AddRequirements(m_shootersubsystem);
+  AddRequirements(m_shooterSubsystem);
 }

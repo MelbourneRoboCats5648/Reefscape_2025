@@ -7,41 +7,29 @@ IntakeSubsystem::IntakeSubsystem() {
 frc2::CommandPtr IntakeSubsystem::CollectCommand() {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem.
-  return Run([this] { 
-        m_motorIntakeWheel.Set(intakeWheelInSpeed);
-    }).FinallyDo([this]{
-        m_motorIntakeWheel.Set(0);
-    });
+  return Run([this] {m_motorIntakeWheel.Set(intakeWheelInSpeed); })
+         .FinallyDo([this]{m_motorIntakeWheel.Set(0);});
 }
 
 frc2::CommandPtr IntakeSubsystem::EjectCommand() {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem.
-  return Run([this] {
-        m_motorIntakeWheel.Set(intakeWheelOutSpeed);
-    }).FinallyDo([this]{
-        m_motorIntakeWheel.Set(0);
-    });
+  return Run([this] {m_motorIntakeWheel.Set(intakeWheelOutSpeed); })
+        .FinallyDo([this]{m_motorIntakeWheel.Set(0);});
 }
 
 frc2::CommandPtr IntakeSubsystem::RetractCommand() {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem.
-  return Run([this] {
-        m_motorIntakeArm.Set(intakeArmRetractSpeed);
-    }).FinallyDo([this]{
-        m_motorIntakeArm.Set(0);
-    });
+  return Run([this] {m_motorIntakeArm.Set(intakeArmRetractSpeed); }) 
+         .FinallyDo([this]{m_motorIntakeArm.Set(0);});
 }
 
 frc2::CommandPtr IntakeSubsystem::ExtendCommand() {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem.
-  return Run([this] {
-        m_motorIntakeArm.Set(intakeArmExtendSpeed);
-    }).FinallyDo([this]{
-        m_motorIntakeArm.Set(0);
-    });
+  return Run([this] {m_motorIntakeArm.Set(intakeArmExtendSpeed); })
+         .FinallyDo([this]{m_motorIntakeArm.Set(0);});
 }
 
 //stops all motors

@@ -23,5 +23,5 @@ class ShooterCommand
   explicit ShooterCommand(ShooterSubsystem* shooterSubsystem);
 
  private:
-  ShooterSubsystem* m_shootersubsystem;
+  ShooterSubsystem* m_shooterSubsystem;
 };

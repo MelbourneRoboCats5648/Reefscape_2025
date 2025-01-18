@@ -7,13 +7,12 @@ ShooterSubsystem::ShooterSubsystem() {
 frc2::CommandPtr ShooterSubsystem::ShooterSpeakerCommand() {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem.
-  return Run([this] { 
+  return Run([this] {
     m_motorShooterLeft.Set(speakerShooterSpeed);
-    m_motorShooterRight.Set(-1.0*speakerShooterSpeed);
-   }).FinallyDo([this]{ 
+    m_motorShooterRight.Set(-1.0*speakerShooterSpeed);})
+   .FinallyDo([this]{ 
    m_motorShooterLeft.Set(0.0);
-   m_motorShooterRight.Set(0.0);
-  });
+   m_motorShooterRight.Set(0.0);});
 }
 
 frc2::CommandPtr ShooterSubsystem::ShooterAmpCommand() {
@@ -21,11 +20,10 @@ frc2::CommandPtr ShooterSubsystem::ShooterAmpCommand() {
   // Subsystem::RunOnce implicitly requires `this` subsystem.
   return Run([this] { 
      m_motorShooterLeft.Set(ampShooterSpeed);
-     m_motorShooterRight.Set(-1.0*ampShooterSpeed);
-   }).FinallyDo ([this]{
+     m_motorShooterRight.Set(-1.0*ampShooterSpeed);})
+   .FinallyDo ([this]{
     m_motorShooterLeft.Set(0.0);
-    m_motorShooterRight.Set(0.0);
-   }); 
+    m_motorShooterRight.Set(0.0);}); 
 }
 
 //stops all motors
