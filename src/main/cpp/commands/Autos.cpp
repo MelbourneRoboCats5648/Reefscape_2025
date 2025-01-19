@@ -24,12 +24,13 @@ frc2::CommandPtr autos::VisionDrive(VisionSubsystem* visionSubsystem, DriveSubsy
   {
     units::meters_per_second_t ForwardSpeed = visionSubsystem->GetTargetingForwardSpeedReef() * kMaxSpeed;
     units::radians_per_second_t AngularVelocity = visionSubsystem->GetTargetingAngularVelocityReef() * kMaxAngularSpeed;
-    auto visionXSpeed = ForwardSpeed;
+    auto visionX_Speed = ForwardSpeed;
     auto visionRot = AngularVelocity;
-  
-    driveSubsystem->Drive(visionXSpeed, 0_mps, visionRot, false);
+
+    auto visionY_Speed = 0_mps;
+    driveSubsystem->Drive(visionX_Speed, visionY_Speed, visionRot, false);
   }
-  ).FinallyDo([visionSubsystem, driveSubsystem]
+  ).FinallyDo([driveSubsystem]
   {  
     driveSubsystem->StopAllModules();
   });
