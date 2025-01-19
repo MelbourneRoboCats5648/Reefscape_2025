@@ -5,16 +5,13 @@
 #include <rev/SparkMax.h>
 #include <Constants.h>
 
-// PWM Ports
-using namespace rev::spark;
-
 class ElevatorSubsystem : public frc2::SubsystemBase {
   private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
   // Initialize the motor
-  SparkMax m_elevatorLiftMotor{CAN_Constants::kElevatorMotorCAN_ID, SparkMax::MotorType::kBrushless};
+  rev::spark::SparkMax m_elevatorLiftMotor{CAN_Constants::kElevatorMotorCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
 
   public:
   ElevatorSubsystem();
