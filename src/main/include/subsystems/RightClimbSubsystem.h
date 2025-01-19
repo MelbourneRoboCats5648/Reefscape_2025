@@ -4,18 +4,24 @@
 
 #pragma once
 
+#include <numbers>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 #include <frc/motorcontrol/VictorSP.h>
 #include <frc/Joystick.h>
 #include <rev/SparkMax.h>
+#include <frc/controller/PIDController.h>
+#include <units/angle.h>
+#include <units/angular_velocity.h>
 
 using namespace rev::spark;
 
 //FRC Motor Ports
-const int motorClimbRightPort= 1;
+
+const int motorClimbRightPort= 0;
 
 //Motor ID
+//plan to change with more Spark motors added
 const int motorClimbRightID = 1;
 
 // Speeds
@@ -27,8 +33,15 @@ const int rightUpButton = 6;
 const int rightDownButton = 4;
 
 // Soft Limits
+//plant to change from example base limits when limits are changed
 const int  extendSoftLimit = 50;
 const int  retractSoftLimit= -50;
+
+ 
+//PID Controller
+
+//PID Profile] 
+
 
 class RightClimbSubsystem : public frc2::SubsystemBase {
  public:
@@ -40,6 +53,11 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr RightClimbUpCommand();
   frc2::CommandPtr RightClimbDownCommand();
   
+    
+  [[nodiscard]]
+  frc2::CommandPtr RightClimbCommand(units::turns_per_second_t setpoint);
+
+
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -59,8 +77,10 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
 //old frc 2024 season motors redundant (need to change to spark)
           frc::VictorSP m_motorClimbRight{motorClimbRightPort};
 
-// Spark Brushless 
+// Spark components
+//plan to add motors to hard switches
           SparkMax m_motor{motorClimbRightID, SparkMax::MotorType::kBrushless};
           SparkRelativeEncoder m_encoder = m_motor.GetEncoder();
+          
 
 };
