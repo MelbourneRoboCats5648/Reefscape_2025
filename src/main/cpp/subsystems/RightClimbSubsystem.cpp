@@ -115,6 +115,10 @@ frc2::CommandPtr RightClimbSubsystem::RightClimbDownCommand() {
     return units::math::abs(error)< RightClimbConstants::kGoalThreshold;
     });
       
+          // Send setpoint to offboard controller PID
+      m_closedLoopController.SetReference(setpointState.position.value(), //- previously part of command
+                                        SparkMax::ControlType::kPosition); //- Closedloopcontroller will set setpoint values through motor controller
+
  */
 
 void RightClimbSubsystem::Periodic() {

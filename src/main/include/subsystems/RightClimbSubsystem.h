@@ -53,6 +53,7 @@ const int  retractSoftLimit= -50;
 namespace RightClimbConstants {
 //PID Trapezoidal Controller
 static constexpr units::second_t kDt = 20_ms;
+const units::radian_t kGoalThreshold = 0.1_rad; //part of RightClimbCommand
 
 //PID Controller
 const double kP = 0.0;
@@ -60,8 +61,11 @@ const double kI = 0.0;
 const double kD = 0.0;
 
 //PID Profile] 
-const units:: turns_per_second_t maximumVelocity= 1.75_tps;
-const units::turns_per_second_squared_t maximumAccelaration = 0.75_tr_per_s_sq;
+const units:: radians_per_second_t maximumVelocity= 1.75_rad_per_s;
+const units::radians_per_second_squared_t maximumAccelaration = 0.75_rad_per_s_sq;
+//radians can also be used
+/*const units::radians_per_second_t maximumVelocity = 1.75_rad_per_s;
+const units::radians_per_second_squared_t maximumAcceleration = 0.75_rad_per_s_sq; */
 
 }
 
@@ -81,7 +85,7 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
    */
 
   [[nodiscard]]
-  frc2::CommandPtr RightClimbCommand(units::turn_t goal);
+  frc2::CommandPtr RightClimbCommand(units::radian_t goal);
 
 
 
@@ -116,7 +120,7 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
 
   // Create a motion profile with the given maximum velocity and maximum
   // acceleration constraints for the next setpoint.
-  frc::TrapezoidProfile<units::meters> m_profile{{1.75_mps, 0.75_mps_sq}};
+  //frc::TrapezoidProfile<units::meters> m_profile{{1.75_mps, 0.75_mps_sq}};
   frc::TrapezoidProfile<units::meters>::State m_goal;
   frc::TrapezoidProfile<units::meters>::State m_setpoint;
   SparkClosedLoopController m_closedLoopController = m_motor.GetClosedLoopController();
@@ -124,6 +128,6 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
   //Edited Trapezoid Profiler with turn_t doesn't build
   // Create a motion profile with the given maximum velocity and maximum
   // acceleration constraints for the next setpoint.
-  //frc::TrapezoidProfile<units::turn_t> m_profile{{RightClimbConstants::maximumVelocity, RightClimbConstants::maximumAccelaration}};
-  
+  //frc::TrapezoidProfile<units::radian_t> m_profile{{RightClimbConstants::maximumVelocity, RightClimbConstants::maximumAccelaration}};
+  // turns can also be changed to radians like the constants
 };
