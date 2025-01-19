@@ -19,10 +19,10 @@ using namespace DriveConstants;
 
 
 
-frc2::CommandPtr autos::VisionDrive(DriveSubsystem* driveSubsystem, VisionSubsystem* visionSubsystem) {
+frc2::CommandPtr autos::VisionDrive(VisionSubsystem* visionSubsystem, DriveSubsystem* driveSubsystem) {
   return frc2::cmd::Run([visionSubsystem, driveSubsystem]
   {
-    units::meters_per_second_t AngularVelocity = visionSubsystem->GetTargetingAngularVelocityReef() * kMaxAngularSpeed;
+    units::radians_per_second_t AngularVelocity = visionSubsystem->GetTargetingAngularVelocityReef() * kMaxAngularSpeed;
     units::meters_per_second_t ForwardSpeed = visionSubsystem->GetTargetingForwardSpeedReef() * kMaxSpeed;
     auto visionRot = AngularVelocity;
     auto visionXSpeed = ForwardSpeed;

@@ -4,19 +4,63 @@
 
 #include "RobotContainer.h"
 
+
 #include <frc2/command/button/Trigger.h>
 
-#include "commands/Autos.h"
+//copied from frc example code
+#include <utility>
+#include <frc/controller/PIDController.h>
+#include <frc/geometry/Translation2d.h>
+#include <frc/shuffleboard/Shuffleboard.h>
+#include <frc/trajectory/Trajectory.h>
+#include <frc/trajectory/TrajectoryGenerator.h>
+#include <frc2/command/Commands.h>
+#include <frc2/command/RunCommand.h>
+#include <frc2/command/InstantCommand.h>
+#include <frc2/command/SequentialCommandGroup.h>
+#include <frc2/command/SwerveControllerCommand.h>
+#include <frc2/command/button/JoystickButton.h>
+#include <units/angle.h>
+#include <units/velocity.h>
 
+#include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
 
-RobotContainer::RobotContainer() 
-{
+#include <frc/filter/SlewRateLimiter.h>
+#include <frc/Joystick.h>
+
+#include <frc2/command/button/Trigger.h>
+
+using namespace DriveConstants;
+
+
+RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
 
   // Configure the button bindings
   ConfigureBindings();
+
+    m_driveSubsystem.SetDefaultCommand(frc2::RunCommand(
+      [this] {
+        m_driveSubsystem.Drive(
+            // Multiply by max speed to map the joystick unitless inputs to
+            // actual units. This will map the [-1, 1] to [max speed backwards,
+            // max speed forwards], converting them to actual units.
+            m_driverController.GetLeftY() * DriveConstants::kMaxSpeed, //xspeed
+            m_driverController.GetLeftX() * DriveConstants::kMaxSpeed, //yspeed
+            m_driverController.GetRightX() * DriveConstants::kMaxAngularSpeed, //rotation
+            false //fieldrelative
+            
+            //xLimiter.Calculate(m_driverJoystick.GetMagnitude() * DriveConstants::kMaxSpeed),
+            //yLimiter.Calculate(m_driverJoystick.GetMagnitude() * DriveConstants::kMaxSpeed),
+            //rotLimiter.Calculate(m_driverJoystick.GetDirection() * DriveConstants::kMaxAngularSpeed),
+            //m_driverJoystick.(whateverbutton()).WhileTrue(false);
+            );
+      },
+      {&m_driveSubsystem}));
+      
 }
+
 
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
@@ -35,7 +79,7 @@ void RobotContainer::ConfigureBindings() {
   // pressed, cancelling on release.
   m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
 
-  //controller.button().whiletrue(autos::VisionDrive(&sub1, &sub3));
+  m_visionSubsystem.m_aprilTagIDTrigger.WhileTrue(autos::VisionDrive(&m_visionSubsystem, &m_driveSubsystem));
   
 }
 
