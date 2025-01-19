@@ -18,6 +18,7 @@
 // PID Profile and Controller stuff
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/trajectory/TrapezoidProfile.h>
+#include <frc2/command/Commands.h>
 #include <units/acceleration.h>
 #include <units/angular_acceleration.h>
 #include <units/length.h>
@@ -119,10 +120,10 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
   frc::TrapezoidProfile<units::meters>::State m_goal;
   frc::TrapezoidProfile<units::meters>::State m_setpoint;
   SparkClosedLoopController m_closedLoopController = m_motor.GetClosedLoopController();
+
+  //Edited Trapezoid Profiler with turn_t doesn't build
   // Create a motion profile with the given maximum velocity and maximum
   // acceleration constraints for the next setpoint.
   //frc::TrapezoidProfile<units::turn_t> m_profile{{RightClimbConstants::maximumVelocity, RightClimbConstants::maximumAccelaration}};
-
-
-
+  
 };
