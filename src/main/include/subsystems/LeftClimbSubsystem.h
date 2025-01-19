@@ -55,11 +55,11 @@ const double kI = 0.0;
 const double kD = 0.0;
 
 //PID Profile 
-const units::turns_per_second_t maximumVelocity = 1.75_rad_per_s;
-const units::turns_per_second_squared_t maximumAcceleration = 0.75_rad_per_s_sq;
+const units::turns_per_second_t maximumVelocity = 0.5_tps;
+const units::turns_per_second_squared_t maximumAcceleration = 0.25_tr_per_s_sq;
 //kDt
 const units::second_t kDt = 20_ms;
-const units::turn_t kGoalThreshold = 0.1_rad;
+const units::turn_t kGoalThreshold = 3.0_tr;
 }
 
 class LeftClimbSubsystem : public frc2::SubsystemBase {
