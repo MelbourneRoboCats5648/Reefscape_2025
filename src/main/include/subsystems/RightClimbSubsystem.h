@@ -19,6 +19,7 @@
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/trajectory/TrapezoidProfile.h>
 #include <units/acceleration.h>
+#include <units/angular_acceleration.h>
 #include <units/length.h>
 #include <units/time.h>
 #include <units/velocity.h>
@@ -31,7 +32,7 @@ using namespace rev::spark;
 
 const int motorClimbRightPort= 0;
 
-//Motor ID
+//SparkMax Motor ID
 //plan to change with more Spark motors added
 const int motorClimbRightID = 1;
 
@@ -48,12 +49,20 @@ const int rightDownButton = 4;
 const int  extendSoftLimit = 50;
 const int  retractSoftLimit= -50;
 
+namespace RightClimbConstants {
 //PID Trapezoidal Controller
 static constexpr units::second_t kDt = 20_ms;
 
 //PID Controller
+const double kP = 0.0;
+const double kI = 0.0;
+const double kD = 0.0;
 
 //PID Profile] 
+const units:: turns_per_second_t maximumVelocity= 1.75_tps;
+const units::turns_per_second_squared_t maximumAccelaration = 0.75_tr_per_s_sq;
+
+}
 
 
 class RightClimbSubsystem : public frc2::SubsystemBase {
@@ -65,10 +74,13 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
    */
   frc2::CommandPtr RightClimbUpCommand();
   frc2::CommandPtr RightClimbDownCommand();
-  
     
+    /**
+   * @param setpointRotationsPerSecond The desired right climb velocity
+   */
+
   [[nodiscard]]
-  frc2::CommandPtr RightClimbCommand(units::turns_per_second_t setpoint);
+  frc2::CommandPtr RightClimbCommand(units::turn_t goal);
 
 
 
@@ -106,6 +118,10 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
   frc::TrapezoidProfile<units::meters> m_profile{{1.75_mps, 0.75_mps_sq}};
   frc::TrapezoidProfile<units::meters>::State m_goal;
   frc::TrapezoidProfile<units::meters>::State m_setpoint;
+  SparkClosedLoopController m_closedLoopController = m_motor.GetClosedLoopController();
+  // Create a motion profile with the given maximum velocity and maximum
+  // acceleration constraints for the next setpoint.
+  //frc::TrapezoidProfile<units::turn_t> m_profile{{RightClimbConstants::maximumVelocity, RightClimbConstants::maximumAccelaration}};
 
 
 
