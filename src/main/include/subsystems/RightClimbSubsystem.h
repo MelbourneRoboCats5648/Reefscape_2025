@@ -13,6 +13,17 @@
 #include <frc/controller/PIDController.h>
 #include <units/angle.h>
 #include <units/angular_velocity.h>
+// possibly add smart dashboard from example for hard switches
+#include <rev/config/SparkMaxConfig.h>
+// PID Profile and Controller stuff
+#include <frc/controller/SimpleMotorFeedforward.h>
+#include <frc/trajectory/TrapezoidProfile.h>
+#include <units/acceleration.h>
+#include <units/length.h>
+#include <units/time.h>
+#include <units/velocity.h>
+#include <units/voltage.h>
+
 
 using namespace rev::spark;
 
@@ -37,7 +48,9 @@ const int rightDownButton = 4;
 const int  extendSoftLimit = 50;
 const int  retractSoftLimit= -50;
 
- 
+//PID Trapezoidal Controller
+static constexpr units::second_t kDt = 20_ms;
+
 //PID Controller
 
 //PID Profile] 
@@ -81,6 +94,19 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
 //plan to add motors to hard switches
           SparkMax m_motor{motorClimbRightID, SparkMax::MotorType::kBrushless};
           SparkRelativeEncoder m_encoder = m_motor.GetEncoder();
-          
+           
+
+    
+    /*frc::SimpleMotorFeedforward<units::meters> m_feedforward{
+      // Note: These gains are fake, and will have to be tuned for your robot. feedforward will be used soon
+      //1_V, 1.5_V * 1_s / 1_m}; */
+
+  // Create a motion profile with the given maximum velocity and maximum
+  // acceleration constraints for the next setpoint.
+  frc::TrapezoidProfile<units::meters> m_profile{{1.75_mps, 0.75_mps_sq}};
+  frc::TrapezoidProfile<units::meters>::State m_goal;
+  frc::TrapezoidProfile<units::meters>::State m_setpoint;
+
+
 
 };

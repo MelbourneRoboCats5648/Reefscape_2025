@@ -1,6 +1,4 @@
 #include "subsystems/RightClimbSubsystem.h"
-// possibly add smart dashboard from example for hard switches
-#include <rev/config/SparkMaxConfig.h>
 
 
 
@@ -26,6 +24,17 @@ RightClimbSubsystem::RightClimbSubsystem() {
       .ForwardSoftLimitEnabled(true)
       .ReverseSoftLimit(-50)
       .ReverseSoftLimitEnabled(true);
+
+
+  motorConfig.closedLoop.P(0.1).I(0.0).D(0.0);
+  m_motor.Configure(motorConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
+                    rev::spark::SparkMax::PersistMode::kNoPersistParameters);
+                    
+  // Reset the position to 0 to start within the range of the soft limits                  
+  m_encoder.SetPosition(0);
+
+
+
       /*
    * Apply the configuration to the SPARK MAX.
    *
@@ -35,8 +44,10 @@ RightClimbSubsystem::RightClimbSubsystem() {
    * kPersistParameters is used to ensure the configuration is not lost when
    * the SPARK MAX loses power. This is useful for power cycles that may occur mid-operation.*/
    
+
   m_motor.Configure(motorConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                     rev::spark::SparkMax::PersistMode::kNoPersistParameters);
+
   // Reset the position to 0 to start within the range of the soft limits
   m_encoder.SetPosition(0);
 
