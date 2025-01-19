@@ -8,7 +8,6 @@
 #include <frc2/command/SubsystemBase.h>
 #include <frc/Joystick.h>
 #include <frc/motorcontrol/VictorSP.h>
-#include <frc/Joystick.h>
 #include <rev/SparkMax.h>
 #include <rev/config/SparkMaxConfig.h>
 #include <frc/controller/PIDController.h>
@@ -56,11 +55,11 @@ const double kI = 0.0;
 const double kD = 0.0;
 
 //PID Profile 
-const units::turns_per_second_t maximumVelocity = 1.75_tps;
-const units::turns_per_second_squared_t maximumAcceleration = 0.75_tr_per_s_sq;
+const units::meters_per_second_t maximumVelocity = 1.75_mps;
+const units::meters_per_second_squared_t maximumAcceleration = 0.75_mps_sq;
 //kDt
 const units::second_t kDt = 20_ms;
-const units::turn_t kGoalThreshold = 0.1_tr;
+const units::meter_t kGoalThreshold = 0.1_m;
 }
 
 class LeftClimbSubsystem : public frc2::SubsystemBase {
@@ -72,7 +71,7 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
    */
   frc2::CommandPtr LeftClimbUpCommand();
   frc2::CommandPtr LeftClimbDownCommand();
-  frc2::CommandPtr LeftClimbCommand(units::turn_t goal);
+  frc2::CommandPtr LeftClimbL1Command(units::meter_t goal);
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -91,6 +90,8 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
       SparkMax m_motorController{motorClimbLeftID, SparkMax::MotorType::kBrushless};
       SparkClosedLoopController m_closedLoopController = m_motorController.GetClosedLoopController();
       SparkRelativeEncoder m_encoder = m_motorController.GetEncoder();
-      //frc::TrapezoidProfile<units::turn_t> m_profile{{LeftClimbConstants::maximumVelocity, LeftClimbConstants::maximumAcceleration}};
+      frc::TrapezoidProfile<units::meters> m_TrapezoidalProfile{{LeftClimbConstants::maximumVelocity, LeftClimbConstants::maximumAcceleration}};
+      frc::TrapezoidProfile<units::meters>::State m_leftClimbGoal;
+      frc::TrapezoidProfile<units::meters>::State m_leftClimbSetpoint;
 };
 
