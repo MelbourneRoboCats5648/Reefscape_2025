@@ -50,7 +50,7 @@ const int  retractSoftLimit= -50;
 //PID Controller constants
 namespace LeftClimbConstants 
 {
-const double kP = 0.0;
+const double kP = 1.0;
 const double kI = 0.0;
 const double kD = 0.0;
 
