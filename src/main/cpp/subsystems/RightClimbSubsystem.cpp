@@ -2,17 +2,16 @@
 
 #include "subsystems/RightClimbSubsystem.h"
 
-// possibly add smart dashboard from example for hard switches
+/* possibly add smart dashboard from example for hard switches
 #include <rev/config/SparkMaxConfig.h>
 #include <frc2/command/Commands.h>
 
 #include <frc/controller/SimpleMotorFeedforward.h>
-#include <frc/trajectory/TrapezoidProfile.h>
 #include <units/acceleration.h>
 #include <units/length.h>
 #include <units/time.h>
 #include <units/velocity.h>
-#include <units/voltage.h>
+#include <units/voltage.h> */
 
 
 
@@ -141,6 +140,5 @@ void RightClimbSubsystem::Periodic() {
 void RightClimbSubsystem::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.
 
-  
 }
 

@@ -12,10 +12,20 @@
 #include <frc/Joystick.h>
 #include <rev/SparkMax.h>
 #include <frc/controller/PIDController.h>
-
+#include <frc/trajectory/TrapezoidProfile.h>
 #include <units/angle.h>
 #include <units/angular_velocity.h>
 #include <units/angular_acceleration.h>
+// possibly add smart dashboard from example for hard switches
+#include <rev/config/SparkMaxConfig.h>
+#include <frc2/command/Commands.h>
+
+#include <frc/controller/SimpleMotorFeedforward.h>
+#include <units/acceleration.h>
+#include <units/length.h>
+#include <units/time.h>
+#include <units/velocity.h>
+#include <units/voltage.h>
 
 
 using namespace rev::spark;
@@ -49,10 +59,15 @@ const double kD = 0.0;
 
 
 //PID Profile 
-const units::turns_per_second_t maximumVelocity = 1.75_tps;
-const units::turns_per_second_squared_t maximumAccelaration = 0.75_tr_per_s_sq;
+/*const units::turns_per_second_t maximumVelocity = 1.75_tps;
+const units::turns_per_second_squared_t maximumAccelaration = 0.75_tr_per_s_sq;*/
+
+const units::radians_per_second_t maximumVelocity = 1.75_rad_per_s;
+const units::radians_per_second_squared_t maximumAcceleration = 0.75_rad_per_s_sq;
 //kDt
 const units::second_t kDt = 20_ms;
+
+const units::turn_t kGoalThreshold = 0.1_tr;
 }
 
 
@@ -67,8 +82,7 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
    */
   frc2::CommandPtr RightClimbUpCommand();
   frc2::CommandPtr RightClimbDownCommand();
-  frc2::CommandPtr RightClimbCommand();
-
+  
   /**
    * Returns a command to shoot the balls currently stored in the robot. Spins
    * the shooter flywheel up to the specified setpoint, and then runs the feeder
@@ -79,7 +93,7 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
   [[nodiscard]]
   frc2::CommandPtr RightClimbCommand(units::turn_t goal);
 
- 
+
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -103,10 +117,11 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
 //plan to add motors and hard switches
           SparkMax m_motorController{motorClimbRightID, SparkMax::MotorType::kBrushless};
           SparkClosedLoopController m_closedLoopController = m_motorController.GetClosedLoopController();
+          SparkRelativeEncoder m_encoder = m_motorController.GetEncoder();
 
           // Create a motion profile with the given maximum velocity and maximum
           // acceleration constraints for the next setpoint.
-          frc::TrapezoidProfile<units::turn_t> m_profile{{RightClimbConstants::maximumVelocity, RightClimbConstants::maximumAccelaration}};
+          frc::TrapezoidProfile<units::radians_per_second> m_profile{{RightClimbConstants::maximumVelocity, RightClimbConstants::maximumAcceleration}};
           
          
           
