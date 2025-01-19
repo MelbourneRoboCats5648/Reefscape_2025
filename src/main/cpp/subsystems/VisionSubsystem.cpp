@@ -29,6 +29,14 @@ void VisionSubsystem::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.
 }
 
+double VisionSubsystem::GetTargetingForwardSpeedReef(){
+
+    double ty = LimelightHelpers::getTY("");
+    double targetingForwardSpeed = ty * kReefForwardKP;
+     //targetingForwardSpeed *= -1.0;
+    return targetingForwardSpeed;
+}
+
 
 double VisionSubsystem::GetTargetingAngularVelocityReef(){
 
@@ -39,12 +47,5 @@ double VisionSubsystem::GetTargetingAngularVelocityReef(){
     return targetingAngularVelocity;
 }
 
-double VisionSubsystem::GetTargetingForwardSpeedReef(){
-
-    double ty = LimelightHelpers::getTY("");
-    double targetingForwardSpeed = ty * kReefForwardKP;
-     //targetingForwardSpeed *= -1.0;
-    return targetingForwardSpeed;
-}
 
 
