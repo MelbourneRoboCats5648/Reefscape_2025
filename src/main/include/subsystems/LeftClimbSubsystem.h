@@ -55,11 +55,11 @@ const double kI = 0.0;
 const double kD = 0.0;
 
 //PID Profile 
-const units::meters_per_second_t maximumVelocity = 1.75_mps;
-const units::meters_per_second_squared_t maximumAcceleration = 0.75_mps_sq;
+const units::radians_per_second_t maximumVelocity = 1.75_rad_per_s;
+const units::radians_per_second_squared_t maximumAcceleration = 0.75_rad_per_s_sq;
 //kDt
 const units::second_t kDt = 20_ms;
-const units::meter_t kGoalThreshold = 0.1_m;
+const units::radian_t kGoalThreshold = 0.1_rad;
 }
 
 class LeftClimbSubsystem : public frc2::SubsystemBase {
@@ -71,7 +71,7 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
    */
   frc2::CommandPtr LeftClimbUpCommand();
   frc2::CommandPtr LeftClimbDownCommand();
-  frc2::CommandPtr LeftClimbL1Command(units::meter_t goal);
+  frc2::CommandPtr LeftClimbL1Command(units::radian_t goal);
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -90,8 +90,8 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
       SparkMax m_motorController{motorClimbLeftID, SparkMax::MotorType::kBrushless};
       SparkClosedLoopController m_closedLoopController = m_motorController.GetClosedLoopController();
       SparkRelativeEncoder m_encoder = m_motorController.GetEncoder();
-      frc::TrapezoidProfile<units::meters> m_TrapezoidalProfile{{LeftClimbConstants::maximumVelocity, LeftClimbConstants::maximumAcceleration}};
-      frc::TrapezoidProfile<units::meters>::State m_leftClimbGoal;
-      frc::TrapezoidProfile<units::meters>::State m_leftClimbSetpoint;
+      frc::TrapezoidProfile<units::radian> m_TrapezoidalProfile{{LeftClimbConstants::maximumVelocity, LeftClimbConstants::maximumAcceleration}};
+      frc::TrapezoidProfile<units::radian>::State m_leftClimbGoal;
+      frc::TrapezoidProfile<units::radian>::State m_leftClimbSetpoint;
 };
 
