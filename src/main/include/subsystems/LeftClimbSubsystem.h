@@ -17,8 +17,8 @@ const double leftClimbUpSpeed = 1.0; //was 0.25
 const double leftClimbDownSpeed = -1.0;
 
 // Joystick buttons
-const int leftUpButton = 5;
-const int leftDownButton = 3;
+const int leftUpButton = 3;
+const int leftDownButton = 5;
 
 class LeftClimbSubsystem : public frc2::SubsystemBase {
  public:
@@ -29,7 +29,6 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
    */
   frc2::CommandPtr LeftClimbUpCommand();
   frc2::CommandPtr LeftClimbDownCommand();
-
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
