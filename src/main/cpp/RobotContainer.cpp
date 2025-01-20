@@ -28,11 +28,6 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.Y().WhileTrue(m_shooterSubsystem.ShooterSpeakerCommand());
   m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
 
-  m_joystick.Button(leftUpButton).WhileTrue(m_leftClimbSubsystem.LeftClimbUpCommand());
-  m_joystick.Button(leftDownButton).WhileTrue(m_leftClimbSubsystem.LeftClimbDownCommand());
-  m_joystick.Button(rightUpButton).WhileTrue(m_rightClimbSubsystem.RightClimbUpCommand());
-  m_joystick.Button(rightDownButton).WhileTrue(m_rightClimbSubsystem.RightClimbDownCommand());
-
 // elevator subsystem commands
   m_driverController.LeftStick().WhileTrue(m_elevatorSubsystem.MoveUpToL1Command());
   m_driverController.RightStick().WhileTrue(m_elevatorSubsystem.MoveUpToL2Command());
