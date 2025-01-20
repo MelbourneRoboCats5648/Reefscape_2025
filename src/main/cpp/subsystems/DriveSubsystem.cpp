@@ -1,11 +1,17 @@
 #include "subsystems/DriveSubsystem.h"
 
-DriveSubsystem::DriveSubsystem() {
+DriveSubsystem::DriveSubsystem() 
+  : m_odometry{kinematics,
+      frc::Rotation2d{GetHeading()},
+      {m_frontLeftModule.GetPosition(), m_frontRightModule.GetPosition(),
+       m_backLeftModule.GetPosition(), m_backRightModule.GetPosition()},
+       frc::Pose2d{}}
+{
   m_gyro.Calibrate();
 }
 
 void DriveSubsystem::Periodic() {
-  // Implementation of subsystem periodic method goes here.
+  // Implementation of subsystem periodic method goes herSe.
 }
 
 void DriveSubsystem::SimulationPeriodic() {
@@ -42,7 +48,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   m_backRightModule.SetModule(br);
 }
 
-/*
+
 void DriveSubsystem::SetModuleStates(
     wpi::array<frc::SwerveModuleState, 4> desiredStates) {
   kinematics.DesaturateWheelSpeeds(&desiredStates,
@@ -52,7 +58,7 @@ void DriveSubsystem::SetModuleStates(
   m_backLeftModule.SetModule(desiredStates[2]);
   m_backRightModule.SetModule(desiredStates[3]);
 }
-*/
+
 
 void DriveSubsystem::StopAllModules()
 {

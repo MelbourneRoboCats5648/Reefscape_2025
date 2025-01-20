@@ -79,6 +79,14 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
 
 
 
+frc::SwerveModulePosition DriveModule::GetPosition() {
+  return {units::meter_t{m_speedMotor.GetPosition().GetValueAsDouble()*0.3198},
+          units::radian_t{m_directionEncoder.GetAbsolutePosition().GetValueAsDouble()*2*M_PI}};
+}
 
 
+void DriveModule::SetModulePositionToZeroDistance()
+{
+  m_speedMotor.SetPosition(units::angle::turn_t {0.0});
+}
 
