@@ -40,7 +40,7 @@ LeftClimbSubsystem::LeftClimbSubsystem() {
    * kResetSafeParameters is used to get the SPARK MAX to a known state. This is useful in case the SPARK MAX is replaced. 
    * kPersistParameters is used to ensure the configuration is not lost when the SPARK MAX loses power. This is useful for power cycles that may occur mid-operation.*/
   m_motorController.Configure(motorConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
-                              rev::spark::SparkMax::PersistMode::kNoPersistParameters);
+                              rev::spark::SparkMax::PersistMode::kPersistParameters);
   
   // Reset the position to 0 to start within the range of the soft limits
   m_motorController.GetEncoder().SetPosition(0);
