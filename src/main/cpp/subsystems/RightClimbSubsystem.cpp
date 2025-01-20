@@ -73,8 +73,6 @@ m_encoder.SetPosition(0);
 
   // Reset the position to 0 to start within the range of the soft limits
   m_motor.GetEncoder().SetPosition(0);
-
-
 }
 
 frc2::CommandPtr RightClimbSubsystem::RightClimbUpCommand() {

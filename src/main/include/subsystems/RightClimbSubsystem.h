@@ -10,8 +10,6 @@
 #include <frc/motorcontrol/VictorSP.h>
 #include <rev/SparkMax.h>
 #include <frc/controller/PIDController.h>
-#include <units/angle.h>
-#include <units/angular_velocity.h>
 // possibly add smart dashboard from example for hard switches
 #include <rev/config/SparkMaxConfig.h>
 // PID Profile and Controller stuff
@@ -24,7 +22,8 @@
 #include <units/time.h>
 #include <units/velocity.h>
 #include <units/voltage.h>
-
+#include <units/angle.h>
+#include <units/angular_velocity.h>
 
 using namespace rev::spark;
 
