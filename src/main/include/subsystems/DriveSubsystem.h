@@ -62,6 +62,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
    */
   void ResetOdometry(frc::Pose2d pose);
 
+  void SetPositionToZeroDistance();
+
 
 
  private:
