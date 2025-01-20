@@ -31,12 +31,9 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.X().WhileTrue(m_intakeSubsystem.ExtendCommand());
   m_driverController.Y().WhileTrue(m_shooterSubsystem.ShooterSpeakerCommand());
   m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
-<<<<<<< HEAD
   m_driverController.LeftTrigger().WhileTrue(m_intakeAndShootSubsystem.PerformIntakeAndShootCommand()); 
-//climb
-=======
 
->>>>>>> origin/22-create-a-skeleton-elevator-subsystem
+//climb
   m_joystick.Button(leftUpButton).WhileTrue(m_leftClimbSubsystem.LeftClimbUpCommand());
   m_joystick.Button(leftDownButton).WhileTrue(m_leftClimbSubsystem.LeftClimbDownCommand());
   m_joystick.Button(rightUpButton).WhileTrue(m_rightClimbSubsystem.RightClimbUpCommand());
@@ -61,9 +58,4 @@ void RobotContainer::ConfigureBindings() {
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
   return autos::ExampleAuto(&m_subsystem);
-<<<<<<< HEAD
 }
-
-=======
-}
->>>>>>> origin/22-create-a-skeleton-elevator-subsystem
