@@ -101,7 +101,7 @@ frc2::CommandPtr RightClimbSubsystem::RightClimbDownCommand() {
           .FinallyDo([this]{m_motorClimbRight.Set(0);});
 }
 
-frc2::CommandPtr RightClimbSubsystem::RightClimb1Command(units::radian_t goal) {
+frc2::CommandPtr RightClimbSubsystem::RightClimb1Command(units::turn_t goal) {
   /*frc::TrapezoidProfile<units::turn_t>::State goalState = {goal, 0_tps};
   frc::TrapezoidProfile<units::turn_t>::State setpointState;
   // Inline construction of command goes here.

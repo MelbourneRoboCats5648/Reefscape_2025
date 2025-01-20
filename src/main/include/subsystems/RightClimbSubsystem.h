@@ -53,7 +53,7 @@ const int  retractSoftLimit= -50;
 namespace RightClimbConstants {
 //PID Trapezoidal Controller
 static constexpr units::second_t kDt = 20_ms;
-const units::radian_t kGoalThreshold = 0.1_rad; //part of RightClimbCommand
+const units::turn_t kGoalThreshold = 0.1_rad; //part of RightClimbCommand
 
 //PID Controller
 const double kP = 0.0;
@@ -61,8 +61,8 @@ const double kI = 0.0;
 const double kD = 0.0;
 
 //PID Profile] 
-const units:: radians_per_second_t maximumVelocity= 1.75_rad_per_s;
-const units::radians_per_second_squared_t maximumAccelaration = 0.75_rad_per_s_sq;
+const units:: turns_per_second_t maximumVelocity= 1.75_rad_per_s;
+const units::turns_per_second_squared_t maximumAccelaration = 0.75_rad_per_s_sq;
 //radians can also be used
 /*const units::radians_per_second_t maximumVelocity = 1.75_rad_per_s;
 const units::radians_per_second_squared_t maximumAcceleration = 0.75_rad_per_s_sq; */
@@ -79,13 +79,7 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
    */
   frc2::CommandPtr RightClimbUpCommand();
   frc2::CommandPtr RightClimbDownCommand();
-    
-    /**
-   * @param setpointRotationsPerSecond The desired right climb velocity
-   */
-
-  [[nodiscard]]
-  frc2::CommandPtr RightClimb1Command(units::radian_t goal);
+  frc2::CommandPtr RightClimb1Command(units::turn_t goal);
 
 
 
@@ -121,9 +115,9 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
   // Create a motion profile with the given maximum velocity and maximum
   // acceleration constraints for the next setpoint.
   //frc::TrapezoidProfile<units::meters> m_profile{{1.75_mps, 0.75_mps_sq}};
-  frc::TrapezoidProfile<units::radian> m_trapezoidalProfile{{RightClimbConstants::maximumVelocity, RightClimbConstants::maximumAccelaration}};
-  frc::TrapezoidProfile<units::radian>::State m_rightClimbGoal;
-  frc::TrapezoidProfile<units::radian>::State m_rightClimbSetpoint;
+  frc::TrapezoidProfile<units::turn> m_trapezoidalProfile{{RightClimbConstants::maximumVelocity, RightClimbConstants::maximumAccelaration}};
+  frc::TrapezoidProfile<units::turn>::State m_rightClimbGoal;
+  frc::TrapezoidProfile<units::turn>::State m_rightClimbSetpoint;
   SparkClosedLoopController m_closedLoopController = m_motor.GetClosedLoopController();
 
 };
