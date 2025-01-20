@@ -100,26 +100,23 @@ frc2::CommandPtr RightClimbSubsystem::RightClimbDownCommand() {
   return Run([this] {m_motorClimbRight.Set(rightClimbDownSpeed);})
           .FinallyDo([this]{m_motorClimbRight.Set(0);});
 }
-//doesn't build fixme
-/*frc2::CommandPtr RightClimbSubsystem::RightClimbCommand(units::turn_t goal) {
-  frc::TrapezoidProfile<units::turn_t>::State goalState = {goal, 0_tps};
+
+frc2::CommandPtr RightClimbSubsystem::RightClimb1Command(units::meter_t goal) {
+  /*frc::TrapezoidProfile<units::turn_t>::State goalState = {goal, 0_tps};
   frc::TrapezoidProfile<units::turn_t>::State setpointState;
   // Inline construction of command goes here.
-  // Subsystem::RunOnce implicitly requires `this` subsystem.
-  return Run([this, &setpointState, goalState] {
-      setpointState = m_profile.Calculate(RightClimbConstants::kDt, setpointState, goalState); });
-      }
-          })
-    .Until([this, goal]{
-      auto error = goal - m_encoder.GetPosition();
-    return units::math::abs(error)< RightClimbConstants::kGoalThreshold;
-    });
+  // Subsystem::RunOnce implicitly requires `this` subsystem. */
+  return Run([this] {
+    m_rightClimbSetpoint = m_trapezoidalProfile.Calculate(RightClimbConstants::kDt, m_rightClimbSetpoint, m_rightClimbGoal);
+    m_closedLoopController.SetReference(m_rightClimbSetpoint.position.value(), SparkLowLevel::ControlType::kPosition);
+      })   
+    .FinallyDo([this]{m_motorClimbRight.Set(0);});
       
+}
           // Send setpoint to offboard controller PID
-      m_closedLoopController.SetReference(setpointState.position.value(), //- previously part of command
-                                        SparkMax::ControlType::kPosition); //- Closedloopcontroller will set setpoint values through motor controller
+      //m_closedLoopController.SetReference(setpointState.position.value(),  previously part of command
+                                       // SparkMax::ControlType::kPosition); //- Closedloopcontroller will set setpoint values through motor controller
 
- */
 
 void RightClimbSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.

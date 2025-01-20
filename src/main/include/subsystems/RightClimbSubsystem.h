@@ -85,7 +85,7 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
    */
 
   [[nodiscard]]
-  frc2::CommandPtr RightClimbCommand(units::meter_t goal);
+  frc2::CommandPtr RightClimb1Command(units::meter_t goal);
 
 
 
@@ -121,13 +121,9 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
   // Create a motion profile with the given maximum velocity and maximum
   // acceleration constraints for the next setpoint.
   //frc::TrapezoidProfile<units::meters> m_profile{{1.75_mps, 0.75_mps_sq}};
-  frc::TrapezoidProfile<units::meters> m_profile{{RightClimbConstants::maximumVelocity, RightClimbConstants::maximumAccelaration}};
+  frc::TrapezoidProfile<units::meters> m_trapezoidalProfile{{RightClimbConstants::maximumVelocity, RightClimbConstants::maximumAccelaration}};
   frc::TrapezoidProfile<units::meters>::State m_rightClimbGoal;
   frc::TrapezoidProfile<units::meters>::State m_rightClimbSetpoint;
   SparkClosedLoopController m_closedLoopController = m_motor.GetClosedLoopController();
 
-  //Edited Trapezoid Profiler with turn_t doesn't build
-  // Create a motion profile with the given maximum velocity and maximum
-  // acceleration constraints for the next setpoint.
-  // turns can also be changed to radians like the constants
 };
