@@ -69,7 +69,7 @@ m_encoder.SetPosition(0);
    
 
   m_motor.Configure(motorConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
-                    rev::spark::SparkMax::PersistMode::kNoPersistParameters);
+                    rev::spark::SparkMax::PersistMode::kPersistParameters);
 
   // Reset the position to 0 to start within the range of the soft limits
   m_motor.GetEncoder().SetPosition(0);
