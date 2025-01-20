@@ -28,36 +28,35 @@ RightClimbSubsystem::RightClimbSubsystem() {
 //      .ReverseSoftLimitEnabled(true);
 
 //PID Controller 
-
-  motorConfig.closedLoop.P(0.1).I(0.0).D(0.0);
-        /*
-   * Apply the configuration to the SPARK MAX.
-   *
-  // Reset the position to 0 to start within the range of the soft limits                  
-  m_encoder.SetPosition(0);
-
-  /*
-   * Configure the encoder. For this specific example, we are using the
-   * integrated encoder of the NEO, and we don't need to configure it. If
-   * needed, we can adjust values like the position or velocity conversion
-   * factors.
-   */
-  motorConfig.encoder.PositionConversionFactor(1).VelocityConversionFactor(1);
-
-  /*
-   * Configure the closed loop controller. We want to make sure we set the
-   * feedback sensor as the primary encoder.
-   */
-  motorConfig.closedLoop
-      .SetFeedbackSensor(ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
+/*
+* Configure the closed loop controller. We want to make sure we set the
+* feedback sensor as the primary encoder.
+*/
+motorConfig.closedLoop
+     .SetFeedbackSensor(ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
       // Set PID values for position control. We don't need to pass a closed
       // loop slot, as it will default to slot 0.
-      .P(RightClimbConstants::kP)
-      .I(RightClimbConstants::kI)
-      .D(RightClimbConstants::kD)
-      .OutputRange(-1, 1);
+    .P(RightClimbConstants::kP)
+    .I(RightClimbConstants::kI)
+    .D(RightClimbConstants::kD)
+    .OutputRange(-1, 1);
       /*
+        /*
+ * Apply the configuration to the SPARK MAX.
+ *
+// Reset the position to 0 to start within the range of the soft limits                  
+m_encoder.SetPosition(0);
 
+/*
+ * Configure the encoder. For this specific example, we are using the
+ * integrated encoder of the NEO, and we don't need to configure it. If
+ * needed, we can adjust values like the position or velocity conversion
+ * factors.
+ */
+  motorConfig.encoder.PositionConversionFactor(1).VelocityConversionFactor(1);
+
+  
+//Hard and Soft limit switch run parameters
 
       /*
    * Apply the configuration to the SPARK MAX.
