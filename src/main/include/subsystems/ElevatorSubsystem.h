@@ -3,25 +3,15 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 #include <rev/SparkMax.h>
-
-#include <frc2/command/button/CommandXboxController.h>
-
-
-// PWM Ports
-const int kMotorControllerPort = 6;
-
-using namespace rev::spark;
+#include <Constants.h>
 
 class ElevatorSubsystem : public frc2::SubsystemBase {
   private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  // Initialize the SPARKs
-  SparkMax m_elevatorLiftMotor{1, SparkMax::MotorType::kBrushless};
-
-  // Initialize the controller
-  frc2::CommandXboxController xboxController {0}; // need to be fixed - only have one physical xbox controller
+  // Initialize the motor
+  rev::spark::SparkMax m_elevatorLiftMotor{CAN_Constants::kElevatorMotorCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
 
   public:
   ElevatorSubsystem();
