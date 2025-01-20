@@ -30,22 +30,39 @@ class DriveSubsystem : public frc2::SubsystemBase {
     void Periodic() override;
     void SimulationPeriodic() override;
 
+  //Gyro Styff
+    void ResetGyro();
 
-  void ResetGyro();
+    units::degree_t GetHeading() const;
 
-  units::degree_t GetHeading() const;
-
+  //Drive and Kinematics 
     void Drive(units::meters_per_second_t xSpeed,
                            units::meters_per_second_t ySpeed,
                            units::radians_per_second_t rot, bool fieldRelative,
                            units::second_t period = kDrivePeriod);
 
     void SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
+
+  //Stops
     void StopAllModules();
     frc2::CommandPtr StopCommand();
 
-    
-   
+  // Odometry
+      /**
+   * Returns the currently-estimated pose of the robot.
+   *
+   * @return The pose.
+   */
+    frc::Pose2d GetPose();
+
+      /**
+   * Resets the odometry to the specified pose.
+   *
+   * @param pose The pose to which to set the odometry.
+   */
+  void ResetOdometry(frc::Pose2d pose);
+
+
 
  private:
     //Gyro
@@ -76,5 +93,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
                                             frontRightLocation, 
                                             backLeftLocation,
                                             backRightLocation};
-
+    // Odometry class for tracking robot pose
+    // 4 defines the number of modules
+    frc::SwerveDriveOdometry<4> m_odometry;
 };
