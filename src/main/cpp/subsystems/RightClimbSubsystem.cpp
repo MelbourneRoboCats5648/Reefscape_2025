@@ -101,7 +101,7 @@ frc2::CommandPtr RightClimbSubsystem::RightClimbDownCommand() {
           .FinallyDo([this]{m_motorClimbRight.Set(0);});
 }
 
-frc2::CommandPtr RightClimbSubsystem::RightClimb1Command(units::meter_t goal) {
+frc2::CommandPtr RightClimbSubsystem::RightClimb1Command(units::radian_t goal) {
   /*frc::TrapezoidProfile<units::turn_t>::State goalState = {goal, 0_tps};
   frc::TrapezoidProfile<units::turn_t>::State setpointState;
   // Inline construction of command goes here.
@@ -110,8 +110,7 @@ frc2::CommandPtr RightClimbSubsystem::RightClimb1Command(units::meter_t goal) {
     m_rightClimbSetpoint = m_trapezoidalProfile.Calculate(RightClimbConstants::kDt, m_rightClimbSetpoint, m_rightClimbGoal);
     m_closedLoopController.SetReference(m_rightClimbSetpoint.position.value(), SparkLowLevel::ControlType::kPosition);
       })   
-    .FinallyDo([this]{m_motorClimbRight.Set(0);});
-      
+         .FinallyDo([this]{m_motorClimbRight.Set(0);});    
 }
           // Send setpoint to offboard controller PID
       //m_closedLoopController.SetReference(setpointState.position.value(),  previously part of command
