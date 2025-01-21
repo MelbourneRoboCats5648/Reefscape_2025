@@ -39,8 +39,8 @@ const double leftClimbUpSpeed = 1.0; //was 0.25
 const double leftClimbDownSpeed = -1.0;
 
 // Joystick buttons
-const int leftUpButton = 5;
-const int leftDownButton = 3;
+const int leftUpButton = 3;
+const int leftDownButton = 5;
 
 // Soft Limits
 // Plan to change from example base when limits are decided
