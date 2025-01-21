@@ -24,6 +24,11 @@
 //plan to change with more Spark motors added
 const int motorElevatorID = 1;
 
+// Soft Limits- will port to elevator and drive soon
+//plant to change from example base limits when limits are changed
+//const int  extendSoftLimit = 50;
+//const int  retractSoftLimit= -50;
+
 namespace ElevatorConstants {
 //PID Trapezoidal Controller
 static constexpr units::second_t kDt = 20_ms;

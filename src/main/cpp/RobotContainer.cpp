@@ -39,11 +39,11 @@ void RobotContainer::ConfigureBindings() {
 //climb susbsystem commands
   m_joystick.Button(leftUpButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
   m_joystick.Button(leftDownButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
-  m_joystick.Button(rightUpButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
-  m_joystick.Button(rightDownButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
+  //m_joystick.Button(rightUpButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
+  //m_joystick.Button(rightDownButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
 
 //PID right climb subsystem command
-m_joystick.Button(rightUpButton).OnTrue(m_rightClimbSubsystem.RightClimb1Command(3.0_tr));
+m_driverController.LeftStick().OnTrue(m_elevatorSubsystem.Elevator1Command(3.0_tr));
 
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is

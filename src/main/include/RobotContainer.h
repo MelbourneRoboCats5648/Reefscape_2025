@@ -13,7 +13,6 @@
 #include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LeftClimbSubsystem.h"
-#include "subsystems/RightClimbSubsystem.h"
 #include "subsystems/ElevatorSubsystem.h"
 
 
@@ -39,7 +38,6 @@ class RobotContainer {
   ExampleSubsystem m_subsystem;
   IntakeSubsystem m_intakeSubsystem;
   LeftClimbSubsystem m_leftClimbSubsystem;
-  RightClimbSubsystem m_rightClimbSubsystem;
   ShooterSubsystem m_shooterSubsystem;
   ElevatorSubsystem m_elevatorSubsystem;
 
