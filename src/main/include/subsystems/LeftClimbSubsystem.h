@@ -3,12 +3,11 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #pragma once
-
-#include <frc/Encoder.h>
+#include <numbers>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
-#include <frc/motorcontrol/VictorSP.h>
 #include <frc/Joystick.h>
+#include <frc/motorcontrol/VictorSP.h>
 #include <rev/SparkMax.h>
 #include <rev/config/SparkMaxConfig.h>
 #include <frc/controller/PIDController.h>
@@ -40,8 +39,8 @@ const double leftClimbUpSpeed = 1.0; //was 0.25
 const double leftClimbDownSpeed = -1.0;
 
 // Joystick buttons
-const int leftUpButton = 5;
-const int leftDownButton = 3;
+const int leftUpButton = 3;
+const int leftDownButton = 5;
 
 // Soft Limits
 // Plan to change from example base when limits are decided
@@ -51,27 +50,28 @@ const int  retractSoftLimit= -50;
 //PID Controller constants
 namespace LeftClimbConstants 
 {
-const double kP = 0.0;
+const double kP = 1.0;
 const double kI = 0.0;
 const double kD = 0.0;
 
 //PID Profile 
-const units::turns_per_second_t maximumVelocity = 1.75_tps;
-const units::turns_per_second_squared_t maximumAccelaration = 0.75_tr_per_s_sq;
+const units::turns_per_second_t maximumVelocity = 0.5_tps;
+const units::turns_per_second_squared_t maximumAcceleration = 0.25_tr_per_s_sq;
 //kDt
 const units::second_t kDt = 20_ms;
-const units::turn_t kGoalThreshold = 0.1_tr;
+const units::turn_t kGoalThreshold = 3.0_tr;
 }
 
 class LeftClimbSubsystem : public frc2::SubsystemBase {
  public:
   LeftClimbSubsystem();
+
   /**
    * LeftClimb command factory method.
    */
   frc2::CommandPtr LeftClimbUpCommand();
   frc2::CommandPtr LeftClimbDownCommand();
-  frc2::CommandPtr LeftClimbCommand(units::turn_t goal);
+  frc2::CommandPtr LeftClimbL1Command(units::turn_t goal);
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -90,5 +90,7 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
       SparkMax m_motorController{motorClimbLeftID, SparkMax::MotorType::kBrushless};
       SparkClosedLoopController m_closedLoopController = m_motorController.GetClosedLoopController();
       SparkRelativeEncoder m_encoder = m_motorController.GetEncoder();
-      frc::TrapezoidProfile<units::turn_t> m_profile{{LeftClimbConstants::maximumVelocity, LeftClimbConstants::maximumAccelaration}};
+      frc::TrapezoidProfile<units::turn> m_TrapezoidalProfile{{LeftClimbConstants::maximumVelocity, LeftClimbConstants::maximumAcceleration}};
+      frc::TrapezoidProfile<units::turn>::State m_leftClimbGoal;
+      frc::TrapezoidProfile<units::turn>::State m_leftClimbSetpoint;
 };
