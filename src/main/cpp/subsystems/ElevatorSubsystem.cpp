@@ -27,6 +27,51 @@ ElevatorSubsystem::ElevatorSubsystem() {
    m_elevatorLiftMotor.Configure(elevatorMotorConfig,
                         rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                         rev::spark::SparkMax::PersistMode::kPersistParameters);
+  //PID Controller 
+/*
+* Configure the closed loop controller. We want to make sure we set the
+* feedback sensor as the primary encoder.
+*/
+elevatorMotorConfig.closedLoop
+     .SetFeedbackSensor(rev::spark::ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
+      // Set PID values for position control. We don't need to pass a closed
+      // loop slot, as it will default to slot 0.
+    .P(ElevatorConstants::kP)
+    .I(ElevatorConstants::kI)
+    .D(ElevatorConstants::kD)
+    .OutputRange(-1, 1);
+      /*
+        /*
+ * Apply the configuration to the SPARK MAX.
+ *
+// Reset the position to 0 to start within the range of the soft limits                  
+m_encoder.SetPosition(0);
+
+/*
+ * Configure the encoder. For this specific example, we are using the
+ * integrated encoder of the NEO, and we don't need to configure it. If
+ * needed, we can adjust values like the position or velocity conversion
+ * factors.
+ */
+  elevatorMotorConfig.encoder.PositionConversionFactor(1).VelocityConversionFactor(1);
+
+  //Hard and Soft limit switch run parameters
+ /*
+   * Apply the configuration to the SPARK MAX.
+   *
+   * kResetSafeParameters is used to get the SPARK MAX to a known state. This
+   * is useful in case the SPARK MAX is replaced.
+   *
+   * kPersistParameters is used to ensure the configuration is not lost when
+   * the SPARK MAX loses power. This is useful for power cycles that may occur mid-operation.*/
+   
+
+  m_elevatorLiftMotor.Configure(elevatorMotorConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
+                    rev::spark::SparkMax::PersistMode::kPersistParameters);
+
+  // Reset the position to 0 to start within the range of the soft limits
+  m_elevatorLiftMotor.GetEncoder().SetPosition(0);
+  
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveUpToL1Command() {
@@ -51,6 +96,18 @@ frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
   // Inline construction of command goes here.
   return Run([this] {m_elevatorLiftMotor.Set(0.1);})
           .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
+}
+
+frc2::CommandPtr ElevatorSubsystem::Elevator1Command(units::turn_t goal) {
+  /*frc::TrapezoidProfile<units::turn_t>::State goalState = {goal, 0_tps};
+  frc::TrapezoidProfile<units::turn_t>::State setpointState;
+  // Inline construction of command goes here.
+  // Subsystem::RunOnce implicitly requires `this` subsystem. */
+  return Run([this] {
+    m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, m_elevatorGoal);
+    m_closedLoopController.SetReference(m_elevatorSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
+      })   
+         .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});    
 }
 
 void ElevatorSubsystem::Periodic() {

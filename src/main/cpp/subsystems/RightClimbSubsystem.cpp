@@ -1,7 +1,6 @@
 #include "subsystems/RightClimbSubsystem.h"
 
 
-
 RightClimbSubsystem::RightClimbSubsystem() {
   // Implementation of subsystem constructor goes here.
   rev::spark::SparkMaxConfig motorConfig;

@@ -43,7 +43,7 @@ const double rightClimbDownSpeed = -1.0;
 const int rightUpButton = 6;
 const int rightDownButton = 4;
 
-// Soft Limits
+// Soft Limits- will port to elevator and drive soon
 //plant to change from example base limits when limits are changed
 const int  extendSoftLimit = 50;
 const int  retractSoftLimit= -50;
@@ -104,8 +104,6 @@ class RightClimbSubsystem : public frc2::SubsystemBase {
           SparkMax m_motor{motorClimbRightID, SparkMax::MotorType::kBrushless};
           SparkRelativeEncoder m_encoder = m_motor.GetEncoder();
            
-
-    
     /*frc::SimpleMotorFeedforward<units::meters> m_feedforward{
       // Note: These gains are fake, and will have to be tuned for your robot. feedforward will be used soon
       //1_V, 1.5_V * 1_s / 1_m}; */

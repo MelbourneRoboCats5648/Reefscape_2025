@@ -42,6 +42,9 @@ void RobotContainer::ConfigureBindings() {
   m_joystick.Button(rightUpButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
   m_joystick.Button(rightDownButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
 
+//PID right climb subsystem command
+m_joystick.Button(rightUpButton).OnTrue(m_rightClimbSubsystem.RightClimb1Command(3.0_tr));
+
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.
