@@ -26,8 +26,8 @@ const int motorElevatorID = 1;
 
 // Soft Limits- will port to elevator and drive soon
 //plant to change from example base limits when limits are changed
-//const int  extendSoftLimit = 50;
-//const int  retractSoftLimit= -50;
+const units::turn_t extendSoftLimit = 50_tr;
+const units::turn_t retractSoftLimit= -50_tr;
 
 namespace ElevatorConstants {
 //PID Trapezoidal Controller

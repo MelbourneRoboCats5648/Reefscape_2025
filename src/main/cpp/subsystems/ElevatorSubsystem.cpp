@@ -112,7 +112,10 @@ frc2::CommandPtr ElevatorSubsystem::MoveUpToL3Command() {
 
 frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_elevatorLiftMotor.Set(0.1);})
+  return Run([this] {m_elevatorLiftMotor.Set(0.1);
+   m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, m_elevatorGoal);
+   m_closedLoopController.SetReference(m_elevatorSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
+    })
           .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
 }
 
