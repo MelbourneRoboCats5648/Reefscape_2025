@@ -20,11 +20,13 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
-
+//intake subsystem commands
   m_driverController.LeftBumper().WhileTrue(m_intakeSubsystem.CollectCommand());
   m_driverController.RightBumper().WhileTrue(m_intakeSubsystem.EjectCommand());
   m_driverController.B().WhileTrue(m_intakeSubsystem.RetractCommand());
   m_driverController.X().WhileTrue(m_intakeSubsystem.ExtendCommand());
+
+// shooter susbsystem commands
   m_driverController.Y().WhileTrue(m_shooterSubsystem.ShooterSpeakerCommand());
   m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
 
@@ -34,10 +36,12 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.LeftTrigger().WhileTrue(m_elevatorSubsystem.MoveUpToL3Command());
   m_driverController.RightTrigger().WhileTrue(m_elevatorSubsystem.MoveDownCommand());
 
+//climb susbsystem commands
   m_joystick.Button(leftUpButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
   m_joystick.Button(leftDownButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
   m_joystick.Button(rightUpButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
   m_joystick.Button(rightDownButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
+
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.
