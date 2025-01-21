@@ -66,7 +66,6 @@ frc2::CommandPtr LeftClimbSubsystem::LeftClimbL1Command(units::turn_t goal) {
           m_closedLoopController.SetReference(m_leftClimbSetpoint.position.value(), SparkLowLevel::ControlType::kPosition);
         })
         .FinallyDo([this]{m_motorClimbLeft.Set(0);});
-
 }
 
 void LeftClimbSubsystem::Periodic() {
