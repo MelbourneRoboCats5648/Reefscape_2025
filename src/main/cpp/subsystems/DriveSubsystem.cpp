@@ -11,7 +11,7 @@ DriveSubsystem::DriveSubsystem()
 }
 
 void DriveSubsystem::Periodic() {
-  // Implementation of subsystem periodic method goes herSe.
+  // Implementation of subsystem periodic method goes here.
   m_odometry.Update(frc::Rotation2d{GetHeading()},
       {m_frontLeftModule.GetPosition(), m_frontRightModule.GetPosition(),
        m_backLeftModule.GetPosition(), m_backRightModule.GetPosition()});

@@ -20,6 +20,11 @@
 
 #include "Constants.h"
 
+#include <frc/estimator/PoseEstimator.h>
+#include <frc/estimator/SwerveDrivePoseEstimator.h>
+
+#include <wpi/array.h>
+
 using namespace DriveConstants;
 
 
@@ -98,4 +103,14 @@ class DriveSubsystem : public frc2::SubsystemBase {
     // Odometry class for tracking robot pose
     // 4 defines the number of modules
     frc::SwerveDriveOdometry<4> m_odometry;
+
+
+    frc::SwerveDrivePoseEstimator<4> m_poseEstimator{kinematics, frc::Rotation2d{GetHeading()},
+                                {m_frontLeftModule.GetPosition(), m_frontRightModule.GetPosition(),
+                                  m_backLeftModule.GetPosition(), m_backRightModule.GetPosition()}, 
+                                  GetPose(), 
+                                  // ( double 0.5, double 0.5, units::radian_t(1)), 
+                                  // ( double 0.5, double 0.5, units::radian_t(1))
+                                  };
+
 };
