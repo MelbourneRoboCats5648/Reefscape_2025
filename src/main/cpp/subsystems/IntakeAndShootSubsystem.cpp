@@ -7,7 +7,11 @@ IntakeAndShootSubsystem::IntakeAndShootSubsystem(IntakeSubsystem& intakeSub, Sho
 
 }
 frc2::CommandPtr IntakeAndShootSubsystem::PerformIntakeAndShootCommand() {
-  return m_intakeSubsystem.ExtendCommand()
+  return m_intakeSubsystem.ExtendCommand().WithTimeout(1.5_s)
+  //.AndThen(m_intakeSubsystem.CollectCommand())
+  // m_intakeSubsystem.RetractCommand()
+  // m_intakeSubsystem.EjectCommand()
+  .AndThen(m_shooterSubsystem.ShooterAmpCommand().WithTimeout(1.5_s))
    .FinallyDo([this]{
     m_intakeSubsystem.stopMotors();
     m_shooterSubsystem.stopMotors(); });

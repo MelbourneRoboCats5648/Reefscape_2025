@@ -31,7 +31,7 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.X().WhileTrue(m_intakeSubsystem.ExtendCommand());
   m_driverController.Y().WhileTrue(m_shooterSubsystem.ShooterSpeakerCommand());
   m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
-  m_driverController.LeftTrigger().WhileTrue(m_intakeAndShootSubsystem.PerformIntakeAndShootCommand()); 
+  m_driverController.LeftTrigger().OnTrue(m_intakeAndShootSubsystem.PerformIntakeAndShootCommand()); 
 
 //climb
   m_joystick.Button(leftUpButton).WhileTrue(m_leftClimbSubsystem.LeftClimbUpCommand());
