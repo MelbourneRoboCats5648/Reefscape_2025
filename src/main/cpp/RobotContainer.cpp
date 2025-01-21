@@ -31,6 +31,7 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.X().WhileTrue(m_intakeSubsystem.ExtendCommand());
   m_driverController.Y().WhileTrue(m_shooterSubsystem.ShooterSpeakerCommand());
   m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
+  //onTrue for WithTimeout sequence
   m_driverController.LeftTrigger().OnTrue(m_intakeAndShootSubsystem.PerformIntakeAndShootCommand()); 
 
 //climb
