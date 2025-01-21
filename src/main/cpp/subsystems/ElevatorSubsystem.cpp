@@ -31,25 +31,25 @@ ElevatorSubsystem::ElevatorSubsystem() {
 
 frc2::CommandPtr ElevatorSubsystem::MoveUpToL1Command() {
   // Inline construction of command goes here.
-  return Run([this] {m_elevatorLiftMotor.Set(-0.3);})
+  return Run([this] {m_elevatorLiftMotor.Set(-0.1);})
           .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveUpToL2Command() {
   // Inline construction of command goes here.
-  return Run([this] {m_elevatorLiftMotor.Set(-0.5);})
+  return Run([this] {m_elevatorLiftMotor.Set(-0.2);})
           .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveUpToL3Command() {
   // Inline construction of command goes here.
-  return Run([this] {m_elevatorLiftMotor.Set(-0.7);})
+  return Run([this] {m_elevatorLiftMotor.Set(-0.3);})
           .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_elevatorLiftMotor.Set(0.3);})
+  return Run([this] {m_elevatorLiftMotor.Set(0.1);})
           .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
 }
 

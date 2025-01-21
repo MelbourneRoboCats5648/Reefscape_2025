@@ -23,6 +23,6 @@ inline constexpr int kDriverControllerPort = 1;
 
 namespace CAN_Constants {
 
-inline constexpr int kElevatorMotorCAN_ID = 0;
+inline constexpr int kElevatorMotorCAN_ID = 1;
 
 }  // namespace OperatorConstants
