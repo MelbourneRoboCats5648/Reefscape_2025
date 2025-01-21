@@ -27,13 +27,25 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.X().WhileTrue(m_intakeSubsystem.ExtendCommand());
   m_driverController.Y().WhileTrue(m_shooterSubsystem.ShooterSpeakerCommand());
   m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
-  m_joystick.Button(leftUpButton).WhileTrue(m_leftClimbSubsystem.LeftClimbUpCommand());
-  m_joystick.Button(leftDownButton).WhileTrue(m_leftClimbSubsystem.LeftClimbDownCommand());
-  m_joystick.Button(rightUpButton).WhileTrue(m_rightClimbSubsystem.RightClimbUpCommand());
-  m_joystick.Button(rightDownButton).WhileTrue(m_rightClimbSubsystem.RightClimbDownCommand());
+
+// elevator subsystem commands
+  m_driverController.LeftStick().WhileTrue(m_elevatorSubsystem.MoveUpToL1Command());
+  m_driverController.RightStick().WhileTrue(m_elevatorSubsystem.MoveUpToL2Command());
+  m_driverController.LeftTrigger().WhileTrue(m_elevatorSubsystem.MoveUpToL3Command());
+  m_driverController.RightTrigger().WhileTrue(m_elevatorSubsystem.MoveDownCommand());
+
+//orignal climb subsystem commands (with timeouts)
+  //m_joystick.Button(leftUpButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
+  m_joystick.Button(leftDownButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
+  m_joystick.Button(rightUpButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
+  m_joystick.Button(rightDownButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
+
+// PID climb subsystem command (temporarily disabling LeftClimbUpCommand to test it)
+  m_joystick.Button(leftUpButton).OnTrue(m_leftClimbSubsystem.LeftClimbL1Command(1.0_tr));
+
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.
-  m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
+  //m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
