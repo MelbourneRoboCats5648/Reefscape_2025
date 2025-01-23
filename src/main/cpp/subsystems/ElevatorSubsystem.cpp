@@ -6,12 +6,14 @@
 
 ElevatorSubsystem::ElevatorSubsystem() {
   // Implementation of subsystem constructor goes here.
-  rev::spark::SparkMaxConfig elevatorMotorConfig;
+  rev::spark::SparkMaxConfig elevatorLeftMotorConfig;
+  rev::spark::SparkMaxConfig elevatorRightMotorConfig;
 
   /*
    * Set parameters that will apply to elevator motor.
    */
-   elevatorMotorConfig.SmartCurrentLimit(50).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake); 
+  elevatorLeftMotorConfig.SmartCurrentLimit(50).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
+  elevatorRightMotorConfig.SmartCurrentLimit(50).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake); 
    //fixme - test to find out the current limit
 
   /*
@@ -24,33 +26,47 @@ ElevatorSubsystem::ElevatorSubsystem() {
    * the SPARK MAX loses power. This is useful for power cycles that may occur
    * mid-operation.
    */
-   m_elevatorLiftMotor.Configure(elevatorMotorConfig,
+   m_elevatorLeftLiftMotor.Configure(elevatorLeftMotorConfig,
+                        rev::spark::SparkMax::ResetMode::kResetSafeParameters,
+                        rev::spark::SparkMax::PersistMode::kPersistParameters);
+
+   m_elevatorRightLiftMotor.Configure(elevatorRightMotorConfig,
                         rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                         rev::spark::SparkMax::PersistMode::kPersistParameters);
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveUpToL1Command() {
   // Inline construction of command goes here.
-  return Run([this] {m_elevatorLiftMotor.Set(-0.1);})
-          .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
+  return Run([this] {m_elevatorLeftLiftMotor.Set(-0.1);})
+          .FinallyDo([this]{m_elevatorLeftLiftMotor.Set(0);});
+  return Run([this] {m_elevatorRightLiftMotor.Set(-0.1);})
+          .FinallyDo([this]{m_elevatorRightLiftMotor.Set(0);});
+
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveUpToL2Command() {
   // Inline construction of command goes here.
-  return Run([this] {m_elevatorLiftMotor.Set(-0.2);})
-          .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
+  return Run([this] {m_elevatorLeftLiftMotor.Set(-0.2);})
+          .FinallyDo([this]{m_elevatorLeftLiftMotor.Set(0);});
+    return Run([this] {m_elevatorRightLiftMotor.Set(-0.2);})
+          .FinallyDo([this]{m_elevatorRightLiftMotor.Set(0);});
+
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveUpToL3Command() {
   // Inline construction of command goes here.
-  return Run([this] {m_elevatorLiftMotor.Set(-0.3);})
-          .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
+  return Run([this] {m_elevatorLeftLiftMotor.Set(-0.3);})
+          .FinallyDo([this]{m_elevatorLeftLiftMotor.Set(0);});
+  return Run([this] {m_elevatorRightLiftMotor.Set(-0.3);})
+          .FinallyDo([this]{m_elevatorRightLiftMotor.Set(0);});
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_elevatorLiftMotor.Set(0.1);})
-          .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
+  return Run([this] {m_elevatorLeftLiftMotor.Set(0.1);})
+          .FinallyDo([this]{m_elevatorLeftLiftMotor.Set(0);});
+  return Run([this] {m_elevatorRightLiftMotor.Set(0.1);})
+          .FinallyDo([this]{m_elevatorRightLiftMotor.Set(0);});
 }
 
 void ElevatorSubsystem::Periodic() {

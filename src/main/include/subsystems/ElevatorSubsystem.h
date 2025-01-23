@@ -11,8 +11,8 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   // declared private and exposed only through public methods.
 
   // Initialize the motor
-  rev::spark::SparkMax m_elevatorLiftMotor{CAN_Constants::kElevatorMotorCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
-
+  rev::spark::SparkMax m_elevatorLeftLiftMotor{CAN_Constants::kElevatorLeftMotorCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
+  rev::spark::SparkMax m_elevatorRightLiftMotor{CAN_Constants::kElevatorRightMotorCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
   public:
   ElevatorSubsystem();
 

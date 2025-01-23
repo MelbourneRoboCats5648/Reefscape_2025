@@ -23,6 +23,9 @@ inline constexpr int kDriverControllerPort = 1;
 
 namespace CAN_Constants {
 
-inline constexpr int kElevatorMotorCAN_ID = 1;
+inline constexpr int kElevatorLeftMotorCAN_ID = 1;
+
+//kElevatorRightMotorCAN_ID is currently not configurated
+inline constexpr int kElevatorRightMotorCAN_ID = 2;
 
 }  // namespace OperatorConstants
