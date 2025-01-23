@@ -25,7 +25,8 @@ namespace CAN_Constants {
 
 inline constexpr int kElevatorLeftMotorCAN_ID = 1;
 
-//kElevatorRightMotorCAN_ID is currently not configurated
+//kElevatorRightMotorCAN_ID & kElevatorArmMotorCAN_ID is currently not configurated
 inline constexpr int kElevatorRightMotorCAN_ID = 2;
+inline constexpr int kElevatorArmMotorCAN_ID = 3;
+}  
 
-}  // namespace OperatorConstants
