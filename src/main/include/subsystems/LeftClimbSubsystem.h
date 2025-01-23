@@ -55,8 +55,8 @@ const double kI = 0.0;
 const double kD = 0.0;
 
 //PID Profile 
-const units::turns_per_second_t maximumVelocity = 0.5_tps;
-const units::turns_per_second_squared_t maximumAcceleration = 0.25_tr_per_s_sq;
+const units::turns_per_second_t maximumVelocity = 1.5_tps;
+const units::turns_per_second_squared_t maximumAcceleration = 1.0_tr_per_s_sq;
 //kDt
 const units::second_t kDt = 20_ms;
 const units::turn_t kGoalThreshold = 3.0_tr;
@@ -71,7 +71,7 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
    */
   frc2::CommandPtr LeftClimbUpCommand();
   frc2::CommandPtr LeftClimbDownCommand();
-  frc2::CommandPtr LeftClimbL1Command(units::turn_t goal);
+  frc2::CommandPtr LeftClimbCommand(units::turn_t goal);
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.

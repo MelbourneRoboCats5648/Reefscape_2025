@@ -60,9 +60,11 @@ frc2::CommandPtr LeftClimbSubsystem::LeftClimbDownCommand() {
           .FinallyDo([this]{m_motorClimbLeft.Set(0);});
 }
 
-frc2::CommandPtr LeftClimbSubsystem::LeftClimbL1Command(units::turn_t goal) {
-  return Run([this] {
-          m_leftClimbSetpoint = m_TrapezoidalProfile.Calculate(LeftClimbConstants::kDt, m_leftClimbSetpoint, m_leftClimbGoal);
+frc2::CommandPtr LeftClimbSubsystem::LeftClimbCommand(units::turn_t goal) {
+
+  return Run([this, goal] {
+          frc::TrapezoidProfile<units::turn>::State goalState = { goal, 0.0_tps }; // stop at goal
+          m_leftClimbSetpoint = m_TrapezoidalProfile.Calculate(LeftClimbConstants::kDt, m_leftClimbSetpoint, goalState);
           m_closedLoopController.SetReference(m_leftClimbSetpoint.position.value(), SparkLowLevel::ControlType::kPosition);
         })
         .FinallyDo([this]{m_motorClimbLeft.Set(0);});
