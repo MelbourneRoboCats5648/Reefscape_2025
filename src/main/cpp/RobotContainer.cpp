@@ -31,9 +31,9 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
 
 // elevator subsystem commands
-  m_driverController.LeftStick().WhileTrue(m_elevatorSubsystem.MoveUpToL1Command());
-  m_driverController.RightStick().WhileTrue(m_elevatorSubsystem.MoveUpToL2Command());
-  m_driverController.LeftTrigger().WhileTrue(m_elevatorSubsystem.MoveUpToL3Command());
+  m_driverController.LeftStick().WhileTrue(m_elevatorSubsystem.MoveUpToL1Command(3.0_tr)); //set three for now will change
+  m_driverController.RightStick().WhileTrue(m_elevatorSubsystem.MoveUpToL2Command(4.0_tr));
+  m_driverController.LeftTrigger().WhileTrue(m_elevatorSubsystem.MoveUpToL3Command(5.0_tr));
   m_driverController.RightTrigger().WhileTrue(m_elevatorSubsystem.MoveDownCommand());
 
 //climb susbsystem commands

@@ -92,47 +92,51 @@ m_encoder.SetPosition(0);
   
 }
 
-frc2::CommandPtr ElevatorSubsystem::MoveUpToL1Command() {
+frc2::CommandPtr ElevatorSubsystem::MoveUpToL1Command(units::turn_t goal) {
   // Inline construction of command goes here.
-  return Run([this] {
-           //units::angle::turn_t goal = 1.0_tr;
-           //frc::TrapezoidProfile<units::turn>::State goal = {1.0, 1.0 };
-
-    m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, m_elevatorGoal);
+  return Run([this, goal] {       
+    frc::TrapezoidProfile<units::turn>::State goalState = {goal, 0.0_tps }; //stop at goal - make L1 constant
+    m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
     m_closedLoopController.SetReference(m_elevatorSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
-           // do PID controlller stuff
-           m_elevatorLiftMotor.Set(-0.1);})
+    })
           .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
 }
 
-frc2::CommandPtr ElevatorSubsystem::MoveUpToL2Command() {
+frc2::CommandPtr ElevatorSubsystem::MoveUpToL2Command(units::turn_t goal) {
   // Inline construction of command goes here.
-  return Run([this] {m_elevatorLiftMotor.Set(-0.2);})
+  return Run([this, goal] {
+    frc::TrapezoidProfile<units::turn>::State goalState = {goal, 0.0_tps }; //stop at goal - make L2 constant
+    m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
+    m_closedLoopController.SetReference(m_elevatorSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
+    })
           .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
 }
 
-frc2::CommandPtr ElevatorSubsystem::MoveUpToL3Command() {
+frc2::CommandPtr ElevatorSubsystem::MoveUpToL3Command(units::turn_t goal) {
   // Inline construction of command goes here.
-  return Run([this] {m_elevatorLiftMotor.Set(-0.3);})
+  return Run([this, goal] {
+    frc::TrapezoidProfile<units::turn>::State goalState = {goal, 0.0_tps }; //stop at goal - make L3 constant
+    m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
+    m_closedLoopController.SetReference(m_elevatorSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition); 
+  })
           .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
   // Inline construction of command goes here.
   return Run([this] {m_elevatorLiftMotor.Set(0.1);
-   m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, m_elevatorGoal);
+   m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, m_elevatorGoal); 
    m_closedLoopController.SetReference(m_elevatorSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
     })
-          .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
+          .FinallyDo([this]{m_elevatorLiftMotor.Set(0);}); // soon make into a retract command
 }
 
 frc2::CommandPtr ElevatorSubsystem::ElevatorCommand(units::turn_t goal) {
-  /*frc::TrapezoidProfile<units::turn_t>::State goalState = {goal, 0_tps};
-  frc::TrapezoidProfile<units::turn_t>::State setpointState;
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
-  return Run([this] {
-    m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, m_elevatorGoal);
+  return Run([this, goal] {
+    frc::TrapezoidProfile<units::turn>::State goalState = {goal, 0.0_tps }; //stop at goal
+    m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
     m_closedLoopController.SetReference(m_elevatorSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
       })   
          .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});    
