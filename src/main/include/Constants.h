@@ -37,6 +37,7 @@ namespace OperatorConstants {
 
 inline constexpr int kDriveJoystickPort = 0;
 inline constexpr int kDriverControllerPort = 1;
+inline constexpr int kDriverControllerPort2 = 2;
 
 }  // namespace OperatorConstants
 
@@ -73,6 +74,6 @@ const units::turns_per_second_squared_t maximumAcceleration = 1.0_tr_per_s_sq;
 const units::turn_t level1Goal = 2.0_tr;
 const units::turn_t level2Goal = 3.0_tr;
 const units::turn_t level3Goal = 4.0_tr;
-const units::turn_t climbGoalRetract = 0.0_tr;
+const units::turn_t level4Goal = 0.0_tr;
 
 }

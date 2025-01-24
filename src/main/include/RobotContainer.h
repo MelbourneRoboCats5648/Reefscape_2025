@@ -33,6 +33,7 @@ class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   frc2::CommandXboxController m_driverController{OperatorConstants::kDriverControllerPort};
   frc2::CommandJoystick m_joystick{OperatorConstants::kDriveJoystickPort};
+  frc2::CommandXboxController m_driverControllerNew{OperatorConstants::kDriverControllerPort2};
 
   // The robot's subsystems are defined here...
   ExampleSubsystem m_subsystem;
