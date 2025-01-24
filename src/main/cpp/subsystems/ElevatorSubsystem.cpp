@@ -42,7 +42,7 @@ ElevatorSubsystem::ElevatorSubsystem() {
    * the SPARK MAX loses power. This is useful for power cycles that may occur
    * mid-operation.
    */
-   m_elevatorLiftMotor.Configure(elevatorMotorConfig,
+   m_motor.Configure(elevatorMotorConfig,
                         rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                         rev::spark::SparkMax::PersistMode::kPersistParameters);
   //PID Controller 
@@ -84,54 +84,24 @@ m_encoder.SetPosition(0);
    * the SPARK MAX loses power. This is useful for power cycles that may occur mid-operation.*/
    
 
-  m_elevatorLiftMotor.Configure(elevatorMotorConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
+  m_motor.Configure(elevatorMotorConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                     rev::spark::SparkMax::PersistMode::kPersistParameters);
 
   // Reset the position to 0 to start within the range of the soft limits
-  m_elevatorLiftMotor.GetEncoder().SetPosition(0);
+  m_motor.GetEncoder().SetPosition(0);
   
-}
-
-frc2::CommandPtr ElevatorSubsystem::MoveUpToL1Command(units::turn_t goal) {
-  // Inline construction of command goes here.
-  return Run([this, goal] {       
-    frc::TrapezoidProfile<units::turn>::State goalState = {goal, 0.0_tps }; //stop at goal - make L1 constant
-    m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
-    m_closedLoopController.SetReference(m_elevatorSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
-    })
-          .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
-}
-
-frc2::CommandPtr ElevatorSubsystem::MoveUpToL2Command(units::turn_t goal) {
-  // Inline construction of command goes here.
-  return Run([this, goal] {
-    frc::TrapezoidProfile<units::turn>::State goalState = {goal, 0.0_tps }; //stop at goal - make L2 constant
-    m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
-    m_closedLoopController.SetReference(m_elevatorSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
-    })
-          .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
-}
-
-frc2::CommandPtr ElevatorSubsystem::MoveUpToL3Command(units::turn_t goal) {
-  // Inline construction of command goes here.
-  return Run([this, goal] {
-    frc::TrapezoidProfile<units::turn>::State goalState = {goal, 0.0_tps }; //stop at goal - make L3 constant
-    m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
-    m_closedLoopController.SetReference(m_elevatorSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition); 
-  })
-          .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_elevatorLiftMotor.Set(0.1);
+  return Run([this] {m_motor.Set(0.1);
    m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, m_elevatorGoal); 
    m_closedLoopController.SetReference(m_elevatorSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
     })
-          .FinallyDo([this]{m_elevatorLiftMotor.Set(0);}); // soon make into a retract command
+          .FinallyDo([this]{m_motor.Set(0);}); // soon make into a retract command
 }
 
-frc2::CommandPtr ElevatorSubsystem::ElevatorCommand(units::turn_t goal) {
+frc2::CommandPtr ElevatorSubsystem::MoveToLevelCommand(units::turn_t goal) {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
   return Run([this, goal] {
@@ -139,7 +109,7 @@ frc2::CommandPtr ElevatorSubsystem::ElevatorCommand(units::turn_t goal) {
     m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
     m_closedLoopController.SetReference(m_elevatorSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
       })   
-         .FinallyDo([this]{m_elevatorLiftMotor.Set(0);});    
+         .FinallyDo([this]{m_motor.Set(0);});    
 }
 
 void ElevatorSubsystem::Periodic() {
