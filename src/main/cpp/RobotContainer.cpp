@@ -42,7 +42,7 @@ void RobotContainer::ConfigureBindings() {
   m_joystick.Button(rightUpButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
   m_joystick.Button(rightDownButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
 
-// PID climb subsystem command (temporarily disabling LeftClimbUpCommand to test it)
+// PID climb subsystem command (temporarily disabling LeftClimbUpCommand and LeftClimbDownCommand to test it)
   m_joystick.Button(leftUpButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalL1));
   m_joystick.Button(leftDownButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalRetract));
 

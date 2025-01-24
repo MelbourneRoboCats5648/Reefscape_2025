@@ -7,7 +7,7 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 #include <frc/Joystick.h>
-#include <frc/motorcontrol/VictorSP.h>
+//#include <frc/motorcontrol/VictorSP.h>
 #include <rev/SparkMax.h>
 #include <rev/config/SparkMaxConfig.h>
 #include <frc/controller/PIDController.h>
@@ -15,7 +15,6 @@
 #include <units/angle.h>
 #include <units/angular_velocity.h>
 #include <units/angular_acceleration.h>
-#include <rev/config/SparkMaxConfig.h>
 #include <frc2/command/Commands.h>
 
 #include <frc/controller/SimpleMotorFeedforward.h>
@@ -86,7 +85,7 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-      frc::VictorSP m_motorClimbLeft{motorClimbLeftPort};
+      //frc::VictorSP m_motorClimbLeft{motorClimbLeftPort};
       SparkMax m_motorController{motorClimbLeftID, SparkMax::MotorType::kBrushless};
       SparkClosedLoopController m_closedLoopController = m_motorController.GetClosedLoopController();
       SparkRelativeEncoder m_encoder = m_motorController.GetEncoder();
