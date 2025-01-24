@@ -10,6 +10,8 @@
 
 #include "commands/ExampleCommand.h"
 
+#include "Constants.h"
+
 RobotContainer::RobotContainer() 
 {
   // Initialize all of your commands and subsystems here
@@ -41,8 +43,8 @@ void RobotContainer::ConfigureBindings() {
   m_joystick.Button(rightDownButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
 
 // PID climb subsystem command (temporarily disabling LeftClimbUpCommand to test it)
-  m_joystick.Button(leftUpButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(m_climbGoalL1));
-  m_joystick.Button(leftDownButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(m_climbGoalRetract));
+  m_joystick.Button(leftUpButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalL1));
+  m_joystick.Button(leftDownButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalRetract));
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.

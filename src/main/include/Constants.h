@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #pragma once
+#include <units/angle.h>
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -26,3 +27,8 @@ namespace CAN_Constants {
 inline constexpr int kElevatorMotorCAN_ID = 1;
 
 }  // namespace OperatorConstants
+
+namespace GoalConstants {
+  inline constexpr units::turn_t m_climbGoalL1 = 1.0_tr; 
+  inline constexpr units::turn_t m_climbGoalRetract = 0.0_tr; 
+}
