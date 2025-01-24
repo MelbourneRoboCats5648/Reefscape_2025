@@ -40,6 +40,11 @@ class RobotContainer {
   LeftClimbSubsystem m_leftClimbSubsystem;
   ShooterSubsystem m_shooterSubsystem;
   ElevatorSubsystem m_elevatorSubsystem;
-
+  
+  units::turn_t m_climbGoalL1 = 1.0_tr;
+  units::turn_t m_climbGoalL2 = 2.0_tr;
+  units::turn_t m_climbGoalL3 = 3.0_tr;
+  units::turn_t m_climbGoalRetract = 0.0_tr;\
+  
   void ConfigureBindings();
 };
