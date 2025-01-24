@@ -19,10 +19,10 @@ class ArmSubsystem : public frc2::SubsystemBase {
   /**
    * arm command factory method.
    */
-  frc2::CommandPtr MoveUpToL1Command();
-  frc2::CommandPtr MoveUpToL2Command();
-  frc2::CommandPtr MoveUpToL3Command();
-  frc2::CommandPtr MoveDownCommand();
+  frc2::CommandPtr MoveArmToL1Command();
+  frc2::CommandPtr MoveArmToL2Command();
+  frc2::CommandPtr MoveArmToL3Command();
+  frc2::CommandPtr MoveArmDownCommand();
 
 //todo - figure out commands for arm
 
