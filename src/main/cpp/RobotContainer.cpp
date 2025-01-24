@@ -43,7 +43,7 @@ void RobotContainer::ConfigureBindings() {
   //m_joystick.Button(rightDownButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
 
 //PID right climb subsystem command
-m_driverController.LeftStick().OnTrue(m_elevatorSubsystem.Elevator1Command(3.0_tr));
+m_driverController.LeftStick().OnTrue(m_elevatorSubsystem.ElevatorCommand(3.0_tr));
 
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
@@ -51,7 +51,8 @@ m_driverController.LeftStick().OnTrue(m_elevatorSubsystem.Elevator1Command(3.0_t
   //m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
 }
 
-frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
+frc2::CommandPtr RobotContainer::GetAutonomousCommand() 
+{
   // An example command will be run in autonomous
   return autos::ExampleAuto(&m_subsystem);
 }

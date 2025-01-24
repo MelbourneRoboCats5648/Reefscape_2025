@@ -29,6 +29,8 @@ const int motorElevatorID = 1;
 const units::turn_t extendSoftLimit = 50_tr;
 const units::turn_t retractSoftLimit= -50_tr;
 
+
+
 namespace ElevatorConstants {
 //PID Trapezoidal Controller
 static constexpr units::second_t kDt = 20_ms;
@@ -40,8 +42,14 @@ const double kI = 0.0;
 const double kD = 0.0;
 
 //PID Profile] 
-const units:: turns_per_second_t maximumVelocity= 0.5_tps;
-const units::turns_per_second_squared_t maximumAccelaration = 0.25_tr_per_s_sq;
+const units::turns_per_second_t maximumVelocity= 1.5_tps;
+const units::turns_per_second_squared_t maximumAccelaration = 1.0_tr_per_s_sq;
+
+//Elevator Goals
+const units::turn_t level1Goal = 2.0_tr;
+const units::turn_t level2Goal = 3.0_tr;
+const units::turn_t level3Goal = 4.0_tr;
+
 }
 
 class ElevatorSubsystem : public frc2::SubsystemBase {
@@ -62,7 +70,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr MoveUpToL2Command();
   frc2::CommandPtr MoveUpToL3Command();
   frc2::CommandPtr MoveDownCommand();
-  frc2::CommandPtr Elevator1Command(units::turn_t goal);
+  frc2::CommandPtr ElevatorCommand(units::turn_t goal);
 
 
   /**
