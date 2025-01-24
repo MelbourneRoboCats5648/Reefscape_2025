@@ -41,7 +41,7 @@ class RobotContainer {
   LeftClimbSubsystem m_leftClimbSubsystem;
   RightClimbSubsystem m_rightClimbSubsystem;
   ShooterSubsystem m_shooterSubsystem;
-  ElevatorSubsystem m_elevatorSubsystem;
+  //ElevatorSubsystem m_elevatorSubsystem;
 
   void ConfigureBindings();
 };

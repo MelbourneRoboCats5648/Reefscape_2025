@@ -10,6 +10,8 @@
 
 #include "commands/ExampleCommand.h"
 
+#include "Constants.h"
+
 RobotContainer::RobotContainer() 
 {
   // Initialize all of your commands and subsystems here
@@ -29,15 +31,20 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
 
 // elevator subsystem commands
-  m_driverController.LeftStick().WhileTrue(m_elevatorSubsystem.MoveUpToL1Command());
-  m_driverController.RightStick().WhileTrue(m_elevatorSubsystem.MoveUpToL2Command());
-  m_driverController.LeftTrigger().WhileTrue(m_elevatorSubsystem.MoveUpToL3Command());
-  m_driverController.RightTrigger().WhileTrue(m_elevatorSubsystem.MoveDownCommand());
+  // m_driverController.LeftStick().WhileTrue(m_elevatorSubsystem.MoveUpToL1Command());
+  // m_driverController.RightStick().WhileTrue(m_elevatorSubsystem.MoveUpToL2Command());
+  // m_driverController.LeftTrigger().WhileTrue(m_elevatorSubsystem.MoveUpToL3Command());
+  // m_driverController.RightTrigger().WhileTrue(m_elevatorSubsystem.MoveDownCommand());
 
-  m_joystick.Button(leftUpButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
-  m_joystick.Button(leftDownButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
+//orignal climb subsystem commands (with timeouts)
+  //m_joystick.Button(leftUpButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
+  //m_joystick.Button(leftDownButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
   m_joystick.Button(rightUpButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
   m_joystick.Button(rightDownButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
+
+// PID climb subsystem command (temporarily disabling LeftClimbUpCommand and LeftClimbDownCommand to test it)
+  m_joystick.Button(leftUpButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalL1));
+  m_joystick.Button(leftDownButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalRetract));
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.
