@@ -1,5 +1,4 @@
 #include "subsystems/ShooterSubsystem.h"
-#include "ShooterSubsystem.h"
 
 ShooterSubsystem::ShooterSubsystem() {
   // Implementation of subsystem constructor goes here.
@@ -28,7 +27,7 @@ frc2::CommandPtr ShooterSubsystem::ShooterAmpCommand() {
 }
 
 frc2::CommandPtr ShooterSubsystem::ShooterSpeakerAmpCommand() {
-  return ShooterAmpCommand().WithTimeout(1.5_s). ShooterSpeakerCommand().WithTimeout(1.5_s)
+  return ShooterAmpCommand().WithTimeout(1.5_s).AndThen(ShooterSpeakerCommand().WithTimeout(1.5_s));
 }
 
 void ShooterSubsystem::Periodic() {
