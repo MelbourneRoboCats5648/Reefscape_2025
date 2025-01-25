@@ -6,15 +6,18 @@ VisionSubsystem::VisionSubsystem() {
 }
 
 frc2::CommandPtr VisionSubsystem::GetAprilTagID(){
-    return RunOnce([this] {double apriltagID = LimelightHelpers::getFiducialID();
-                                                    std::cout << apriltagID; })
-         .FinallyDo([this]{std::cout <<"command stopped";
+    return RunOnce([this] {LimelightHelpers::setPriorityTagID("limelight", 11);
+                           double apriltagID = LimelightHelpers::getFiducialID();
+                                            std::cout << apriltagID <<std::endl; 
+                                            frc::SmartDashboard::PutNumber("aprilTagID", apriltagID);})
+         .FinallyDo([this]{std::cout <<"command stopped" <<std::endl;
          });
 }
 frc2::CommandPtr VisionSubsystem::GetTagTY(){
     return RunOnce([this] {double ty = LimelightHelpers::getTY("");
-                                            std::cout << ty; })
-         .FinallyDo([this]{std::cout <<"command stopped";
+                                            std::cout << ty <<std::endl;
+                                            frc::SmartDashboard::PutNumber("TY", ty); })
+         .FinallyDo([this]{std::cout <<"command stopped" <<std::endl;
          });
 }
     
@@ -22,8 +25,9 @@ frc2::CommandPtr VisionSubsystem::GetTagTY(){
 
 frc2::CommandPtr VisionSubsystem::GetTagTX(){
     return RunOnce([this] {double tx = LimelightHelpers::getTX("");
-                                                std::cout << tx;})
-         .FinallyDo([this]{std::cout <<"command stopped";
+                                                std::cout << tx <<std::endl;
+                                                frc::SmartDashboard::PutNumber("TX", tx);})
+         .FinallyDo([this]{std::cout <<"command stopped" <<std::endl;
          });
 
 }

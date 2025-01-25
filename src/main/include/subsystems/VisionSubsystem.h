@@ -5,6 +5,8 @@
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/button/Trigger.h>
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 class VisionSubsystem : public frc2::SubsystemBase {
  public:
   VisionSubsystem();
