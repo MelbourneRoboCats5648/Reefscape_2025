@@ -46,10 +46,6 @@ inline constexpr int kElevatorMotorCAN_ID = 1;
 
 }  // namespace OperatorConstants
 
-//SparkMax Motor ID
-//plan to change with more Spark motors added
-const int motorElevatorID = 1;
-
 namespace ElevatorConstants {
 //PID Trapezoidal Controller
 static constexpr units::second_t kDt = 20_ms;

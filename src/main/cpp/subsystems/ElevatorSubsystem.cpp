@@ -94,12 +94,6 @@ frc2::CommandPtr ElevatorSubsystem::MoveToLevelCommand(units::turn_t goal) {
          .FinallyDo([this]{m_motor.Set(0);});
 }
 
-frc2::CommandPtr ElevatorSubsystem::StopAtLimitCommand() {
-  // Inline construction of command goes here.
-  return Run([this] {})
-        .FinallyDo([this]{m_motor.Set(0);});
-}
-
 void ElevatorSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
 }

@@ -2,13 +2,6 @@
 #include <Constants.h>
 
 class ElevatorSubsystem : public frc2::SubsystemBase {
-  private:
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
-
-  // Initialize the motor
-  rev::spark::SparkMax m_elevatorLiftMotor{CAN_Constants::kElevatorMotorCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
-
   public:
   ElevatorSubsystem();
 
@@ -18,8 +11,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr MoveDownCommand();
   frc2::CommandPtr MoveUpCommand();
   frc2::CommandPtr MoveToLevelCommand(units::turn_t goal);
-  frc2::CommandPtr StopAtLimitCommand();
-
+  
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
@@ -37,7 +29,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
  // Spark components
  //plan to add motors to hard switches
-  rev::spark::SparkMax m_motor{motorElevatorID, rev::spark::SparkMax::MotorType::kBrushless};
+  rev::spark::SparkMax m_motor{CAN_Constants::kElevatorMotorCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
   rev::spark::SparkRelativeEncoder m_encoder = m_motor.GetEncoder();
            
 
