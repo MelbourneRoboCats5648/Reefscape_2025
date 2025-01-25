@@ -21,9 +21,9 @@ RobotContainer::RobotContainer()
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
-    m_driverController.A().WhileTrue(m_visionSubsystem.GetAprilTagID());
-    m_driverController.B().WhileTrue(m_visionSubsystem.GetTagTY());
-    m_driverController.X().WhileTrue(m_visionSubsystem.GetTagTX());
+    m_driverController.A().OnTrue(m_visionSubsystem.GetAprilTagID());
+    m_driverController.B().OnTrue(m_visionSubsystem.GetTagTY());
+    m_driverController.X().OnTrue(m_visionSubsystem.GetTagTX());
   // m_driverController.LeftBumper().WhileTrue(m_intakeSubsystem.CollectCommand());
   // m_driverController.RightBumper().WhileTrue(m_intakeSubsystem.EjectCommand());
   // m_driverController.B().WhileTrue(m_intakeSubsystem.RetractCommand());

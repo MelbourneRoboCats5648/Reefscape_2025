@@ -6,13 +6,13 @@ VisionSubsystem::VisionSubsystem() {
 }
 
 frc2::CommandPtr VisionSubsystem::GetAprilTagID(){
-    return Run([this] {double apriltagID = LimelightHelpers::getFiducialID();
+    return RunOnce([this] {double apriltagID = LimelightHelpers::getFiducialID();
                                                     std::cout << apriltagID; })
          .FinallyDo([this]{std::cout <<"command stopped";
          });
 }
 frc2::CommandPtr VisionSubsystem::GetTagTY(){
-    return Run([this] {double ty = LimelightHelpers::getTY("");
+    return RunOnce([this] {double ty = LimelightHelpers::getTY("");
                                             std::cout << ty; })
          .FinallyDo([this]{std::cout <<"command stopped";
          });
@@ -21,7 +21,7 @@ frc2::CommandPtr VisionSubsystem::GetTagTY(){
 
 
 frc2::CommandPtr VisionSubsystem::GetTagTX(){
-    return Run([this] {double tx = LimelightHelpers::getTX("");
+    return RunOnce([this] {double tx = LimelightHelpers::getTX("");
                                                 std::cout << tx;})
          .FinallyDo([this]{std::cout <<"command stopped";
          });
