@@ -10,11 +10,11 @@
 
 #include "Constants.h"
 #include "subsystems/ExampleSubsystem.h"
-#include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
+#include "subsystems/ShooterSubsystem.h"
+#include "subsystems/IntakeAndShootSubsystem.h"
 #include "subsystems/LeftClimbSubsystem.h"
 #include "subsystems/ElevatorSubsystem.h"
-
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -40,6 +40,7 @@ class RobotContainer {
   IntakeSubsystem m_intakeSubsystem;
   LeftClimbSubsystem m_leftClimbSubsystem;
   ShooterSubsystem m_shooterSubsystem;
+  IntakeAndShootSubsystem m_intakeAndShootSubsystem;
   ElevatorSubsystem m_elevatorSubsystem;
   
 

@@ -26,7 +26,11 @@ frc2::CommandPtr ShooterSubsystem::ShooterAmpCommand() {
     m_motorShooterRight.Set(0.0);}); 
 }
 
-
+//stops all motors
+void ShooterSubsystem::stopMotors() {
+  m_motorShooterLeft.Set(0.0);
+  m_motorShooterRight.Set(0.0);
+}
 
 void ShooterSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
