@@ -23,10 +23,15 @@ void RobotContainer::ConfigureBindings() {
 
   m_driverController.LeftBumper().WhileTrue(m_intakeSubsystem.CollectCommand());
   m_driverController.RightBumper().WhileTrue(m_intakeSubsystem.EjectCommand());
-  m_driverController.B().WhileTrue(m_intakeSubsystem.RetractCommand());
-  m_driverController.X().WhileTrue(m_intakeSubsystem.ExtendCommand());
+
+  //m_driverController.B().WhileTrue(m_intakeSubsystem.RetractCommand());
+  //m_driverController.X().WhileTrue(m_intakeSubsystem.ExtendCommand());
+
+  m_driverController.B().WhileTrue(m_shooterSubsystem.ShooterSpeakerAmpCommand());
+
   m_driverController.Y().WhileTrue(m_shooterSubsystem.ShooterSpeakerCommand());
   m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
+
   m_joystick.Button(leftUpButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
   m_joystick.Button(leftDownButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
   m_joystick.Button(rightUpButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
