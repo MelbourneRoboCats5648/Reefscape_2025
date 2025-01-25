@@ -41,7 +41,6 @@ frc2::CommandPtr ElevatorSubsystem::MoveUpToL1Command() {
           .FinallyDo([this]{m_elevatorLeftLiftMotor.Set(0);});
   return Run([this] {m_elevatorRightLiftMotor.Set(-0.1);})
           .FinallyDo([this]{m_elevatorRightLiftMotor.Set(0);});
-
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveUpToL2Command() {
@@ -67,6 +66,12 @@ frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
           .FinallyDo([this]{m_elevatorLeftLiftMotor.Set(0);});
   return Run([this] {m_elevatorRightLiftMotor.Set(0.1);})
           .FinallyDo([this]{m_elevatorRightLiftMotor.Set(0);});
+}
+
+//stops all motors
+void ElevatorSubsystem::StopMotors() {
+  m_elevatorLeftLiftMotor.Set(0);
+  m_elevatorRightLiftMotor.Set(0);
 }
 
 void ElevatorSubsystem::Periodic() {

@@ -10,7 +10,10 @@
 
 #include "commands/ExampleCommand.h"
 
-RobotContainer::RobotContainer() 
+RobotContainer::RobotContainer()
+  : m_elevatorSubsystem(),
+    m_armSubsystem(),
+    m_elevatorAndArmSubsystem(m_elevatorSubsystem, m_armSubsystem)
 {
   // Initialize all of your commands and subsystems here
 

@@ -16,7 +16,7 @@ class ArmCommand
     : public frc2::CommandHelper<frc2::Command, ArmCommand> {
  public:
   /**
-   * Creates a new ElevatorCommand.
+   * Creates a new ArmCommand.
    *
    * @param ArmSubsystem The subsystem used by this command.
    */

@@ -53,6 +53,11 @@ frc2::CommandPtr ArmSubsystem::MoveArmDownCommand() {
           .FinallyDo([this]{m_elevatorArmMotor.Set(0);});
 }
 
+//stops motor
+void ArmSubsystem::StopMotor() {
+  m_elevatorArmMotor.Set(0.0);
+}
+
 void ArmSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
 }

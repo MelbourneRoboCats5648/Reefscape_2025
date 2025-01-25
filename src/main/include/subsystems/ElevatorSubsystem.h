@@ -24,7 +24,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr MoveUpToL3Command();
   frc2::CommandPtr MoveDownCommand();
 
-
+  void StopMotors();
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */

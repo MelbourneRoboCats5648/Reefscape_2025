@@ -26,6 +26,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
 //todo - figure out commands for arm
 
+  void StopMotor();
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
