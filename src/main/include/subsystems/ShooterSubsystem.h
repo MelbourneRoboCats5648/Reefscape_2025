@@ -25,6 +25,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
    */
   frc2::CommandPtr ShooterSpeakerCommand();
   frc2::CommandPtr ShooterAmpCommand();
+  frc2::CommandPtr ShooterSpeakerAmpCommand();
   
   void stopMotors();
   

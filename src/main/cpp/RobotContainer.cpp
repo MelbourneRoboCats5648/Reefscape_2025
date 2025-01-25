@@ -25,16 +25,18 @@ void RobotContainer::ConfigureBindings() {
 //intake commands
   m_driverController.LeftBumper().WhileTrue(m_intakeSubsystem.CollectCommand());
   m_driverController.RightBumper().WhileTrue(m_intakeSubsystem.EjectCommand());
-  m_driverController.B().WhileTrue(m_intakeSubsystem.RetractCommand());
-  m_driverController.X().WhileTrue(m_intakeSubsystem.ExtendCommand());
 
-//shootercommands
+  //m_driverController.B().WhileTrue(m_intakeSubsystem.RetractCommand());
+  m_driverController.X().WhileTrue(m_intakeSubsystem.ExtendCommand());
+  m_driverController.B().WhileTrue(m_shooterSubsystem.ShooterSpeakerAmpCommand());
+
+  //shootercommands
   m_driverController.Y().WhileTrue(m_shooterSubsystem.ShooterSpeakerCommand());
   m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
   //onTrue for WithTimeout sequence
   m_driverController.LeftTrigger().OnTrue(m_intakeAndShootSubsystem.PerformIntakeAndShootCommand()); 
 
-//elevator commands
+  //elevator commands
   m_driverController.LeftStick().WhileTrue(m_elevatorSubsystem.MoveUpToL1Command());
   m_driverController.RightStick().WhileTrue(m_elevatorSubsystem.MoveUpToL2Command());
   //repeated button 
