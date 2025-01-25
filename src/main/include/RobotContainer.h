@@ -15,6 +15,7 @@
 #include "subsystems/LeftClimbSubsystem.h"
 #include "subsystems/RightClimbSubsystem.h"
 #include "subsystems/ElevatorSubsystem.h"
+#include "subsystems/VisionSubsystem.h"
 
 
 /**
@@ -42,6 +43,7 @@ class RobotContainer {
   RightClimbSubsystem m_rightClimbSubsystem;
   ShooterSubsystem m_shooterSubsystem;
   ElevatorSubsystem m_elevatorSubsystem;
+  VisionSubsystem m_visionSubsystem;
 
   void ConfigureBindings();
 };

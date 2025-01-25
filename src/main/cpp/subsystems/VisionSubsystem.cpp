@@ -5,21 +5,27 @@ VisionSubsystem::VisionSubsystem() {
   // Implementation of subsystem constructor goes here.
 }
 
-void VisionSubsystem::GetAprilTagID(){
-    double apriltagID = LimelightHelpers::getFiducialID();
-    std::cout << apriltagID;
+frc2::CommandPtr VisionSubsystem::GetAprilTagID(){
+    return Run([this] {double apriltagID = LimelightHelpers::getFiducialID();
+                                                    std::cout << apriltagID; })
+         .FinallyDo([this]{std::cout <<"command stopped";
+         });
 }
-void VisionSubsystem::GetTagTY(){
-
-    double ty = LimelightHelpers::getTY("");
-    std::cout << ty;
+frc2::CommandPtr VisionSubsystem::GetTagTY(){
+    return Run([this] {double ty = LimelightHelpers::getTY("");
+                                            std::cout << ty; })
+         .FinallyDo([this]{std::cout <<"command stopped";
+         });
 }
+    
 
 
-void VisionSubsystem::GetTagTX(){
+frc2::CommandPtr VisionSubsystem::GetTagTX(){
+    return Run([this] {double tx = LimelightHelpers::getTX("");
+                                                std::cout << tx;})
+         .FinallyDo([this]{std::cout <<"command stopped";
+         });
 
-    double tx = LimelightHelpers::getTX("");
-    std::cout << tx;
 }
 
 void VisionSubsystem::Periodic() {

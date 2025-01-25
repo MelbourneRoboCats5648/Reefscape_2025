@@ -21,23 +21,26 @@ RobotContainer::RobotContainer()
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
-  m_driverController.LeftBumper().WhileTrue(m_intakeSubsystem.CollectCommand());
-  m_driverController.RightBumper().WhileTrue(m_intakeSubsystem.EjectCommand());
-  m_driverController.B().WhileTrue(m_intakeSubsystem.RetractCommand());
-  m_driverController.X().WhileTrue(m_intakeSubsystem.ExtendCommand());
-  m_driverController.Y().WhileTrue(m_shooterSubsystem.ShooterSpeakerCommand());
-  m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
+    m_driverController.A().WhileTrue(m_visionSubsystem.GetAprilTagID());
+    m_driverController.B().WhileTrue(m_visionSubsystem.GetTagTY());
+    m_driverController.X().WhileTrue(m_visionSubsystem.GetTagTX());
+  // m_driverController.LeftBumper().WhileTrue(m_intakeSubsystem.CollectCommand());
+  // m_driverController.RightBumper().WhileTrue(m_intakeSubsystem.EjectCommand());
+  // m_driverController.B().WhileTrue(m_intakeSubsystem.RetractCommand());
+  // m_driverController.X().WhileTrue(m_intakeSubsystem.ExtendCommand());
+  // m_driverController.Y().WhileTrue(m_shooterSubsystem.ShooterSpeakerCommand());
+  // m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
 
 // elevator subsystem commands
-  m_driverController.LeftStick().WhileTrue(m_elevatorSubsystem.MoveUpToL1Command());
-  m_driverController.RightStick().WhileTrue(m_elevatorSubsystem.MoveUpToL2Command());
-  m_driverController.LeftTrigger().WhileTrue(m_elevatorSubsystem.MoveUpToL3Command());
-  m_driverController.RightTrigger().WhileTrue(m_elevatorSubsystem.MoveDownCommand());
+  // m_driverController.LeftStick().WhileTrue(m_elevatorSubsystem.MoveUpToL1Command());
+  // m_driverController.RightStick().WhileTrue(m_elevatorSubsystem.MoveUpToL2Command());
+  // m_driverController.LeftTrigger().WhileTrue(m_elevatorSubsystem.MoveUpToL3Command());
+  // m_driverController.RightTrigger().WhileTrue(m_elevatorSubsystem.MoveDownCommand());
 
-  m_joystick.Button(leftUpButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
-  m_joystick.Button(leftDownButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
-  m_joystick.Button(rightUpButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
-  m_joystick.Button(rightDownButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
+  // m_joystick.Button(leftUpButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
+  // m_joystick.Button(leftDownButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
+  // m_joystick.Button(rightUpButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
+  // m_joystick.Button(rightDownButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.
