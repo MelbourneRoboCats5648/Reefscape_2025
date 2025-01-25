@@ -54,10 +54,11 @@ class DriveSubsystem : public frc2::SubsystemBase {
     frc::Translation2d frontRightLocation{+0.26_m, -0.26_m};
 
     //MagOffset Doubles
-    const double FRONT_LEFT_MAG_OFFSET = 0.2939453125;
-    const double FRONT_RIGHT_MAG_OFFSET = 0.346435546875;
-    const double BACK_LEFT_MAG_OFFSET = 0.06201171875;
-    const double BACK_RIGHT_MAG_OFFSET = 0.012451171875;
+      const double FRONT_LEFT_MAG_OFFSET = (0.303955);
+      const double FRONT_RIGHT_MAG_OFFSET = (0.346436);
+      const double BACK_LEFT_MAG_OFFSET = (0.064697);
+      const double BACK_RIGHT_MAG_OFFSET = (0.015381); 
+      // this mag offset has been set by the phoenix tuner set the new offsets
 
     DriveModule m_frontLeftModule{FRONT_LEFT_SPEED_MOTOR_ID, FRONT_LEFT_DIRECTION_MOTOR_ID, 
                                     FRONT_LEFT_DIRECTION_ENCODER_ID, FRONT_LEFT_MAG_OFFSET, "Front Left"};
