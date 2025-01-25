@@ -28,6 +28,7 @@ frc2::CommandPtr ShooterSubsystem::ShooterAmpCommand() {
 
 frc2::CommandPtr ShooterSubsystem::ShooterSpeakerAmpCommand() {
   return ShooterAmpCommand().WithTimeout(1.5_s).AndThen(ShooterSpeakerCommand().WithTimeout(1.5_s));
+}
 
 //stops all motors
 void ShooterSubsystem::stopMotors() {
