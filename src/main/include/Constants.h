@@ -50,11 +50,6 @@ inline constexpr int kElevatorMotorCAN_ID = 1;
 //plan to change with more Spark motors added
 const int motorElevatorID = 1;
 
-// Soft Limits- will port to elevator and drive soon
-//plant to change from example base limits when limits are changed
-const units::turn_t extendSoftLimit = 50_tr;
-const units::turn_t retractSoftLimit= -50_tr;
-
 namespace ElevatorConstants {
 //PID Trapezoidal Controller
 static constexpr units::second_t kDt = 20_ms;
@@ -65,8 +60,8 @@ const double kP = 1.0;
 const double kI = 0.0;
 const double kD = 0.0;
 
-//PID Profile] 
-const units::turns_per_second_t maximumVelocity= 1.5_tps;
+//PID Profile
+const units::turns_per_second_t maximumVelocity= 0.5_tps;
 const units::turns_per_second_squared_t maximumAcceleration = 1.0_tr_per_s_sq;
 
 //Elevator Goals
@@ -76,6 +71,12 @@ const units::turn_t level3Goal = 4.0_tr;
 const units::turn_t level4Goal = 0.0_tr;
 
 //Encoder Position
-const int resetEncoder = 0;
+const units::turn_t resetEncoder = 0.0_tr;
+
+// Elevator limits
+// Soft Limits- will port to elevator and drive soon
+//plant to change from example base limits when limits are changed
+const units::turn_t extendSoftLimit = 6.0_tr;
+const units::turn_t retractSoftLimit = -1.0_tr;
 
 }

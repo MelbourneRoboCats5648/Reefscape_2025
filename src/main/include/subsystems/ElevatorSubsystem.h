@@ -16,6 +16,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
    * Elevator command factory method.
    */
   frc2::CommandPtr MoveDownCommand();
+  frc2::CommandPtr MoveUpCommand();
   frc2::CommandPtr MoveToLevelCommand(units::turn_t goal);
   frc2::CommandPtr StopAtLimitCommand();
 
