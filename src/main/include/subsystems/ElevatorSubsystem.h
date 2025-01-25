@@ -1,24 +1,5 @@
 #pragma once
-#include <numbers>
-#include <frc2/command/CommandPtr.h>
-#include <frc2/command/SubsystemBase.h>
-#include <rev/SparkMax.h>
 #include <Constants.h>
-#include <frc/controller/PIDController.h>
-// possibly add smart dashboard from example for hard switches
-#include <rev/config/SparkMaxConfig.h>
-// PID Profile and Controller stuff
-#include <frc/controller/SimpleMotorFeedforward.h>
-#include <frc/trajectory/TrapezoidProfile.h>
-#include <frc2/command/Commands.h>
-#include <units/acceleration.h>
-#include <units/angular_acceleration.h>
-#include <units/length.h>
-#include <units/time.h>
-#include <units/velocity.h>
-#include <units/voltage.h>
-#include <units/angle.h>
-#include <units/angular_velocity.h>
 
 class ElevatorSubsystem : public frc2::SubsystemBase {
   private:
@@ -26,7 +7,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   // declared private and exposed only through public methods.
 
   // Initialize the motor
-  //rev::spark::SparkMax m_elevatorLiftMotor{CAN_Constants::kElevatorMotorCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
+  rev::spark::SparkMax m_elevatorLiftMotor{CAN_Constants::kElevatorMotorCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
 
   public:
   ElevatorSubsystem();

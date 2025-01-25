@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #pragma once
-#include <numbers>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 #include <rev/SparkMax.h>
@@ -75,5 +74,8 @@ const units::turn_t level1Goal = 2.0_tr;
 const units::turn_t level2Goal = 3.0_tr;
 const units::turn_t level3Goal = 4.0_tr;
 const units::turn_t level4Goal = 0.0_tr;
+
+//Encoder Position
+const int resetEncoder = 0;
 
 }
