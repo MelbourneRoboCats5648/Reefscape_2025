@@ -3,10 +3,6 @@
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/ShooterSubsystem.h"
 
-#include <frc/XboxController.h>
-#include <frc/motorcontrol/VictorSP.h>
-//#include <frc/Timer.h>
-
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 

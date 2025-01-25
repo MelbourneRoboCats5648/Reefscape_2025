@@ -10,7 +10,7 @@ class IntakeAndShootCommand
     : public frc2::CommandHelper<frc2::Command, IntakeAndShootCommand> {
  public:
   /**
-   * Creates a new ExampleCommand.
+   * Creates a new IntakeAndShoot Command.
    *
    * @param intakeAndShootSubsystem The subsystem used by this command.
    */
