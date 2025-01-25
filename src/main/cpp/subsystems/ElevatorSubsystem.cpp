@@ -90,6 +90,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveToLevelCommand(units::turn_t goal) {
             frc::TrapezoidProfile<units::turn>::State goalState = {goal, 0.0_tps }; //stop at goal
             m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
             m_closedLoopController.SetReference(m_elevatorSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
+            frc::SmartDashboard::PutNumber("encoderValue", m_encoder.GetPosition());
             })   
          .FinallyDo([this]{m_motor.Set(0);});
 }

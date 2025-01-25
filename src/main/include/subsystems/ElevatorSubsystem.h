@@ -1,5 +1,6 @@
 #pragma once
 #include <Constants.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 class ElevatorSubsystem : public frc2::SubsystemBase {
   public:
