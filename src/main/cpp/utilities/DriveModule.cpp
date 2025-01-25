@@ -78,18 +78,6 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
   m_directionMotor.SetVoltage(units::voltage::volt_t{-1.0 * turnOutput});
 }
 
-double DriveModule::GetModulePositionDistance()
-{
-  double distance = m_speedMotor.GetPosition().GetValueAsDouble()*0.3198;  
-  std::cout << m_name << " modulePosition " << distance << std::endl;
-  return distance;
-}
-
-void DriveModule::SetModulePositionToZeroDistance()
-{
-  m_speedMotor.SetPosition(units::angle::turn_t {0.0});
-}
-
 
 
 
