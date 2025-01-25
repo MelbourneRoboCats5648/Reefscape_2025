@@ -31,8 +31,8 @@ class RobotContainer {
   frc2::CommandXboxController m_driverController{
       OperatorConstants::kDriverControllerPort};
 
-  frc2::CommandJoystick m_driverJoystick{
-      OperatorConstants::kDriverJoystickPort};
+//   frc2::CommandJoystick m_driverJoystick{
+//       OperatorConstants::kDriverJoystickPort};
 
   // The robot's subsystems are defined here...
   ExampleSubsystem m_subsystem;

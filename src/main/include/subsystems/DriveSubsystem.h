@@ -20,6 +20,8 @@
 
 #include "Constants.h"
 
+#include <frc/filter/SlewRateLimiter.h>
+
 using namespace DriveConstants;
 
 
@@ -73,5 +75,10 @@ class DriveSubsystem : public frc2::SubsystemBase {
                                             frontRightLocation, 
                                             backLeftLocation,
                                             backRightLocation};
+                                            
+  public:
+  frc::SlewRateLimiter<units::scalar> m_xLimiter{2 / 1_s};
+  frc::SlewRateLimiter<units::scalar> m_yLimiter{2 / 1_s};
+  frc::SlewRateLimiter<units::scalar> m_rotLimiter{2 / 1_s};
 
 };
