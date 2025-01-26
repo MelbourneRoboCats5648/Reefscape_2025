@@ -87,16 +87,17 @@ frc2::CommandPtr ElevatorSubsystem::MoveToLevelCommand(units::turn_t goal) {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
   return Run([this, goal] {
+            frc::TrapezoidProfile<units::turn>::State currentState = {units::angle::turn_t (m_encoder.GetPosition()), units::angular_velocity::revolutions_per_minute_t(m_encoder.GetVelocity())};
             frc::TrapezoidProfile<units::turn>::State goalState = {goal, 0.0_tps }; //stop at goal
-            m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
+            m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, currentState, goalState);
             m_closedLoopController.SetReference(m_elevatorSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
-            frc::SmartDashboard::PutNumber("encoderValue", m_encoder.GetPosition());
             })   
          .FinallyDo([this]{m_motor.Set(0);});
 }
 
 void ElevatorSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
+  frc::SmartDashboard::PutNumber("encoderValue", m_encoder.GetPosition());
 }
 
 void ElevatorSubsystem::SimulationPeriodic() {
