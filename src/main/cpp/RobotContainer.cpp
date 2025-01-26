@@ -41,11 +41,12 @@ void RobotContainer::ConfigureBindings() {
   //m_joystick.Button(rightDownButton).OnTrue(std::move(m_rightClimbSubsystem.RightClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
 
   //PID elevator subsystem command
-  m_driverControllerNew.B().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level4Goal));
   m_driverControllerNew.A().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level1Goal));
   m_driverControllerNew.X().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level2Goal));
   m_driverControllerNew.Y().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level3Goal));
-  
+  m_driverControllerNew.B().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level4Goal));
+
+
   m_driverControllerNew.LeftTrigger().WhileTrue(m_elevatorSubsystem.MoveUpCommand());
   m_driverControllerNew.RightTrigger().WhileTrue(m_elevatorSubsystem.MoveDownCommand());
 

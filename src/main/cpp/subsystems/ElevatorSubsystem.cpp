@@ -50,7 +50,7 @@ ElevatorSubsystem::ElevatorSubsystem() {
   * needed, we can adjust values like the position or velocity conversion
   * factors.
   */
-  elevatorMotorConfig.encoder.PositionConversionFactor(1).VelocityConversionFactor(1);
+  elevatorMotorConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatio).VelocityConversionFactor(ElevatorConstants::gearRatio);
 
   //Hard and Soft limit switch run parameters
   /*
