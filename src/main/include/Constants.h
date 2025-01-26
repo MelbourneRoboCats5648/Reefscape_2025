@@ -3,7 +3,18 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #pragma once
+#include <rev/SparkMax.h>
+#include <rev/config/SparkMaxConfig.h>
 #include <units/angle.h>
+#include <units/angular_velocity.h>
+#include <units/angular_acceleration.h>
+#include <frc/controller/SimpleMotorFeedforward.h>
+#include <frc/trajectory/TrapezoidProfile.h>
+#include <units/acceleration.h>
+#include <units/length.h>
+#include <units/time.h>
+#include <units/velocity.h>
+#include <units/voltage.h>
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -31,4 +42,28 @@ inline constexpr int kElevatorMotorCAN_ID = 1;
 namespace GoalConstants {
   inline constexpr units::turn_t m_climbGoalL1 = 1.0_tr; 
   inline constexpr units::turn_t m_climbGoalRetract = 0.0_tr; 
+}
+
+namespace LeftClimbConstants {
+  //Motor ID
+  const int motorClimbLeftID = 1;
+  // Speeds
+  const double leftClimbUpSpeed = 1.0; //was 0.25
+  const double leftClimbDownSpeed = -1.0;
+  // Joystick buttons
+  const int leftUpButton = 3;
+  const int leftDownButton = 5;
+  // Soft Limits - Plan to change from example base when limits are decided
+  const int  extendSoftLimit = 50;
+  const int  retractSoftLimit= -50;
+  //PID Controller constants
+  const double kP = 1.0;
+  const double kI = 0.0;
+  const double kD = 0.0;
+  //PID Profile 
+  const units::turns_per_second_t maximumVelocity = 1.5_tps;
+  const units::turns_per_second_squared_t maximumAcceleration = 1.0_tr_per_s_sq;
+  //kDt
+  const units::second_t kDt = 20_ms;
+  const units::turn_t kGoalThreshold = 3.0_tr;
 }

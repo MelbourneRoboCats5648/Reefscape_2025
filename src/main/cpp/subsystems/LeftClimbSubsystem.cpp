@@ -1,5 +1,9 @@
 #include "subsystems/LeftClimbSubsystem.h"
 
+void LeftClimbSubsystem::RobotInit() {
+  m_encoder.SetPosition(0);
+}
+
 LeftClimbSubsystem::LeftClimbSubsystem() {
   // Implementation of subsystem constructor goes here.
   rev::spark::SparkMaxConfig motorConfig;
@@ -7,7 +11,7 @@ LeftClimbSubsystem::LeftClimbSubsystem() {
   motorConfig.encoder.PositionConversionFactor(1).VelocityConversionFactor(1);
   //Configure the closed loop controller. We want to make sure we set the feedback sensor as the primary encoder.
   motorConfig.closedLoop
-      .SetFeedbackSensor(ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
+      .SetFeedbackSensor(rev::spark::ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
       // Set PID values for position control. We don't need to pass a closed loop slot, as it will default to slot 0.
       .P(LeftClimbConstants::kP)
       .I(LeftClimbConstants::kI)
@@ -43,21 +47,21 @@ LeftClimbSubsystem::LeftClimbSubsystem() {
                               rev::spark::SparkMax::PersistMode::kPersistParameters);
   
   // Reset the position to 0 to start within the range of the soft limits
-  m_motorController.GetEncoder().SetPosition(0);
+  RobotInit();
 }
 
 frc2::CommandPtr LeftClimbSubsystem::LeftClimbUpCommand() {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem.
-  return Run([this] {m_motorClimbLeft.Set(leftClimbUpSpeed);})
-          .FinallyDo([this]{m_motorClimbLeft.Set(0);});
+  return Run([this] {m_motorController.Set(LeftClimbConstants::leftClimbUpSpeed);})
+          .FinallyDo([this]{RobotInit();;});
 }
 
 frc2::CommandPtr LeftClimbSubsystem::LeftClimbDownCommand() {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem.
-  return Run([this] {m_motorClimbLeft.Set(leftClimbDownSpeed);})
-          .FinallyDo([this]{m_motorClimbLeft.Set(0);});
+  return Run([this] {m_motorController.Set(LeftClimbConstants::leftClimbDownSpeed);})
+          .FinallyDo([this]{RobotInit();;});
 }
 
 frc2::CommandPtr LeftClimbSubsystem::LeftClimbCommand(units::turn_t goal) {
@@ -65,9 +69,9 @@ frc2::CommandPtr LeftClimbSubsystem::LeftClimbCommand(units::turn_t goal) {
   return Run([this, goal] {
           frc::TrapezoidProfile<units::turn>::State goalState = { goal, 0.0_tps }; // stop at goal
           m_leftClimbSetpoint = m_TrapezoidalProfile.Calculate(LeftClimbConstants::kDt, m_leftClimbSetpoint, goalState);
-          m_closedLoopController.SetReference(m_leftClimbSetpoint.position.value(), SparkLowLevel::ControlType::kPosition);
+          m_closedLoopController.SetReference(m_leftClimbSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
         })
-        .FinallyDo([this]{m_motorClimbLeft.Set(0);});
+        .FinallyDo([this]{RobotInit();;});
 }
 
 void LeftClimbSubsystem::Periodic() {
