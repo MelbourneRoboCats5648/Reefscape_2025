@@ -1,10 +1,5 @@
 #include "subsystems/LeftClimbSubsystem.h"
 
-void LeftClimbSubsystem::RobotInit() {
-  m_encoder.SetPosition(0);
-  m_motorController.Set(0);
-}
-
 LeftClimbSubsystem::LeftClimbSubsystem() {
   // Implementation of subsystem constructor goes here.
   rev::spark::SparkMaxConfig motorConfig;
@@ -48,21 +43,26 @@ LeftClimbSubsystem::LeftClimbSubsystem() {
                               rev::spark::SparkMax::PersistMode::kPersistParameters);
   
   // Reset the position to 0 to start within the range of the soft limits
-  RobotInit();
+  m_encoder.SetPosition(0);
+}
+
+void LeftClimbSubsystem::RobotReset() {
+  m_encoder.SetPosition(0);
+  m_motorController.Set(0);
 }
 
 frc2::CommandPtr LeftClimbSubsystem::LeftClimbUpCommand() {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem.
   return Run([this] {m_motorController.Set(LeftClimbConstants::leftClimbUpSpeed);})
-          .FinallyDo([this]{RobotInit();;});
+          .FinallyDo([this]{RobotReset();;});
 }
 
 frc2::CommandPtr LeftClimbSubsystem::LeftClimbDownCommand() {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem.
   return Run([this] {m_motorController.Set(LeftClimbConstants::leftClimbDownSpeed);})
-          .FinallyDo([this]{RobotInit();;});
+          .FinallyDo([this]{RobotReset();;});
 }
 
 frc2::CommandPtr LeftClimbSubsystem::LeftClimbCommand(units::turn_t goal) {
@@ -72,7 +72,7 @@ frc2::CommandPtr LeftClimbSubsystem::LeftClimbCommand(units::turn_t goal) {
           m_leftClimbSetpoint = m_TrapezoidalProfile.Calculate(LeftClimbConstants::kDt, m_leftClimbSetpoint, goalState);
           m_closedLoopController.SetReference(m_leftClimbSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
         })
-        .FinallyDo([this]{RobotInit();;});
+        .FinallyDo([this]{RobotReset();;});
 }
 
 void LeftClimbSubsystem::Periodic() {

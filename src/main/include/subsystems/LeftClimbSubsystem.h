@@ -42,5 +42,5 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
       frc::TrapezoidProfile<units::turn> m_TrapezoidalProfile{{LeftClimbConstants::maximumVelocity, LeftClimbConstants::maximumAcceleration}};
       frc::TrapezoidProfile<units::turn>::State m_leftClimbGoal;
       frc::TrapezoidProfile<units::turn>::State m_leftClimbSetpoint;
-      void RobotInit();
+      void RobotReset();
 };
