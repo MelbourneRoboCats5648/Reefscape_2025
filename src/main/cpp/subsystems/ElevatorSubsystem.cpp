@@ -104,7 +104,10 @@ frc2::CommandPtr ElevatorSubsystem::MoveToLevelCommand(units::turn_t goal) {
   return Run([this, goal] {
             frc::TrapezoidProfile<units::turn>::State goalState = {goal, 0.0_tps }; //stop at goal
             m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
-            m_closedLoopController.SetReference(m_elevatorSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
+
+            frc::SmartDashboard::PutNumber("trapazoidalSetpoint", m_elevatorSetpoint.position.value());
+
+            m_closedLoopController.SetReference(goalState.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
             })   
          .FinallyDo([this]{m_motor.Set(0);});
 }

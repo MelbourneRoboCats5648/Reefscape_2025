@@ -52,7 +52,7 @@ static constexpr units::second_t kDt = 20_ms;
 const units::turn_t kGoalThreshold = 3.0_tr; //part of RightClimbCommand
 
 //PID Controller
-const double kP = 1.0;
+const double kP = 0.1;
 const double kI = 0.0;
 const double kD = 0.0;
 
