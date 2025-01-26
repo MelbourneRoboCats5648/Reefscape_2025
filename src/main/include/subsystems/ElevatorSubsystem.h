@@ -46,6 +46,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   frc::TrapezoidProfile<units::turn>::State m_elevatorSetpoint;
   rev::spark::SparkClosedLoopController m_closedLoopController = m_motor.GetClosedLoopController();
 
+  void UpdateSetPoint();
 };
 
 
