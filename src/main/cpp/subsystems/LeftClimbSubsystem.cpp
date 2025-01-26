@@ -2,6 +2,7 @@
 
 void LeftClimbSubsystem::RobotInit() {
   m_encoder.SetPosition(0);
+  m_motorController.Set(0);
 }
 
 LeftClimbSubsystem::LeftClimbSubsystem() {
