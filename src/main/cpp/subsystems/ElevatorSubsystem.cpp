@@ -68,36 +68,31 @@ ElevatorSubsystem::ElevatorSubsystem() {
 
   // Reset the position to 0 to start within the range of the soft limits
   m_encoder.SetPosition(ElevatorConstants::resetEncoder.value());
-  
+
 }
 
 void ElevatorSubsystem::UpdateSetPoint() {  
   m_elevatorSetpoint.position = units::angle::turn_t(m_encoder.GetPosition());
-  m_elevatorSetpoint.velocity = 0.0_tps;
+  m_elevatorSetpoint.velocity = 0.0_tps; 
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
   return Run([this] {m_motor.Set(0.1);})
-         .FinallyDo([this]{
-          m_motor.Set(0);
-          UpdateSetPoint();
-          });
+         .FinallyDo([this]{m_motor.Set(0);});
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
   // Inline construction of command goes here.
   return Run([this] {m_motor.Set(-0.1);})
-         .FinallyDo([this]{
-          m_motor.Set(0);
-          UpdateSetPoint();
-          });
+         .FinallyDo([this]{m_motor.Set(0);});
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveToLevelCommand(units::turn_t goal) {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
   return Run([this, goal] {
+            //frc::TrapezoidProfile<units::turn>::State currentState = {units::angle::turn_t (m_encoder.GetPosition()), units::angular_velocity::revolutions_per_minute_t(m_encoder.GetVelocity())};
             frc::TrapezoidProfile<units::turn>::State goalState = {goal, 0.0_tps }; //stop at goal
             m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
             m_closedLoopController.SetReference(m_elevatorSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);

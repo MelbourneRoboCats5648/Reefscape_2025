@@ -45,7 +45,7 @@ void RobotContainer::ConfigureBindings() {
   m_driverControllerNew.A().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level1Goal));
   m_driverControllerNew.X().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level2Goal));
   m_driverControllerNew.Y().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level3Goal));
-
+  
   m_driverControllerNew.LeftTrigger().WhileTrue(m_elevatorSubsystem.MoveUpCommand());
   m_driverControllerNew.RightTrigger().WhileTrue(m_elevatorSubsystem.MoveDownCommand());
 

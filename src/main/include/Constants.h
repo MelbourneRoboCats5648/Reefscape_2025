@@ -61,10 +61,10 @@ const units::turns_per_second_t maximumVelocity= 0.5_tps;
 const units::turns_per_second_squared_t maximumAcceleration = 1.0_tr_per_s_sq;
 
 //Elevator Goals
-const units::turn_t level1Goal = 2.0_tr;
-const units::turn_t level2Goal = 3.0_tr;
-const units::turn_t level3Goal = 4.0_tr;
-const units::turn_t level4Goal = 0.0_tr;
+const units::turn_t level1Goal = 4.0_tr;
+const units::turn_t level2Goal = 6.0_tr;
+const units::turn_t level3Goal = 8.0_tr;
+const units::turn_t level4Goal = 10.0_tr;
 
 //Encoder Position
 const units::turn_t resetEncoder = 0.0_tr;
