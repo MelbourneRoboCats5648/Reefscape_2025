@@ -57,8 +57,8 @@ const double kI = 0.0;
 const double kD = 0.0;
 
 //PID Profile
-const units::turns_per_second_t maximumVelocity= 0.5_tps;
-const units::turns_per_second_squared_t maximumAcceleration = 1.0_tr_per_s_sq;
+const units::turns_per_second_t maximumVelocity= 2.0_tps;
+const units::turns_per_second_squared_t maximumAcceleration = 4.0_tr_per_s_sq;
 
 //Elevator Goals
 const units::turn_t level1Goal = 4.0_tr;
@@ -72,7 +72,7 @@ const units::turn_t resetEncoder = 0.0_tr;
 // Elevator limits
 // Soft Limits- will port to elevator and drive soon
 //plant to change from example base limits when limits are changed
-const units::turn_t extendSoftLimit = 6.0_tr;
-const units::turn_t retractSoftLimit = -1.0_tr;
+const units::turn_t extendSoftLimit = 14.0_tr;
+const units::turn_t retractSoftLimit = 0.0_tr;
 
 }
