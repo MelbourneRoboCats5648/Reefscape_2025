@@ -11,7 +11,7 @@ DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEn
             m_magOffset(magOffset),
             m_name(name),
             m_turningPIDController{
-                1,
+                6,
                 0.0,
                 0.0,
                 {kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration}}
