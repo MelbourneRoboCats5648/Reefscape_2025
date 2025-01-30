@@ -21,6 +21,8 @@ DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEn
 
     m_directionMotor.SetPosition(m_directionEncoder.GetAbsolutePosition().
                                 WaitForUpdate(250_ms).GetValue());
+                                
+    m_directionMotor.SetNeutralMode(NeutralModeValue::Coast);
 
     // Config CANCoder   
     CANcoderConfiguration cancoderConfig;
