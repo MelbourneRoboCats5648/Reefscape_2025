@@ -6,10 +6,6 @@ DriveSubsystem::DriveSubsystem() {
 
 void DriveSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
-m_frontLeftModule.OutputPositionToDashboard();
-m_frontRightModule.OutputPositionToDashboard();
-m_backLeftModule.OutputPositionToDashboard();
-m_backRightModule.OutputPositionToDashboard();
 }
 
 void DriveSubsystem::SimulationPeriodic() {
@@ -73,4 +69,10 @@ return Run([this] {m_frontLeftModule.StopMotors();
                    m_backRightModule.StopMotors(); });
 
 }
-
+frc2::CommandPtr DriveSubsystem::SmartDashboardOutputCommand() 
+{
+return Run([this] {m_frontLeftModule.OutputPositionToDashboard();
+                   m_frontRightModule.OutputPositionToDashboard();
+                   m_backLeftModule.OutputPositionToDashboard();
+                   m_backRightModule.OutputPositionToDashboard(); });
+}

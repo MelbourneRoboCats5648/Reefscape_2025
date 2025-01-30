@@ -22,6 +22,7 @@ class Robot : public frc::TimedRobot {
   void TeleopInit() override;
   void TeleopPeriodic() override;
   void TestPeriodic() override;
+  void TestInit() override;
   void SimulationInit() override;
   void SimulationPeriodic() override;
 
@@ -29,6 +30,6 @@ class Robot : public frc::TimedRobot {
   // Have it empty by default so that if testing teleop it
   // doesn't have undefined behavior and potentially crash.
   std::optional<frc2::CommandPtr> m_autonomousCommand;
-
+  std::optional<frc2::CommandPtr> m_testCommand;
   RobotContainer m_container;
 };
