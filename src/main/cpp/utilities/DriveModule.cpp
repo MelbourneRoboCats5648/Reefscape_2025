@@ -1,5 +1,6 @@
 #include "utilities/DriveModule.h"
 #include <iostream>
+#include<frc/smartdashboard/SmartDashboard.h>
 
 using namespace ctre::phoenix6::signals;
 using namespace ctre::phoenix6::configs;
@@ -56,6 +57,10 @@ void DriveModule::StopMotors()
 {
   m_directionMotor.Set(0);
   m_speedMotor.Set(0);
+}
+
+void DriveModule::OutputPositionToDashboard(){
+  frc::SmartDashboard::PutNumber(m_name, m_directionEncoder.GetAbsolutePosition().GetValueAsDouble());
 }
 
 void DriveModule::SetModule(frc::SwerveModuleState state) {
