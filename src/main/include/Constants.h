@@ -15,8 +15,8 @@
 namespace OperatorConstants {
     inline constexpr int kDriverControllerPort = 0;
     inline constexpr int kDriverJoystickPort = 1;
-    inline constexpr units::meters_per_second_squared_t kSlewRateTranslation = 2_mps_sq; //confused why squared
-    inline constexpr units::radians_per_second_squared_t kSlewRateRotation = 2_rad_per_s_sq;
+    inline constexpr units::meters_per_second_squared_t kSlewRateTranslation = 6_mps_sq; //increase to reduce lag
+    inline constexpr units::radians_per_second_squared_t kSlewRateRotation = 6_rad_per_s_sq;
     inline constexpr double kDeadband = 0.1;
 }
 
