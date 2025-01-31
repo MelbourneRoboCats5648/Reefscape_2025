@@ -1,5 +1,7 @@
 #include "subsystems/DriveSubsystem.h"
 
+using namespace DriveConstants;
+
 DriveSubsystem::DriveSubsystem() {
   m_gyro.Calibrate();
 }
@@ -31,7 +33,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
                          : frc::ChassisSpeeds{xSpeed, ySpeed, rot},
            period));
 
-  kinematics.DesaturateWheelSpeeds(&states, DriveConstants::kMaxSpeed);
+  kinematics.DesaturateWheelSpeeds(&states, kMaxSpeed);
 
   auto [fl, fr, bl, br] = states;
 
@@ -40,18 +42,6 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   m_backLeftModule.SetModule(bl);
   m_backRightModule.SetModule(br);
 }
-
-/*
-void DriveSubsystem::SetModuleStates(
-    wpi::array<frc::SwerveModuleState, 4> desiredStates) {
-  kinematics.DesaturateWheelSpeeds(&desiredStates,
-                                         DriveConstants::kMaxSpeed);
-  m_frontLeftModule.SetModule(desiredStates[0]);
-  m_frontRightModule.SetModule(desiredStates[1]);
-  m_backLeftModule.SetModule(desiredStates[2]);
-  m_backRightModule.SetModule(desiredStates[3]);
-}
-*/
 
 void DriveSubsystem::StopAllModules()
 {
@@ -63,12 +53,9 @@ void DriveSubsystem::StopAllModules()
 
 frc2::CommandPtr DriveSubsystem::StopCommand() 
 {
-return Run([this] {m_frontLeftModule.StopMotors();
-                   m_frontRightModule.StopMotors();
-                   m_backLeftModule.StopMotors();
-                   m_backRightModule.StopMotors(); });
-
+return Run([this] {StopAllModules(); });
 }
+
 frc2::CommandPtr DriveSubsystem::SmartDashboardOutputCommand() 
 {
 return Run([this] {m_frontLeftModule.OutputPositionToDashboard();

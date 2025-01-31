@@ -23,6 +23,7 @@
 #include <frc/filter/SlewRateLimiter.h>
 
 using namespace DriveConstants;
+using namespace OperatorConstants;
 
 
 class DriveSubsystem : public frc2::SubsystemBase {
@@ -50,36 +51,24 @@ class DriveSubsystem : public frc2::SubsystemBase {
  private:
     //Gyro
     frc::ADIS16470_IMU m_gyro;
-    //Translation2D
-    frc::Translation2d backLeftLocation{-0.26_m, +0.26_m};
-    frc::Translation2d backRightLocation{-0.26_m, -0.26_m};
-    frc::Translation2d frontLeftLocation{+0.26_m, +0.26_m};
-    frc::Translation2d frontRightLocation{+0.26_m, -0.26_m};
 
-    //MagOffset Doubles
-      const double FRONT_LEFT_MAG_OFFSET = (0.302246);
-      const double FRONT_RIGHT_MAG_OFFSET = (0.351074);
-      const double BACK_LEFT_MAG_OFFSET = (0.062012);
-      const double BACK_RIGHT_MAG_OFFSET = (0.012695); 
-      // this mag offset has been set by the phoenix tuner set the new offsets
-
-    DriveModule m_frontLeftModule{FRONT_LEFT_SPEED_MOTOR_ID, FRONT_LEFT_DIRECTION_MOTOR_ID, 
-                                    FRONT_LEFT_DIRECTION_ENCODER_ID, FRONT_LEFT_MAG_OFFSET, "Front Left"};
-    DriveModule m_frontRightModule{FRONT_RIGHT_SPEED_MOTOR_ID, FRONT_RIGHT_DIRECTION_MOTOR_ID, 
-                                    FRONT_RIGHT_DIRECTION_ENCODER_ID, FRONT_RIGHT_MAG_OFFSET, "Front Right"};
-    DriveModule m_backLeftModule{BACK_LEFT_SPEED_MOTOR_ID, BACK_LEFT_DIRECTION_MOTOR_ID, 
-                                    BACK_LEFT_DIRECTION_ENCODER_ID, BACK_LEFT_MAG_OFFSET, "Back Left"};
-    DriveModule m_backRightModule{BACK_RIGHT_SPEED_MOTOR_ID, BACK_RIGHT_DIRECTION_MOTOR_ID, 
-                                    BACK_RIGHT_DIRECTION_ENCODER_ID, BACK_RIGHT_MAG_OFFSET, "Back Right"};
+    DriveModule m_frontLeftModule{kFrontLeftSpeedMotorID, kFrontLeftDirectionMotorID, 
+                                   kFrontLeftDirectionEncoderID, kFrontLeftMagOffset, "Front Left"};
+    DriveModule m_frontRightModule{kFrontRightSpeedMotorID, kFrontRightDirectionMotorID, 
+                                   kFrontRightDirectionEncoderID, kFrontRightMagOffset, "Front Right"};
+    DriveModule m_backLeftModule{kBackLeftSpeedMotorID, kBackLeftDirectionMotorID, 
+                                   kBackLeftDirectionEncoderID, kBackLeftMagOffset, "Back Left"};
+    DriveModule m_backRightModule{kBackRightSpeedMotorID, kBackRightDirectionMotorID, 
+                                   kBackRightDirectionEncoderID, kBackRightMagOffset, "Back Right"};
     
-    frc::SwerveDriveKinematics<4> kinematics{frontLeftLocation, 
-                                            frontRightLocation, 
-                                            backLeftLocation,
-                                            backRightLocation};
+    frc::SwerveDriveKinematics<4> kinematics{kFrontLeftLocation, 
+                                            kFrontRightLocation, 
+                                            kBackLeftLocation,
+                                            kBackRightLocation};
                                             
   public:
-  frc::SlewRateLimiter<units::scalar> m_xLimiter{2 / 1_s};
-  frc::SlewRateLimiter<units::scalar> m_yLimiter{2 / 1_s};
-  frc::SlewRateLimiter<units::scalar> m_rotLimiter{2 / 1_s};
+  frc::SlewRateLimiter<units::meters_per_second> m_xLimiter{kSlewRateTranslation};
+  frc::SlewRateLimiter<units::meters_per_second> m_yLimiter{kSlewRateTranslation};
+  frc::SlewRateLimiter<units::radians_per_second> m_rotLimiter{kSlewRateRotation};
 
 };
