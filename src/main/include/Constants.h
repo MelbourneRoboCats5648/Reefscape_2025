@@ -9,13 +9,15 @@
 #include <units/angular_velocity.h>
 
 #include <frc/TimedRobot.h>
+#include <frc/geometry/Translation2d.h>
 
 
 namespace OperatorConstants {
     inline constexpr int kDriverControllerPort = 0;
     inline constexpr int kDriverJoystickPort = 1;
-    inline constexpr units::meters_per_second_squared_t kSlewRateTranslation = {2 / 1_s}; //confused why squared
-    inline constexpr units::radians_per_second_squared_t kSlewRateRotation = {2 / 1_s};
+    inline constexpr units::meters_per_second_squared_t kSlewRateTranslation = 2_mps_sq; //confused why squared
+    inline constexpr units::radians_per_second_squared_t kSlewRateRotation = 2_rad_per_s_sq;
+    inline constexpr double kDeadband = 0.1;
 }
 
 namespace DriveConstants {
@@ -71,8 +73,8 @@ namespace DriveConstants {
         inline constexpr units::angle::turn_t kBackRightMagOffset = 0.012695_tr; 
 
     //Module Locations Translation 2D
-        frc::Translation2d kFrontLeftLocation{+0.26_m, +0.26_m};
-        frc::Translation2d kFrontRightLocation{+0.26_m, -0.26_m};
-        frc::Translation2d kBackLeftLocation{-0.26_m, +0.26_m};
-        frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
+        inline constexpr frc::Translation2d kFrontLeftLocation{+0.26_m, +0.26_m};
+        inline constexpr frc::Translation2d kFrontRightLocation{+0.26_m, -0.26_m};
+        inline constexpr frc::Translation2d kBackLeftLocation{-0.26_m, +0.26_m};
+        inline constexpr frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
 } 
