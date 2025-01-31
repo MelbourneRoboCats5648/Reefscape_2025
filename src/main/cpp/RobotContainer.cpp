@@ -41,9 +41,9 @@ RobotContainer::RobotContainer() {
     m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {
         const double deadband = 0.1;
-        units::velocity::meters_per_second_t yspeed = m_drive.m_yLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetLeftY(), deadband)) * kMaxSpeed;
-        units::velocity::meters_per_second_t xspeed = m_drive.m_xLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetLeftX(), deadband)) * kMaxSpeed;
-        units::angular_velocity::radians_per_second_t rotspeed = m_drive.m_rotLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetRightX(), deadband)) * kMaxAngularSpeed;
+        units::velocity::meters_per_second_t yspeed = -m_drive.m_yLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetLeftY(), deadband)) * kMaxSpeed;
+        units::velocity::meters_per_second_t xspeed = -m_drive.m_xLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetLeftX(), deadband)) * kMaxSpeed;
+        units::angular_velocity::radians_per_second_t rotspeed = -m_drive.m_rotLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetRightX(), deadband)) * kMaxAngularSpeed;
         m_drive.Drive(
             // Multiply by max speed to map the joystick unitless inputs to
             // actual units. This will map the [-1, 1] to [max speed backwards,
