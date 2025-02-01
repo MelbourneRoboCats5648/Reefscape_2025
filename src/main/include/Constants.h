@@ -20,13 +20,16 @@ namespace OperatorConstants {
     inline constexpr double kDeadband = 0.1;
 }
 
+namespace CAN_Constants {
+    inline constexpr int kElevatorMotorCAN_ID = 1;
+}
+
 namespace DriveConstants {
     //CAN IDs
         inline constexpr const int kFrontLeftSpeedMotorID = 4;
         inline constexpr const int kFrontRightSpeedMotorID = 2;
         inline constexpr const int kBackLeftSpeedMotorID = 6;
         inline constexpr const int kBackRightSpeedMotorID = 7;
-
         inline constexpr const int kFrontLeftDirectionMotorID = 3;
         inline constexpr const int kFrontRightDirectionMotorID = 5;
         inline constexpr const int kBackLeftDirectionMotorID = 1;
