@@ -6,6 +6,8 @@ DriveSubsystem::DriveSubsystem() {
   m_gyro.Calibrate();
   m_statePublisher = nt::NetworkTableInstance::GetDefault()
       .GetStructArrayTopic<frc::SwerveModuleState>("/SwerveStates").Publish();
+  m_headingPublisher = nt::NetworkTableInstance::GetDefault()
+      .GetStructTopic<frc::Rotation2d>("/DriveHeading").Publish();
 }
 
 void DriveSubsystem::Periodic() {
@@ -18,6 +20,9 @@ void DriveSubsystem::Periodic() {
         m_backLeftModule.GetState(),
         m_backRightModule.GetState()
       });
+    m_headingPublisher.Set(
+      GetHeading()
+    );
 }
 
 void DriveSubsystem::SimulationPeriodic() {
