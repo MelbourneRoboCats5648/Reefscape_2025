@@ -55,6 +55,9 @@ class DriveSubsystem : public frc2::SubsystemBase {
                             units::second_t period = DriveConstants::kDrivePeriod);
 
       void SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
+
+      frc::ChassisSpeeds GetRobotRelativeSpeeds();
+
     //Stops
       void StopAllModules();
       frc2::CommandPtr StopCommand();

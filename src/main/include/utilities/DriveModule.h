@@ -27,9 +27,14 @@ public:
     // sets the drive of all motors to zero    
     void StopMotors();
     void SetModule(frc::SwerveModuleState state);
+
     frc::SwerveModulePosition GetPosition();
     void SetModulePositionToZeroDistance();
     
+    units::meters_per_second_t GetSpeed();
+    frc::Rotation2d GetAngle();
+    frc::SwerveModuleState GetState();
+
     void OutputPositionToDashboard();
 
 

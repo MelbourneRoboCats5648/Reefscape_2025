@@ -83,12 +83,25 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
 
 frc::SwerveModulePosition DriveModule::GetPosition() {
   return {units::meter_t{m_speedMotor.GetPosition().GetValueAsDouble()*kWheelCircumference},
-          units::radian_t{m_directionEncoder.GetAbsolutePosition().GetValueAsDouble()*2*M_PI}};
+          units::radian_t{m_directionEncoder.GetAbsolutePosition().GetValue()}}; //was previously .GetValueAsDouble()*2*M_PI}
 }
 
 void DriveModule::SetModulePositionToZeroDistance()
 {
   m_speedMotor.SetPosition(units::angle::turn_t {0.0});
+}
+
+units::meters_per_second_t DriveModule::GetSpeed() {
+  return (m_speedMotor.GetVelocity().GetValue().value() * kWheelCircumference.value()) * 1_mps;
+}
+
+frc::Rotation2d DriveModule::GetAngle() {
+  units::radian_t turnAngle = m_directionEncoder.GetAbsolutePosition().GetValue();
+  return turnAngle;
+}
+
+frc::SwerveModuleState DriveModule::GetState() {
+  return {GetSpeed(), GetAngle()};
 }
 
 void DriveModule::OutputPositionToDashboard(){
