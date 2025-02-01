@@ -72,16 +72,15 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
   units::angle::radian_t encoderCurrentAngleRadians = 
                           m_directionEncoder.GetAbsolutePosition().GetValue();
     // updates state variable angle to the optimum change in angle
-  auto optimizedState = state = frc::SwerveModuleState::Optimize(state, encoderCurrentAngleRadians);
+  state.Optimize(encoderCurrentAngleRadians);
 
   // to set the speed using control onboard the motor, use m_speedMotor.SetControl(ctre::phoenix6::controls::VelocityVoltage{desiredWheelSpeed}); // desiredWheelSpeed in turns per second
   units::angular_velocity::turns_per_second_t desiredWheelSpeed{(state.speed.value())/kWheelCircumference.value()};
   m_speedMotor.SetControl(ctre::phoenix6::controls::VelocityVoltage{desiredWheelSpeed*kDriveGearRatio});
-  ////m_speedMotor.Set(normalisedSpeed); 
 
   // Calculate the turning motor output from the turning PID controller. 
   const auto turnOutput = m_turningPIDController.Calculate(
-    encoderCurrentAngleRadians, optimizedState.angle.Radians());
+    encoderCurrentAngleRadians, state.angle.Radians());
 
   m_directionMotor.SetVoltage(units::voltage::volt_t{1.0 * turnOutput}); 
 }
