@@ -1,7 +1,4 @@
 #include "subsystems/ElevatorSubsystem.h"
-
-#include <rev/SparkMax.h>
-
 #include <rev/config/SparkMaxConfig.h>
 
 ElevatorSubsystem::ElevatorSubsystem() {
@@ -42,7 +39,7 @@ ElevatorSubsystem::ElevatorSubsystem() {
     .P(ElevatorConstants::kP)
     .I(ElevatorConstants::kI)
     .D(ElevatorConstants::kD)
-    .OutputRange(-1, 1);
+    .OutputRange(-ElevatorConstants::maxOutput, ElevatorConstants::maxOutput);
 
   /*
   * Configure the encoder. For this specific example, we are using the

@@ -1,5 +1,9 @@
 #pragma once
+#include <frc2/command/SubsystemBase.h>
+#include <frc/trajectory/TrapezoidProfile.h>
+#include <frc2/command/Commands.h>
 #include <Constants.h>
+#include <rev/SparkMax.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
 class ElevatorSubsystem : public frc2::SubsystemBase {
@@ -40,7 +44,6 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
   // Create a motion profile with the given maximum velocity and maximum
   // acceleration constraints for the next setpoint.
-  //frc::TrapezoidProfile<units::meters> m_profile{{1.75_mps, 0.75_mps_sq}};
   frc::TrapezoidProfile<units::turn> m_trapezoidalProfile{{ElevatorConstants::maximumVelocity, ElevatorConstants::maximumAcceleration}};
   frc::TrapezoidProfile<units::turn>::State m_elevatorGoal;
   frc::TrapezoidProfile<units::turn>::State m_elevatorSetpoint;

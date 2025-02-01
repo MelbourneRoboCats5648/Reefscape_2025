@@ -3,16 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #pragma once
-#include <frc2/command/CommandPtr.h>
-#include <frc2/command/SubsystemBase.h>
-#include <rev/SparkMax.h>
-#include <frc/controller/PIDController.h>
-// possibly add smart dashboard from example for hard switches
-#include <rev/config/SparkMaxConfig.h>
 // PID Profile and Controller stuff
-#include <frc/controller/SimpleMotorFeedforward.h>
-#include <frc/trajectory/TrapezoidProfile.h>
-#include <frc2/command/Commands.h>
 #include <units/acceleration.h>
 #include <units/angular_acceleration.h>
 #include <units/length.h>
@@ -36,18 +27,16 @@ enum BuildSeason { Crescendo, Reefscape};
 
 namespace General {
     // Choose the bindings for which robot to build
-    const BuildSeason KbuildSeason = BuildSeason::Crescendo;
+    const BuildSeason KBuildSeason = BuildSeason::Crescendo;
 }
 
 namespace OperatorConstants {
-
 inline constexpr int kDriveJoystickPort = 0;
 inline constexpr int kDriverControllerPort = 1;
 
 }  // namespace OperatorConstants
 
 namespace CAN_Constants {
-
 inline constexpr int kElevatorMotorCAN_ID = 1;
 
 }  // namespace OperatorConstants
@@ -61,6 +50,7 @@ const units::turn_t kGoalThreshold = 3.0_tr;
 const double kP = 0.1;
 const double kI = 0.0;
 const double kD = 0.0;
+const double maxOutput = 1.0;
 
 //PID Profile
 const units::turns_per_second_t maximumVelocity= 0.5_tps;
@@ -76,11 +66,8 @@ const units::turn_t level4Goal = 5.0_tr;
 const units::turn_t resetEncoder = 0.0_tr;
 
 // Elevator limits
-// Soft Limits- will port to elevator and drive soon
-//plant to change from example base limits when limits are changed
 const units::turn_t extendSoftLimit = 7.0_tr;
 const units::turn_t retractSoftLimit = -1.0_tr;
 
 const double gearRatio = 1.0 / 9.0;
-
 }

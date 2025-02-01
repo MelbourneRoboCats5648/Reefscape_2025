@@ -16,7 +16,7 @@ RobotContainer::RobotContainer()
   // Initialize all of your commands and subsystems here
 
   // Configure the button bindings
-  switch(General::KbuildSeason)
+  switch(General::KBuildSeason)
   {
     case (BuildSeason::Reefscape):
     {
