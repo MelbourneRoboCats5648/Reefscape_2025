@@ -30,7 +30,10 @@
 #include <frc/filter/SlewRateLimiter.h>
 #include <frc/Joystick.h>
 
+#include <pathplanner/lib/commands/PathPlannerAuto.h>
+
 using namespace DriveConstants;
+using namespace pathplanner;
 
 
 RobotContainer::RobotContainer() 
@@ -114,8 +117,16 @@ void RobotContainer::Configure2024Bindings() {
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() 
 {
   // An example command will be run in autonomous
-  return autos::ExampleAuto(&m_subsystem);
+  //return autos::ExampleAuto(&m_subsystem);
+
+    // This method loads the auto when it is called, however, it is recommended
+    // to first load your paths/autos when code starts, then return the
+    // pre-loaded auto/path
+    return PathPlannerAuto("Test Auto").ToPtr();
+
 }
+
+
 frc2::CommandPtr RobotContainer::GetTestCommand() {
   // An example command will be run in autonomous
   return m_drive.SmartDashboardOutputCommand();
