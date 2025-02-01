@@ -32,11 +32,17 @@
  * they are needed.
  */
 
+enum BuildSeason { Crescendo, Reefscape};
+
+namespace General {
+    // Choose the bindings for which robot to build
+    const BuildSeason KbuildSeason = BuildSeason::Crescendo;
+}
+
 namespace OperatorConstants {
 
 inline constexpr int kDriveJoystickPort = 0;
 inline constexpr int kDriverControllerPort = 1;
-inline constexpr int kDriverControllerPort2 = 2;
 
 }  // namespace OperatorConstants
 
@@ -49,7 +55,7 @@ inline constexpr int kElevatorMotorCAN_ID = 1;
 namespace ElevatorConstants {
 //PID Trapezoidal Controller
 static constexpr units::second_t kDt = 20_ms;
-const units::turn_t kGoalThreshold = 3.0_tr; //part of RightClimbCommand
+const units::turn_t kGoalThreshold = 3.0_tr;
 
 //PID Controller
 const double kP = 0.1;
