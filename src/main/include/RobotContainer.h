@@ -15,7 +15,6 @@
 #include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeAndShootSubsystem.h"
 #include "subsystems/LeftClimbSubsystem.h"
-#include "subsystems/RightClimbSubsystem.h"
 #include "subsystems/ElevatorSubsystem.h"
 
 /**
@@ -33,6 +32,10 @@ class RobotContainer {
   frc2::CommandPtr GetTestCommand();
 
  private:
+
+  void ConfigureBindings();
+  void Configure2024Bindings();
+ 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   frc2::CommandXboxController m_driverController{OperatorConstants::kDriverControllerPort};
   frc2::CommandJoystick m_joystick{OperatorConstants::kDriverJoystickPort};
@@ -42,10 +45,8 @@ class RobotContainer {
   DriveSubsystem m_drive;
   IntakeSubsystem m_intakeSubsystem;
   LeftClimbSubsystem m_leftClimbSubsystem;
-  RightClimbSubsystem m_rightClimbSubsystem;
   ShooterSubsystem m_shooterSubsystem;
   IntakeAndShootSubsystem m_intakeAndShootSubsystem;
   ElevatorSubsystem m_elevatorSubsystem;
-
-  void ConfigureBindings();
+  
 };
