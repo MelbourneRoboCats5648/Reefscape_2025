@@ -5,6 +5,8 @@
 #include "Robot.h"
 
 #include <frc2/command/CommandScheduler.h>
+#include <frc/RobotController.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 Robot::Robot() {}
 
@@ -18,6 +20,8 @@ Robot::Robot() {}
  */
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();
+  
+  frc::SmartDashboard::PutNumber("battery voltage", frc::RobotController::GetBatteryVoltage().value());
 }
 
 /**
