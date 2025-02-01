@@ -83,7 +83,7 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
   const auto turnOutput = m_turningPIDController.Calculate(
     encoderCurrentAngleRadians, optimizedState.angle.Radians());
 
-  m_directionMotor.SetVoltage(units::voltage::volt_t{1.0 * turnOutput}); // FIX: direction motors were going in the wrong way, possibly due to 2024->2025 API changes - we need to invert the voltage
+  m_directionMotor.SetVoltage(units::voltage::volt_t{1.0 * turnOutput}); 
 }
 
 

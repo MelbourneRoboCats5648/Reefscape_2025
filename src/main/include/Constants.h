@@ -21,25 +21,24 @@ namespace OperatorConstants {
 }
 
 namespace CAN_Constants {
-    inline constexpr int kElevatorMotorCAN_ID = 1;
+    //Subsystem CAN IDs
+        inline constexpr int kElevatorMotorCAN_ID = 1;
+    //Drive CAN IDs
+        inline constexpr int kFrontLeftSpeedMotorID = 4;
+        inline constexpr int kFrontRightSpeedMotorID = 2;
+        inline constexpr int kBackLeftSpeedMotorID = 6;
+        inline constexpr int kBackRightSpeedMotorID = 7;
+        inline constexpr int kFrontLeftDirectionMotorID = 3;
+        inline constexpr int kFrontRightDirectionMotorID = 5;
+        inline constexpr int kBackLeftDirectionMotorID = 1;
+        inline constexpr int kBackRightDirectionMotorID = 8;
+        inline constexpr int kFrontLeftDirectionEncoderID = 9;
+        inline constexpr int kFrontRightDirectionEncoderID = 10;
+        inline constexpr int kBackLeftDirectionEncoderID = 12;
+        inline constexpr int kBackRightDirectionEncoderID = 11;
 }
 
 namespace DriveConstants {
-    //CAN IDs
-        inline constexpr const int kFrontLeftSpeedMotorID = 4;
-        inline constexpr const int kFrontRightSpeedMotorID = 2;
-        inline constexpr const int kBackLeftSpeedMotorID = 6;
-        inline constexpr const int kBackRightSpeedMotorID = 7;
-        inline constexpr const int kFrontLeftDirectionMotorID = 3;
-        inline constexpr const int kFrontRightDirectionMotorID = 5;
-        inline constexpr const int kBackLeftDirectionMotorID = 1;
-        inline constexpr const int kBackRightDirectionMotorID = 8;
-
-        inline constexpr const int kFrontLeftDirectionEncoderID = 9;
-        inline constexpr const int kFrontRightDirectionEncoderID = 10;
-        inline constexpr const int kBackLeftDirectionEncoderID = 12;
-        inline constexpr const int kBackRightDirectionEncoderID = 11;
-
     //Max Speed and Acceleration Constanst
         inline constexpr auto kMaxSpeed = 3_mps;
         inline constexpr auto kMaxAcceleration = 3_mps_sq;

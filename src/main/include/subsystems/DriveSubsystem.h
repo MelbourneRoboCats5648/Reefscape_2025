@@ -24,6 +24,7 @@
 
 using namespace DriveConstants;
 using namespace OperatorConstants;
+using namespace CAN_Constants;
 
 
 class DriveSubsystem : public frc2::SubsystemBase {
