@@ -27,7 +27,11 @@ public:
     // sets the drive of all motors to zero    
     void StopMotors();
     void SetModule(frc::SwerveModuleState state);
+    frc::SwerveModulePosition GetPosition();
+    void SetModulePositionToZeroDistance();
+    
     void OutputPositionToDashboard();
+
 
 private:
     TalonFX m_speedMotor;

@@ -62,10 +62,6 @@ void DriveModule::StopMotors()
   m_speedMotor.Set(0);
 }
 
-void DriveModule::OutputPositionToDashboard(){
-  frc::SmartDashboard::PutNumber(m_name, m_directionEncoder.GetAbsolutePosition().GetValueAsDouble());
-}
-
 void DriveModule::SetModule(frc::SwerveModuleState state) {
   // encoder range -0.5 +0.5,  GetValue returns rotation
   // encoder current angle is -pi to +pi
@@ -83,6 +79,20 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
     encoderCurrentAngleRadians, state.angle.Radians());
 
   m_directionMotor.SetVoltage(units::voltage::volt_t{1.0 * turnOutput}); 
+}
+
+frc::SwerveModulePosition DriveModule::GetPosition() {
+  return {units::meter_t{m_speedMotor.GetPosition().GetValueAsDouble()*kWheelCircumference},
+          units::radian_t{m_directionEncoder.GetAbsolutePosition().GetValueAsDouble()*2*M_PI}};
+}
+
+void DriveModule::SetModulePositionToZeroDistance()
+{
+  m_speedMotor.SetPosition(units::angle::turn_t {0.0});
+}
+
+void DriveModule::OutputPositionToDashboard(){
+  frc::SmartDashboard::PutNumber(m_name, m_directionEncoder.GetAbsolutePosition().GetValueAsDouble());
 }
 
 
