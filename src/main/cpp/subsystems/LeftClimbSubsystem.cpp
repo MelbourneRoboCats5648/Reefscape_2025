@@ -66,7 +66,6 @@ frc2::CommandPtr LeftClimbSubsystem::LeftClimbDownCommand() {
 }
 
 frc2::CommandPtr LeftClimbSubsystem::LeftClimbCommand(units::turn_t goal) {
-
   return Run([this, goal] {
           frc::TrapezoidProfile<units::turn>::State goalState = { goal, 0.0_tps }; // stop at goal
           m_leftClimbSetpoint = m_TrapezoidalProfile.Calculate(LeftClimbConstants::kDt, m_leftClimbSetpoint, goalState);
