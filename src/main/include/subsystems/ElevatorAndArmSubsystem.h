@@ -11,10 +11,10 @@ class ElevatorAndArmSubsystem : public frc2::SubsystemBase {
   ElevatorAndArmSubsystem(ElevatorSubsystem& elevatorSub,
     ArmSubsystem& armSub);
 
-  frc2::CommandPtr Level1();
-  frc2::CommandPtr Level2();
-  frc2::CommandPtr Level3();
+  frc2::CommandPtr MoveUp();
   frc2::CommandPtr MoveDown();
+  frc2::CommandPtr MoveToLevel();
+
 
   void Periodic() override;
   void SimulationPeriodic() override;

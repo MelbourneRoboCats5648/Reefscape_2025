@@ -32,7 +32,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr RetractCommand();
   frc2::CommandPtr ExtendCommand();
 
-
+  void stopMotors();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.

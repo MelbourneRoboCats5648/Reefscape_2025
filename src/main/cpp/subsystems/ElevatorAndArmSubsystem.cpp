@@ -6,27 +6,10 @@ ElevatorAndArmSubsystem::ElevatorAndArmSubsystem(ElevatorSubsystem& elevatorSub,
 {
 
 }
-frc2::CommandPtr ElevatorAndArmSubsystem::Level1() {
-  return m_elevatorSubsystem.MoveUpToL1Command()
-  .AndThen(m_armSubsystem.MoveArmToL1Command())
+frc2::CommandPtr ElevatorAndArmSubsystem::MoveUp() {
+  return m_elevatorSubsystem.MoveUpCommand()
+  .AndThen(m_armSubsystem.MoveArmUpCommand())
    .FinallyDo([this]{
-    m_elevatorSubsystem.StopMotors();
-    m_armSubsystem.StopMotor(); });
-}
-
-frc2::CommandPtr ElevatorAndArmSubsystem::Level2() {
-  return m_elevatorSubsystem.MoveUpToL2Command()
-  .AndThen(m_armSubsystem.MoveArmToL2Command())
-   .FinallyDo([this]{
-    m_elevatorSubsystem.StopMotors();
-    m_armSubsystem.StopMotor(); });
-}
-
-frc2::CommandPtr ElevatorAndArmSubsystem::Level3() {
-  return m_elevatorSubsystem.MoveUpToL3Command()
-  .AndThen(m_armSubsystem.MoveArmToL3Command())
-   .FinallyDo([this]{
-    m_elevatorSubsystem.StopMotors();
     m_armSubsystem.StopMotor(); });
 }
 
@@ -34,7 +17,13 @@ frc2::CommandPtr ElevatorAndArmSubsystem::MoveDown() {
   return m_elevatorSubsystem.MoveDownCommand()
   .AndThen(m_armSubsystem.MoveArmDownCommand())
    .FinallyDo([this]{
-    m_elevatorSubsystem.StopMotors();
+    m_armSubsystem.StopMotor(); });
+}
+
+frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel() {
+  return m_elevatorSubsystem.MoveToLevelCommand()
+  .AndThen(m_armSubsystem.MoveArmToLevelCommand())
+   .FinallyDo([this]{
     m_armSubsystem.StopMotor(); });
 }
 

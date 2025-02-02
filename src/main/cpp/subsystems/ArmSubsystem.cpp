@@ -29,27 +29,21 @@ ArmSubsystem::ArmSubsystem() {
                         rev::spark::SparkMax::PersistMode::kPersistParameters);
 }
 
-frc2::CommandPtr ArmSubsystem::MoveArmToL1Command() {
+frc2::CommandPtr ArmSubsystem::MoveArmUpCommand() {
   // Inline construction of command goes here.
   return Run([this] {m_elevatorArmMotor.Set(-0.1);})
-          .FinallyDo([this]{m_elevatorArmMotor.Set(0);});
-}
-
-frc2::CommandPtr ArmSubsystem::MoveArmToL2Command() {
-  // Inline construction of command goes here.
-  return Run([this] {m_elevatorArmMotor.Set(-0.2);})
-          .FinallyDo([this]{m_elevatorArmMotor.Set(0);});
-}
-
-frc2::CommandPtr ArmSubsystem::MoveArmToL3Command() {
-  // Inline construction of command goes here.
-  return Run([this] {m_elevatorArmMotor.Set(-0.3);})
           .FinallyDo([this]{m_elevatorArmMotor.Set(0);});
 }
 
 frc2::CommandPtr ArmSubsystem::MoveArmDownCommand() {
   // Inline construction of command goes here.
   return Run([this] {m_elevatorArmMotor.Set(0.1);})
+          .FinallyDo([this]{m_elevatorArmMotor.Set(0);});
+}
+
+frc2::CommandPtr ArmSubsystem::MoveArmToLevelCommand() {
+  // Inline construction of command goes here.
+  return Run([this] {m_elevatorArmMotor.Set(-0.2);})
           .FinallyDo([this]{m_elevatorArmMotor.Set(0);});
 }
 
