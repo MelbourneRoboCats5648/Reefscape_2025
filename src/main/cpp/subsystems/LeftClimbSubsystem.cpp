@@ -14,27 +14,8 @@ LeftClimbSubsystem::LeftClimbSubsystem() {
       .D(LeftClimbConstants::kD)
       .OutputRange(-1, 1);
 
-// Set the idle mode to brake to stop immediately when reaching a limit
+ // Set the idle mode to brake to stop immediately when reaching a limit
  motorConfig.SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
-
-/* TEMPORARILY REMOVED THE LIMIT SWITCH CODE BELOW TO TEST PID CONTROL FIRST */
-
-// // Enable limit switches to stop the motor when they are closed
-// //only hard switch code in this repo, will add others when organised
-//  motorConfig.limitSwitch
-//       .ForwardLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
-//       .ForwardLimitSwitchEnabled(true)
-//       .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
-//       .ReverseLimitSwitchEnabled(true);
-
-//   // Set the soft limits to stop the motor at set number of rotations
-//   //will alter constants 
-//   motorConfig.softLimit
-//       .ForwardSoftLimit(extendSoftLimit)
-//       .ForwardSoftLimitEnabled(true)
-//       .ReverseSoftLimit(retractSoftLimit)
-//       .ReverseSoftLimitEnabled(true);
-
 
    /* Apply the configuration to the SPARK MAX.
    * kResetSafeParameters is used to get the SPARK MAX to a known state. This is useful in case the SPARK MAX is replaced. 
@@ -55,14 +36,14 @@ frc2::CommandPtr LeftClimbSubsystem::LeftClimbUpCommand() {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem.
   return Run([this] {m_motorController.Set(LeftClimbConstants::leftClimbUpSpeed);})
-          .FinallyDo([this]{RobotReset();;});
+          .FinallyDo([this]{RobotReset();});
 }
 
 frc2::CommandPtr LeftClimbSubsystem::LeftClimbDownCommand() {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem.
   return Run([this] {m_motorController.Set(LeftClimbConstants::leftClimbDownSpeed);})
-          .FinallyDo([this]{RobotReset();;});
+          .FinallyDo([this]{RobotReset();});
 }
 
 frc2::CommandPtr LeftClimbSubsystem::LeftClimbCommand(units::turn_t goal) {
@@ -71,7 +52,7 @@ frc2::CommandPtr LeftClimbSubsystem::LeftClimbCommand(units::turn_t goal) {
           m_leftClimbSetpoint = m_TrapezoidalProfile.Calculate(LeftClimbConstants::kDt, m_leftClimbSetpoint, goalState);
           m_closedLoopController.SetReference(m_leftClimbSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
         })
-        .FinallyDo([this]{RobotReset();;});
+        .FinallyDo([this]{RobotReset();});
 }
 
 void LeftClimbSubsystem::Periodic() {
