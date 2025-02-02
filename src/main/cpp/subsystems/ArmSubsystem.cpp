@@ -41,9 +41,9 @@ frc2::CommandPtr ArmSubsystem::MoveArmDownCommand() {
           .FinallyDo([this]{m_elevatorArmMotor.Set(0);});
 }
 
-frc2::CommandPtr ArmSubsystem::MoveArmToLevelCommand() {
+frc2::CommandPtr ArmSubsystem::MoveArmToLevelCommand(units::turn_t goal) {
   // Inline construction of command goes here.
-  return Run([this] {m_elevatorArmMotor.Set(-0.2);})
+  return Run([this, goal] {m_elevatorArmMotor.Set(goal.value());})
           .FinallyDo([this]{m_elevatorArmMotor.Set(0);});
 }
 

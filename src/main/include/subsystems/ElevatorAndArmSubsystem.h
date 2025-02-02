@@ -15,6 +15,7 @@ class ElevatorAndArmSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr MoveDown();
   frc2::CommandPtr MoveToLevel(units::turn_t goal);
 
+  enum Level {L1, L2, L3, L4};
 
   void Periodic() override;
   void SimulationPeriodic() override;

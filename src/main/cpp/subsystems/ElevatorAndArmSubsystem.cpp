@@ -22,7 +22,7 @@ frc2::CommandPtr ElevatorAndArmSubsystem::MoveDown() {
  
 frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel(units::turn_t goal) {
   return m_elevatorSubsystem.MoveToLevelCommand(goal)
-  .AndThen(m_armSubsystem.MoveArmToLevelCommand())
+  .AndThen(m_armSubsystem.MoveArmToLevelCommand(goal))
     .FinallyDo([this]{
       m_armSubsystem.StopMotor(); });
   }
