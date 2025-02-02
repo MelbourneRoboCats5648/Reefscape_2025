@@ -10,7 +10,6 @@
 //copied from frc example code
 #include <utility>
 #include <frc/controller/PIDController.h>
-#include <frc/geometry/Translation2d.h>
 #include <frc/shuffleboard/Shuffleboard.h>
 #include <frc/trajectory/Trajectory.h>
 #include <frc/trajectory/TrajectoryGenerator.h>
@@ -20,8 +19,6 @@
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/SwerveControllerCommand.h>
 #include <frc2/command/button/JoystickButton.h>
-#include <units/angle.h>
-#include <units/velocity.h>
 
 #include "commands/Autos.h"
 
@@ -31,6 +28,7 @@
 #include <frc/Joystick.h>
 
 using namespace DriveConstants;
+
 
 
 RobotContainer::RobotContainer() 
@@ -80,6 +78,13 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.Y().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level3Goal));
   m_driverController.B().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level4Goal));
 
+// PID climb subsystem command (temporarily disabling LeftClimbUpCommand and LeftClimbDownCommand to test it)
+  m_joystick.Button(LeftClimbConstants::leftUpButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalL1));
+  m_joystick.Button(LeftClimbConstants::leftDownButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalRetract));
+
+  // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
+  // pressed, cancelling on release.
+  //m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
   m_driverController.LeftTrigger().WhileTrue(m_elevatorSubsystem.MoveUpCommand());
   m_driverController.RightTrigger().WhileTrue(m_elevatorSubsystem.MoveDownCommand());
 
@@ -106,9 +111,8 @@ void RobotContainer::Configure2024Bindings() {
   m_driverController.LeftTrigger().OnTrue(m_intakeAndShootSubsystem.PerformIntakeAndShootCommand()); 
 
   //left climb commands
-  m_joystick.Button(leftUpButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
-  m_joystick.Button(leftDownButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
-
+  m_joystick.Button(LeftClimbConstants::leftUpButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
+  m_joystick.Button(LeftClimbConstants::leftDownButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() 

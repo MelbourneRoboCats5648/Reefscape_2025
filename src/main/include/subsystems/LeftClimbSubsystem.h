@@ -3,22 +3,13 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #pragma once
-
+#include "Constants.h"
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
-#include <frc/Joystick.h>
-#include <frc/motorcontrol/VictorSP.h>
+#include <frc2/command/Commands.h>
 
 // PWM Ports
-const int motorClimbLeftPort = 1;
-
-// Speeds
-const double leftClimbUpSpeed = 1.0; //was 0.25
-const double leftClimbDownSpeed = -1.0;
-
-// Joystick buttons
-const int leftUpButton = 3;
-const int leftDownButton = 5;
+//const int motorClimbLeftPort = 1;
 
 class LeftClimbSubsystem : public frc2::SubsystemBase {
  public:
@@ -29,6 +20,8 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
    */
   frc2::CommandPtr LeftClimbUpCommand();
   frc2::CommandPtr LeftClimbDownCommand();
+  frc2::CommandPtr LeftClimbCommand(units::turn_t goal);
+
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
@@ -42,7 +35,12 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-      frc::VictorSP m_motorClimbLeft{motorClimbLeftPort};
-
+      //frc::VictorSP m_motorClimbLeft{motorClimbLeftPort};
+      rev::spark::SparkMax m_motorController{LeftClimbConstants::motorClimbLeftID, rev::spark::SparkMax::MotorType::kBrushless};
+      rev::spark::SparkClosedLoopController m_closedLoopController = m_motorController.GetClosedLoopController();
+      rev::spark::SparkRelativeEncoder m_encoder = m_motorController.GetEncoder();
+      frc::TrapezoidProfile<units::turn> m_TrapezoidalProfile{{LeftClimbConstants::maximumVelocity, LeftClimbConstants::maximumAcceleration}};
+      frc::TrapezoidProfile<units::turn>::State m_leftClimbGoal;
+      frc::TrapezoidProfile<units::turn>::State m_leftClimbSetpoint;
+      void RobotReset();
 };
-
