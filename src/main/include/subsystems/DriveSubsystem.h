@@ -22,6 +22,9 @@
 
 #include <frc/filter/SlewRateLimiter.h>
 
+#include <networktables/StructArrayTopic.h>
+#include <networktables/StructTopic.h>
+
 //Odometry 
 #include <frc/estimator/PoseEstimator.h>
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
@@ -65,20 +68,22 @@ class DriveSubsystem : public frc2::SubsystemBase {
       frc2::CommandPtr SmartDashboardOutputCommand();
 
     //Odometry
-        /**
+        
+      //void UpdateOdometry(frc::Pose2d m_pose);
+
+      /**
      * Returns the currently-estimated pose of the robot.
      *
      * @return The pose.
      */
-      frc::Pose2d GetPose();
+      frc::Pose2d GetPosition();
 
         /**
      * Resets the odometry to the specified pose.
      *
      * @param pose The pose to which to set the odometry.
      */
-      void ResetOdometry(frc::Pose2d pose);
-
+      void ResetPosition(frc::Pose2d pose);
       void SetPositionToZeroDistance();
 
 
@@ -99,15 +104,17 @@ class DriveSubsystem : public frc2::SubsystemBase {
                                             kFrontRightLocation, 
                                             kBackLeftLocation,
                                             kBackRightLocation};
-    // Odometry class for tracking robot pose
+
+    
+    nt::StructArrayPublisher<frc::SwerveModuleState> m_statePublisher; 
+    nt::StructPublisher<frc::Rotation2d> m_headingPublisher; 
+
+    // PoseEstimator class for tracking robot pose
     // 4 defines the number of modules
-    frc::SwerveDriveOdometry<4> m_odometry;
-
-
     frc::SwerveDrivePoseEstimator<4> m_poseEstimator{kinematics, frc::Rotation2d{GetHeading()},
                                 {m_frontLeftModule.GetPosition(), m_frontRightModule.GetPosition(),
                                   m_backLeftModule.GetPosition(), m_backRightModule.GetPosition()}, 
-                                  GetPose(), 
+                                   frc::Pose2d{}, 
                                   // ( double 0.5, double 0.5, units::radian_t(1)), 
                                   // ( double 0.5, double 0.5, units::radian_t(1))
                                   };

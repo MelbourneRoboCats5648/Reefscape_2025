@@ -64,7 +64,7 @@ void DriveModule::StopMotors()
 
 void DriveModule::SetModule(frc::SwerveModuleState state) {
   // encoder range -0.5 +0.5,  GetValue returns rotation
-  // encoder current angle is -pi to +pi
+  // encoder current angle is -pi to +pi (i think this was removed... im not sure so should test again)
   units::angle::radian_t encoderCurrentAngleRadians = 
                           m_directionEncoder.GetAbsolutePosition().GetValue();
     // updates state variable angle to the optimum change in angle
@@ -83,7 +83,7 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
 
 frc::SwerveModulePosition DriveModule::GetPosition() {
   return {units::meter_t{m_speedMotor.GetPosition().GetValueAsDouble()*kWheelCircumference},
-          units::radian_t{m_directionEncoder.GetAbsolutePosition().GetValue()}}; //was previously .GetValueAsDouble()*2*M_PI}
+          frc::Rotation2d{m_directionEncoder.GetAbsolutePosition().GetValue()}}; //was previously .GetValueAsDouble()*2*M_PI}
 }
 
 void DriveModule::SetModulePositionToZeroDistance()
@@ -96,13 +96,14 @@ units::meters_per_second_t DriveModule::GetSpeed() {
 }
 
 frc::Rotation2d DriveModule::GetAngle() {
-  units::radian_t turnAngle = m_directionEncoder.GetAbsolutePosition().GetValue();
+  units::radian_t turnAngle = m_directionEncoder.GetAbsolutePosition().GetValue() /* 2.0 * M_PI*/;
   return turnAngle;
 }
 
+
 frc::SwerveModuleState DriveModule::GetState() {
   return {GetSpeed(), GetAngle()};
-}
+} 
 
 void DriveModule::OutputPositionToDashboard(){
   frc::SmartDashboard::PutNumber(m_name, m_directionEncoder.GetAbsolutePosition().GetValueAsDouble());

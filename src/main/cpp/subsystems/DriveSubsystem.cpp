@@ -12,13 +12,18 @@ using namespace DriveConstants;
 using namespace pathplanner;
 
 DriveSubsystem::DriveSubsystem()   
-    : m_odometry{kinematics,
+    : m_poseEstimator{kinematics,
       frc::Rotation2d{GetHeading()},
       {m_frontLeftModule.GetPosition(), m_frontRightModule.GetPosition(),
        m_backLeftModule.GetPosition(), m_backRightModule.GetPosition()},
        frc::Pose2d{}}
 {
   m_gyro.Calibrate();
+  
+  m_statePublisher = nt::NetworkTableInstance::GetDefault()
+      .GetStructArrayTopic<frc::SwerveModuleState>("/SwerveStates").Publish();
+  m_headingPublisher = nt::NetworkTableInstance::GetDefault()
+      .GetStructTopic<frc::Rotation2d>("/DriveHeading").Publish();
 
   //PathPlanner
     // Load the RobotConfig from the GUI settings. You should probably
@@ -27,8 +32,8 @@ DriveSubsystem::DriveSubsystem()
 
     // Configure the AutoBuilder last
     AutoBuilder::configure(
-        [this](){ return GetPose(); }, // Robot pose supplier
-        [this](frc::Pose2d pose){ ResetOdometry(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
+        [this](){ return GetPosition(); }, // Robot pose supplier
+        [this](frc::Pose2d pose){ResetPosition(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
         [this](){ return GetRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         [this](frc::ChassisSpeeds speeds /*,auto feedforwards*/){ 
                 Drive(speeds.vx, speeds.vy, speeds.omega, false); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
@@ -54,6 +59,17 @@ DriveSubsystem::DriveSubsystem()
 
 void DriveSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
+  m_statePublisher.Set(
+    std::vector{
+      m_frontLeftModule.GetState(),
+      m_frontRightModule.GetState(),
+      m_backLeftModule.GetState(),
+      m_backRightModule.GetState()
+    });
+  m_headingPublisher.Set(
+    GetHeading()
+  );
+
   m_poseEstimator.Update(frc::Rotation2d{GetHeading()}, //idk if this should be m_odometry and m_poseestimator https://github.com/LimelightVision/limelight-examples/blob/main/java-wpilib/swerve-megatag-odometry/src/main/java/frc/robot/Drivetrain.java#L88
       {m_frontLeftModule.GetPosition(), m_frontRightModule.GetPosition(),
        m_backLeftModule.GetPosition(), m_backRightModule.GetPosition()});
@@ -134,15 +150,14 @@ frc2::CommandPtr DriveSubsystem::StopCommand()
 return Run([this] {StopAllModules(); });
 }
 
-//Odometry
-//Odometry
-frc::Pose2d DriveSubsystem::GetPose() {
-  return m_odometry.GetPose();
+
+//Pose Estimation
+frc::Pose2d DriveSubsystem::GetPosition() {
+  return m_poseEstimator.GetEstimatedPosition();
 }
 
-void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
-  m_odometry.ResetPosition(
-                  frc::Rotation2d{GetHeading()},
+void DriveSubsystem::ResetPosition(frc::Pose2d pose) {
+  m_poseEstimator.ResetPosition(frc::Rotation2d{GetHeading()},
                   {m_frontLeftModule.GetPosition(), m_frontRightModule.GetPosition(),
                   m_backLeftModule.GetPosition(), m_backRightModule.GetPosition()}, 
                   pose);
