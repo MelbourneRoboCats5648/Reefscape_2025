@@ -10,7 +10,6 @@
 //copied from frc example code
 #include <utility>
 #include <frc/controller/PIDController.h>
-#include <frc/geometry/Translation2d.h>
 #include <frc/shuffleboard/Shuffleboard.h>
 #include <frc/trajectory/Trajectory.h>
 #include <frc/trajectory/TrajectoryGenerator.h>
@@ -20,8 +19,6 @@
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/SwerveControllerCommand.h>
 #include <frc2/command/button/JoystickButton.h>
-#include <units/angle.h>
-#include <units/velocity.h>
 
 #include "commands/Autos.h"
 
