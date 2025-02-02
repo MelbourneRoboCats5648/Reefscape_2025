@@ -8,14 +8,14 @@
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/button/CommandJoystick.h>
 
+#include "subsystems/DriveSubsystem.h"
 #include "Constants.h"
 #include "subsystems/ExampleSubsystem.h"
-#include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
+#include "subsystems/ShooterSubsystem.h"
+#include "subsystems/IntakeAndShootSubsystem.h"
 #include "subsystems/LeftClimbSubsystem.h"
-#include "subsystems/RightClimbSubsystem.h"
 #include "subsystems/ElevatorSubsystem.h"
-
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -29,19 +29,24 @@ class RobotContainer {
   RobotContainer();
 
   frc2::CommandPtr GetAutonomousCommand();
+  frc2::CommandPtr GetTestCommand();
 
  private:
+
+  void ConfigureBindings();
+  void Configure2024Bindings();
+ 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   frc2::CommandXboxController m_driverController{OperatorConstants::kDriverControllerPort};
-  frc2::CommandJoystick m_joystick{OperatorConstants::kDriveJoystickPort};
+  frc2::CommandJoystick m_joystick{OperatorConstants::kDriverJoystickPort};
 
   // The robot's subsystems are defined here...
   ExampleSubsystem m_subsystem;
+  DriveSubsystem m_drive;
   IntakeSubsystem m_intakeSubsystem;
   LeftClimbSubsystem m_leftClimbSubsystem;
-  RightClimbSubsystem m_rightClimbSubsystem;
   ShooterSubsystem m_shooterSubsystem;
-  //ElevatorSubsystem m_elevatorSubsystem;
-
-  void ConfigureBindings();
+  IntakeAndShootSubsystem m_intakeAndShootSubsystem;
+  ElevatorSubsystem m_elevatorSubsystem;
+  
 };
