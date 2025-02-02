@@ -19,13 +19,14 @@ frc2::CommandPtr ElevatorAndArmSubsystem::MoveDown() {
    .FinallyDo([this]{
     m_armSubsystem.StopMotor(); });
 }
-
+ 
 frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel() {
-  return m_elevatorSubsystem.MoveToLevelCommand()
+  units::turn_t goal;
+  return m_elevatorSubsystem.MoveToLevelCommand(goal)
   .AndThen(m_armSubsystem.MoveArmToLevelCommand())
-   .FinallyDo([this]{
-    m_armSubsystem.StopMotor(); });
-}
+    .FinallyDo([this]{
+      m_armSubsystem.StopMotor(); });
+  }
 
 void ElevatorAndArmSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.

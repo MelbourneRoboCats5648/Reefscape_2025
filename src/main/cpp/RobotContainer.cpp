@@ -35,11 +35,12 @@ using namespace DriveConstants;
 RobotContainer::RobotContainer() 
   : m_intakeSubsystem(),
     m_shooterSubsystem(),
-    m_intakeAndShootSubsystem(m_intakeSubsystem, m_shooterSubsystem)
-  : m_elevatorSubsystem(),
+    m_intakeAndShootSubsystem(m_intakeSubsystem, m_shooterSubsystem),
+    m_elevatorSubsystem(),
     m_armSubsystem(),
     m_elevatorAndArmSubsystem(m_elevatorSubsystem, m_armSubsystem)
 {
+
   // Initialize all of your commands and subsystems here
 
   // Configure the button bindings
