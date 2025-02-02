@@ -5,6 +5,7 @@
 #include <Constants.h>
 #include <rev/SparkMax.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/controller/ElevatorFeedforward.h>
 
 class ElevatorSubsystem : public frc2::SubsystemBase {
   public:
@@ -48,6 +49,9 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   frc::TrapezoidProfile<units::turn>::State m_elevatorGoal;
   frc::TrapezoidProfile<units::turn>::State m_elevatorSetpoint;
   rev::spark::SparkClosedLoopController m_closedLoopController = m_motor.GetClosedLoopController();
+// Create a new ElevatorFeedforward with gains kS, kV, and kA
+// Distance is measured in meters
+  frc::ElevatorFeedforward feedforward{ElevatorConstants::kS, ElevatorConstants::kG, ElevatorConstants::kV, ElevatorConstants::kA};
 
   void UpdateSetpoint();
   void ResetMotor();

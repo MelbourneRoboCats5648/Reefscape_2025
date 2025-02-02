@@ -132,5 +132,13 @@ const units::turn_t extendSoftLimit = 7.0_tr;
 const units::turn_t retractSoftLimit = -1.0_tr;
 
 const double gearRatio = 1.0 / 9.0;
+
+//Elevator feedforward
+const units::volt_t kS = 1.0_V;
+const units::volt_t kG = 1.0_V;
+const auto kV = 1.0_V * 1_s / 1_m;
+const auto kA = 1.0_V * 1_s * 1_s / 1_m;
+
+
 }
 

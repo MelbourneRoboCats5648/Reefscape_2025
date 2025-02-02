@@ -66,6 +66,11 @@ ElevatorSubsystem::ElevatorSubsystem() {
   // Reset the position to 0 to start within the range of the soft limits
   m_encoder.SetPosition(ElevatorConstants::resetEncoder.value());
 
+  // Calculates the feedforward for a velocity of 20 meters/second
+// and an acceleration of 30 meters/second^2
+// Output is in volts
+ feedforward.Calculate(20_mps, 30_mps_sq);
+
 }
 
 void ElevatorSubsystem::UpdateSetpoint() {  
