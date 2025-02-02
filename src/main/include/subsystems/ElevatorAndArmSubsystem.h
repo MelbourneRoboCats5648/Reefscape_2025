@@ -13,7 +13,7 @@ class ElevatorAndArmSubsystem : public frc2::SubsystemBase {
 
   frc2::CommandPtr MoveUp();
   frc2::CommandPtr MoveDown();
-  frc2::CommandPtr MoveToLevel();
+  frc2::CommandPtr MoveToLevel(units::turn_t goal);
 
 
   void Periodic() override;

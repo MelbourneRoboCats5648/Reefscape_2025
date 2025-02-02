@@ -53,6 +53,4 @@ class RobotContainer {
   ArmSubsystem m_armSubsystem;
   //this subsystem relies on the two subsystems above
   ElevatorAndArmSubsystem m_elevatorAndArmSubsystem;
-
-  void ConfigureBindings();
 };
