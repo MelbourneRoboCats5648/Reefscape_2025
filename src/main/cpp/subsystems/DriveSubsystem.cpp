@@ -4,10 +4,25 @@ using namespace DriveConstants;
 
 DriveSubsystem::DriveSubsystem() {
   m_gyro.Calibrate();
+  m_statePublisher = nt::NetworkTableInstance::GetDefault()
+      .GetStructArrayTopic<frc::SwerveModuleState>("/SwerveStates").Publish();
+  m_headingPublisher = nt::NetworkTableInstance::GetDefault()
+      .GetStructTopic<frc::Rotation2d>("/DriveHeading").Publish();
 }
 
 void DriveSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
+   // Periodically send a set of module states
+    m_statePublisher.Set(
+      std::vector{
+        m_frontLeftModule.GetState(),
+        m_frontRightModule.GetState(),
+        m_backLeftModule.GetState(),
+        m_backRightModule.GetState()
+      });
+    m_headingPublisher.Set(
+      GetHeading()
+    );
 }
 
 void DriveSubsystem::SimulationPeriodic() {
@@ -63,3 +78,4 @@ return Run([this] {m_frontLeftModule.OutputPositionToDashboard();
                    m_backLeftModule.OutputPositionToDashboard();
                    m_backRightModule.OutputPositionToDashboard(); });
 }
+

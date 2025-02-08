@@ -85,9 +85,12 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
   m_directionMotor.SetVoltage(units::voltage::volt_t{1.0 * turnOutput}); 
 }
 
-
-
-
+frc::SwerveModuleState DriveModule::GetState() {
+  return frc::SwerveModuleState{
+    m_speedMotor.GetVelocity().GetValueAsDouble()*kWheelCircumference/1_s, //metres per sec
+    m_directionEncoder.GetAbsolutePosition().GetValue()
+  };
+}
 
 
 
