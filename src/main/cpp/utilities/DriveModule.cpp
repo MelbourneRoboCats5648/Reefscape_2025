@@ -1,7 +1,5 @@
 #include "utilities/DriveModule.h"
-#include <iostream>
 #include<frc/smartdashboard/SmartDashboard.h>
-#include <frc/geometry/Rotation2d.h>
 
 using namespace ctre::phoenix6::signals;
 using namespace ctre::phoenix6::configs;
