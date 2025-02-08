@@ -5,9 +5,9 @@ using namespace DriveConstants;
 DriveSubsystem::DriveSubsystem() {
   m_gyro.Calibrate();
   m_statePublisher = nt::NetworkTableInstance::GetDefault()
-      .GetStructArrayTopic<frc::SwerveModuleState>("/SwerveStates").Publish();
+      .GetStructArrayTopic<frc::SwerveModuleState>("DriveTrain/SwerveStates").Publish();
   m_headingPublisher = nt::NetworkTableInstance::GetDefault()
-      .GetStructTopic<frc::Rotation2d>("/DriveHeading").Publish();
+      .GetStructTopic<frc::Rotation2d>("DriveTrain/Heading").Publish();
 }
 
 void DriveSubsystem::Periodic() {
