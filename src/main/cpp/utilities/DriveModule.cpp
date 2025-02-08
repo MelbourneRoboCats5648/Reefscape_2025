@@ -1,5 +1,4 @@
 #include "utilities/DriveModule.h"
-#include <iostream>
 #include<frc/smartdashboard/SmartDashboard.h>
 
 using namespace ctre::phoenix6::signals;
@@ -56,6 +55,9 @@ DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEn
                 units::angle::radian_t{M_PI});
     }
 
+
+
+
 void DriveModule::StopMotors()
 {
   m_directionMotor.Set(0);
@@ -73,6 +75,10 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
                           m_directionEncoder.GetAbsolutePosition().GetValue();
     // updates state variable angle to the optimum change in angle
   state.Optimize(encoderCurrentAngleRadians);
+  // Scale speed by cosine of angle error. This scales down movement
+  // perpendicular to the desired direction of travel that can occur when
+  // modules change directions. This results in smoother driving.
+  state.CosineScale(encoderCurrentAngleRadians);
 
   // to set the speed using control onboard the motor, use m_speedMotor.SetControl(ctre::phoenix6::controls::VelocityVoltage{desiredWheelSpeed}); // desiredWheelSpeed in turns per second
   units::angular_velocity::turns_per_second_t desiredWheelSpeed{(state.speed.value())/kWheelCircumference.value()};
