@@ -39,6 +39,10 @@ RobotContainer::RobotContainer()
   // Initialize all of your commands and subsystems here
 
   // Configure the button bindings
+  m_driverController.POVUp().WhileTrue(m_drive.DriveCommand(kMaxSpeed, 0.0_mps, 0.0_rad_per_s, false));
+  m_driverController.POVDown().WhileTrue(m_drive.DriveCommand(-kMaxSpeed, 0.0_mps, 0.0_rad_per_s, false));
+  m_driverController.POVLeft().WhileTrue(m_drive.DriveCommand(0.0_mps, kMaxSpeed, 0.0_rad_per_s, false));
+  m_driverController.POVRight().WhileTrue(m_drive.DriveCommand(0.0_mps, -kMaxSpeed, 0.0_rad_per_s, false));
   switch(General::KBuildSeason)
   {
     case (BuildSeason::Reefscape):
@@ -71,7 +75,6 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
-
   //PID elevator subsystem command
   m_driverController.A().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level1Goal));
   m_driverController.X().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level2Goal));

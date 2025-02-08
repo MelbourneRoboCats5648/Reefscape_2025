@@ -57,6 +57,14 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   m_backLeftModule.SetModule(bl);
   m_backRightModule.SetModule(br);
 }
+frc2::CommandPtr DriveSubsystem::DriveCommand(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed, units::radians_per_second_t rot, bool fieldRelative, units::second_t period) 
+{
+  return Run ([this, xSpeed, ySpeed, rot, fieldRelative, period ] {
+    Drive(xSpeed, ySpeed, rot, fieldRelative, period);})
+          .FinallyDo ([this, fieldRelative, period] {
+          Drive(0.0_mps, 0.0_mps, 0.0_rad_per_s, fieldRelative, period);});
+
+}
 
 void DriveSubsystem::StopAllModules()
 {
