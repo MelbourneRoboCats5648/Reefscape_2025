@@ -41,6 +41,8 @@ ElevatorSubsystem::ElevatorSubsystem() {
     .D(ElevatorConstants::kD)
     .OutputRange(-ElevatorConstants::maxOutput, ElevatorConstants::maxOutput);
 
+   
+
   /*
   * Configure the encoder. For this specific example, we are using the
   * integrated encoder of the NEO, and we don't need to configure it. If
@@ -68,12 +70,16 @@ ElevatorSubsystem::ElevatorSubsystem() {
 }
 
 void ElevatorSubsystem::UpdateSetpoint() {  
-  m_elevatorSetpoint.position = units::angle::turn_t(m_encoder.GetPosition());
-  m_elevatorSetpoint.velocity = 0.0_tps; 
+  m_elevatorSetpoint.position = GetElevatorPosition();
+  m_elevatorSetpoint.velocity = 0.0_mps; 
 }
 
 void ElevatorSubsystem::ResetMotor() {  
   m_motor.Set(0);
+}
+
+units::meter_t ElevatorSubsystem::GetElevatorPosition() {
+  return m_encoder.GetPosition() * ElevatorConstants::distancePerTurn;
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveUpCommand() {
@@ -94,18 +100,19 @@ frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
          });
 }
 
-frc2::CommandPtr ElevatorSubsystem::MoveToLevelCommand(units::turn_t goal) {
+frc2::CommandPtr ElevatorSubsystem::MoveToLevelCommand(units::meter_t goal) {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
   return Run([this, goal] {
-            frc::TrapezoidProfile<units::turn>::State goalState = {goal, 0.0_tps }; //stop at goal
+            frc::TrapezoidProfile<units::meter>::State goalState = {goal, 0.0_mps }; //stop at goal
             m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
-
             frc::SmartDashboard::PutNumber("trapazoidalSetpoint", m_elevatorSetpoint.position.value());
-
-            m_closedLoopController.SetReference(goalState.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
+            m_closedLoopController.SetReference(goalState.position.value(), 
+                                                rev::spark::SparkLowLevel::ControlType::kPosition,
+                                                rev::spark::kSlot0,
+                                                m_elevatorFeedforward.Calculate(m_elevatorSetpoint.velocity).value());
             })   
-         .FinallyDo([this]{m_motor.Set(0);});
+        .FinallyDo([this]{m_motor.Set(0);});
 }
 
 void ElevatorSubsystem::Periodic() {

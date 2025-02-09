@@ -22,6 +22,9 @@
 
 #include <frc/filter/SlewRateLimiter.h>
 
+#include <networktables/StructArrayTopic.h>
+#include <networktables/StructTopic.h>
+
 using namespace DriveConstants;
 using namespace OperatorConstants;
 using namespace CAN_Constants;
@@ -66,6 +69,10 @@ class DriveSubsystem : public frc2::SubsystemBase {
                                             kFrontRightLocation, 
                                             kBackLeftLocation,
                                             kBackRightLocation};
+
+    nt::StructArrayPublisher<frc::SwerveModuleState> m_statePublisher; 
+    nt::StructPublisher<frc::Rotation2d> m_headingPublisher; 
+
                                             
   public:
   frc::SlewRateLimiter<units::meters_per_second> m_xLimiter{kSlewRateTranslation};
