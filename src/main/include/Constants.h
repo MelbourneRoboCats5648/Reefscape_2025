@@ -19,8 +19,9 @@
 #include <frc/geometry/Translation2d.h>
 
 
-
 enum BuildSeason { Crescendo, Reefscape};
+
+enum ArmLevel {L1, L2, L3, L4};
 
 namespace General {
 // Choose the bindings for which robot to build
@@ -167,5 +168,21 @@ const units::turn_t extendSoftLimit = 7.0_tr;
 const units::turn_t retractSoftLimit = -1.0_tr;
 
 const double gearRatio = 1.0 / 9.0;
+}
+
+namespace ArmConstants {
+//PID Profile
+const units::turns_per_second_t maximumVelocity= 0.5_tps;
+const units::turns_per_second_squared_t maximumAcceleration = 1.0_tr_per_s_sq;
+
+//PID Trapezoidal Controller
+static constexpr units::second_t kDt = 20_ms;
+const units::turn_t kGoalThreshold = 3.0_tr;
+
+//Arm Goals
+const units::turn_t level1Goal = 0.0_tr;
+const units::turn_t level2Goal = 2.0_tr;
+const units::turn_t level3Goal = 4.0_tr;
+const units::turn_t level4Goal = 5.0_tr;
 }
 

@@ -47,6 +47,19 @@ frc2::CommandPtr ArmSubsystem::MoveArmToLevelCommand(units::turn_t goal) {
           .FinallyDo([this]{m_elevatorArmMotor.Set(0);});
 }
 
+frc2::CommandPtr ArmSubsystem::MoveArmToLevelCommand(units::turn_t goal) {
+  // Inline construction of command goes here.
+  // Subsystem::RunOnce implicitly requires `this` subsystem. */
+  return Run([this, goal] {
+            frc::TrapezoidProfile<units::turn>::State goalState = {goal, 0.0_tps }; //stop at goal
+            m_ArmSetpoint = m_trapezoidalProfile.Calculate(ArmConstants::kDt, m_ArmSetpoint, goalState);
+
+            frc::SmartDashboard::PutNumber("trapazoidalSetpoint", m_ArmSetpoint.position.value());
+
+            m_closedLoopController.SetReference(goalState.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
+            });
+}
+
 //stops motor
 void ArmSubsystem::StopMotor() {
   m_elevatorArmMotor.Set(0.0);
