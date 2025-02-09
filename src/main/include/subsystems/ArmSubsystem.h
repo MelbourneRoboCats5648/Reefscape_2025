@@ -17,6 +17,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   // Initialize the motor
   rev::spark::SparkMax m_elevatorArmMotor{CAN_Constants::kElevatorArmMotorCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
+  rev::spark::SparkRelativeEncoder m_armEncoder = m_elevatorArmMotor.GetEncoder();
 
   public:
   ArmSubsystem();
@@ -32,6 +33,8 @@ class ArmSubsystem : public frc2::SubsystemBase {
 //todo - figure out commands for arm
 
   void StopMotor();
+
+  void UpdateSetpoint();
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
@@ -45,9 +48,9 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   // Create a motion profile with the given maximum velocity and maximum
   // acceleration constraints for the next setpoint.
-frc::TrapezoidProfile<units::turn> m_trapezoidalProfile{{ArmConstants::maximumVelocity, ArmConstants::maximumAcceleration}};
-  frc::TrapezoidProfile<units::turn>::State m_ArmGoal;
-  frc::TrapezoidProfile<units::turn>::State m_ArmSetpoint;
+  frc::TrapezoidProfile<units::turn> m_trapezoidalProfile{{ArmConstants::maximumVelocity, ArmConstants::maximumAcceleration}};
+  frc::TrapezoidProfile<units::turn>::State m_armGoal;
+  frc::TrapezoidProfile<units::turn>::State m_armSetpoint;
   rev::spark::SparkClosedLoopController m_closedLoopController = m_elevatorArmMotor.GetClosedLoopController();
 
 };

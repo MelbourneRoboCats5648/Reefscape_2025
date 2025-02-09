@@ -27,12 +27,21 @@ ArmSubsystem::ArmSubsystem() {
    m_elevatorArmMotor.Configure(elevatorArmMotorConfig,
                         rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                         rev::spark::SparkMax::PersistMode::kPersistParameters);
+
+  m_armEncoder.SetPosition(ElevatorConstants::resetEncoder.value());
 }
+
+void ArmSubsystem::UpdateSetpoint() {  
+  m_armSetpoint.position = units::angle::turn_t(m_armEncoder.GetPosition());
+  m_armSetpoint.velocity = 0.0_tps; 
+}
+
 
 frc2::CommandPtr ArmSubsystem::MoveArmUpCommand() {
   // Inline construction of command goes here.
   return Run([this] {m_elevatorArmMotor.Set(-0.1);})
-          .FinallyDo([this]{m_elevatorArmMotor.Set(0);});
+          .FinallyDo([this]{m_elevatorArmMotor.Set(0);})
+;
 }
 
 frc2::CommandPtr ArmSubsystem::MoveArmDownCommand() {
@@ -46,9 +55,9 @@ frc2::CommandPtr ArmSubsystem::MoveArmToLevelCommand(units::turn_t goal) {
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
   return Run([this, goal] {
             frc::TrapezoidProfile<units::turn>::State goalState = {goal, 0.0_tps }; //stop at goal
-            m_ArmSetpoint = m_trapezoidalProfile.Calculate(ArmConstants::kDt, m_ArmSetpoint, goalState);
+            m_armSetpoint = m_trapezoidalProfile.Calculate(ArmConstants::kDt, m_armSetpoint, goalState);
 
-            frc::SmartDashboard::PutNumber("trapazoidalSetpoint", m_ArmSetpoint.position.value());
+            frc::SmartDashboard::PutNumber("trapazoidalSetpoint", m_armSetpoint.position.value());
 
             m_closedLoopController.SetReference(goalState.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
             });
