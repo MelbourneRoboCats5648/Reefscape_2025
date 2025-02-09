@@ -43,12 +43,6 @@ frc2::CommandPtr ArmSubsystem::MoveArmDownCommand() {
 
 frc2::CommandPtr ArmSubsystem::MoveArmToLevelCommand(units::turn_t goal) {
   // Inline construction of command goes here.
-  return Run([this, goal] {m_elevatorArmMotor.Set(goal.value());})
-          .FinallyDo([this]{m_elevatorArmMotor.Set(0);});
-}
-
-frc2::CommandPtr ArmSubsystem::MoveArmToLevelCommand(units::turn_t goal) {
-  // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
   return Run([this, goal] {
             frc::TrapezoidProfile<units::turn>::State goalState = {goal, 0.0_tps }; //stop at goal
