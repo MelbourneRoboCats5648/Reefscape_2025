@@ -27,6 +27,12 @@ frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel(Level level) {
 
   switch(level)
   {
+    case (Level::L0):
+    {
+      elevGoal = ElevatorConstants::level0Goal;
+      armGoal = ArmConstants::level0Goal;
+      break;
+    }
     case (Level::L1):
     {
       elevGoal = ElevatorConstants::level1Goal;
