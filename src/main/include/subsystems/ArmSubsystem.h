@@ -16,8 +16,8 @@ class ArmSubsystem : public frc2::SubsystemBase {
   // declared private and exposed only through public methods.
 
   // Initialize the motor
-  rev::spark::SparkMax m_elevatorArmMotor{CAN_Constants::kElevatorArmMotorCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
-  rev::spark::SparkRelativeEncoder m_armEncoder = m_elevatorArmMotor.GetEncoder();
+  rev::spark::SparkMax m_armMotor{CAN_Constants::kElevatorArmMotorCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
+  rev::spark::SparkRelativeEncoder m_armEncoder = m_armMotor.GetEncoder();
 
   public:
   ArmSubsystem();
@@ -51,7 +51,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
   frc::TrapezoidProfile<units::turn> m_trapezoidalProfile{{ArmConstants::maximumVelocity, ArmConstants::maximumAcceleration}};
   frc::TrapezoidProfile<units::turn>::State m_armGoal;
   frc::TrapezoidProfile<units::turn>::State m_armSetpoint;
-  rev::spark::SparkClosedLoopController m_closedLoopController = m_elevatorArmMotor.GetClosedLoopController();
+  rev::spark::SparkClosedLoopController m_closedLoopController = m_armMotor.GetClosedLoopController();
 
 };
 

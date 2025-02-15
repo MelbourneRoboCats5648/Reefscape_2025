@@ -193,5 +193,8 @@ const units::turn_t level1Goal = 0.0_tr;
 const units::turn_t level2Goal = 2.0_tr;
 const units::turn_t level3Goal = 4.0_tr;
 const units::turn_t level4Goal = 5.0_tr;
+
+const double gearRatio = 1.0 / 9.0; // issue 64 - update this param
+
 }
 

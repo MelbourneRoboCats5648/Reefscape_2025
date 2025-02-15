@@ -6,13 +6,15 @@
 
 ArmSubsystem::ArmSubsystem() {
   // Implementation of subsystem constructor goes here.
-  rev::spark::SparkMaxConfig elevatorArmMotorConfig;
+  rev::spark::SparkMaxConfig armMotorConfig;
 
   /*
    * Set parameters that will apply to elevator motor.
    */
-   elevatorArmMotorConfig.SmartCurrentLimit(50).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake); 
+   armMotorConfig.SmartCurrentLimit(50).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake); 
    //fixme - test to find out the current limit
+
+   armMotorConfig.encoder.PositionConversionFactor(ArmConstants::gearRatio).VelocityConversionFactor(ArmConstants::gearRatio);
 
   /*
    * Apply the configuration to the SPARKs.
@@ -24,11 +26,12 @@ ArmSubsystem::ArmSubsystem() {
    * the SPARK MAX loses power. This is useful for power cycles that may occur
    * mid-operation.
    */
-   m_elevatorArmMotor.Configure(elevatorArmMotorConfig,
+   m_armMotor.Configure(armMotorConfig,
                         rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                         rev::spark::SparkMax::PersistMode::kPersistParameters);
 
   m_armEncoder.SetPosition(ElevatorConstants::resetEncoder.value());
+
 }
 
 void ArmSubsystem::UpdateSetpoint() {  
@@ -39,15 +42,15 @@ void ArmSubsystem::UpdateSetpoint() {
 
 frc2::CommandPtr ArmSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_elevatorArmMotor.Set(-0.1);})
-          .FinallyDo([this]{m_elevatorArmMotor.Set(0);})
+  return Run([this] {m_armMotor.Set(-0.1);})
+          .FinallyDo([this]{m_armMotor.Set(0);})
 ;
 }
 
 frc2::CommandPtr ArmSubsystem::MoveDownCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_elevatorArmMotor.Set(0.1);})
-          .FinallyDo([this]{m_elevatorArmMotor.Set(0);});
+  return Run([this] {m_armMotor.Set(0.1);})
+          .FinallyDo([this]{m_armMotor.Set(0);});
 }
 
 frc2::CommandPtr ArmSubsystem::MoveToAngleCommand(units::turn_t goal) {
@@ -65,7 +68,7 @@ frc2::CommandPtr ArmSubsystem::MoveToAngleCommand(units::turn_t goal) {
 
 //stops motor
 void ArmSubsystem::StopMotor() {
-  m_elevatorArmMotor.Set(0.0);
+  m_armMotor.Set(0.0);
 }
 
 void ArmSubsystem::Periodic() {
