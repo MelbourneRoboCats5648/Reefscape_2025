@@ -37,20 +37,20 @@ void ArmSubsystem::UpdateSetpoint() {
 }
 
 
-frc2::CommandPtr ArmSubsystem::MoveArmUpCommand() {
+frc2::CommandPtr ArmSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
   return Run([this] {m_elevatorArmMotor.Set(-0.1);})
           .FinallyDo([this]{m_elevatorArmMotor.Set(0);})
 ;
 }
 
-frc2::CommandPtr ArmSubsystem::MoveArmDownCommand() {
+frc2::CommandPtr ArmSubsystem::MoveDownCommand() {
   // Inline construction of command goes here.
   return Run([this] {m_elevatorArmMotor.Set(0.1);})
           .FinallyDo([this]{m_elevatorArmMotor.Set(0);});
 }
 
-frc2::CommandPtr ArmSubsystem::MoveArmToLevelCommand(units::turn_t goal) {
+frc2::CommandPtr ArmSubsystem::MoveToAngleCommand(units::turn_t goal) {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
   return Run([this, goal] {

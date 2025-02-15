@@ -19,9 +19,9 @@
 #include <frc/geometry/Translation2d.h>
 
 
-enum BuildSeason { Crescendo, Reefscape};
+enum BuildSeason {Crescendo, Reefscape};
 
-enum ArmLevel {L1, L2, L3, L4};
+enum Level {L1, L2, L3, L4};
 
 namespace General {
 // Choose the bindings for which robot to build
@@ -167,7 +167,7 @@ const units::turn_t resetEncoder = 0.0_tr;
 const units::turn_t extendSoftLimit = 7.0_tr;
 const units::turn_t retractSoftLimit = -1.0_tr;
 
-const double gearRatio = 1.0 / 9.0;
+const double gearRatio = 1.0 / 9.0; // issue 64 - update this param
 }
 
 namespace ArmConstants {

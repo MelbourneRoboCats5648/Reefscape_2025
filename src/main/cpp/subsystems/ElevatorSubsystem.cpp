@@ -94,7 +94,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
          });
 }
 
-frc2::CommandPtr ElevatorSubsystem::MoveToLevelCommand(units::turn_t goal) {
+frc2::CommandPtr ElevatorSubsystem::MoveToHeightCommand(units::turn_t goal) {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
   return Run([this, goal] {

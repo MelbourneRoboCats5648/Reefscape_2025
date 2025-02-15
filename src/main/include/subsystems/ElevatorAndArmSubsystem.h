@@ -14,12 +14,14 @@ class ElevatorAndArmSubsystem : public frc2::SubsystemBase {
 
   frc2::CommandPtr MoveUp();
   frc2::CommandPtr MoveDown();
-  frc2::CommandPtr MoveToLevel(units::turn_t goal);
+  frc2::CommandPtr MoveToLevel(Level level);
   
   void Periodic() override;
   void SimulationPeriodic() override;
 
  private:
+  frc2::CommandPtr ReturnCommandWithCorrectLevel(units::turn_t elevGoal, units::turn_t armGoal);
+
   ElevatorSubsystem& m_elevatorSubsystem;
   ArmSubsystem& m_armSubsystem;
 
