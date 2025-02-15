@@ -19,26 +19,37 @@ frc2::CommandPtr ElevatorAndArmSubsystem::MoveDown() {
    .FinallyDo([this]{
     m_armSubsystem.StopMotor(); });
 }
- 
+
 frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel(Level level) {
   
+  units::turn_t elevGoal;
+  units::turn_t armGoal;
+
   switch(level)
   {
     case (Level::L1):
     {
-      return ReturnCommandWithCorrectLevel(ElevatorConstants::level1Goal, ArmConstants::level1Goal);
+      elevGoal = ElevatorConstants::level1Goal;
+      armGoal = ArmConstants::level1Goal;
+      break;
     }
     case (Level::L2):
     {
-      return ReturnCommandWithCorrectLevel(ElevatorConstants::level2Goal, ArmConstants::level2Goal);
+      elevGoal = ElevatorConstants::level2Goal;
+      armGoal = ArmConstants::level2Goal;
+      break;
     }
     case (Level::L3):
     {
-      return ReturnCommandWithCorrectLevel(ElevatorConstants::level3Goal, ArmConstants::level3Goal);
+      elevGoal = ElevatorConstants::level3Goal;
+      armGoal = ArmConstants::level3Goal;
+      break;
     }
     case (Level::L4):
     {
-      return ReturnCommandWithCorrectLevel(ElevatorConstants::level4Goal, ArmConstants::level4Goal);
+      elevGoal = ElevatorConstants::level4Goal;
+      armGoal = ArmConstants::level4Goal;
+      break;
     }
     default:
     {
@@ -46,13 +57,10 @@ frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel(Level level) {
     }
   }
 
-}
-
-frc2::CommandPtr ElevatorAndArmSubsystem::ReturnCommandWithCorrectLevel(units::turn_t elevGoal, units::turn_t armGoal)
-{
   return m_elevatorSubsystem.MoveToHeightCommand(elevGoal)
             .AndThen(m_armSubsystem.MoveToAngleCommand(armGoal))
             .FinallyDo([this]{m_armSubsystem.StopMotor(); });
+
 }
 
 void ElevatorAndArmSubsystem::Periodic() {

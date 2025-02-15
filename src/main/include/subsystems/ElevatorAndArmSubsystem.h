@@ -20,8 +20,6 @@ class ElevatorAndArmSubsystem : public frc2::SubsystemBase {
   void SimulationPeriodic() override;
 
  private:
-  frc2::CommandPtr ReturnCommandWithCorrectLevel(units::turn_t elevGoal, units::turn_t armGoal);
-
   ElevatorSubsystem& m_elevatorSubsystem;
   ArmSubsystem& m_armSubsystem;
 
