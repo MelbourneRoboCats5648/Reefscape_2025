@@ -22,7 +22,7 @@ frc2::CommandPtr ElevatorAndArmSubsystem::MoveDown() {
 
 frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel(Level level) {
   
-  units::turn_t elevGoal;
+  units::meter_t elevGoal;
   units::turn_t armGoal;
 
   switch(level)

@@ -142,7 +142,7 @@ inline constexpr frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
 namespace ElevatorConstants {
 //PID Trapezoidal Controller
 static constexpr units::second_t kDt = 20_ms;
-const units::turn_t kGoalThreshold = 3.0_tr;
+const units::meter_t kGoalThreshold = 3.0_m;
 
 //PID Controller
 const double kP = 0.1;
@@ -151,14 +151,14 @@ const double kD = 0.0;
 const double maxOutput = 1.0;
 
 //PID Profile
-const units::turns_per_second_t maximumVelocity= 0.5_tps;
-const units::turns_per_second_squared_t maximumAcceleration = 1.0_tr_per_s_sq;
+const units::meters_per_second_t maximumVelocity= 0.5_mps;
+const units::meters_per_second_squared_t maximumAcceleration = 1.0_mps_sq;
 
 //Elevator Goals
-const units::turn_t level1Goal = 0.0_tr;
-const units::turn_t level2Goal = 2.0_tr;
-const units::turn_t level3Goal = 4.0_tr;
-const units::turn_t level4Goal = 5.0_tr;
+const units::meter_t level1Goal = 0.0_m;
+const units::meter_t level2Goal = 0.5_m;
+const units::meter_t level3Goal = 1.0_m;
+const units::meter_t level4Goal = 1.5_m;
 
 //Encoder Position
 const units::turn_t resetEncoder = 0.0_tr;
@@ -166,6 +166,15 @@ const units::turn_t resetEncoder = 0.0_tr;
 // Elevator limits
 const units::turn_t extendSoftLimit = 7.0_tr;
 const units::turn_t retractSoftLimit = -1.0_tr;
+
+//Elevator feedforward
+const units::volt_t kS = 1.0_V;
+const units::volt_t kG = 1.0_V;
+const auto kV = 1.0_V / 1_mps;
+const auto kA = 1.0_V / 1_mps_sq;
+
+//Elevator Height Conversion
+const units::meter_t distancePerTurn = 0.1_m;
 
 const double gearRatio = 1.0 / 9.0; // issue 64 - update this param
 }
