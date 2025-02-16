@@ -15,13 +15,9 @@ ArmSubsystem::ArmSubsystem() {
    //fixme - test to find out the current limit
 
       armMotorConfig.limitSwitch
-        //ForwardLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
-        //ForwardLimitSwitchEnabled(true);
         .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
         .ReverseLimitSwitchEnabled(true);
 
-    //  // Set the soft limits to stop the motor at -50 and 50 rotations
-    //  //will alter constants 
       armMotorConfig.softLimit
         .ForwardSoftLimit(ArmConstants::extendSoftLimit.value())
         .ForwardSoftLimitEnabled(true);
@@ -84,7 +80,7 @@ void ArmSubsystem::StopMotor() {
 
 void ArmSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
-  frc::SmartDashboard::PutNumber("encoderValue", m_armEncoder.GetPosition());
+  frc::SmartDashboard::PutNumber("armEncoderValue", m_armEncoder.GetPosition());
 }
 
 void ArmSubsystem::SimulationPeriodic() {

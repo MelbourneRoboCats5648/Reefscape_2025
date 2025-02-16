@@ -202,7 +202,7 @@ const units::turn_t level4Goal = 0.0_tr;
 const double gearRatio = 1.0 / 9.0; // issue 64 - update this param
 
 // Arm limits
-const units::turn_t extendSoftLimit = 0.0825_tr;
+const units::turn_t extendSoftLimit = 0.0825_tr; // this is 29.7 degrees
 
 //Encoder Position
 const units::turn_t resetEncoder = -0.25_tr;
