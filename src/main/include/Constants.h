@@ -148,7 +148,7 @@ inline constexpr frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
   //Smart Current Limit
   const int kCurrentLimit = 50;
 
-  //PID Controller
+  //Second Stage PID Controller 
   const double kP = 0.1;
   const double kI = 0.0;
   const double kD = 0.0;
@@ -172,7 +172,6 @@ inline constexpr frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
   const units::meter_t extendSoftLimitFirstStage = 7.0_m;
   const units::meter_t retractSoftLimit = -1.0_m;
   const units::meter_t extendSoftLimitThirdStage = 4.0_m;
-
 
   //Elevator feedforward
   const units::volt_t kS = 1.0_V;

@@ -110,6 +110,7 @@ void ElevatorSubsystem::ResetMotor() {
 
 units::meter_t ElevatorSubsystem::GetElevatorPosition() {
   return m_encoder.GetPosition() * ElevatorConstants::distancePerTurn;
+         m_encoderThirdStage.GetPosition() * ElevatorConstants::distancePerTurn;
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveUpCommand() {
@@ -136,8 +137,23 @@ frc2::CommandPtr ElevatorSubsystem::MoveSecondStageToHeightCommand(units::meter_
   return Run([this, goal] {
             frc::TrapezoidProfile<units::meter>::State goalState = {goal, 0.0_mps }; //stop at goal
             m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
-            frc::SmartDashboard::PutNumber("trapazoidalSetpoint", m_elevatorSetpoint.position.value());
+            frc::SmartDashboard::PutNumber("trapazoidalSecondStageSetpoint", m_elevatorSetpoint.position.value());
             m_closedLoopController.SetReference(goalState.position.value(), 
+                                                rev::spark::SparkLowLevel::ControlType::kPosition,
+                                                rev::spark::kSlot0,
+                                                m_elevatorFeedforward.Calculate(m_elevatorSetpoint.velocity).value());
+            })   
+        .FinallyDo([this]{m_motor.Set(0);});
+}
+
+frc2::CommandPtr ElevatorSubsystem::MoveThirdStageToHeightCommand(units::meter_t goal) {
+  // Inline construction of command goes here.
+  // Subsystem::RunOnce implicitly requires `this` subsystem. */
+  return Run([this, goal] {
+            frc::TrapezoidProfile<units::meter>::State goalState = {goal, 0.0_mps }; //stop at goal
+            m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
+            frc::SmartDashboard::PutNumber("trapazoidalThirdStageSetpoint", m_elevatorSetpoint.position.value());
+            m_closedLoopControllerThirdStage.SetReference(goalState.position.value(), 
                                                 rev::spark::SparkLowLevel::ControlType::kPosition,
                                                 rev::spark::kSlot0,
                                                 m_elevatorFeedforward.Calculate(m_elevatorSetpoint.velocity).value());
@@ -148,6 +164,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveSecondStageToHeightCommand(units::meter_
 void ElevatorSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
   frc::SmartDashboard::PutNumber("encoderValue", m_encoder.GetPosition());
+  frc::SmartDashboard::PutNumber("encoderThirdStageValue", m_encoderThirdStage.GetPosition());
 }
 
 void ElevatorSubsystem::SimulationPeriodic() {
