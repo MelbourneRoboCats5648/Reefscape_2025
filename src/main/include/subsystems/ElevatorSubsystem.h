@@ -1,6 +1,5 @@
 #pragma once
 #include <frc2/command/SubsystemBase.h>
-//#include <frc/controller/PIDController.h>
 #include <frc/trajectory/TrapezoidProfile.h>
 #include <frc2/command/Commands.h>
 #include <Constants.h>
@@ -37,9 +36,9 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
  // Spark components
  //plan to add motors to hard switches
   rev::spark::SparkMax m_motorLeft{CAN_Constants::kElevatorMotorLeftCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
-  rev::spark::SparkMax m_motorRight{CAN_Constants::kElevatorMotorRightCAN_ID, rev::spark::SparkMax::MotorType::kBrushless}; // issue 64 - the elevator has 2 motors connected to each other
+  rev::spark::SparkMax m_motorRight{CAN_Constants::kElevatorMotorRightCAN_ID, rev::spark::SparkMax::MotorType::kBrushless}; 
   rev::spark::SparkRelativeEncoder m_encoderLeft = m_motorLeft.GetEncoder();
-  rev::spark::SparkRelativeEncoder m_encoderRight = m_motorRight.GetEncoder(); // fixme - use the right encoders
+  rev::spark::SparkRelativeEncoder m_encoderRight = m_motorRight.GetEncoder(); 
            
 
   /*frc::SimpleMotorFeedforward<units::meters> m_feedforward{
@@ -51,7 +50,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   frc::TrapezoidProfile<units::meter> m_trapezoidalProfile{{ElevatorConstants::maximumVelocity, ElevatorConstants::maximumAcceleration}};
   frc::TrapezoidProfile<units::meter>::State m_elevatorGoal;
   frc::TrapezoidProfile<units::meter>::State m_elevatorSetpoint;
-  rev::spark::SparkClosedLoopController m_closedLoopController = m_motorLeft.GetClosedLoopController();
+  rev::spark::SparkClosedLoopController m_closedLoopControllerLeft = m_motorLeft.GetClosedLoopController();
 // Create a new ElevatorFeedforward with gains kS, kV, and kA
 // Distance is measured in meters
   frc::ElevatorFeedforward m_elevatorFeedforward{ElevatorConstants::kS, ElevatorConstants::kG, ElevatorConstants::kV, ElevatorConstants::kA};

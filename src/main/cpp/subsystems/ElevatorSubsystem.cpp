@@ -52,6 +52,7 @@ ElevatorSubsystem::ElevatorSubsystem() {
   * factors.
   */
   elevatorMotorLeftConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatio).VelocityConversionFactor(ElevatorConstants::gearRatio);
+  elevatorMotorRightConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatio).VelocityConversionFactor(ElevatorConstants::gearRatio);
 
   bool invertOutput = true;
   elevatorMotorRightConfig.Follow(m_motorLeft, invertOutput);
@@ -68,10 +69,12 @@ ElevatorSubsystem::ElevatorSubsystem() {
    
   m_motorLeft.Configure(elevatorMotorLeftConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                     rev::spark::SparkMax::PersistMode::kPersistParameters);
+  m_motorRight.Configure(elevatorMotorRightConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
+                    rev::spark::SparkMax::PersistMode::kPersistParameters);
 
   // Reset the position to 0 to start within the range of the soft limits
   m_encoderLeft.SetPosition(ElevatorConstants::resetEncoder.value());
-
+  m_encoderRight.SetPosition(ElevatorConstants::resetEncoder.value());
 }
 
 void ElevatorSubsystem::UpdateSetpoint() {  
@@ -84,6 +87,7 @@ void ElevatorSubsystem::ResetMotor() {
 }
 
 units::meter_t ElevatorSubsystem::GetElevatorPosition() {
+  //using left encoder as position reference
   return m_encoderLeft.GetPosition() * ElevatorConstants::distancePerTurn;
 }
 
@@ -112,7 +116,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveToHeightCommand(units::meter_t goal) {
             frc::TrapezoidProfile<units::meter>::State goalState = {goal, 0.0_mps }; //stop at goal
             m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
             frc::SmartDashboard::PutNumber("trapazoidalSetpoint", m_elevatorSetpoint.position.value());
-            m_closedLoopController.SetReference(goalState.position.value(), 
+            m_closedLoopControllerLeft.SetReference(goalState.position.value(), 
                                                 rev::spark::SparkLowLevel::ControlType::kPosition,
                                                 rev::spark::kSlot0,
                                                 m_elevatorFeedforward.Calculate(m_elevatorSetpoint.velocity).value());
@@ -122,7 +126,8 @@ frc2::CommandPtr ElevatorSubsystem::MoveToHeightCommand(units::meter_t goal) {
 
 void ElevatorSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
-  frc::SmartDashboard::PutNumber("encoderValue", m_encoderLeft.GetPosition());
+  frc::SmartDashboard::PutNumber("encoderLeftValue", m_encoderLeft.GetPosition());
+  frc::SmartDashboard::PutNumber("encoderRightValue", m_encoderRight.GetPosition());
 }
 
 void ElevatorSubsystem::SimulationPeriodic() {
