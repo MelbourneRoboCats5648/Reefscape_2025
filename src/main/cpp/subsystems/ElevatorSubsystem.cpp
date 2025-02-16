@@ -9,25 +9,20 @@ ElevatorSubsystem::ElevatorSubsystem() {
   /*
    * Set parameters that will apply to elevator motor.
    */
-  elevatorMotorLeftConfig.SmartCurrentLimit(50).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
-  elevatorMotorRightConfig.SmartCurrentLimit(50).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
+  elevatorMotorLeftConfig.SmartCurrentLimit(ElevatorConstants::kCurrentLimit).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
+  elevatorMotorRightConfig.SmartCurrentLimit(ElevatorConstants::kCurrentLimit).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
    //fixme - test to find out the current limit
 
+  //Hard and Soft limit switch run parameters
     // // Enable limit switches to stop the motor when they are closed
     // //only hard switch code in this repo, will add others when organised
     elevatorMotorLeftConfig.limitSwitch
-        .ForwardLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
-        .ForwardLimitSwitchEnabled(true)
         .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
         .ReverseLimitSwitchEnabled(true);
 
-    //  // Set the soft limits to stop the motor at -50 and 50 rotations
-    //  //will alter constants 
     elevatorMotorLeftConfig.softLimit
       .ForwardSoftLimit(ElevatorConstants::extendSoftLimit.value())
-      .ForwardSoftLimitEnabled(true)
-      .ReverseSoftLimit(ElevatorConstants::retractSoftLimit.value())
-      .ReverseSoftLimitEnabled(true);
+      .ForwardSoftLimitEnabled(true);
 
   //PID Controller 
   /*
@@ -43,8 +38,6 @@ ElevatorSubsystem::ElevatorSubsystem() {
     .D(ElevatorConstants::kD)
     .OutputRange(-ElevatorConstants::maxOutput, ElevatorConstants::maxOutput);
 
-   
-
   /*
   * Configure the encoder. For this specific example, we are using the
   * integrated encoder of the NEO, and we don't need to configure it. If
@@ -54,10 +47,10 @@ ElevatorSubsystem::ElevatorSubsystem() {
   elevatorMotorLeftConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatio).VelocityConversionFactor(ElevatorConstants::gearRatio);
   elevatorMotorRightConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatio).VelocityConversionFactor(ElevatorConstants::gearRatio);
 
+// right motor will follow the inverted output of left motor to drive shaft
   bool invertOutput = true;
   elevatorMotorRightConfig.Follow(m_motorLeft, invertOutput);
 
-  //Hard and Soft limit switch run parameters
   /*
    * Apply the configuration to the SPARK MAX.
    *

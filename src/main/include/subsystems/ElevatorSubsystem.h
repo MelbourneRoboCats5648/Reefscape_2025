@@ -40,11 +40,6 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   rev::spark::SparkRelativeEncoder m_encoderLeft = m_motorLeft.GetEncoder();
   rev::spark::SparkRelativeEncoder m_encoderRight = m_motorRight.GetEncoder(); 
            
-
-  /*frc::SimpleMotorFeedforward<units::meters> m_feedforward{
-// Note: These gains are fake, and will have to be tuned for your robot. feedforward will be used soon
-//1_V, 1.5_V * 1_s / 1_m}; */
-
   // Create a motion profile with the given maximum velocity and maximum
   // acceleration constraints for the next setpoint.
   frc::TrapezoidProfile<units::meter> m_trapezoidalProfile{{ElevatorConstants::maximumVelocity, ElevatorConstants::maximumAcceleration}};
