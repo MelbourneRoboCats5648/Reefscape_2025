@@ -203,5 +203,8 @@ const units::turn_t aLevel4Goal = 0.0_tr;
 
 const double gearRatio = 1.0 / 9.0; // issue 64 - update this param
 
+const double k_armPositionTolerance = 0.1; // issue 70 - update this tolerance
+const double k_armVelocityTolerance = 0.1;
+
 }
 

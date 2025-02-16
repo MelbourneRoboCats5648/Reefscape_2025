@@ -4,6 +4,8 @@
 
 #include <rev/config/SparkMaxConfig.h>
 
+using namespace ArmConstants;
+
 ArmSubsystem::ArmSubsystem() {
   // Implementation of subsystem constructor goes here.
   rev::spark::SparkMaxConfig armMotorConfig;
@@ -39,6 +41,26 @@ void ArmSubsystem::UpdateSetpoint() {
   m_armSetpoint.velocity = 0.0_tps; 
 }
 
+frc::TrapezoidProfile<units::turn>::State& ArmSubsystem::GetSetpoint() {
+  return  m_armSetpoint;
+} 
+
+frc::TrapezoidProfile<units::turn>::State& ArmSubsystem::GetGoal() {
+  return  m_armGoal;
+} 
+
+bool ArmSubsystem::IsGoalReached() {
+  double errorPosition = std::abs(GetSetpoint().position.value() - GetGoal().position.value());
+  double errorVelocity = std::abs(GetSetpoint().velocity.value() - GetGoal().velocity.value());
+
+  if( errorPosition <= k_armPositionTolerance && errorVelocity <= k_armVelocityTolerance){
+    return true;
+  }
+  else if(errorPosition >= k_armPositionTolerance && errorVelocity >= k_armVelocityTolerance){
+    return false;
+  }
+
+}
 
 frc2::CommandPtr ArmSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
@@ -57,13 +79,13 @@ frc2::CommandPtr ArmSubsystem::MoveToAngleCommand(units::turn_t goal) {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
   return Run([this, goal] {
-            frc::TrapezoidProfile<units::turn>::State goalState = {goal, 0.0_tps }; //stop at goal
-            m_armSetpoint = m_trapezoidalProfile.Calculate(ArmConstants::kDt, m_armSetpoint, goalState);
+            m_armGoal = {goal, 0.0_tps }; //stop at goal
+            m_armSetpoint = m_trapezoidalProfile.Calculate(ArmConstants::kDt, m_armSetpoint, m_armGoal);
 
             frc::SmartDashboard::PutNumber("trapazoidalSetpoint", m_armSetpoint.position.value());
 
-            m_closedLoopController.SetReference(goalState.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
-            });
+            m_closedLoopController.SetReference(m_armGoal.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
+            }).Until([this] {return IsGoalReached();});
 }
 
 //stops motor

@@ -35,6 +35,9 @@ class ArmSubsystem : public frc2::SubsystemBase {
   void StopMotor();
 
   void UpdateSetpoint();
+  frc::TrapezoidProfile<units::turn>::State& GetSetpoint();
+  frc::TrapezoidProfile<units::turn>::State& GetGoal();
+  bool IsGoalReached();
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
@@ -46,6 +49,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
    */
   void SimulationPeriodic() override;
 
+  private:
   // Create a motion profile with the given maximum velocity and maximum
   // acceleration constraints for the next setpoint.
   frc::TrapezoidProfile<units::turn> m_trapezoidalProfile{{ArmConstants::maximumVelocity, ArmConstants::maximumAcceleration}};
