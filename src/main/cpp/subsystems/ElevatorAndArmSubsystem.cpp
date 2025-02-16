@@ -63,7 +63,7 @@ frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel(Level level) {
     }
   }
 
-  return m_elevatorSubsystem.MoveToHeightCommand(elevGoal)
+  return m_elevatorSubsystem.MoveSecondStageToHeightCommand(elevGoal)
             .AlongWith(m_armSubsystem.MoveToAngleCommand(armGoal))
             .FinallyDo([this]{m_armSubsystem.StopMotor(); });
 

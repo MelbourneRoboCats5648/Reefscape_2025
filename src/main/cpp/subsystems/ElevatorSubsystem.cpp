@@ -4,28 +4,42 @@
 ElevatorSubsystem::ElevatorSubsystem() {
   // Implementation of subsystem constructor goes here.
   rev::spark::SparkMaxConfig elevatorMotorConfig;
+  rev::spark::SparkMaxConfig elevatorMotorThirdStageConfig;
+  
 
   /*
    * Set parameters that will apply to elevator motor.
    */
-  elevatorMotorConfig.SmartCurrentLimit(50).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
+  elevatorMotorConfig.SmartCurrentLimit(ElevatorConstants::kCurrentLimit).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
+  elevatorMotorThirdStageConfig.SmartCurrentLimit(ElevatorConstants::kCurrentLimit).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
    //fixme - test to find out the current limit
 
+    //First and Second Stage Limits
     // // Enable limit switches to stop the motor when they are closed
-    // //only hard switch code in this repo, will add others when organised
     elevatorMotorConfig.limitSwitch
         .ForwardLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
         .ForwardLimitSwitchEnabled(true)
         .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
         .ReverseLimitSwitchEnabled(true);
 
-    //  // Set the soft limits to stop the motor at -50 and 50 rotations
-    //  //will alter constants 
     elevatorMotorConfig.softLimit
-      .ForwardSoftLimit(ElevatorConstants::extendSoftLimit.value())
+      .ForwardSoftLimit(ElevatorConstants::extendSoftLimitFirstStage.value())
       .ForwardSoftLimitEnabled(true)
       .ReverseSoftLimit(ElevatorConstants::retractSoftLimit.value())
       .ReverseSoftLimitEnabled(true);
+
+//Third Stage Limits
+    // // Enable limit switches to stop the motor when they are closed
+    // //only hard switch code in this repo, will add others when organised
+    elevatorMotorThirdStageConfig.limitSwitch
+        .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
+        .ReverseLimitSwitchEnabled(true);
+
+    //  // Set the soft limits to stop the motor at -50 and 50 rotations
+    //  //will alter constants 
+    elevatorMotorThirdStageConfig.softLimit
+      .ForwardSoftLimit(ElevatorConstants::extendSoftLimitThirdStage.value())
+      .ForwardSoftLimitEnabled(true);
 
   //PID Controller 
   /*
@@ -33,6 +47,20 @@ ElevatorSubsystem::ElevatorSubsystem() {
   * feedback sensor as the primary encoder.
   */
   elevatorMotorConfig.closedLoop
+     .SetFeedbackSensor(rev::spark::ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
+      // Set PID values for position control. We don't need to pass a closed
+      // loop slot, as it will default to slot 0.
+    .P(ElevatorConstants::kP)
+    .I(ElevatorConstants::kI)
+    .D(ElevatorConstants::kD)
+    .OutputRange(-ElevatorConstants::maxOutput, ElevatorConstants::maxOutput);
+
+//PID Controller Third Stage
+  /*
+  * Configure the closed loop controller. We want to make sure we set the
+  * feedback sensor as the primary encoder.
+  */
+  elevatorMotorThirdStageConfig.closedLoop
      .SetFeedbackSensor(rev::spark::ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
       // Set PID values for position control. We don't need to pass a closed
       // loop slot, as it will default to slot 0.
@@ -50,7 +78,7 @@ ElevatorSubsystem::ElevatorSubsystem() {
   * factors.
   */
   elevatorMotorConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatio).VelocityConversionFactor(ElevatorConstants::gearRatio);
-
+  elevatorMotorThirdStageConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatio).VelocityConversionFactor(ElevatorConstants::gearRatio);
   //Hard and Soft limit switch run parameters
   /*
    * Apply the configuration to the SPARK MAX.
@@ -63,10 +91,12 @@ ElevatorSubsystem::ElevatorSubsystem() {
    
   m_motor.Configure(elevatorMotorConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                     rev::spark::SparkMax::PersistMode::kPersistParameters);
+  m_motorThirdStage.Configure(elevatorMotorThirdStageConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
+                    rev::spark::SparkMax::PersistMode::kPersistParameters);
 
   // Reset the position to 0 to start within the range of the soft limits
   m_encoder.SetPosition(ElevatorConstants::resetEncoder.value());
-
+  m_encoderThirdStage.SetPosition(ElevatorConstants::resetEncoder.value());
 }
 
 void ElevatorSubsystem::UpdateSetpoint() {  
@@ -100,7 +130,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
          });
 }
 
-frc2::CommandPtr ElevatorSubsystem::MoveToHeightCommand(units::meter_t goal) {
+frc2::CommandPtr ElevatorSubsystem::MoveSecondStageToHeightCommand(units::meter_t goal) {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
   return Run([this, goal] {
