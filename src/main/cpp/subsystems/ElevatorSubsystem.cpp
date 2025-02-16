@@ -8,7 +8,7 @@ ElevatorSubsystem::ElevatorSubsystem() {
   /*
    * Set parameters that will apply to elevator motor.
    */
-   elevatorMotorConfig.SmartCurrentLimit(50).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake); 
+  elevatorMotorConfig.SmartCurrentLimit(50).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
    //fixme - test to find out the current limit
 
     // // Enable limit switches to stop the motor when they are closed
@@ -61,7 +61,6 @@ ElevatorSubsystem::ElevatorSubsystem() {
    * kPersistParameters is used to ensure the configuration is not lost when
    * the SPARK MAX loses power. This is useful for power cycles that may occur mid-operation.*/
    
-
   m_motor.Configure(elevatorMotorConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                     rev::spark::SparkMax::PersistMode::kPersistParameters);
 
@@ -101,7 +100,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
          });
 }
 
-frc2::CommandPtr ElevatorSubsystem::MoveToLevelCommand(units::meter_t goal) {
+frc2::CommandPtr ElevatorSubsystem::MoveToHeightCommand(units::meter_t goal) {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
   return Run([this, goal] {

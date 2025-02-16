@@ -29,13 +29,15 @@
 
 using namespace DriveConstants;
 
-
-
-RobotContainer::RobotContainer() 
+RobotContainer::RobotContainer()
   : m_intakeSubsystem(),
     m_shooterSubsystem(),
-    m_intakeAndShootSubsystem(m_intakeSubsystem, m_shooterSubsystem)
+    m_intakeAndShootSubsystem(m_intakeSubsystem, m_shooterSubsystem),
+    m_elevatorSubsystem(),
+    m_armSubsystem(),
+    m_elevatorAndArmSubsystem(m_elevatorSubsystem, m_armSubsystem)
 {
+
   // Initialize all of your commands and subsystems here
 
   // Configure the button bindings
@@ -73,10 +75,10 @@ void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
   //PID elevator subsystem command
-  m_driverController.A().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level1Goal));
-  m_driverController.X().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level2Goal));
-  m_driverController.Y().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level3Goal));
-  m_driverController.B().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level4Goal));
+  m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
+  m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
+  m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
+  m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L4));
 
 // PID climb subsystem command (temporarily disabling LeftClimbUpCommand and LeftClimbDownCommand to test it)
   m_joystick.Button(LeftClimbConstants::leftUpButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalL1));
