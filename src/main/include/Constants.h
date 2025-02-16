@@ -38,7 +38,8 @@ inline constexpr double kDeadband = 0.1;
 
 namespace CAN_Constants {
 //Subsystem CAN IDs
-inline constexpr int kElevatorMotorCAN_ID = 13;
+inline constexpr int kElevatorMotorLeftCAN_ID = 13;
+inline constexpr int kElevatorMotorRightCAN_ID = 15;
 // not configurated yet
 inline constexpr int kElevatorArmMotorCAN_ID = 14;
 
