@@ -50,15 +50,8 @@ class RobotContainer {
   IntakeSubsystem m_intakeSubsystem;
   LeftClimbSubsystem m_leftClimbSubsystem;
   ShooterSubsystem m_shooterSubsystem;
-<<<<<<< HEAD
-  DriveSubsystem m_driveSubsystem;
   VisionSubsystem m_visionSubsystem;
-  
-
-  void ConfigureBindings();
-=======
   IntakeAndShootSubsystem m_intakeAndShootSubsystem;
   ElevatorSubsystem m_elevatorSubsystem;
   
->>>>>>> 58-starting-path-planner
 };
