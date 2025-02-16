@@ -15,10 +15,10 @@ ArmSubsystem::ArmSubsystem() {
    //fixme - test to find out the current limit
 
       armMotorConfig.limitSwitch
-        .ForwardLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
-        .ForwardLimitSwitchEnabled(true);
-        //.ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
-        //.ReverseLimitSwitchEnabled(true);
+        //ForwardLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
+        //ForwardLimitSwitchEnabled(true);
+        .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
+        .ReverseLimitSwitchEnabled(true);
 
     //  // Set the soft limits to stop the motor at -50 and 50 rotations
     //  //will alter constants 
