@@ -38,7 +38,8 @@ inline constexpr double kDeadband = 0.1;
 
 namespace CAN_Constants {
 //Subsystem CAN IDs
-inline constexpr int kElevatorMotorCAN_ID = 13;
+inline constexpr int kElevatorMotorLeftCAN_ID = 13;
+inline constexpr int kElevatorMotorRightCAN_ID = 15;
 // not configurated yet
 inline constexpr int kElevatorArmMotorCAN_ID = 14;
 
@@ -144,6 +145,9 @@ namespace ElevatorConstants {
 static constexpr units::second_t kDt = 20_ms;
 const units::meter_t kGoalThreshold = 3.0_m;
 
+//Smart Current Limit
+const int kCurrentLimit = 50;
+
 //PID Controller
 const double kP = 0.1;
 const double kI = 0.0;
@@ -166,7 +170,6 @@ const units::turn_t resetEncoder = 0.0_tr;
 
 // Elevator limits
 const units::meter_t extendSoftLimit = 7.0_m;
-const units::meter_t retractSoftLimit = -1.0_m;
 
 //Elevator feedforward
 const units::volt_t kS = 1.0_V;
