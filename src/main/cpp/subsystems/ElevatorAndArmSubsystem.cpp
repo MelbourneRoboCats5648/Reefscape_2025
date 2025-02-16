@@ -20,6 +20,16 @@ frc2::CommandPtr ElevatorAndArmSubsystem::MoveDown() {
     m_armSubsystem.StopMotor(); });
 }
 
+frc2::CommandPtr ElevatorAndArmSubsystem::ArmMoveToAngle(units::turn_t armGoal) {
+  return m_armSubsystem.MoveToAngleCommand(armGoal);
+}
+
+
+frc2::CommandPtr ElevatorAndArmSubsystem::ElevatorMoveToHeight(units::meter_t elevGoal) {
+    return m_elevatorSubsystem.MoveToHeightCommand(elevGoal);
+            
+}
+
 frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel(Level level) {
   
   units::meter_t elevGoal;
@@ -29,32 +39,32 @@ frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel(Level level) {
   {
     case (Level::L0):
     {
-      elevGoal = ElevatorConstants::level0Goal;
-      armGoal = ArmConstants::level0Goal;
+      elevGoal = ElevatorConstants::eLevel0Goal;
+      armGoal = ArmConstants::aLevel0Goal;
       break;
     }
     case (Level::L1):
     {
-      elevGoal = ElevatorConstants::level1Goal;
-      armGoal = ArmConstants::level1Goal;
+      elevGoal = ElevatorConstants::eLevel1Goal;
+      armGoal = ArmConstants::aLevel1Goal;
       break;
     }
     case (Level::L2):
     {
-      elevGoal = ElevatorConstants::level2Goal;
-      armGoal = ArmConstants::level2Goal;
+      elevGoal = ElevatorConstants::eLevel2Goal;
+      armGoal = ArmConstants::aLevel2Goal;
       break;
     }
     case (Level::L3):
     {
-      elevGoal = ElevatorConstants::level3Goal;
-      armGoal = ArmConstants::level3Goal;
+      elevGoal = ElevatorConstants::eLevel3Goal;
+      armGoal = ArmConstants::aLevel3Goal;
       break;
     }
     case (Level::L4):
     {
-      elevGoal = ElevatorConstants::level4Goal;
-      armGoal = ArmConstants::level4Goal;
+      elevGoal = ElevatorConstants::eLevel4Goal;
+      armGoal = ArmConstants::aLevel4Goal;
       break;
     }
     default:
@@ -64,9 +74,7 @@ frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel(Level level) {
   }
 
   return m_elevatorSubsystem.MoveToHeightCommand(elevGoal)
-            .AlongWith(m_armSubsystem.MoveToAngleCommand(armGoal))
-            .FinallyDo([this]{m_armSubsystem.StopMotor(); });
-
+            .AlongWith(m_armSubsystem.MoveToAngleCommand(armGoal));
 }
 
 void ElevatorAndArmSubsystem::Periodic() {

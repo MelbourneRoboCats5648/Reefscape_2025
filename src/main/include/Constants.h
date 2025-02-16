@@ -155,11 +155,11 @@ const units::meters_per_second_t maximumVelocity= 0.5_mps;
 const units::meters_per_second_squared_t maximumAcceleration = 1.0_mps_sq;
 
 //Elevator Goals
-const units::meter_t level0Goal = 0.0_m;
-const units::meter_t level1Goal = level0Goal;
-const units::meter_t level2Goal = 0.5_m;
-const units::meter_t level3Goal = 1.0_m;
-const units::meter_t level4Goal = 1.5_m;
+const units::meter_t eLevel0Goal = 0.0_m;
+const units::meter_t eLevel1Goal = eLevel0Goal;
+const units::meter_t eLevel2Goal = 0.5_m;
+const units::meter_t eLevel3Goal = 1.0_m;
+const units::meter_t eLevel4Goal = 1.5_m;
 
 //Encoder Position
 const units::turn_t resetEncoder = 0.0_tr;
@@ -192,11 +192,11 @@ const units::turn_t kGoalThreshold = 3.0_tr;
 // add arm soft limits
 
 //Arm Goals - this is the output of the gearbox (not the motor)
-const units::turn_t level0Goal = -0.25_tr;
-const units::turn_t level1Goal = 0.0_tr;
-const units::turn_t level2Goal = 0.125_tr;
-const units::turn_t level3Goal = 0.125_tr;
-const units::turn_t level4Goal = 0.0_tr;
+const units::turn_t aLevel0Goal = -0.25_tr;
+const units::turn_t aLevel1Goal = 0.0_tr;
+const units::turn_t aLevel2Goal = 0.125_tr;
+const units::turn_t aLevel3Goal = 0.125_tr;
+const units::turn_t aLevel4Goal = 0.0_tr;
 
 const double gearRatio = 1.0 / 9.0; // issue 64 - update this param
 

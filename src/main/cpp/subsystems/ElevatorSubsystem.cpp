@@ -111,8 +111,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveToHeightCommand(units::meter_t goal) {
                                                 rev::spark::SparkLowLevel::ControlType::kPosition,
                                                 rev::spark::kSlot0,
                                                 m_elevatorFeedforward.Calculate(m_elevatorSetpoint.velocity).value());
-            })   
-        .FinallyDo([this]{m_motor.Set(0);});
+            });
 }
 
 void ElevatorSubsystem::Periodic() {
