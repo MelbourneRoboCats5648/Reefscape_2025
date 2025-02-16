@@ -41,6 +41,10 @@ void ArmSubsystem::UpdateSetpoint() {
   m_armSetpoint.velocity = 0.0_tps; 
 }
 
+units::turn_t ArmSubsystem::GetArmAngle(){
+  return units::turn_t(m_armEncoder.GetPosition() * ArmConstants::gearRatio);
+}
+
 frc::TrapezoidProfile<units::turn>::State& ArmSubsystem::GetSetpoint() {
   return  m_armSetpoint;
 } 
@@ -86,6 +90,12 @@ frc2::CommandPtr ArmSubsystem::MoveToAngleCommand(units::turn_t goal) {
 
             m_closedLoopController.SetReference(m_armGoal.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
             }).Until([this] {return IsGoalReached();});
+}
+
+//To move down supply a negative
+frc2::CommandPtr ArmSubsystem::RotateBy(units::turn_t angle) {
+      units::turn_t moveGoal = (GetArmAngle() + angle);
+      return MoveToAngleCommand(moveGoal);
 }
 
 //stops motor
