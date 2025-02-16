@@ -77,7 +77,7 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
-  m_visionSubsystem.m_aprilTagIDTrigger.WhileTrue(autos::VisionDrive(&m_visionSubsystem, &m_driveSubsystem));
+  m_visionSubsystem.m_aprilTagIDTrigger.WhileTrue(autos::VisionDrive(&m_visionSubsystem, &m_drive));
 
   //PID elevator subsystem command
   m_driverController.A().OnTrue(m_elevatorSubsystem.MoveToLevelCommand(ElevatorConstants::level1Goal));
