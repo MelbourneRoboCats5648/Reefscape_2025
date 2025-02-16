@@ -100,7 +100,8 @@ frc2::CommandPtr ElevatorAndArmSubsystem::CollectCoral(){
 }
 
 frc2::CommandPtr ElevatorAndArmSubsystem::PlaceCoral(){
-  //return m_elevatorS
+  return m_elevatorSubsystem.MoveUpBy(kElevatorPlaceCoral)
+          .AlongWith(m_armSubsystem.RotateBy(kArmPlaceCoral));
 }
 
 

@@ -185,6 +185,8 @@ const double gearRatio = 1.0 / 9.0; // issue 64 - update this param
 const double k_elevatorPositionTolerance = 0.1; // issue 70 - update this tolerance
 const double k_elevatorVelocityTolerance = 0.1;
 const units::meter_t kElevatorMinHeightCollect = 1_m; //issue 70 - update this position
+const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amount
+
 }
 
 namespace ArmConstants {
@@ -209,6 +211,7 @@ const double gearRatio = 1.0 / 9.0; // issue 64 - update this param
 
 const double k_armPositionTolerance = 0.1; // issue 70 - update this tolerance
 const double k_armVelocityTolerance = 0.1;
+const units::turn_t kArmPlaceCoral = -15_tr; // issue 70 - update this amount
 
 }
 

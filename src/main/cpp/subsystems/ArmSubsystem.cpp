@@ -57,10 +57,10 @@ bool ArmSubsystem::IsGoalReached() {
   double errorPosition = std::abs(GetSetpoint().position.value() - GetGoal().position.value());
   double errorVelocity = std::abs(GetSetpoint().velocity.value() - GetGoal().velocity.value());
 
-  if( errorPosition <= k_armPositionTolerance && errorVelocity <= k_armVelocityTolerance){
+  if (errorPosition <= k_armPositionTolerance && errorVelocity <= k_armVelocityTolerance){
     return true;
   }
-  else if(errorPosition >= k_armPositionTolerance && errorVelocity >= k_armVelocityTolerance){
+  else {
     return false;
   }
 
@@ -69,8 +69,7 @@ bool ArmSubsystem::IsGoalReached() {
 frc2::CommandPtr ArmSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
   return Run([this] {m_armMotor.Set(-0.1);})
-          .FinallyDo([this]{m_armMotor.Set(0);})
-;
+          .FinallyDo([this]{m_armMotor.Set(0);});
 }
 
 frc2::CommandPtr ArmSubsystem::MoveDownCommand() {

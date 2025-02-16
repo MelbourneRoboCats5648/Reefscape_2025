@@ -28,6 +28,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr MoveUpCommand();
   frc2::CommandPtr MoveDownCommand();
   frc2::CommandPtr MoveToAngleCommand(units::turn_t goal);
+  frc2::CommandPtr RotateBy(units::turn_t angle);
 
 
 //todo - figure out commands for arm
@@ -35,6 +36,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
   void StopMotor();
 
   void UpdateSetpoint();
+  units::turn_t GetArmAngle();
   frc::TrapezoidProfile<units::turn>::State& GetSetpoint();
   frc::TrapezoidProfile<units::turn>::State& GetGoal();
   bool IsGoalReached();

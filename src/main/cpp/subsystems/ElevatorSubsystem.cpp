@@ -97,7 +97,7 @@ bool ElevatorSubsystem::IsGoalReached() {
   if( errorPosition <= k_elevatorPositionTolerance && errorVelocity <= k_elevatorVelocityTolerance){
     return true;
   }
-  else if(errorPosition >= k_elevatorPositionTolerance && errorVelocity >= k_elevatorVelocityTolerance){
+  else {
     return false;
   }
 
