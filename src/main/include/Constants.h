@@ -192,8 +192,6 @@ const units::turns_per_second_squared_t maximumAcceleration = 1.0_tr_per_s_sq;
 static constexpr units::second_t kDt = 20_ms;
 const units::turn_t kGoalThreshold = 3.0_tr;
 
-// add arm soft limits
-
 //Arm Goals - this is the output of the gearbox (not the motor)
 const units::turn_t level0Goal = -0.25_tr;
 const units::turn_t level1Goal = 0.0_tr;
@@ -203,5 +201,10 @@ const units::turn_t level4Goal = 0.0_tr;
 
 const double gearRatio = 1.0 / 9.0; // issue 64 - update this param
 
+// Arm limits
+const units::turn_t extendSoftLimit = 0.0825_tr; // this is 29.7 degrees
+
+//Encoder Position
+const units::turn_t resetEncoder = -0.25_tr;
 }
 
