@@ -28,6 +28,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr MoveUpCommand();
   frc2::CommandPtr MoveDownCommand();
   frc2::CommandPtr MoveToAngleCommand(units::turn_t goal);
+  frc2::CommandPtr RotateBy(units::turn_t angle);
 
 
 //todo - figure out commands for arm
@@ -35,6 +36,10 @@ class ArmSubsystem : public frc2::SubsystemBase {
   void StopMotor();
 
   void UpdateSetpoint();
+  units::turn_t GetArmAngle();
+  frc::TrapezoidProfile<units::turn>::State& GetSetpoint();
+  frc::TrapezoidProfile<units::turn>::State& GetGoal();
+  bool IsGoalReached();
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
@@ -46,6 +51,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
    */
   void SimulationPeriodic() override;
 
+  private:
   // Create a motion profile with the given maximum velocity and maximum
   // acceleration constraints for the next setpoint.
   frc::TrapezoidProfile<units::turn> m_trapezoidalProfile{{ArmConstants::maximumVelocity, ArmConstants::maximumAcceleration}};
