@@ -181,6 +181,10 @@ const auto kA = 1.0_V / 1_mps_sq;
 const units::meter_t distancePerTurn = 0.1_m;
 
 const double gearRatio = 1.0 / 9.0; // issue 64 - update this param
+
+const double k_elevatorPositionTolerance = 0.1; // issue 70 - update this tolerance
+const double k_elevatorVelocityTolerance = 0.1;
+const units::meter_t kElevatorMinHeightCollect = 1_m; //issue 70 - update this position
 }
 
 namespace ArmConstants {

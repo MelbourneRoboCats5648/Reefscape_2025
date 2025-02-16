@@ -11,12 +11,21 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   public:
   ElevatorSubsystem();
 
+  units::meter_t GetElevatorPosition();
+  void UpdateSetpoint();
+  void ResetMotor();
+
+  frc::TrapezoidProfile<units::meter>::State& GetSetpoint();
+  frc::TrapezoidProfile<units::meter>::State& GetGoal();
+  bool IsGoalReached();
   /**
    * Elevator command factory method.
    */
   frc2::CommandPtr MoveDownCommand();
   frc2::CommandPtr MoveUpCommand();
   frc2::CommandPtr MoveToHeightCommand(units::meter_t goal);
+  frc2::CommandPtr MoveUpBy(units::meter_t height);
+
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -50,9 +59,6 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 // Distance is measured in meters
   frc::ElevatorFeedforward m_elevatorFeedforward{ElevatorConstants::kS, ElevatorConstants::kG, ElevatorConstants::kV, ElevatorConstants::kA};
   
-  void UpdateSetpoint();
-  void ResetMotor();
-  units::meter_t GetElevatorPosition();
 };
 
 

@@ -1,5 +1,8 @@
 #include "subsystems/ElevatorAndArmSubsystem.h"
 
+using namespace ElevatorConstants;
+using namespace ArmConstants;
+
 ElevatorAndArmSubsystem::ElevatorAndArmSubsystem(ElevatorSubsystem& elevatorSub, ArmSubsystem& armSub) 
   : m_elevatorSubsystem(elevatorSub),
     m_armSubsystem(armSub)
@@ -28,6 +31,10 @@ frc2::CommandPtr ElevatorAndArmSubsystem::ArmMoveToAngle(units::turn_t armGoal) 
 frc2::CommandPtr ElevatorAndArmSubsystem::ElevatorMoveToHeight(units::meter_t elevGoal) {
     return m_elevatorSubsystem.MoveToHeightCommand(elevGoal);
             
+}
+
+ units::meter_t ElevatorAndArmSubsystem::ElevatorGetPosition() {
+    return m_elevatorSubsystem.GetElevatorPosition();
 }
 
 frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel(Level level) {
@@ -76,6 +83,26 @@ frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel(Level level) {
   return m_elevatorSubsystem.MoveToHeightCommand(elevGoal)
             .AlongWith(m_armSubsystem.MoveToAngleCommand(armGoal));
 }
+
+frc2::CommandPtr ElevatorAndArmSubsystem::CollectCoral(){
+  if(ElevatorGetPosition() >= kElevatorMinHeightCollect)
+    {
+        return (ArmMoveToAngle(aLevel0Goal))
+               .AndThen(ElevatorMoveToHeight(eLevel0Goal));
+    }
+    else if(ElevatorGetPosition() <= kElevatorMinHeightCollect)
+    {
+        //issue 70 make this a new goal
+        return ElevatorMoveToHeight(eLevel2Goal)
+               .AndThen(ArmMoveToAngle(aLevel0Goal))
+               .AndThen(ElevatorMoveToHeight(eLevel0Goal));
+    }
+}
+
+frc2::CommandPtr ElevatorAndArmSubsystem::PlaceCoral(){
+  //return m_elevatorS
+}
+
 
 void ElevatorAndArmSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
