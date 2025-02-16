@@ -5,6 +5,8 @@
 #include "Robot.h"
 
 #include <frc2/command/CommandScheduler.h>
+#include <frc/RobotController.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 Robot::Robot() {}
 
@@ -18,6 +20,8 @@ Robot::Robot() {}
  */
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();
+  
+  frc::SmartDashboard::PutNumber("battery voltage", frc::RobotController::GetBatteryVoltage().value());
 }
 
 /**
@@ -56,12 +60,24 @@ void Robot::TeleopInit() {
 /**
  * This function is called periodically during operator control.
  */
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+   if (m_testCommand) {
+    m_testCommand->Cancel();
+   }
+}
 
 /**
  * This function is called periodically during test mode.
  */
 void Robot::TestPeriodic() {}
+
+void Robot::TestInit() {
+   m_testCommand = m_container.GetTestCommand();
+
+   if(m_testCommand) {
+    m_testCommand->Schedule();
+   }
+}
 
 /**
  * This function is called once when the robot is first started up.

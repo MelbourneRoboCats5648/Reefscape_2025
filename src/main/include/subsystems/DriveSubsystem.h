@@ -20,16 +20,25 @@
 
 #include "Constants.h"
 
+#include <frc/filter/SlewRateLimiter.h>
+
+#include <networktables/StructArrayTopic.h>
+#include <networktables/StructTopic.h>
+
+//Odometry 
 #include <frc/estimator/PoseEstimator.h>
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
 #include <frc/geometry/Pose2d.h>
 
 #include <wpi/array.h>
 
-
+//Limelight
 #include "LimelightHelpers.h"
 
+//Namespaces
 using namespace DriveConstants;
+using namespace OperatorConstants;
+using namespace CAN_Constants;
 
 
 class DriveSubsystem : public frc2::SubsystemBase {
@@ -39,82 +48,80 @@ class DriveSubsystem : public frc2::SubsystemBase {
     void Periodic() override;
     void SimulationPeriodic() override;
 
-  //Gyro Styff
-    void ResetGyro();
+    //Gyro
+      void ResetGyro();
+      units::degree_t GetHeading() const;
+    //Drive + Kinematics
+      void Drive(units::meters_per_second_t xSpeed,
+                            units::meters_per_second_t ySpeed,
+                            units::radians_per_second_t rot, bool fieldRelative,
+                            units::second_t period = DriveConstants::kDrivePeriod);
 
-    units::degree_t GetHeading() const;
+      void SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
 
-  //Drive and Kinematics 
-    void Drive(units::meters_per_second_t xSpeed,
-                           units::meters_per_second_t ySpeed,
-                           units::radians_per_second_t rot, bool fieldRelative,
-                           units::second_t period = kDrivePeriod);
+      frc::ChassisSpeeds GetRobotRelativeSpeeds();
 
-    void SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
+    //Stops
+      void StopAllModules();
+      frc2::CommandPtr StopCommand();
+    //SmartDashboard
+      frc2::CommandPtr SmartDashboardOutputCommand();
 
-  //Stops
-    void StopAllModules();
-    frc2::CommandPtr StopCommand();
-
-  // Odometry
-      /**
-   * Returns the currently-estimated pose of the robot.
-   *
-   * @return The pose.
-   */
-    frc::Pose2d GetPose();
+    //Odometry
+        
+      //void UpdateOdometry(frc::Pose2d m_pose);
 
       /**
-   * Resets the odometry to the specified pose.
-   *
-   * @param pose The pose to which to set the odometry.
-   */
-  void ResetOdometry(frc::Pose2d pose);
+     * Returns the currently-estimated pose of the robot.
+     *
+     * @return The pose.
+     */
+      frc::Pose2d GetPosition();
 
-  void SetPositionToZeroDistance();
-
+        /**
+     * Resets the odometry to the specified pose.
+     *
+     * @param pose The pose to which to set the odometry.
+     */
+      void ResetPosition(frc::Pose2d pose);
+      void SetPositionToZeroDistance();
 
 
  private:
     //Gyro
     frc::ADIS16470_IMU m_gyro;
-    //Translation2D
-    frc::Translation2d backLeftLocation{-0.26_m, +0.26_m};
-    frc::Translation2d backRightLocation{-0.26_m, -0.26_m};
-    frc::Translation2d frontLeftLocation{+0.26_m, +0.26_m};
-    frc::Translation2d frontRightLocation{+0.26_m, -0.26_m};
 
-    //MagOffset Doubles
-      const double FRONT_LEFT_MAG_OFFSET = (0.303955);
-      const double FRONT_RIGHT_MAG_OFFSET = (0.346436);
-      const double BACK_LEFT_MAG_OFFSET = (0.064697);
-      const double BACK_RIGHT_MAG_OFFSET = (0.015381); 
-      // this mag offset has been set by the phoenix tuner set the new offsets
-
-    DriveModule m_frontLeftModule{FRONT_LEFT_SPEED_MOTOR_ID, FRONT_LEFT_DIRECTION_MOTOR_ID, 
-                                    FRONT_LEFT_DIRECTION_ENCODER_ID, FRONT_LEFT_MAG_OFFSET, "Front Left"};
-    DriveModule m_frontRightModule{FRONT_RIGHT_SPEED_MOTOR_ID, FRONT_RIGHT_DIRECTION_MOTOR_ID, 
-                                    FRONT_RIGHT_DIRECTION_ENCODER_ID, FRONT_RIGHT_MAG_OFFSET, "Front Right"};
-    DriveModule m_backLeftModule{BACK_LEFT_SPEED_MOTOR_ID, BACK_LEFT_DIRECTION_MOTOR_ID, 
-                                    BACK_LEFT_DIRECTION_ENCODER_ID, BACK_LEFT_MAG_OFFSET, "Back Left"};
-    DriveModule m_backRightModule{BACK_RIGHT_SPEED_MOTOR_ID, BACK_RIGHT_DIRECTION_MOTOR_ID, 
-                                    BACK_RIGHT_DIRECTION_ENCODER_ID, BACK_RIGHT_MAG_OFFSET, "Back Right"};
+    DriveModule m_frontLeftModule{kFrontLeftSpeedMotorID, kFrontLeftDirectionMotorID, 
+                                   kFrontLeftDirectionEncoderID, kFrontLeftMagOffset, "Front Left"};
+    DriveModule m_frontRightModule{kFrontRightSpeedMotorID, kFrontRightDirectionMotorID, 
+                                   kFrontRightDirectionEncoderID, kFrontRightMagOffset, "Front Right"};
+    DriveModule m_backLeftModule{kBackLeftSpeedMotorID, kBackLeftDirectionMotorID, 
+                                   kBackLeftDirectionEncoderID, kBackLeftMagOffset, "Back Left"};
+    DriveModule m_backRightModule{kBackRightSpeedMotorID, kBackRightDirectionMotorID, 
+                                   kBackRightDirectionEncoderID, kBackRightMagOffset, "Back Right"};
     
-    frc::SwerveDriveKinematics<4> kinematics{frontLeftLocation, 
-                                            frontRightLocation, 
-                                            backLeftLocation,
-                                            backRightLocation};
-    // Odometry class for tracking robot pose
+    frc::SwerveDriveKinematics<4> kinematics{kFrontLeftLocation, 
+                                            kFrontRightLocation, 
+                                            kBackLeftLocation,
+                                            kBackRightLocation};
+
+    
+    nt::StructArrayPublisher<frc::SwerveModuleState> m_statePublisher; 
+    nt::StructPublisher<frc::Rotation2d> m_headingPublisher; 
+
+    // PoseEstimator class for tracking robot pose
     // 4 defines the number of modules
-    frc::SwerveDriveOdometry<4> m_odometry;
-
-
     frc::SwerveDrivePoseEstimator<4> m_poseEstimator{kinematics, frc::Rotation2d{GetHeading()},
                                 {m_frontLeftModule.GetPosition(), m_frontRightModule.GetPosition(),
                                   m_backLeftModule.GetPosition(), m_backRightModule.GetPosition()}, 
-                                  GetPose(), 
+                                   frc::Pose2d{}, 
                                   // ( double 0.5, double 0.5, units::radian_t(1)), 
                                   // ( double 0.5, double 0.5, units::radian_t(1))
                                   };
+                                            
+  public:
+  frc::SlewRateLimiter<units::meters_per_second> m_xLimiter{kSlewRateTranslation};
+  frc::SlewRateLimiter<units::meters_per_second> m_yLimiter{kSlewRateTranslation};
+  frc::SlewRateLimiter<units::radians_per_second> m_rotLimiter{kSlewRateRotation};
 
 };
