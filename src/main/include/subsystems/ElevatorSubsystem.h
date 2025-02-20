@@ -11,7 +11,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   public:
   ElevatorSubsystem();
 
-  units::meter_t GetElevatorPosition();
+  units::meter_t GetElevatorHeight();
   void UpdateSetpoint();
   void ResetMotor();
 

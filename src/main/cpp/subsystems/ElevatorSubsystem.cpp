@@ -72,13 +72,13 @@ ElevatorSubsystem::ElevatorSubsystem() {
   m_encoderRight.SetPosition(ElevatorConstants::resetEncoder.value());
 }
 
-units::meter_t ElevatorSubsystem::GetElevatorPosition() {
+units::meter_t ElevatorSubsystem::GetElevatorHeight() {
   //using left encoder as position reference
   return m_encoderLeft.GetPosition() * ElevatorConstants::distancePerTurn;
 }
 
 void ElevatorSubsystem::UpdateSetpoint() {  
-  m_elevatorSetpoint.position = GetElevatorPosition();
+  m_elevatorSetpoint.position = GetElevatorHeight();
   m_elevatorSetpoint.velocity = 0.0_mps; 
 }
 
@@ -94,7 +94,7 @@ bool ElevatorSubsystem::IsGoalReached() {
   double errorPosition = std::abs(GetSetpoint().position.value() - GetGoal().position.value());
   double errorVelocity = std::abs(GetSetpoint().velocity.value() - GetGoal().velocity.value());
 
-  if( errorPosition <= k_elevatorPositionTolerance && errorVelocity <= k_elevatorVelocityTolerance){
+  if((errorPosition <= kElevatorPositionToleranceMetres) && (errorVelocity <= kElevatorVelocityTolerancePerSecond)){
     return true;
   }
   else {
@@ -141,7 +141,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveToHeightCommand(units::meter_t goal) {
 
 //To move down supply a negative
 frc2::CommandPtr ElevatorSubsystem::MoveUpBy(units::meter_t height) {
-      units::meter_t moveGoal = (GetElevatorPosition() + height);
+      units::meter_t moveGoal = (GetElevatorHeight() + height);
       return MoveToHeightCommand(moveGoal);
 }
 

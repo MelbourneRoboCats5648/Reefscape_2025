@@ -182,8 +182,8 @@ const units::meter_t distancePerTurn = 0.1_m;
 
 const double gearRatio = 1.0 / 9.0; // issue 64 - update this param
 
-const double k_elevatorPositionTolerance = 0.1; // issue 70 - update this tolerance
-const double k_elevatorVelocityTolerance = 0.1;
+const double kElevatorPositionToleranceMetres = 0.01; // issue 70 - update this tolerance
+const double kElevatorVelocityTolerancePerSecond = 0.1;
 const units::meter_t kElevatorMinHeightCollect = 1_m; //issue 70 - update this position
 const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amount
 
@@ -207,8 +207,8 @@ const units::turn_t aLevel4Goal = 0.0_tr;
 
 const double gearRatio = 1.0 / 9.0; // issue 64 - update this param
 
-const double k_armPositionTolerance = 0.1; // issue 70 - update this tolerance
-const double k_armVelocityTolerance = 0.1;
+const double kArmPositionToleranceTurns = 0.01; // issue 70 - update this tolerance
+const double kArmVelocityTolerancePerSecond = 0.1;
 const units::turn_t kArmPlaceCoral = -15_tr; // issue 70 - update this amount
 
 // Arm limits

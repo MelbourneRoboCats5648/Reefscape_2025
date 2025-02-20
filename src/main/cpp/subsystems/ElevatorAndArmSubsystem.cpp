@@ -33,8 +33,8 @@ frc2::CommandPtr ElevatorAndArmSubsystem::ElevatorMoveToHeight(units::meter_t el
             
 }
 
- units::meter_t ElevatorAndArmSubsystem::ElevatorGetPosition() {
-    return m_elevatorSubsystem.GetElevatorPosition();
+ units::meter_t ElevatorAndArmSubsystem::ElevatorGetHeight() {
+    return m_elevatorSubsystem.GetElevatorHeight();
 }
 
 frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel(Level level) {
@@ -84,13 +84,16 @@ frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel(Level level) {
             .AlongWith(m_armSubsystem.MoveToAngleCommand(armGoal));
 }
 
+//For collecting coral, if elevator height is not high enough, 
+//arm will not be able to rotate and then elevator move down to collect coral, 
+//so in this case the arm must move upwards
 frc2::CommandPtr ElevatorAndArmSubsystem::CollectCoral(){
-  if(ElevatorGetPosition() >= kElevatorMinHeightCollect)
+  if(ElevatorGetHeight() >= kElevatorMinHeightCollect)
     {
         return (ArmMoveToAngle(aLevel0Goal))
                .AndThen(ElevatorMoveToHeight(eLevel0Goal));
     }
-    else if(ElevatorGetPosition() <= kElevatorMinHeightCollect)
+    else if(ElevatorGetHeight() <= kElevatorMinHeightCollect)
     {
         //issue 70 make this a new goal
         return ElevatorMoveToHeight(eLevel2Goal)

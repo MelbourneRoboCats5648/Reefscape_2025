@@ -64,7 +64,7 @@ bool ArmSubsystem::IsGoalReached() {
   double errorPosition = std::abs(GetSetpoint().position.value() - GetGoal().position.value());
   double errorVelocity = std::abs(GetSetpoint().velocity.value() - GetGoal().velocity.value());
 
-  if (errorPosition <= k_armPositionTolerance && errorVelocity <= k_armVelocityTolerance){
+  if ((errorPosition <= kArmPositionToleranceTurns) && (errorVelocity <= kArmVelocityTolerancePerSecond)){
     return true;
   }
   else {
@@ -94,8 +94,8 @@ frc2::CommandPtr ArmSubsystem::MoveToAngleCommand(units::turn_t goal) {
 
             frc::SmartDashboard::PutNumber("trapazoidalSetpoint", m_armSetpoint.position.value());
 
-            m_closedLoopController.SetReference(m_armGoal.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
-            }).Until([this] {return IsGoalReached();});
+            m_closedLoopController.SetReference(m_armGoal.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);})
+            .Until([this] {return IsGoalReached();});
 }
 
 //To move down supply a negative
