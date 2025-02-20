@@ -142,6 +142,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveSecondStageToHeightCommand(units::meter_
                                                 rev::spark::SparkLowLevel::ControlType::kPosition,
                                                 rev::spark::kSlot0,
                                                 m_elevatorFeedforward.Calculate(m_elevatorSetpoint.velocity).value());
+            
             })   
         .FinallyDo([this]{m_motor.Set(0);});
 }
@@ -159,6 +160,19 @@ frc2::CommandPtr ElevatorSubsystem::MoveThirdStageToHeightCommand(units::meter_t
                                                 m_elevatorFeedforward.Calculate(m_elevatorSetpoint.velocity).value());
             })   
         .FinallyDo([this]{m_motor.Set(0);});
+}
+
+frc2::CommandPtr ElevatorSubsystem::MoveToHeightCommand(units::meter_t heightGoal) {
+  // Inline construction of command goes here.
+  // Subsystem::RunOnce implicitly requires `this` subsystem. */
+  if(heightGoal <= ElevatorConstants::kMax2){
+    return (MoveSecondStageToHeightCommand(heightGoal))
+    .AlongWith(MoveThirdStageToHeightCommand(0_m));
+  }
+  else{
+    return (MoveSecondStageToHeightCommand(ElevatorConstants::kMax2))
+    .AlongWith(MoveThirdStageToHeightCommand(heightGoal - ElevatorConstants::kMax2));
+  }
 }
 
 void ElevatorSubsystem::Periodic() {
