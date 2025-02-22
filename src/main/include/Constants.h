@@ -22,6 +22,7 @@
 enum BuildSeason {Crescendo, Reefscape};
 
 enum Level {L0, L1, L2, L3, L4};
+enum Direction {Left, Right};
 
 namespace General {
 // Choose the bindings for which robot to build
@@ -138,6 +139,13 @@ inline constexpr frc::Translation2d kFrontLeftLocation{+0.26_m, +0.26_m};
 inline constexpr frc::Translation2d kFrontRightLocation{+0.26_m, -0.26_m};
 inline constexpr frc::Translation2d kBackLeftLocation{-0.26_m, +0.26_m};
 inline constexpr frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
+
+const double kPThetaController = 0.5; //Issue 76 constants need to be changed
+const frc::TrapezoidProfile<units::radians>::Constraints
+    kThetaControllerConstraints{kMaxAngularSpeed, kMaxAngularAcceleration};
+
+const double kPXController = 0.5;
+const double kPYController = 0.5; //Issue 76 constants
 }
 
 namespace ElevatorConstants {

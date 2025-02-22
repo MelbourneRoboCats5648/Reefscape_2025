@@ -8,6 +8,8 @@ DriveSubsystem::DriveSubsystem() {
       .GetStructArrayTopic<frc::SwerveModuleState>("DriveTrain/SwerveStates").Publish();
   m_headingPublisher = nt::NetworkTableInstance::GetDefault()
       .GetStructTopic<frc::Rotation2d>("DriveTrain/Heading").Publish();
+  thetaController.EnableContinuousInput(units::radian_t{-std::numbers::pi},
+                                        units::radian_t{std::numbers::pi});
 }
 
 void DriveSubsystem::Periodic() {
@@ -27,6 +29,10 @@ void DriveSubsystem::Periodic() {
 
 void DriveSubsystem::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.
+}
+
+frc::Pose2d DriveSubsystem::getPose(){
+  return frc::Pose2d{}; //Issue 76 replace this with actual pose function
 }
 
 void DriveSubsystem::ResetGyro() {
@@ -58,6 +64,16 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   m_backRightModule.SetModule(br);
 }
 
+void DriveSubsystem::SetModuleStates(
+    wpi::array<frc::SwerveModuleState, 4> desiredStates) {
+  kinematics.DesaturateWheelSpeeds(&desiredStates,
+                                         DriveConstants::kMaxSpeed);
+  m_frontLeftModule.SetModule(desiredStates[0]);
+  m_frontRightModule.SetModule(desiredStates[1]);
+  m_backLeftModule.SetModule(desiredStates[2]);
+  m_backRightModule.SetModule(desiredStates[3]);
+}
+
 void DriveSubsystem::StopAllModules()
 {
   m_frontLeftModule.StopMotors();
@@ -78,4 +94,21 @@ return Run([this] {m_frontLeftModule.OutputPositionToDashboard();
                    m_backLeftModule.OutputPositionToDashboard();
                    m_backRightModule.OutputPositionToDashboard(); });
 }
+
+//Calculate Trajectory
+frc::Trajectory DriveSubsystem::CalculateTrajectory(units::meter_t deltaX, units::meter_t deltaY, units::turn_t deltaTheta)
+{
+   frc::TrajectoryConfig config(kMaxSpeed, kMaxAcceleration); //Issue 76 these Max constants need to be diff from general drive ones
+  // Add kinematics to ensure max speed is actually obeyed
+  config.SetKinematics(kinematics);
+  // An example trajectory to follow.  All units in meters.
+  frc::Trajectory trajectory = frc::TrajectoryGenerator::GenerateTrajectory(
+    {frc::Pose2d{0_m, 0_m, 0_tr}, frc::Pose2d{deltaX, deltaY, deltaTheta}}, //Issue 76 this will actually be DriveSubsystem.GetPosition();
+      // Pass the config
+      config);
+
+  return trajectory;
+}
+
+
 

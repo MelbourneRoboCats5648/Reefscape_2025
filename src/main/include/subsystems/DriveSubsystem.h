@@ -25,6 +25,13 @@
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
 
+//SwerveController
+#include <frc/trajectory/Trajectory.h>
+#include <frc/trajectory/TrajectoryConfig.h>
+#include <frc/trajectory/TrajectoryGenerator.h>
+#include <frc2/command/SwerveControllerCommand.h>
+
+
 using namespace DriveConstants;
 using namespace OperatorConstants;
 using namespace CAN_Constants;
@@ -50,6 +57,10 @@ class DriveSubsystem : public frc2::SubsystemBase {
     frc2::CommandPtr StopCommand();
     frc2::CommandPtr SmartDashboardOutputCommand();
 
+    frc::Pose2d getPose(); //Issue 76 replace with actual pose function
+
+  frc::Trajectory CalculateTrajectory(units::meter_t deltaX, units::meter_t deltaY, units::turn_t deltaTheta);
+
 
 
  private:
@@ -65,18 +76,22 @@ class DriveSubsystem : public frc2::SubsystemBase {
     DriveModule m_backRightModule{kBackRightSpeedMotorID, kBackRightDirectionMotorID, 
                                    kBackRightDirectionEncoderID, kBackRightMagOffset, "Back Right"};
     
-    frc::SwerveDriveKinematics<4> kinematics{kFrontLeftLocation, 
-                                            kFrontRightLocation, 
-                                            kBackLeftLocation,
-                                            kBackRightLocation};
-
     nt::StructArrayPublisher<frc::SwerveModuleState> m_statePublisher; 
     nt::StructPublisher<frc::Rotation2d> m_headingPublisher; 
-
+    
                                             
   public:
   frc::SlewRateLimiter<units::meters_per_second> m_xLimiter{kSlewRateTranslation};
   frc::SlewRateLimiter<units::meters_per_second> m_yLimiter{kSlewRateTranslation};
   frc::SlewRateLimiter<units::radians_per_second> m_rotLimiter{kSlewRateRotation};
+
+   frc::ProfiledPIDController<units::radians> thetaController{
+      DriveConstants::kPThetaController, 0, 0, //Issue 76 constants need to be changed
+      DriveConstants::kThetaControllerConstraints};
+
+  frc::SwerveDriveKinematics<4> kinematics{kFrontLeftLocation, 
+                                            kFrontRightLocation, 
+                                            kBackLeftLocation,
+                                            kBackRightLocation};
 
 };
