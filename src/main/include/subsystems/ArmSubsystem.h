@@ -21,7 +21,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
   rev::spark::SparkRelativeEncoder m_armEncoder = m_armMotor.GetEncoder();
 
   //digital input
-  frc::DigitalInput m_limitSwitchArm;
+  frc::DigitalInput m_limitSwitchArm{ArmConstants::k_limitSwitchArmPin};
 
   public:
   ArmSubsystem();

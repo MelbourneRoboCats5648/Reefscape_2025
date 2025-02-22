@@ -13,7 +13,6 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   ElevatorSubsystem();
   
   units::meter_t GetElevatorHeight();
-  void UpdateSetpoint();
   frc::TrapezoidProfile<units::meter>::State& GetSetpoint();
   frc::TrapezoidProfile<units::meter>::State& GetGoal();
   bool IsGoalReached();
@@ -47,7 +46,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   // declared private and exposed only through public methods.
   
   //digital input
-  frc::DigitalInput m_limitSwitchElevator;
+  frc::DigitalInput m_limitSwitchElevator{ElevatorConstants::k_limitSwitchElevatorPin};
   
  // Spark components
  //plan to add motors to hard switches
@@ -76,7 +75,6 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   frc::ElevatorFeedforward m_elevatorFeedforward{ElevatorConstants::kS, ElevatorConstants::kG, ElevatorConstants::kV, ElevatorConstants::kA};
   
   void UpdateSetpoint();
-  void ResetMotor();
   frc2::CommandPtr MoveSecondStageToHeightCommand(units::meter_t goal);
   frc2::CommandPtr MoveThirdStageToHeightCommand(units::meter_t goal);
 

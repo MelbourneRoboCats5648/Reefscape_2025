@@ -197,7 +197,7 @@ inline constexpr frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
   const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amount
 
   //Elevator DIO port
-  inline constexpr int m_limitSwitchElevator = 1;
+  inline constexpr int k_limitSwitchElevatorPin = 1;
 }
 
 namespace ArmConstants {
@@ -229,6 +229,6 @@ const units::turn_t extendSoftLimit = 0.0825_tr; // this is 29.7 degrees
 const units::turn_t resetEncoder = -0.25_tr;
 
 //Arm DIO port
-inline constexpr int m_limitSwitchArm = 2;
+inline constexpr int k_limitSwitchArmPin = 2;
 }
 
