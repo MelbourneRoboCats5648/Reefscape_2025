@@ -30,16 +30,16 @@
 using namespace DriveConstants;
 
 RobotContainer::RobotContainer()
+  // Initialize all of your commands and subsystems here
+/* COMMENTED OUT TO TEST DRIVE
   : m_intakeSubsystem(),
     m_shooterSubsystem(),
     m_intakeAndShootSubsystem(m_intakeSubsystem, m_shooterSubsystem),
     m_elevatorSubsystem(),
     m_armSubsystem(),
     m_elevatorAndArmSubsystem(m_elevatorSubsystem, m_armSubsystem)
+*/
 {
-
-  // Initialize all of your commands and subsystems here
-
   // Configure the button bindings
   switch(General::KBuildSeason)
   {
@@ -73,7 +73,7 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
-
+/* COMMENTED OUT TO TEST DRIVE
   //PID elevator subsystem command
   m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
   m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
@@ -89,15 +89,16 @@ void RobotContainer::ConfigureBindings() {
   //m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
   m_driverController.LeftTrigger().WhileTrue(m_elevatorSubsystem.MoveUpCommand());
   m_driverController.RightTrigger().WhileTrue(m_elevatorSubsystem.MoveDownCommand());
-
+*/
 }
+
 
 void RobotContainer::Configure2024Bindings() {
   // Configure your trigger bindings here
   
   //drivetrain commands
   m_driverController.B().WhileTrue(m_drive.StopCommand()); 
-
+/* COMMENTED OUT TO TEST DRIVE
   //intake commands
   m_driverController.LeftBumper().WhileTrue(m_intakeSubsystem.CollectCommand());
   m_driverController.RightBumper().WhileTrue(m_intakeSubsystem.EjectCommand());
@@ -115,12 +116,13 @@ void RobotContainer::Configure2024Bindings() {
   //left climb commands
   m_joystick.Button(LeftClimbConstants::leftUpButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
   m_joystick.Button(LeftClimbConstants::leftDownButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
+*/
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() 
 {
   // An example command will be run in autonomous
-  return autos::ExampleAuto(&m_subsystem);
+  //return autos::ExampleAuto(&m_subsystem);
 }
 frc2::CommandPtr RobotContainer::GetTestCommand() {
   // An example command will be run in autonomous
