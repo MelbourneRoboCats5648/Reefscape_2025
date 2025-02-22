@@ -238,3 +238,8 @@ return Run([this] {m_frontLeftModule.OutputPositionToDashboard();
                    m_backRightModule.OutputPositionToDashboard(); });
 }
 
+//Align
+frc2::CommandPtr DriveSubsystem::Allign(Direction direction)
+{
+
+}
