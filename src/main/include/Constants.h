@@ -56,7 +56,6 @@ inline constexpr int kFrontLeftDirectionEncoderID = 11;
 inline constexpr int kFrontRightDirectionEncoderID = 10;
 inline constexpr int kBackLeftDirectionEncoderID = 12;
 inline constexpr int kBackRightDirectionEncoderID = 13;
-
 }  // namespace OperatorConstants
 
 namespace GoalConstants {
@@ -180,13 +179,12 @@ const auto kA = 1.0_V / 1_mps_sq;
 //Elevator Height Conversion
 const units::meter_t distancePerTurn = 0.1_m;
 
-const double gearRatio = 1.0 / 27.0; // issue 64 - update this param
+const double gearRatio = 1.0 / 27.0;
 
 const double kElevatorPositionToleranceMetres = 0.01; // issue 70 - update this tolerance
 const double kElevatorVelocityTolerancePerSecond = 0.1;
 const units::meter_t kElevatorMinHeightCollect = 1_m; //issue 70 - update this position
 const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amount
-
 }
 
 namespace ArmConstants {
@@ -205,7 +203,7 @@ const units::turn_t aLevel2Goal = 0.125_tr;
 const units::turn_t aLevel3Goal = 0.125_tr;
 const units::turn_t aLevel4Goal = 0.0_tr;
 
-const double gearRatio = 1.0 / 27.0; // issue 64 - update this param
+const double gearRatio = 1.0 / 27.0;
 
 const double kArmPositionToleranceTurns = 0.01; // issue 70 - update this tolerance
 const double kArmVelocityTolerancePerSecond = 0.1;
