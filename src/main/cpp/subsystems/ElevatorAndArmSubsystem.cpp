@@ -89,17 +89,17 @@ frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel(Level level) {
 //so in this case the arm must move upwards
 frc2::CommandPtr ElevatorAndArmSubsystem::CollectCoral(){
   if(ElevatorGetHeight() >= kElevatorMinHeightCollect)
-    {
-        return (ArmMoveToAngle(aLevel0Goal))
-               .AndThen(ElevatorMoveToHeight(eLevel0Goal));
-    }
-    else if(ElevatorGetHeight() <= kElevatorMinHeightCollect)
-    {
-        //issue 70 make this a new goal
-        return ElevatorMoveToHeight(eLevel2Goal)
-               .AndThen(ArmMoveToAngle(aLevel0Goal))
-               .AndThen(ElevatorMoveToHeight(eLevel0Goal));
-    }
+  {
+      return (ArmMoveToAngle(aLevel0Goal))
+              .AndThen(ElevatorMoveToHeight(eLevel0Goal));
+  }
+  else
+  {
+      //issue 70 make this a new goal
+      return ElevatorMoveToHeight(eLevel2Goal)
+              .AndThen(ArmMoveToAngle(aLevel0Goal))
+              .AndThen(ElevatorMoveToHeight(eLevel0Goal));
+  }
 }
 
 frc2::CommandPtr ElevatorAndArmSubsystem::PlaceCoral(){
