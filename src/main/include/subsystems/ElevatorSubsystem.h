@@ -6,6 +6,7 @@
 #include <rev/SparkMax.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/controller/ElevatorFeedforward.h>
+#include <frc/DigitalInput.h>
 
 class ElevatorSubsystem : public frc2::SubsystemBase {
   public:
