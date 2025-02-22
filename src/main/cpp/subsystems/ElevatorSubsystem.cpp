@@ -145,11 +145,24 @@ frc2::CommandPtr ElevatorSubsystem::MoveUpBy(units::meter_t height) {
       return MoveToHeightCommand(moveGoal);
 }
 
-
 void ElevatorSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
   frc::SmartDashboard::PutNumber("encoderLeftValue", m_encoderLeft.GetPosition());
   frc::SmartDashboard::PutNumber("encoderRightValue", m_encoderRight.GetPosition());
+}
+
+void ElevatorSubsystem::OnLimitActivation() {
+  frc::DigitalInput limit {2};
+  //need to double check
+      if(!limit.Get()) {
+        m_motorLeft.Set(-0.5);
+        m_motorRight.Set(-0.5);
+    } else {
+        m_motorLeft.Set(0);
+        m_motorRight.Set(0);
+        m_encoderLeft.SetPosition(0);
+        m_encoderRight.SetPosition(0);
+    }
 }
 
 void ElevatorSubsystem::SimulationPeriodic() {
