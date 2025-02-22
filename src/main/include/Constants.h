@@ -155,8 +155,8 @@ const double kD = 0.0;
 const double maxOutput = 1.0;
 
 //PID Profile
-const units::meters_per_second_t maximumVelocity= 0.5_mps;
-const units::meters_per_second_squared_t maximumAcceleration = 1.0_mps_sq;
+const units::meters_per_second_t maximumVelocity= 0.1_mps;
+const units::meters_per_second_squared_t maximumAcceleration = 0.2_mps_sq;
 
 //Elevator Goals
 const units::meter_t eLevel0Goal = 0.0_m;
@@ -180,7 +180,7 @@ const auto kA = 1.0_V / 1_mps_sq;
 //Elevator Height Conversion
 const units::meter_t distancePerTurn = 0.1_m;
 
-const double gearRatio = 1.0 / 9.0; // issue 64 - update this param
+const double gearRatio = 1.0 / 27.0; // issue 64 - update this param
 
 const double kElevatorPositionToleranceMetres = 0.01; // issue 70 - update this tolerance
 const double kElevatorVelocityTolerancePerSecond = 0.1;
@@ -191,12 +191,12 @@ const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amou
 
 namespace ArmConstants {
 //PID Profile
-const units::turns_per_second_t maximumVelocity= 0.5_tps;
-const units::turns_per_second_squared_t maximumAcceleration = 1.0_tr_per_s_sq;
+const units::turns_per_second_t maximumVelocity= 0.1_tps;
+const units::turns_per_second_squared_t maximumAcceleration = 0.2_tr_per_s_sq;
 
 //PID Trapezoidal Controller
 static constexpr units::second_t kDt = 20_ms;
-const units::turn_t kGoalThreshold = 3.0_tr;
+const units::turn_t kGoalThreshold = 0.5_tr;
 
 //Arm Goals - this is the output of the gearbox (not the motor)
 const units::turn_t aLevel0Goal = -0.25_tr;
@@ -205,7 +205,7 @@ const units::turn_t aLevel2Goal = 0.125_tr;
 const units::turn_t aLevel3Goal = 0.125_tr;
 const units::turn_t aLevel4Goal = 0.0_tr;
 
-const double gearRatio = 1.0 / 9.0; // issue 64 - update this param
+const double gearRatio = 1.0 / 27.0; // issue 64 - update this param
 
 const double kArmPositionToleranceTurns = 0.01; // issue 70 - update this tolerance
 const double kArmVelocityTolerancePerSecond = 0.1;
