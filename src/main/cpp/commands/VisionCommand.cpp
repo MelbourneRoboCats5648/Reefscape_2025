@@ -9,7 +9,7 @@ VisionCommand::VisionCommand(VisionSubsystem* visionSubsystem,
       m_driveSubsystem(driveSubsystem)
     
 {
-  // Register that this command requires the subsystem.
+   Register that this command requires the subsystem.
   AddRequirements(m_visionSubsystem,
                   m_driveSubsystem);
 
@@ -27,11 +27,11 @@ frc2::CommandPtr VisionCommand::AimRobotToTargetReef(){
     return Run([this] { 
         
         double m_visionSubsystem->m_targettingAngularVelocity = m_visionSubsystem->GetTargetingAngularVelocityReef() *= 1.0;
-                                            //*= m_driveTrain.kMaxAngularSpeed
-                                            //);
-        double targettingFowardSpeed = 1.0;//(m_visionSubsystem->GetTargetingForwardSpeedReef() *= 1.0
-                                            //*= m_driveTrain.kMaxFowardSpeed
-                                            //);
+                                            = m_driveTrain.kMaxAngularSpeed
+                                            );
+        double targettingFowardSpeed = 1.0(m_visionSubsystem->GetTargetingForwardSpeedReef() *= 1.0
+                                            = m_driveTrain.kMaxFowardSpeed
+                                            );
         return targettingAngularVelocity;
         return targettingFowardSpeed;
 
@@ -45,17 +45,17 @@ frc2::CommandPtr VisionCommand::AimRobotToTargetReef(){
     
 } //cmd namespace
 
-/*
+
 
 frc2::CommandPtr VisionCommand::AimRobotToTargetReef(){
     return Run([this, m_visionSubsystem] { 
         
         double m_visionSubsystem->m_targettingAngularVelocity = m_visionSubsystem->GetTargetingAngularVelocityReef() *= 1.0;
-                                            //*= m_driveTrain.kMaxAngularSpeed
-                                            //);
-        double targettingFowardSpeed = 1.0;//(m_visionSubsystem->GetTargetingForwardSpeedReef() *= 1.0
-                                            //*= m_driveTrain.kMaxFowardSpeed
-                                            //);
+                                            = m_driveTrain.kMaxAngularSpeed
+                                            );
+        double targettingFowardSpeed = 1.0;(m_visionSubsystem->GetTargetingForwardSpeedReef() *= 1.0
+                                            = m_driveTrain.kMaxFowardSpeed
+                                            );
         return targettingAngularVelocity;
         return targettingFowardSpeed;
 

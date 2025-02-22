@@ -36,7 +36,6 @@ public:
     frc::SwerveModuleState GetState();
 
     void OutputPositionToDashboard();
-    frc::SwerveModuleState GetState();
 
 
 private:
