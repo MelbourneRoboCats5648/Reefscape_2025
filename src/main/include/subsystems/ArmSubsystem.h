@@ -9,6 +9,7 @@
 #include <frc/trajectory/TrapezoidProfile.h>
 #include <frc2/command/Commands.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/DigitalInput.h>
 
 class ArmSubsystem : public frc2::SubsystemBase {
   private:
@@ -40,6 +41,9 @@ class ArmSubsystem : public frc2::SubsystemBase {
   frc::TrapezoidProfile<units::turn>::State& GetSetpoint();
   frc::TrapezoidProfile<units::turn>::State& GetGoal();
   bool IsGoalReached();
+
+  void OnLimitActivation();
+
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
