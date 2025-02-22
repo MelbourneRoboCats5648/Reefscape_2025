@@ -146,6 +146,16 @@ const frc::TrapezoidProfile<units::radians>::Constraints
 
 const double kPXController = 0.5;
 const double kPYController = 0.5; //Issue 76 constants
+
+const units::meter_t rightDeltaX = 0.1_m;
+const units::meter_t rightDeltaY = 0.1_m; 
+const units::turn_t rightDeltaTheta = 0.0_tr;
+
+const units::meter_t leftDeltaX = -0.1_m; //Issue 76 change consts
+const units::meter_t leftDeltaY = 0.1_m; 
+const units::turn_t leftDeltaTheta = 0.0_tr;
+
+
 }
 
 namespace ElevatorConstants {

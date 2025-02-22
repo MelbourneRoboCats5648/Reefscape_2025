@@ -10,11 +10,26 @@
 
 frc2::CommandPtr alignDrive::AlignCommand(DriveSubsystem* drive, Direction direction) {
   {
+        units::meter_t deltaX;
+        units::meter_t deltaY;
+        units::turn_t deltaTheta;
+
     // if direction etc.
+    if(Direction::Right){
+        deltaX = DriveConstants::rightDeltaX;
+        deltaY = DriveConstants::rightDeltaY;
+        deltaTheta = DriveConstants::rightDeltaTheta;
+    }
+    else{
+        deltaX = DriveConstants::leftDeltaX;
+        deltaY = DriveConstants::leftDeltaY;
+        deltaTheta = DriveConstants::leftDeltaTheta;
+    }
 
     frc2::CommandPtr controllerCommand = 
     frc2::SwerveControllerCommand<4>(
-          drive->CalculateTrajectory(1_m, 1_m, 0_tr), [drive]() {return drive->getPose(); },
+          drive->CalculateTrajectory(deltaX, deltaY, deltaTheta),
+          [drive]() {return drive->getPose(); },
 
           drive->kinematics,
 
