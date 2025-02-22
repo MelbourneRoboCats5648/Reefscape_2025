@@ -19,12 +19,6 @@ DriveSubsystem::DriveSubsystem()
        frc::Pose2d{}}
 {
   m_gyro.Calibrate();
-<<<<<<< HEAD
-  m_statePublisher = nt::NetworkTableInstance::GetDefault()
-      .GetStructArrayTopic<frc::SwerveModuleState>("DriveTrain/SwerveStates").Publish();
-  m_headingPublisher = nt::NetworkTableInstance::GetDefault()
-      .GetStructTopic<frc::Rotation2d>("DriveTrain/Heading").Publish();
-=======
   
   m_statePublisher = nt::NetworkTableInstance::GetDefault()
       .GetStructArrayTopic<frc::SwerveModuleState>("/SwerveStates").Publish();
@@ -61,24 +55,10 @@ DriveSubsystem::DriveSubsystem()
         },
         this // Reference to this subsystem to set requirements
     );
->>>>>>> 33-starting-limelight
 }
 
 void DriveSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
-<<<<<<< HEAD
-   // Periodically send a set of module states
-    m_statePublisher.Set(
-      std::vector{
-        m_frontLeftModule.GetState(),
-        m_frontRightModule.GetState(),
-        m_backLeftModule.GetState(),
-        m_backRightModule.GetState()
-      });
-    m_headingPublisher.Set(
-      GetHeading()
-    );
-=======
   
   m_statePublisher.Set(
     std::vector{
@@ -150,7 +130,6 @@ void DriveSubsystem::Periodic() {
           }
         }
   
->>>>>>> 33-starting-limelight
 }
 
 void DriveSubsystem::SimulationPeriodic() {

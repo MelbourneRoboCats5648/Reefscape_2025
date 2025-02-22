@@ -30,9 +30,16 @@ frc2::CommandPtr autos::VisionDrive(VisionSubsystem* visionSubsystem, DriveSubsy
     auto visionY_Speed = 0_mps;
     driveSubsystem->Drive(visionX_Speed, visionY_Speed, visionRot, false);
   }
-  ).FinallyDo([driveSubsystem]
+  ).AndThen([driveSubsystem]{
+    //input a certian value of either left or right >>
+    //>> then drive moves that certain value. like elevator or arm positions
+    //trajectory
+    
+  })
+  .FinallyDo([driveSubsystem]
   {  
     driveSubsystem->StopAllModules();
+    //return 'Complete'; might need smth like this. so like when tx and ty = a certain value (aka deadband) stop moving and return complete.
   });
 }
 

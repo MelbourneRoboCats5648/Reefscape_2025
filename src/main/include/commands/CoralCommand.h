@@ -9,12 +9,12 @@
 #include "subsystems/ElevatorAndArmSubsystem.h"
 #include "subsystems/DriveSubsystem.h"
 #include "Constants.h"
-
+#include "Autos.h"
 
 namespace coralCommands {
 /**
  * Example static factory for an autonomous command.
  */
-frc2::CommandPtr PlaceOnReef(ElevatorAndArmSubsystem* elevatorAndArm, DriveSubsystem* drive, Level* level);
+frc2::CommandPtr PlaceOnReef(ElevatorAndArmSubsystem* elevatorAndArm, DriveSubsystem* drive, VisionSubsystem* vision, Level level, Direction direction);
 
 }  // namespace autos

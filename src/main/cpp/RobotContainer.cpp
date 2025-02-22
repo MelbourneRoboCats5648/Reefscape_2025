@@ -77,7 +77,7 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
-  m_visionSubsystem.m_aprilTagIDTrigger.WhileTrue(autos::VisionDrive(&m_visionSubsystem, &m_drive));
+  // Issue 70  Fix This m_visionSubsystem.m_aprilTagIDTrigger.WhileTrue(coralCommands::PlaceOnReef(&m_elevatorAndArmSubsystem, &m_drive, &m_visionSubsystem, Level::L1));
 
   //PID elevator subsystem command
   m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));

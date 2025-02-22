@@ -21,13 +21,14 @@ using namespace ElevatorConstants;
 }
 */
 
-frc2::CommandPtr coralCommands::PlaceOnReef(ElevatorAndArmSubsystem* elevatorAndArm, DriveSubsystem* drive, Level level) {
-  return frc2::cmd::Run([elevatorAndArm, drive, level]
+frc2::CommandPtr coralCommands::PlaceOnReef(ElevatorAndArmSubsystem* elevatorAndArm, DriveSubsystem* drive, VisionSubsystem* vision, Level level, Direction direction) {
+  return frc2::cmd::Run([elevatorAndArm, drive, vision, level, direction]
   {
     //pass command a level
     //moving elevator and arm to height (then positioning) then move arm and elevator down at the same time (not move to level but move by certain amount, eg 15degrees and down 10cm) 
     elevatorAndArm->MoveToLevel(level);
-    drive->GetHeading();
+    autos::VisionDrive(vision, drive);
+    //drive->Align(drive, direction);//check joystick button here 
     elevatorAndArm->PlaceCoral();
   }
   );

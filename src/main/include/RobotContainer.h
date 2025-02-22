@@ -17,6 +17,8 @@
 #include "subsystems/LeftClimbSubsystem.h"
 #include "subsystems/VisionSubsystem.h"
 
+#include "commands/CoralCommand.h"
+
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/ArmSubsystem.h"
 #include "subsystems/ElevatorAndArmSubsystem.h"

@@ -23,6 +23,8 @@ enum BuildSeason {Crescendo, Reefscape};
 
 enum Level {L0, L1, L2, L3, L4};
 
+enum Direction {Right, Left};
+
 namespace General {
 // Choose the bindings for which robot to build
 const BuildSeason KBuildSeason = BuildSeason::Crescendo;
