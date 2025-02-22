@@ -115,13 +115,8 @@ void ArmSubsystem::Periodic() {
 }
 
 void ArmSubsystem::OnLimitActivation() {
-  frc::DigitalInput limit {1};
-  //need to double check
       if(!limit.Get()) {
-        m_armMotor.Set(-0.5);
-    } else {
-        m_armMotor.Set(0);
-        m_armEncoder.SetPosition(0);
+      StopMotor();
     }
 }
 

@@ -152,16 +152,8 @@ void ElevatorSubsystem::Periodic() {
 }
 
 void ElevatorSubsystem::OnLimitActivation() {
-  frc::DigitalInput limit {2};
-  //need to double check
       if(!limit.Get()) {
-        m_motorLeft.Set(-0.5);
-        m_motorRight.Set(-0.5);
-    } else {
-        m_motorLeft.Set(0);
-        m_motorRight.Set(0);
-        m_encoderLeft.SetPosition(0);
-        m_encoderRight.SetPosition(0);
+      ResetMotor();
     }
 }
 
