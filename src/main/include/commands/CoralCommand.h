@@ -15,7 +15,6 @@ namespace coralCommands {
 /**
  * Example static factory for an autonomous command.
  */
-frc2::CommandPtr PlaceOnReef(ElevatorAndArmSubsystem* elevatorAndArm, DriveSubsystem* drive);
-frc2::CommandPtr CollectCoral(ElevatorAndArmSubsystem* elevatorAndArm, DriveSubsystem* drive);
+frc2::CommandPtr PlaceOnReef(ElevatorAndArmSubsystem* elevatorAndArm, DriveSubsystem* drive, Level* level);
 
 }  // namespace autos

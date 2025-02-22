@@ -19,13 +19,17 @@ using namespace ElevatorConstants;
 /*frc2::CommandPtr coralCommands::CollectCoral(ElevatorAndArmSubsystem* elevatorAndArm) {
 
 }
+*/
 
-frc2::CommandPtr coralCommands::PlaceOnReef(ElevatorAndArmSubsystem* elevatorAndArm, DriveSubsystem* drive) {
-  return frc2::cmd::Run([elevatorAndArm, drive]
+frc2::CommandPtr coralCommands::PlaceOnReef(ElevatorAndArmSubsystem* elevatorAndArm, DriveSubsystem* drive, Level level) {
+  return frc2::cmd::Run([elevatorAndArm, drive, level]
   {
     //pass command a level
     //moving elevator and arm to height (then positioning) then move arm and elevator down at the same time (not move to level but move by certain amount, eg 15degrees and down 10cm) 
+    elevatorAndArm->MoveToLevel(level);
+    drive->GetHeading();
+    elevatorAndArm->PlaceCoral();
   }
   );
-}
-*/
+  }
+
