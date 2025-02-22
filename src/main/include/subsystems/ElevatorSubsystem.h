@@ -6,6 +6,7 @@
 #include <rev/SparkMax.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/controller/ElevatorFeedforward.h>
+#include <frc/DigitalInput.h>
 
 class ElevatorSubsystem : public frc2::SubsystemBase {
   public:
@@ -15,6 +16,10 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   frc::TrapezoidProfile<units::meter>::State& GetSetpoint();
   frc::TrapezoidProfile<units::meter>::State& GetGoal();
   bool IsGoalReached();
+
+  void ResetMotor();
+  void OnLimitSwitchActivation();
+  void ResetEncoder();
   /**
    * Elevator command factory method.
    */
@@ -33,11 +38,16 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
    * simulation.
    */
   void SimulationPeriodic() override;
-
+  /**
+   * Will be called periodically.
+   */
   private:
    // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-
+  
+  //digital input
+  frc::DigitalInput m_limitSwitchElevator{ElevatorConstants::k_limitSwitchElevatorPin};
+  
  // Spark components
  //plan to add motors to hard switches
 
@@ -65,7 +75,6 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   frc::ElevatorFeedforward m_elevatorFeedforward{ElevatorConstants::kS, ElevatorConstants::kG, ElevatorConstants::kV, ElevatorConstants::kA};
   
   void UpdateSetpoint();
-  void ResetMotor();
   frc2::CommandPtr MoveSecondStageToHeightCommand(units::meter_t goal);
   frc2::CommandPtr MoveThirdStageToHeightCommand(units::meter_t goal);
 
