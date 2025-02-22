@@ -38,8 +38,10 @@ inline constexpr double kDeadband = 0.1;
 
 namespace CAN_Constants {
 //Subsystem CAN IDs
+
 inline constexpr int kElevatorMotorLeftCAN_ID = 13;
 inline constexpr int kElevatorMotorRightCAN_ID = 15;
+inline constexpr int kElevatorMotorThirdStageCAN_ID = 16;
 // not configurated yet
 inline constexpr int kElevatorArmMotorCAN_ID = 14;
 
@@ -140,54 +142,60 @@ inline constexpr frc::Translation2d kBackLeftLocation{-0.26_m, +0.26_m};
 inline constexpr frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
 }
 
-namespace ElevatorConstants {
-//PID Trapezoidal Controller
-static constexpr units::second_t kDt = 20_ms;
-const units::meter_t kGoalThreshold = 3.0_m;
+  namespace ElevatorConstants {
+  //PID Trapezoidal Controller
+  static constexpr units::second_t kDt = 20_ms;
+  const units::meter_t kGoalThreshold = 3.0_m;
 
-//Smart Current Limit
-const int kCurrentLimit = 50;
+  //Smart Current Limit
+  const int kCurrentLimit = 50;
 
-//PID Controller
-const double kP = 0.1;
-const double kI = 0.0;
-const double kD = 0.0;
-const double maxOutput = 1.0;
+  //Second Stage PID Controller 
+  const double kP = 0.1;
+  const double kI = 0.0;
+  const double kD = 0.0;
+  const double maxOutput = 1.0;
 
-//PID Profile
-const units::meters_per_second_t maximumVelocity= 0.5_mps;
-const units::meters_per_second_squared_t maximumAcceleration = 1.0_mps_sq;
+  //PID Profile
+  const units::meters_per_second_t maximumVelocity= 0.5_mps;
+  const units::meters_per_second_squared_t maximumAcceleration = 1.0_mps_sq;
 
-//Elevator Goals
-const units::meter_t eLevel0Goal = 0.0_m;
-const units::meter_t eLevel1Goal = eLevel0Goal;
-const units::meter_t eLevel2Goal = 0.5_m;
-const units::meter_t eLevel3Goal = 1.0_m;
-const units::meter_t eLevel4Goal = 1.5_m;
+  //Elevator Goals
+  const units::meter_t eLevel0Goal = 0.0_m;
+  const units::meter_t eLevel1Goal = eLevel0Goal;
+  const units::meter_t eLevel2Goal = 0.5_m;
+  const units::meter_t eLevel3Goal = 1.0_m;
+  const units::meter_t eLevel4Goal = 1.5_m;
 
-//Encoder Position
-const units::turn_t resetEncoder = 0.0_tr;
+  //Encoder Position
+  const units::turn_t resetEncoder = 0.0_tr;
 
-// Elevator limits
-const units::meter_t extendSoftLimit = 7.0_m;
+  // Elevator limits
+  const units::meter_t extendSoftLimitSecondStage = 7.0_m;
+  const units::meter_t retractSoftLimit = -1.0_m;
+  const units::meter_t extendSoftLimitThirdStage = 4.0_m;
 
-//Elevator feedforward
-const units::volt_t kS = 1.0_V;
-const units::volt_t kG = 1.0_V;
-const auto kV = 1.0_V / 1_mps;
-const auto kA = 1.0_V / 1_mps_sq;
+  //Elevator feedforward
+  const units::volt_t kS = 1.0_V;
+  const units::volt_t kG = 1.0_V;
+  const auto kV = 1.0_V / 1_mps;
+  const auto kA = 1.0_V / 1_mps_sq;
 
-//Elevator Height Conversion
-const units::meter_t distancePerTurn = 0.1_m;
+  // Maximum Elevator Heights
+  const units::meter_t kMaxSecondStageHeight = 1.5_m;
+  const units::meter_t kMaxThirdStageHeight = 0.3_m;
 
-const double gearRatio = 1.0 / 9.0; // issue 64 - update this param
+  //Elevator Height Conversion
+  const units::meter_t distancePerTurn = 0.1_m;
 
-const double kElevatorPositionToleranceMetres = 0.01; // issue 70 - update this tolerance
-const double kElevatorVelocityTolerancePerSecond = 0.1;
-const units::meter_t kElevatorMinHeightCollect = 1_m; //issue 70 - update this position
-const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amount
+  //Gear Ratio
+  const double gearRatio = 1.0 / 27.0; 
 
-}
+  const double kElevatorPositionToleranceMetres = 0.01; // issue 70 - update this tolerance
+  const double kElevatorVelocityTolerancePerSecond = 0.1;
+  const units::meter_t kElevatorMinHeightCollect = 1_m; //issue 70 - update this position
+  const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amount
+  }
 
 namespace ArmConstants {
 //PID Profile
