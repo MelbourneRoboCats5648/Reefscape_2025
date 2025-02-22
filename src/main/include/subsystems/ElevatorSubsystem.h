@@ -45,7 +45,10 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   private:
    // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-
+  
+  //digital input
+  frc::DigitalInput limit {2};
+  
  // Spark components
  //plan to add motors to hard switches
   rev::spark::SparkMax m_motorLeft{CAN_Constants::kElevatorMotorLeftCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};

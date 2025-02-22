@@ -20,6 +20,9 @@ class ArmSubsystem : public frc2::SubsystemBase {
   rev::spark::SparkMax m_armMotor{CAN_Constants::kElevatorArmMotorCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
   rev::spark::SparkRelativeEncoder m_armEncoder = m_armMotor.GetEncoder();
 
+  //digital input
+  frc::DigitalInput limit {1};
+
   public:
   ArmSubsystem();
 
@@ -58,6 +61,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
   private:
   // Create a motion profile with the given maximum velocity and maximum
   // acceleration constraints for the next setpoint.
+
   frc::TrapezoidProfile<units::turn> m_trapezoidalProfile{{ArmConstants::maximumVelocity, ArmConstants::maximumAcceleration}};
   frc::TrapezoidProfile<units::turn>::State m_armGoal;
   frc::TrapezoidProfile<units::turn>::State m_armSetpoint;
