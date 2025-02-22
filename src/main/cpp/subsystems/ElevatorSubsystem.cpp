@@ -81,7 +81,7 @@ ElevatorSubsystem::ElevatorSubsystem() {
   //Hard and Soft limit switch run parameters
 // right motor will follow the inverted output of left motor to drive shaft
   bool invertOutput = true;
-  elevatorMotorSecondStageRightConfig.Follow(m_motorLeft, invertOutput);
+  elevatorMotorSecondStageRightConfig.Follow(m_motorSecondStageLeft, invertOutput);
 
 
   /*
@@ -93,9 +93,9 @@ ElevatorSubsystem::ElevatorSubsystem() {
    * kPersistParameters is used to ensure the configuration is not lost when
    * the SPARK MAX loses power. This is useful for power cycles that may occur mid-operation.*/
    
-  m_motorLeft.Configure(elevatorMotorSecondStageLeftConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
+  m_motorSecondStageLeft.Configure(elevatorMotorSecondStageLeftConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                     rev::spark::SparkMax::PersistMode::kPersistParameters);
-  m_motorRight.Configure(elevatorMotorSecondStageRightConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
+  m_motorSecondStageRight.Configure(elevatorMotorSecondStageRightConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                     rev::spark::SparkMax::PersistMode::kPersistParameters);
   m_motorThirdStage.Configure(elevatorMotorThirdStageConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                     rev::spark::SparkMax::PersistMode::kPersistParameters);
@@ -141,12 +141,12 @@ bool ElevatorSubsystem::IsGoalReached() {
 }
 
 void ElevatorSubsystem::ResetMotor() {  
-  m_motorLeft.Set(0);
+  m_motorSecondStageLeft.Set(0);
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_motorLeft.Set(0.1);})
+  return Run([this] {m_motorSecondStageLeft.Set(0.1);})
          .FinallyDo([this]{
           ResetMotor();
           UpdateSetpoint();
@@ -155,7 +155,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveUpCommand() {
 
 frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_motorLeft.Set(-0.1);})
+  return Run([this] {m_motorSecondStageLeft.Set(-0.1);})
          .FinallyDo([this]{
           ResetMotor();
           UpdateSetpoint();
@@ -188,7 +188,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveSecondStageToHeightCommand(units::meter_
                                                 m_elevatorFeedforward.Calculate(m_elevatorSetpoint.velocity).value());
             
             })   
-        .FinallyDo([this]{m_motorLeft.Set(0);});
+        .FinallyDo([this]{m_motorSecondStageLeft.Set(0);});
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveThirdStageToHeightCommand(units::meter_t goal) {

@@ -41,11 +41,11 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
  // Spark components
  //plan to add motors to hard switches
 
-  rev::spark::SparkMax m_motorLeft{CAN_Constants::kElevatorMotorLeftCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
-  rev::spark::SparkMax m_motorRight{CAN_Constants::kElevatorMotorRightCAN_ID, rev::spark::SparkMax::MotorType::kBrushless}; 
+  rev::spark::SparkMax m_motorSecondStageLeft{CAN_Constants::kElevatorMotorLeftCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
+  rev::spark::SparkMax m_motorSecondStageRight{CAN_Constants::kElevatorMotorRightCAN_ID, rev::spark::SparkMax::MotorType::kBrushless}; 
   rev::spark::SparkMax m_motorThirdStage{CAN_Constants::kElevatorMotorThirdStageCAN_ID, rev::spark::SparkMax::MotorType::kBrushless}; 
-  rev::spark::SparkRelativeEncoder m_encoderLeft = m_motorLeft.GetEncoder();
-  rev::spark::SparkRelativeEncoder m_encoderRight = m_motorRight.GetEncoder(); 
+  rev::spark::SparkRelativeEncoder m_encoderLeft = m_motorSecondStageLeft.GetEncoder();
+  rev::spark::SparkRelativeEncoder m_encoderRight = m_motorSecondStageRight.GetEncoder(); 
   rev::spark::SparkRelativeEncoder m_encoderThirdStage = m_motorThirdStage.GetEncoder();      
 
   /*frc::SimpleMotorFeedforward<units::meters> m_feedforward{
@@ -57,7 +57,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   frc::TrapezoidProfile<units::meter> m_trapezoidalProfile{{ElevatorConstants::maximumVelocity, ElevatorConstants::maximumAcceleration}};
   frc::TrapezoidProfile<units::meter>::State m_elevatorGoal;
   frc::TrapezoidProfile<units::meter>::State m_elevatorSetpoint;
-  rev::spark::SparkClosedLoopController m_closedLoopControllerLeft = m_motorLeft.GetClosedLoopController();
+  rev::spark::SparkClosedLoopController m_closedLoopControllerLeft = m_motorSecondStageLeft.GetClosedLoopController();
   rev::spark::SparkClosedLoopController m_closedLoopControllerThirdStage = m_motorThirdStage.GetClosedLoopController();
 
 // Create a new ElevatorFeedforward with gains kS, kV, and kA
