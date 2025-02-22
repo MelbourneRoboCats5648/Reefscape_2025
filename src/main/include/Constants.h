@@ -180,13 +180,13 @@ inline constexpr frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
   const auto kA = 1.0_V / 1_mps_sq;
 
   // Maximum Elevator Heights
-  const units::meter_t kMaxHeight = 1.5_m;
-  const units::meter_t kMaxThirdStage = 0.3_m;
+  const units::meter_t kMaxSecondStageHeight = 1.5_m;
+  const units::meter_t kMaxThirdStageHeight = 0.3_m;
 
   //Elevator Height Conversion
   const units::meter_t distancePerTurn = 0.1_m;
 
-  const double gearRatio = 1.0 / 27.0; // issue 64 - update this param
+  const double gearRatio = 1.0 / 27.0; 
   }
 
 namespace ArmConstants {
