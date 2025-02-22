@@ -64,13 +64,9 @@ void DriveModule::StopMotors()
   m_speedMotor.Set(0);
 }
 
-void DriveModule::OutputPositionToDashboard(){
-  frc::SmartDashboard::PutNumber(m_name, m_directionEncoder.GetAbsolutePosition().GetValueAsDouble());
-}
-
 void DriveModule::SetModule(frc::SwerveModuleState state) {
   // encoder range -0.5 +0.5,  GetValue returns rotation
-  // encoder current angle is -pi to +pi
+  // encoder current angle is -pi to +pi (i think this was removed... im not sure so should test again)
   units::angle::radian_t encoderCurrentAngleRadians = 
                           m_directionEncoder.GetAbsolutePosition().GetValue();
     // updates state variable angle to the optimum change in angle
@@ -91,12 +87,37 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
   m_directionMotor.SetVoltage(units::voltage::volt_t{1.0 * turnOutput}); 
 }
 
-frc::SwerveModuleState DriveModule::GetState() {
-  return frc::SwerveModuleState{
-    m_speedMotor.GetVelocity().GetValueAsDouble()*kWheelCircumference/1_s, //metres per sec
-    m_directionEncoder.GetAbsolutePosition().GetValue()
-  };
+frc::SwerveModulePosition DriveModule::GetPosition() {
+  return {units::meter_t{m_speedMotor.GetPosition().GetValueAsDouble()*kWheelCircumference},
+          frc::Rotation2d{m_directionEncoder.GetAbsolutePosition().GetValue()}}; //was previously .GetValueAsDouble()*2*M_PI}
 }
+
+void DriveModule::SetModulePositionToZeroDistance()
+{
+  m_speedMotor.SetPosition(units::angle::turn_t {0.0});
+}
+
+units::meters_per_second_t DriveModule::GetSpeed() {
+  return (m_speedMotor.GetVelocity().GetValue().value() * kWheelCircumference.value()) * 1_mps;
+}
+
+frc::Rotation2d DriveModule::GetAngle() {
+  units::radian_t turnAngle = m_directionEncoder.GetAbsolutePosition().GetValue() /* 2.0 * M_PI*/;
+  return turnAngle;
+}
+
+
+frc::SwerveModuleState DriveModule::GetState() {
+  return {GetSpeed(), GetAngle()};
+} 
+
+void DriveModule::OutputPositionToDashboard(){
+  frc::SmartDashboard::PutNumber(m_name, m_directionEncoder.GetAbsolutePosition().GetValueAsDouble());
+}
+
+
+
+
 
 
 
