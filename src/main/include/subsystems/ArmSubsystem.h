@@ -21,7 +21,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
   rev::spark::SparkRelativeEncoder m_armEncoder = m_armMotor.GetEncoder();
 
   //digital input
-  frc::DigitalInput limit {1};
+  frc::DigitalInput m_limitSwitchArm;
 
   public:
   ArmSubsystem();
@@ -38,14 +38,15 @@ class ArmSubsystem : public frc2::SubsystemBase {
 //todo - figure out commands for arm
 
   void StopMotor();
-
+  void ResetEncoder();
+  
   void UpdateSetpoint();
   units::turn_t GetArmAngle();
   frc::TrapezoidProfile<units::turn>::State& GetSetpoint();
   frc::TrapezoidProfile<units::turn>::State& GetGoal();
   bool IsGoalReached();
 
-  void OnLimitActivation();
+  void OnLimitSwitchActivation();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.

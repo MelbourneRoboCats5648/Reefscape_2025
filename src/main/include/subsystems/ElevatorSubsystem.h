@@ -15,7 +15,8 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   units::meter_t GetElevatorHeight();
   void UpdateSetpoint();
   void ResetMotor();
-  void OnLimitActivation();
+  void OnLimitSwitchActivation();
+  void ResetEncoder();
 
   frc::TrapezoidProfile<units::meter>::State& GetSetpoint();
   frc::TrapezoidProfile<units::meter>::State& GetGoal();
@@ -27,7 +28,6 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr MoveUpCommand();
   frc2::CommandPtr MoveToHeightCommand(units::meter_t goal);
   frc2::CommandPtr MoveUpBy(units::meter_t height);
-
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -47,7 +47,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   // declared private and exposed only through public methods.
   
   //digital input
-  frc::DigitalInput limit {2};
+  frc::DigitalInput m_limitSwitchElevator;
   
  // Spark components
  //plan to add motors to hard switches

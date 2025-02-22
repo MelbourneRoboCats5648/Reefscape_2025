@@ -109,14 +109,20 @@ void ArmSubsystem::StopMotor() {
   m_armMotor.Set(0.0);
 }
 
+//reset encoder
+void ArmSubsystem::ResetEncoder() {
+  m_armEncoder.SetPosition(0.0);
+}
+
 void ArmSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
   frc::SmartDashboard::PutNumber("armEncoderValue", m_armEncoder.GetPosition());
 }
 
-void ArmSubsystem::OnLimitActivation() {
-      if(limit.Get()) {
+void ArmSubsystem::OnLimitSwitchActivation() {
+      if(m_limitSwitchArm.Get()) {
       StopMotor();
+      ResetEncoder();
     }
 }
 

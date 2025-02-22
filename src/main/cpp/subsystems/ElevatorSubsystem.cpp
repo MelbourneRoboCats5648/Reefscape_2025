@@ -107,6 +107,11 @@ void ElevatorSubsystem::ResetMotor() {
   m_motorLeft.Set(0);
 }
 
+void ElevatorSubsystem::ResetEncoder() {
+  m_encoderLeft.SetPosition(0.0);
+  m_encoderRight.SetPosition(0.0);
+}
+
 frc2::CommandPtr ElevatorSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
   return Run([this] {m_motorLeft.Set(0.1);})
@@ -151,9 +156,10 @@ void ElevatorSubsystem::Periodic() {
   frc::SmartDashboard::PutNumber("encoderRightValue", m_encoderRight.GetPosition());
 }
 
-void ElevatorSubsystem::OnLimitActivation() {
-      if(limit.Get()) {
+void ElevatorSubsystem::OnLimitSwitchActivation() {
+      if(m_limitSwitchElevator.Get()) {
       ResetMotor();
+      ResetEncoder();
     }
 }
 
