@@ -134,13 +134,13 @@ frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
 frc2::CommandPtr ElevatorSubsystem::MoveToHeightCommand(units::meter_t heightGoal) {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
-  if(heightGoal <= ElevatorConstants::kMaxSecondStage){
+  if(heightGoal <= ElevatorConstants::kMaxHeight){
     return (MoveSecondStageToHeightCommand(heightGoal))
     .AlongWith(MoveThirdStageToHeightCommand(0_m));
   }
   else{
-    return (MoveSecondStageToHeightCommand(ElevatorConstants::kMaxSecondStage))
-    .AlongWith(MoveThirdStageToHeightCommand(heightGoal - ElevatorConstants::kMaxSecondStage));
+    return (MoveSecondStageToHeightCommand(ElevatorConstants::kMaxHeight))
+    .AlongWith(MoveThirdStageToHeightCommand(heightGoal - ElevatorConstants::kMaxHeight));
   }
 }
 
