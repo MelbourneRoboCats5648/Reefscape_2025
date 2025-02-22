@@ -152,7 +152,7 @@ void ElevatorSubsystem::Periodic() {
 }
 
 void ElevatorSubsystem::OnLimitActivation() {
-      if(!limit.Get()) {
+      if(limit.Get()) {
       ResetMotor();
     }
 }

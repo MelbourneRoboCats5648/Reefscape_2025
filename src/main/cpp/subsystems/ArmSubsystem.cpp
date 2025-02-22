@@ -115,7 +115,7 @@ void ArmSubsystem::Periodic() {
 }
 
 void ArmSubsystem::OnLimitActivation() {
-      if(!limit.Get()) {
+      if(limit.Get()) {
       StopMotor();
     }
 }
