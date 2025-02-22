@@ -195,7 +195,10 @@ inline constexpr frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
   const double kElevatorVelocityTolerancePerSecond = 0.1;
   const units::meter_t kElevatorMinHeightCollect = 1_m; //issue 70 - update this position
   const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amount
-  }
+
+  //Elevator DIO port
+  inline constexpr int k_limitSwitchElevatorPin = 1;
+}
 
 namespace ArmConstants {
 //PID Profile
@@ -224,5 +227,8 @@ const units::turn_t extendSoftLimit = 0.0825_tr; // this is 29.7 degrees
 
 //Encoder Position
 const units::turn_t resetEncoder = -0.25_tr;
+
+//Arm DIO port
+inline constexpr int k_limitSwitchArmPin = 2;
 }
 
