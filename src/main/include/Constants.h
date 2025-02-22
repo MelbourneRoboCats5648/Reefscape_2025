@@ -38,24 +38,24 @@ inline constexpr double kDeadband = 0.1;
 
 namespace CAN_Constants {
 //Subsystem CAN IDs
-inline constexpr int kElevatorMotorLeftCAN_ID = 13;
+inline constexpr int kElevatorMotorLeftCAN_ID = 9;
 inline constexpr int kElevatorMotorRightCAN_ID = 15;
 // not configurated yet
 inline constexpr int kElevatorArmMotorCAN_ID = 14;
 
 //Drive CAN IDs
-inline constexpr int kFrontLeftSpeedMotorID = 4;
-inline constexpr int kFrontRightSpeedMotorID = 2;
-inline constexpr int kBackLeftSpeedMotorID = 6;
+inline constexpr int kFrontLeftSpeedMotorID = 3;
+inline constexpr int kFrontRightSpeedMotorID = 1;
+inline constexpr int kBackLeftSpeedMotorID = 5;
 inline constexpr int kBackRightSpeedMotorID = 7;
-inline constexpr int kFrontLeftDirectionMotorID = 3;
-inline constexpr int kFrontRightDirectionMotorID = 5;
-inline constexpr int kBackLeftDirectionMotorID = 1;
+inline constexpr int kFrontLeftDirectionMotorID = 4;
+inline constexpr int kFrontRightDirectionMotorID = 2;
+inline constexpr int kBackLeftDirectionMotorID = 6;
 inline constexpr int kBackRightDirectionMotorID = 8;
-inline constexpr int kFrontLeftDirectionEncoderID = 9;
+inline constexpr int kFrontLeftDirectionEncoderID = 11;
 inline constexpr int kFrontRightDirectionEncoderID = 10;
 inline constexpr int kBackLeftDirectionEncoderID = 12;
-inline constexpr int kBackRightDirectionEncoderID = 11;
+inline constexpr int kBackRightDirectionEncoderID = 13;
 
 }  // namespace OperatorConstants
 
