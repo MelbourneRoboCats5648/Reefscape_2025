@@ -1,6 +1,8 @@
 #include "subsystems/ElevatorSubsystem.h"
 #include <rev/config/SparkMaxConfig.h>
 
+using namespace ElevatorConstants;
+
 ElevatorSubsystem::ElevatorSubsystem() {
   // Implementation of subsystem constructor goes here.
   rev::spark::SparkMaxConfig elevatorMotorLeftConfig;
@@ -70,18 +72,39 @@ ElevatorSubsystem::ElevatorSubsystem() {
   m_encoderRight.SetPosition(ElevatorConstants::resetEncoder.value());
 }
 
+units::meter_t ElevatorSubsystem::GetElevatorHeight() {
+  //using left encoder as position reference
+  return m_encoderLeft.GetPosition() * ElevatorConstants::distancePerTurn;
+}
+
 void ElevatorSubsystem::UpdateSetpoint() {  
-  m_elevatorSetpoint.position = GetElevatorPosition();
+  m_elevatorSetpoint.position = GetElevatorHeight();
   m_elevatorSetpoint.velocity = 0.0_mps; 
+}
+
+frc::TrapezoidProfile<units::meter>::State& ElevatorSubsystem::GetSetpoint() {
+  return  m_elevatorSetpoint;
+} 
+
+frc::TrapezoidProfile<units::meter>::State& ElevatorSubsystem::GetGoal() {
+  return  m_elevatorGoal;
+} 
+
+bool ElevatorSubsystem::IsGoalReached() {
+  double errorPosition = std::abs(GetSetpoint().position.value() - GetGoal().position.value());
+  double errorVelocity = std::abs(GetSetpoint().velocity.value() - GetGoal().velocity.value());
+
+  if((errorPosition <= kElevatorPositionToleranceMetres) && (errorVelocity <= kElevatorVelocityTolerancePerSecond)){
+    return true;
+  }
+  else {
+    return false;
+  }
+
 }
 
 void ElevatorSubsystem::ResetMotor() {  
   m_motorLeft.Set(0);
-}
-
-units::meter_t ElevatorSubsystem::GetElevatorPosition() {
-  //using left encoder as position reference
-  return m_encoderLeft.GetPosition() * ElevatorConstants::distancePerTurn;
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveUpCommand() {
@@ -106,16 +129,22 @@ frc2::CommandPtr ElevatorSubsystem::MoveToHeightCommand(units::meter_t goal) {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
   return Run([this, goal] {
-            frc::TrapezoidProfile<units::meter>::State goalState = {goal, 0.0_mps }; //stop at goal
-            m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, goalState);
+            m_elevatorGoal = {goal, 0.0_mps }; //stop at goal
+            m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, m_elevatorGoal);
             frc::SmartDashboard::PutNumber("trapazoidalSetpoint", m_elevatorSetpoint.position.value());
-            m_closedLoopControllerLeft.SetReference(goalState.position.value(), 
+            m_closedLoopControllerLeft.SetReference(m_elevatorGoal.position.value(), 
                                                 rev::spark::SparkLowLevel::ControlType::kPosition,
                                                 rev::spark::kSlot0,
                                                 m_elevatorFeedforward.Calculate(m_elevatorSetpoint.velocity).value());
-            })   
-        .FinallyDo([this]{m_motorLeft.Set(0);});
+            });
 }
+
+//To move down supply a negative
+frc2::CommandPtr ElevatorSubsystem::MoveUpBy(units::meter_t height) {
+      units::meter_t moveGoal = (GetElevatorHeight() + height);
+      return MoveToHeightCommand(moveGoal);
+}
+
 
 void ElevatorSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
