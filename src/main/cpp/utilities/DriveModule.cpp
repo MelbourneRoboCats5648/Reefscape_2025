@@ -88,7 +88,7 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
   const auto turnOutput = m_turningPIDController.Calculate(
     encoderCurrentAngleRadians, state.angle.Radians());
 
-  m_directionMotor.SetVoltage(units::voltage::volt_t{1.0 * turnOutput}); 
+  m_directionMotor.SetVoltage(units::voltage::volt_t{1.0 * turnOutput}); //used to be -1
 }
 
 frc::SwerveModuleState DriveModule::GetState() {

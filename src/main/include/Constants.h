@@ -49,10 +49,12 @@ namespace CAN_Constants {
   inline constexpr int kFrontRightSpeedMotorID = 1;
   inline constexpr int kBackLeftSpeedMotorID = 5;
   inline constexpr int kBackRightSpeedMotorID = 7;
+
   inline constexpr int kFrontLeftDirectionMotorID = 4;
   inline constexpr int kFrontRightDirectionMotorID = 2;
   inline constexpr int kBackLeftDirectionMotorID = 6;
   inline constexpr int kBackRightDirectionMotorID = 8;
+  
   inline constexpr int kFrontLeftDirectionEncoderID = 11;
   inline constexpr int kFrontRightDirectionEncoderID = 10;
   inline constexpr int kBackLeftDirectionEncoderID = 12;
