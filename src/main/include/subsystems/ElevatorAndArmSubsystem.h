@@ -27,6 +27,5 @@ class ElevatorAndArmSubsystem : public frc2::SubsystemBase {
  private:
   ElevatorSubsystem& m_elevatorSubsystem;
   ArmSubsystem& m_armSubsystem;
-
 };
 
