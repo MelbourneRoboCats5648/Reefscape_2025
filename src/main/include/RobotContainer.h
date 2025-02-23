@@ -8,8 +8,8 @@
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/button/CommandJoystick.h>
 
-#include "subsystems/DriveSubsystem.h"
 #include "Constants.h"
+#include "subsystems/DriveSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/ShooterSubsystem.h"

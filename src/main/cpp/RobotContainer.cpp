@@ -80,6 +80,12 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
   m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L4));
 
+  //Collect Command
+  m_driverController.LeftBumper().OnTrue(m_elevatorAndArmSubsystem.CollectCoral());
+
+  //Place on Reef Command
+  m_driverController.RightBumper().OnTrue(m_elevatorAndArmSubsystem.PlaceCoral());
+
 // PID climb subsystem command (temporarily disabling LeftClimbUpCommand and LeftClimbDownCommand to test it)
   m_joystick.Button(LeftClimbConstants::leftUpButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalL1));
   m_joystick.Button(LeftClimbConstants::leftDownButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalRetract));
