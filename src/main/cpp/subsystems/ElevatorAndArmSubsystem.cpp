@@ -23,6 +23,26 @@ frc2::CommandPtr ElevatorAndArmSubsystem::MoveDown() {
     m_armSubsystem.StopMotor(); });
 }
 
+frc2::CommandPtr ElevatorAndArmSubsystem::ElevatorMoveUp() {
+  return m_elevatorSubsystem.MoveUpCommand();
+ }
+
+frc2::CommandPtr ElevatorAndArmSubsystem::ElevatorMoveDown() {
+  return m_elevatorSubsystem.MoveDownCommand();
+}
+
+frc2::CommandPtr ElevatorAndArmSubsystem::ArmMoveUp() {
+  return m_armSubsystem.MoveUpCommand()
+   .FinallyDo([this]{
+    m_armSubsystem.StopMotor(); });
+}
+
+frc2::CommandPtr ElevatorAndArmSubsystem::ArmMoveDown() {
+  return m_armSubsystem.MoveDownCommand()
+   .FinallyDo([this]{
+    m_armSubsystem.StopMotor(); });
+}
+
 frc2::CommandPtr ElevatorAndArmSubsystem::ArmMoveToAngle(units::turn_t armGoal) {
   return m_armSubsystem.MoveToAngleCommand(armGoal);
 }
