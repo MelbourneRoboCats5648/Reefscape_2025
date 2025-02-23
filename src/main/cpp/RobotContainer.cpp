@@ -22,8 +22,6 @@
 
 #include "commands/Autos.h"
 
-#include "commands/ExampleCommand.h"
-
 #include <frc/filter/SlewRateLimiter.h>
 #include <frc/Joystick.h>
 
@@ -70,6 +68,8 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
+    //drivetrain commands
+  m_driverController.B().WhileTrue(m_drive.StopCommand());
 
   //PID elevator subsystem command
   m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
@@ -96,20 +96,13 @@ void RobotContainer::ConfigureBindings() {
 }
 
 void RobotContainer::Configure2024Bindings() {
-  // Configure your trigger bindings here
-  
-  //drivetrain commands
-  m_driverController.B().WhileTrue(m_drive.StopCommand()); 
 
-  //left climb commands
-  m_joystick.Button(LeftClimbConstants::leftUpButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
-  m_joystick.Button(LeftClimbConstants::leftDownButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() 
 {
   // An example command will be run in autonomous
-  return autos::ExampleAuto(&m_subsystem);
+  return autos::ExampleAuto(&m_armSubsystem);
 }
 frc2::CommandPtr RobotContainer::GetTestCommand() {
   // An example command will be run in autonomous
