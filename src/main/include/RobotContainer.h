@@ -45,6 +45,7 @@ class RobotContainer {
   // The robot's subsystems are defined here...
   ExampleSubsystem m_subsystem;
   DriveSubsystem m_drive;
+  /* COMMENTED OUT TO TEST DRIVE
   IntakeSubsystem m_intakeSubsystem;
   LeftClimbSubsystem m_leftClimbSubsystem;
   ShooterSubsystem m_shooterSubsystem;
@@ -53,4 +54,5 @@ class RobotContainer {
   ArmSubsystem m_armSubsystem;
   //this subsystem relies on the two subsystems above
   ElevatorAndArmSubsystem m_elevatorAndArmSubsystem;
+  */
 };

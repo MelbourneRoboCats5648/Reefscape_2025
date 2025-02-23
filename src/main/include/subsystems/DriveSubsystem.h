@@ -54,7 +54,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
  private:
     //Gyro
-    frc::ADIS16470_IMU m_gyro;
+    //frc::ADIS16470_IMU m_gyro;
 
     DriveModule m_frontLeftModule{kFrontLeftSpeedMotorID, kFrontLeftDirectionMotorID, 
                                    kFrontLeftDirectionEncoderID, kFrontLeftMagOffset, "Front Left"};
