@@ -55,6 +55,12 @@ void Robot::TeleopInit() {
   if (m_autonomousCommand) {
     m_autonomousCommand->Cancel();
   }
+
+  m_testCommand = m_container.GetTestCommand();
+
+   if(m_testCommand) {
+    m_testCommand->Schedule();
+   }
 }
 
 /**

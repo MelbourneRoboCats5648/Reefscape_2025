@@ -25,7 +25,7 @@ enum Level {L0, L1, L2, L3, L4};
 
 namespace General {
   // Choose the bindings for which robot to build
-  const BuildSeason KBuildSeason = BuildSeason::Crescendo;
+  const BuildSeason KBuildSeason = BuildSeason::Reefscape;
 }
 
 namespace OperatorConstants {  
@@ -127,10 +127,10 @@ namespace DriveConstants {
   inline constexpr double kTurnKD = 0.0;
 
   //MagOffset Doubles
-  inline constexpr units::angle::turn_t kFrontLeftMagOffset = 0.302246_tr;
-  inline constexpr units::angle::turn_t kFrontRightMagOffset = 0.351074_tr;
-  inline constexpr units::angle::turn_t kBackLeftMagOffset = 0.062012_tr;
-  inline constexpr units::angle::turn_t kBackRightMagOffset = 0.012695_tr; 
+  inline constexpr units::angle::turn_t kFrontLeftMagOffset = -0.3056640625_tr;
+  inline constexpr units::angle::turn_t kFrontRightMagOffset = 0.203369140625_tr;
+  inline constexpr units::angle::turn_t kBackLeftMagOffset = 0.01708984375_tr;
+  inline constexpr units::angle::turn_t kBackRightMagOffset = -0.24755859375_tr;
 
   //Module Locations Translation 2D
   inline constexpr frc::Translation2d kFrontLeftLocation{+0.26_m, +0.26_m};

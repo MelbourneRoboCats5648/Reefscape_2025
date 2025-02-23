@@ -3,7 +3,7 @@
 using namespace DriveConstants;
 
 DriveSubsystem::DriveSubsystem() {
-  m_gyro.Calibrate();
+  //m_gyro.Calibrate();
   m_statePublisher = nt::NetworkTableInstance::GetDefault()
       .GetStructArrayTopic<frc::SwerveModuleState>("DriveTrain/SwerveStates").Publish();
   m_headingPublisher = nt::NetworkTableInstance::GetDefault()
@@ -30,11 +30,13 @@ void DriveSubsystem::SimulationPeriodic() {
 }
 
 void DriveSubsystem::ResetGyro() {
-  m_gyro.Reset();
+  //m_gyro.Reset();
 }
 
 units::degree_t DriveSubsystem::GetHeading() const {
-  return m_gyro.GetAngle();
+  //return m_gyro.GetAngle();
+
+  return units::degree_t{0};
 }
 
 void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
