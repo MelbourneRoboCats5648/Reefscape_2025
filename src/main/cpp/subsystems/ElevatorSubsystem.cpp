@@ -109,9 +109,9 @@ ElevatorSubsystem::ElevatorSubsystem() {
 
 units::meter_t ElevatorSubsystem::GetElevatorHeight() {
   //using left encoder as position reference
-  return m_encoderLeft.GetPosition() * ElevatorConstants::distancePerTurn;
-         m_encoderRight.GetPosition() * ElevatorConstants::distancePerTurn;
-         m_encoderThirdStage.GetPosition() * ElevatorConstants::distancePerTurn;
+  return m_encoderLeft.GetPosition() * ElevatorConstants::distancePerTurnSecondStage;
+         m_encoderRight.GetPosition() * ElevatorConstants::distancePerTurnSecondStage;
+         m_encoderThirdStage.GetPosition() * ElevatorConstants::distancePerTurnThirdStage;
 }
 
 void ElevatorSubsystem::UpdateSetpoint() {  
