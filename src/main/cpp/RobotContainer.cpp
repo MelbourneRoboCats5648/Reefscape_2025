@@ -30,9 +30,7 @@
 using namespace DriveConstants;
 
 RobotContainer::RobotContainer()
-  : m_intakeSubsystem(),
-    m_shooterSubsystem(),
-    m_intakeAndShootSubsystem(m_intakeSubsystem, m_shooterSubsystem),
+   :m_shooterSubsystem(),
     m_elevatorSubsystem(),
     m_armSubsystem(),
     m_elevatorAndArmSubsystem(m_elevatorSubsystem, m_armSubsystem)
@@ -104,19 +102,11 @@ void RobotContainer::Configure2024Bindings() {
   //drivetrain commands
   m_driverController.B().WhileTrue(m_drive.StopCommand()); 
 
-  //intake commands
-  m_driverController.LeftBumper().WhileTrue(m_intakeSubsystem.CollectCommand());
-  m_driverController.RightBumper().WhileTrue(m_intakeSubsystem.EjectCommand());
-  //m_driverController.B().WhileTrue(m_intakeSubsystem.RetractCommand());
-  m_driverController.X().WhileTrue(m_intakeSubsystem.ExtendCommand());
-
   //shootercommands
   m_driverController.Y().WhileTrue(m_shooterSubsystem.ShooterSpeakerCommand());
   m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
   //m_driverController.B().WhileTrue(m_shooterSubsystem.ShooterSpeakerAmpCommand());
  
-
-  m_driverController.LeftTrigger().OnTrue(m_intakeAndShootSubsystem.PerformIntakeAndShootCommand()); 
 
   //left climb commands
   m_joystick.Button(LeftClimbConstants::leftUpButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
