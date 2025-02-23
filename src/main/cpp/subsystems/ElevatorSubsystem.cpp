@@ -144,6 +144,11 @@ void ElevatorSubsystem::ResetMotor() {
   m_motorSecondStageLeft.Set(0);
 }
 
+void ElevatorSubsystem::ResetEncoder() {
+  m_encoderLeft.SetPosition(0.0);
+  m_encoderRight.SetPosition(0.0);
+}
+
 frc2::CommandPtr ElevatorSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
   return Run([this] {m_motorSecondStageLeft.Set(0.1);})
@@ -212,12 +217,18 @@ frc2::CommandPtr ElevatorSubsystem::MoveUpBy(units::meter_t height) {
       return MoveToHeightCommand(moveGoal);
 }
 
-
 void ElevatorSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
   frc::SmartDashboard::PutNumber("encoderSecondStageLeftValue", m_encoderLeft.GetPosition());
   frc::SmartDashboard::PutNumber("encoderSecondStageRightValue", m_encoderRight.GetPosition());
   frc::SmartDashboard::PutNumber("encoderThirdStageValue", m_encoderThirdStage.GetPosition());
+}
+
+void ElevatorSubsystem::OnLimitSwitchActivation() {
+      if(m_limitSwitchElevator.Get()) {
+      ResetMotor();
+      ResetEncoder();
+    }
 }
 
 void ElevatorSubsystem::SimulationPeriodic() {
