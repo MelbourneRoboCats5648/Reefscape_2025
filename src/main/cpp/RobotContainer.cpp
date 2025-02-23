@@ -30,8 +30,7 @@
 using namespace DriveConstants;
 
 RobotContainer::RobotContainer()
-   :m_shooterSubsystem(),
-    m_elevatorSubsystem(),
+   :m_elevatorSubsystem(),
     m_armSubsystem(),
     m_elevatorAndArmSubsystem(m_elevatorSubsystem, m_armSubsystem)
 {
@@ -101,12 +100,6 @@ void RobotContainer::Configure2024Bindings() {
   
   //drivetrain commands
   m_driverController.B().WhileTrue(m_drive.StopCommand()); 
-
-  //shootercommands
-  m_driverController.Y().WhileTrue(m_shooterSubsystem.ShooterSpeakerCommand());
-  m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
-  //m_driverController.B().WhileTrue(m_shooterSubsystem.ShooterSpeakerAmpCommand());
- 
 
   //left climb commands
   m_joystick.Button(LeftClimbConstants::leftUpButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
