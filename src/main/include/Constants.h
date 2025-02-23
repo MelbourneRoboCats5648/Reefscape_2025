@@ -38,11 +38,12 @@ namespace OperatorConstants {
 
 namespace CAN_Constants {
   //Subsystem CAN IDs
-  inline constexpr int kElevatorMotorLeftCAN_ID = 9;
-  inline constexpr int kElevatorMotorRightCAN_ID = 15;
-  inline constexpr int kElevatorMotorThirdStageCAN_ID = 16;
+  inline constexpr int kClimbCAN_ID = 20;
+  inline constexpr int kElevatorMotorLeftCAN_ID = 21;
+  inline constexpr int kElevatorMotorRightCAN_ID = 22;
+  inline constexpr int kElevatorMotorThirdStageCAN_ID = 23;
   // not configurated yet
-  inline constexpr int kElevatorArmMotorCAN_ID = 14;
+  inline constexpr int kElevatorArmMotorCAN_ID = 24;
 
   //Drive CAN IDs
   inline constexpr int kFrontLeftSpeedMotorID = 3;
