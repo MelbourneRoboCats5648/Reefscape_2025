@@ -38,27 +38,25 @@ inline constexpr double kDeadband = 0.1;
 
 namespace CAN_Constants {
 //Subsystem CAN IDs
-
-inline constexpr int kElevatorMotorLeftCAN_ID = 13;
+inline constexpr int kElevatorMotorLeftCAN_ID = 9;
 inline constexpr int kElevatorMotorRightCAN_ID = 15;
 inline constexpr int kElevatorMotorThirdStageCAN_ID = 16;
 // not configurated yet
 inline constexpr int kElevatorArmMotorCAN_ID = 14;
 
 //Drive CAN IDs
-inline constexpr int kFrontLeftSpeedMotorID = 4;
-inline constexpr int kFrontRightSpeedMotorID = 2;
-inline constexpr int kBackLeftSpeedMotorID = 6;
+inline constexpr int kFrontLeftSpeedMotorID = 3;
+inline constexpr int kFrontRightSpeedMotorID = 1;
+inline constexpr int kBackLeftSpeedMotorID = 5;
 inline constexpr int kBackRightSpeedMotorID = 7;
-inline constexpr int kFrontLeftDirectionMotorID = 3;
-inline constexpr int kFrontRightDirectionMotorID = 5;
-inline constexpr int kBackLeftDirectionMotorID = 1;
+inline constexpr int kFrontLeftDirectionMotorID = 4;
+inline constexpr int kFrontRightDirectionMotorID = 2;
+inline constexpr int kBackLeftDirectionMotorID = 6;
 inline constexpr int kBackRightDirectionMotorID = 8;
-inline constexpr int kFrontLeftDirectionEncoderID = 9;
+inline constexpr int kFrontLeftDirectionEncoderID = 11;
 inline constexpr int kFrontRightDirectionEncoderID = 10;
 inline constexpr int kBackLeftDirectionEncoderID = 12;
-inline constexpr int kBackRightDirectionEncoderID = 11;
-
+inline constexpr int kBackRightDirectionEncoderID = 13;
 }  // namespace OperatorConstants
 
 namespace GoalConstants {
@@ -93,6 +91,7 @@ namespace LeftClimbConstants {
 
   //kDt
   const units::second_t kDt = 20_ms;
+  const units::turn_t kGoalThreshold = 3.0_tr;
 }
 
 namespace DriveConstants {
@@ -144,7 +143,8 @@ inline constexpr frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
   namespace ElevatorConstants {
   //PID Trapezoidal Controller
   static constexpr units::second_t kDt = 20_ms;
-  
+  const units::meter_t kGoalThreshold = 3.0_m;
+
   //Smart Current Limit
   const int kCurrentLimit = 50;
 
@@ -154,9 +154,9 @@ inline constexpr frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
   const double kD = 0.0;
   const double maxOutput = 1.0;
 
-  //PID Profile
-  const units::meters_per_second_t maximumVelocity= 0.1_mps;
-  const units::meters_per_second_squared_t maximumAcceleration = 0.2_mps_sq;
+//PID Profile
+const units::meters_per_second_t maximumVelocity= 0.1_mps;
+const units::meters_per_second_squared_t maximumAcceleration = 0.2_mps_sq;
 
   //Elevator Goals
   const units::meter_t eLevel0Goal = 0.0_m;
@@ -173,28 +173,22 @@ inline constexpr frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
   const units::meter_t retractSoftLimit = -1.0_m;
   const units::meter_t extendSoftLimitThirdStage = 4.0_m;
 
-  //Elevator feedforward
-  const units::volt_t kS = 1.0_V;
-  const units::volt_t kG = 1.0_V;
-  const auto kV = 1.0_V / 1_mps;
-  const auto kA = 1.0_V / 1_mps_sq;
+//Elevator feedforward
+const units::volt_t kS = 1.0_V;
+const units::volt_t kG = 1.0_V;
+const auto kV = 1.0_V / 1_mps;
+const auto kA = 1.0_V / 1_mps_sq;
 
-  // Maximum Elevator Heights
-  const units::meter_t kMaxSecondStageHeight = 1.5_m;
-  const units::meter_t kMaxThirdStageHeight = 0.3_m;
+//Elevator Height Conversion
+const units::meter_t distancePerTurn = 0.1_m;
 
-  //Elevator Height Conversion
-  const units::meter_t secondStageDistancePerTurn = 0.1727876_m;
-  const units::meter_t thirdStageDistancePerTurn = 0.1193805_m;
+const double gearRatio = 1.0 / 27.0;
 
-  //Gear Ratio
-  const double gearRatio = 1.0 / 27.0; 
-
-  const double kElevatorPositionToleranceMetres = 0.01; // issue 70 - update this tolerance
-  const double kElevatorVelocityTolerancePerSecond = 0.1;
-  const units::meter_t kElevatorMinHeightCollect = 1_m; //issue 70 - update this position
-  const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amount
-  }
+const double kElevatorPositionToleranceMetres = 0.01; // issue 70 - update this tolerance
+const double kElevatorVelocityTolerancePerSecond = 0.1;
+const units::meter_t kElevatorMinHeightCollect = 1_m; //issue 70 - update this position
+const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amount
+}
 
 namespace ArmConstants {
 //PID Profile
@@ -203,6 +197,7 @@ const units::turns_per_second_squared_t maximumAcceleration = 0.2_tr_per_s_sq;
 
 //PID Trapezoidal Controller
 static constexpr units::second_t kDt = 20_ms;
+const units::turn_t kGoalThreshold = 0.5_tr;
 
 //Arm Goals - this is the output of the gearbox (not the motor)
 const units::turn_t aLevel0Goal = -0.25_tr;
@@ -211,7 +206,7 @@ const units::turn_t aLevel2Goal = 0.125_tr;
 const units::turn_t aLevel3Goal = 0.125_tr;
 const units::turn_t aLevel4Goal = 0.0_tr;
 
-const double gearRatio = 1.0 / 9.0; // issue 64 - update this param
+const double gearRatio = 1.0 / 27.0;
 
 const double kArmPositionToleranceTurns = 0.01; // issue 70 - update this tolerance
 const double kArmVelocityTolerancePerSecond = 0.1;
