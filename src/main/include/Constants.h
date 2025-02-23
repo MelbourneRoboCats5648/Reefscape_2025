@@ -34,9 +34,9 @@ namespace OperatorConstants {
   inline constexpr units::meters_per_second_squared_t kSlewRateTranslation = 6_mps_sq; //increase to reduce lag
   inline constexpr units::radians_per_second_squared_t kSlewRateRotation = 6_rad_per_s_sq;
   inline constexpr double kDeadband = 0.1;
-  }  // namespace OperatorConstants
+}  // namespace OperatorConstants
 
-  namespace CAN_Constants {
+namespace CAN_Constants {
   //Subsystem CAN IDs
   inline constexpr int kElevatorMotorLeftCAN_ID = 9;
   inline constexpr int kElevatorMotorRightCAN_ID = 15;
