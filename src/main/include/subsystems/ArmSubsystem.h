@@ -26,16 +26,14 @@ class ArmSubsystem : public frc2::SubsystemBase {
   public:
   ArmSubsystem();
 
-  /**
-   * arm command factory method.
-   */
+  //arm command factory method.
   frc2::CommandPtr MoveUpCommand();
   frc2::CommandPtr MoveDownCommand();
   frc2::CommandPtr MoveToAngleCommand(units::turn_t goal);
   frc2::CommandPtr RotateBy(units::turn_t angle);
 
 
-//todo - figure out commands for arm
+  //todo - figure out commands for arm
 
   void StopMotor();
   void ResetEncoder();
@@ -48,15 +46,10 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   void OnLimitSwitchActivation();
 
-  /**
-   * Will be called periodically whenever the CommandScheduler runs.
-   */
+  //Will be called periodically whenever the CommandScheduler runs.
   void Periodic() override;
 
-  /**
-   * Will be called periodically whenever the CommandScheduler runs during
-   * simulation.
-   */
+  //Will be called periodically whenever the CommandScheduler runs during simulation.
   void SimulationPeriodic() override;
 
   private:
@@ -67,7 +60,6 @@ class ArmSubsystem : public frc2::SubsystemBase {
   frc::TrapezoidProfile<units::turn>::State m_armGoal;
   frc::TrapezoidProfile<units::turn>::State m_armSetpoint;
   rev::spark::SparkClosedLoopController m_closedLoopController = m_armMotor.GetClosedLoopController();
-
 };
 
 
