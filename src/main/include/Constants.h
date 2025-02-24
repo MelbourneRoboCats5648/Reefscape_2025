@@ -28,14 +28,16 @@ namespace General {
   const BuildSeason KBuildSeason = BuildSeason::Crescendo;
 }
 
+// namespace OperatorConstants
 namespace OperatorConstants {  
   inline constexpr int kDriverControllerPort = 0;
   inline constexpr int kDriverJoystickPort = 1;
   inline constexpr units::meters_per_second_squared_t kSlewRateTranslation = 6_mps_sq; //increase to reduce lag
   inline constexpr units::radians_per_second_squared_t kSlewRateRotation = 6_rad_per_s_sq;
   inline constexpr double kDeadband = 0.1;
-}  // namespace OperatorConstants
+}  
 
+// namespace CAN Constants
 namespace CAN_Constants {
   //Subsystem CAN IDs
   inline constexpr int kElevatorMotorLeftCAN_ID = 9;
@@ -57,7 +59,7 @@ namespace CAN_Constants {
   inline constexpr int kFrontRightDirectionEncoderID = 10;
   inline constexpr int kBackLeftDirectionEncoderID = 12;
   inline constexpr int kBackRightDirectionEncoderID = 13;
-}  // namespace OperatorConstants
+}  
 
 namespace GoalConstants {
   inline constexpr units::turn_t m_climbGoalL1 = 1.0_tr; 
@@ -76,7 +78,7 @@ namespace LeftClimbConstants {
   const int leftUpButton = 3;
   const int leftDownButton = 5;
 
-  // Soft Limits - Plan to change from example base when limits are decided
+  // Soft Limits
   const int  extendSoftLimit = 50;
   const int  retractSoftLimit= -50;
 
