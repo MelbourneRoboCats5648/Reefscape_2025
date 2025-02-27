@@ -26,18 +26,18 @@ enum Level {L0, L1, L2, L3, L4};
 namespace General {
   // Choose the bindings for which robot to build
   const BuildSeason KBuildSeason = BuildSeason::Crescendo;
-}
+} // namespace General
 
-// namespace OperatorConstants
+
 namespace OperatorConstants {  
   inline constexpr int kDriverControllerPort = 0;
   inline constexpr int kDriverJoystickPort = 1;
   inline constexpr units::meters_per_second_squared_t kSlewRateTranslation = 6_mps_sq; //increase to reduce lag
   inline constexpr units::radians_per_second_squared_t kSlewRateRotation = 6_rad_per_s_sq;
   inline constexpr double kDeadband = 0.1;
-}  
+}  // namespace OperatorConstants
 
-// namespace CAN Constants
+
 namespace CAN_Constants {
   //Subsystem CAN IDs
   inline constexpr int kElevatorMotorLeftCAN_ID = 9;
@@ -59,12 +59,12 @@ namespace CAN_Constants {
   inline constexpr int kFrontRightDirectionEncoderID = 10;
   inline constexpr int kBackLeftDirectionEncoderID = 12;
   inline constexpr int kBackRightDirectionEncoderID = 13;
-}  
+}  // namespace CAN Constants
 
 namespace GoalConstants {
   inline constexpr units::turn_t m_climbGoalL1 = 1.0_tr; 
   inline constexpr units::turn_t m_climbGoalRetract = 0.0_tr; 
-}
+} // namespace GoalConstants
 
 namespace LeftClimbConstants {
   //Motor ID
@@ -93,7 +93,7 @@ namespace LeftClimbConstants {
 
   //kDt
   const units::second_t kDt = 20_ms;
-}
+} // namespace LeftClimbConstants
 
 namespace DriveConstants {
   //Max Speed and Acceleration Constanst
@@ -139,7 +139,7 @@ namespace DriveConstants {
   inline constexpr frc::Translation2d kFrontRightLocation{+0.26_m, -0.26_m};
   inline constexpr frc::Translation2d kBackLeftLocation{-0.26_m, +0.26_m};
   inline constexpr frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
-}
+} // namespace DriveConstants
 
 namespace ElevatorConstants {
   //PID Trapezoidal Controller
@@ -204,7 +204,7 @@ namespace ElevatorConstants {
   
   //Elevator DIO port
   inline constexpr int k_limitSwitchElevatorPin = 1;
-}
+} // namespace ElevatorConstants
 
 namespace ArmConstants {
   //PID Profile
@@ -235,5 +235,5 @@ namespace ArmConstants {
 
   //Arm DIO port
   inline constexpr int k_limitSwitchArmPin = 2;
-}
+} // namespace ArmConstants
 

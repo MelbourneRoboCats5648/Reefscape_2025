@@ -30,31 +30,29 @@ ElevatorSubsystem::ElevatorSubsystem() {
       .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
       .ReverseLimitSwitchEnabled(true);
 
-    // Set the soft limits to stop the motor at -50 and 50 rotations
-    // will alter constants
     elevatorMotorThirdStageConfig.softLimit
       .ForwardSoftLimit(ElevatorConstants::extendSoftLimitThirdStage.value())
       .ForwardSoftLimitEnabled(true);
 
   //PID Controller 
-  /* Configure the closed loop controller. We want to make sure we set the
-  * feedback sensor as the primary encoder. */
+  /* Configure the closed loop controller. 
+  * We want to make sure we set the feedback sensor as the primary encoder. */
   elevatorMotorSecondStageLeftConfig.closedLoop
      .SetFeedbackSensor(rev::spark::ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
-      // Set PID values for position control. We don't need to pass a closed
-      // loop slot, as it will default to slot 0.
+      //Set PID values for position control. 
+      //We don't need to pass a closed loop slot, as it will default to slot 0.
     .P(ElevatorConstants::kP)
     .I(ElevatorConstants::kI)
     .D(ElevatorConstants::kD)
     .OutputRange(-ElevatorConstants::maxOutput, ElevatorConstants::maxOutput);
 
   //PID Controller Third Stage
-  /* Configure the closed loop controller. We want to make sure we set the
-  * feedback sensor as the primary encoder. */
+  /* Configure the closed loop controller. 
+  *  We want to make sure we set the feedback sensor as the primary encoder. */
   elevatorMotorThirdStageConfig.closedLoop
      .SetFeedbackSensor(rev::spark::ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
-      /* Set PID values for position control. We don't need to pass a closed
-      * loop slot, as it will default to slot 0. */
+      //Set PID values for position control. 
+      //We don't need to pass a closed loop slot, as it will default to slot 0.
     .P(ElevatorConstants::kP)
     .I(ElevatorConstants::kI)
     .D(ElevatorConstants::kD)
@@ -153,7 +151,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
 
 frc2::CommandPtr ElevatorSubsystem::MoveToHeightCommand(units::meter_t heightGoal) {
   // Inline construction of command goes here.
-  // Subsystem::RunOnce implicitly requires `this` subsystem. */
+  // Subsystem::RunOnce implicitly requires `this` subsystem.
   if(heightGoal <= ElevatorConstants::kMaxSecondStageHeight) {
     return (MoveSecondStageToHeightCommand(heightGoal))
     .AlongWith(MoveThirdStageToHeightCommand(0_m));
@@ -166,7 +164,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveToHeightCommand(units::meter_t heightGoa
 
 frc2::CommandPtr ElevatorSubsystem::MoveSecondStageToHeightCommand(units::meter_t goal) {
   // Inline construction of command goes here.
-  // Subsystem::RunOnce implicitly requires `this` subsystem. */
+  // Subsystem::RunOnce implicitly requires `this` subsystem.
   return Run([this, goal] {
             m_elevatorGoal = {goal, 0.0_mps }; //stop at goal
             m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, m_elevatorGoal);
@@ -182,7 +180,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveSecondStageToHeightCommand(units::meter_
 
 frc2::CommandPtr ElevatorSubsystem::MoveThirdStageToHeightCommand(units::meter_t goal) {
   // Inline construction of command goes here.
-  // Subsystem::RunOnce implicitly requires `this` subsystem. */
+  // Subsystem::RunOnce implicitly requires `this` subsystem.
   return Run([this, goal] {
             m_elevatorGoal = {goal, 0.0_mps }; //stop at goal
             m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, m_elevatorGoal);
