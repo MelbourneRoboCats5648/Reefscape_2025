@@ -74,22 +74,19 @@ void DriveSubsystem::SetModuleStates(
   m_backRightModule.SetModule(desiredStates[3]);
 }
 
-void DriveSubsystem::StopAllModules()
-{
+void DriveSubsystem::StopAllModules() {
   m_frontLeftModule.StopMotors();
   m_frontRightModule.StopMotors();
   m_backLeftModule.StopMotors();
   m_backRightModule.StopMotors();
 }
 
-frc2::CommandPtr DriveSubsystem::StopCommand() 
-{
-return Run([this] {StopAllModules(); });
+frc2::CommandPtr DriveSubsystem::StopCommand() {
+  return Run([this] {StopAllModules(); });
 }
 
-frc2::CommandPtr DriveSubsystem::SmartDashboardOutputCommand() 
-{
-return Run([this] {m_frontLeftModule.OutputPositionToDashboard();
+frc2::CommandPtr DriveSubsystem::SmartDashboardOutputCommand() {
+  return Run([this] {m_frontLeftModule.OutputPositionToDashboard();
                    m_frontRightModule.OutputPositionToDashboard();
                    m_backLeftModule.OutputPositionToDashboard();
                    m_backRightModule.OutputPositionToDashboard(); });

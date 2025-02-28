@@ -22,18 +22,13 @@
 
 #include "commands/Autos.h"
 
-#include "commands/ExampleCommand.h"
-
 #include <frc/filter/SlewRateLimiter.h>
 #include <frc/Joystick.h>
 
 using namespace DriveConstants;
 
 RobotContainer::RobotContainer()
-  : m_intakeSubsystem(),
-    m_shooterSubsystem(),
-    m_intakeAndShootSubsystem(m_intakeSubsystem, m_shooterSubsystem),
-    m_elevatorSubsystem(),
+   :m_elevatorSubsystem(),
     m_armSubsystem(),
     m_elevatorAndArmSubsystem(m_elevatorSubsystem, m_armSubsystem)
 {
@@ -41,15 +36,12 @@ RobotContainer::RobotContainer()
   // Initialize all of your commands and subsystems here
 
   // Configure the button bindings
-  switch(General::KBuildSeason)
-  {
-    case (BuildSeason::Reefscape):
-    {
+  switch(General::KBuildSeason) {
+    case (BuildSeason::Reefscape): {
       ConfigureBindings();
       break;
-    }
-    case (BuildSeason::Crescendo):
-    {
+    }    
+    case (BuildSeason::Crescendo): {
       Configure2024Bindings();
       break;
     }
@@ -73,6 +65,8 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
+    //drivetrain commands
+  m_driverController.B().WhileTrue(m_drive.StopCommand());
 
   //PID elevator subsystem command
   m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
@@ -86,7 +80,7 @@ void RobotContainer::ConfigureBindings() {
   //Place on Reef Command
   m_driverController.RightBumper().OnTrue(m_elevatorAndArmSubsystem.PlaceCoral());
 
-// PID climb subsystem command (temporarily disabling LeftClimbUpCommand and LeftClimbDownCommand to test it)
+  // PID climb subsystem command (temporarily disabling LeftClimbUpCommand and LeftClimbDownCommand to test it)
   m_joystick.Button(LeftClimbConstants::leftUpButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalL1));
   m_joystick.Button(LeftClimbConstants::leftDownButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalRetract));
 
@@ -95,39 +89,16 @@ void RobotContainer::ConfigureBindings() {
   //m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
   m_driverController.LeftTrigger().WhileTrue(m_elevatorSubsystem.MoveUpCommand());
   m_driverController.RightTrigger().WhileTrue(m_elevatorSubsystem.MoveDownCommand());
-
 }
 
 void RobotContainer::Configure2024Bindings() {
-  // Configure your trigger bindings here
-  
-  //drivetrain commands
-  m_driverController.B().WhileTrue(m_drive.StopCommand()); 
-
-  //intake commands
-  m_driverController.LeftBumper().WhileTrue(m_intakeSubsystem.CollectCommand());
-  m_driverController.RightBumper().WhileTrue(m_intakeSubsystem.EjectCommand());
-  //m_driverController.B().WhileTrue(m_intakeSubsystem.RetractCommand());
-  m_driverController.X().WhileTrue(m_intakeSubsystem.ExtendCommand());
-
-  //shootercommands
-  m_driverController.Y().WhileTrue(m_shooterSubsystem.ShooterSpeakerCommand());
-  m_driverController.A().WhileTrue(m_shooterSubsystem.ShooterAmpCommand());
-  //m_driverController.B().WhileTrue(m_shooterSubsystem.ShooterSpeakerAmpCommand());
- 
-
-  m_driverController.LeftTrigger().OnTrue(m_intakeAndShootSubsystem.PerformIntakeAndShootCommand()); 
-
-  //left climb commands
-  m_joystick.Button(LeftClimbConstants::leftUpButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbUpCommand()).Repeatedly().WithTimeout(1.5_s));
-  m_joystick.Button(LeftClimbConstants::leftDownButton).OnTrue(std::move(m_leftClimbSubsystem.LeftClimbDownCommand()).Repeatedly().WithTimeout(1.5_s));
 }
 
-frc2::CommandPtr RobotContainer::GetAutonomousCommand() 
-{
+frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
-  return autos::ExampleAuto(&m_subsystem);
+  return autos::ExampleAuto(&m_armSubsystem);
 }
+
 frc2::CommandPtr RobotContainer::GetTestCommand() {
   // An example command will be run in autonomous
   return m_drive.SmartDashboardOutputCommand();
