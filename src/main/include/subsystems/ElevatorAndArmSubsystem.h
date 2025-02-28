@@ -14,6 +14,10 @@ class ElevatorAndArmSubsystem : public frc2::SubsystemBase {
 
   frc2::CommandPtr MoveUp();
   frc2::CommandPtr MoveDown();
+  frc2::CommandPtr ElevatorMoveUp();
+  frc2::CommandPtr ElevatorMoveDown();
+  frc2::CommandPtr ArmMoveUp();
+  frc2::CommandPtr ArmMoveDown();
   frc2::CommandPtr ArmMoveToAngle(units::turn_t armGoal);
   frc2::CommandPtr ElevatorMoveToHeight(units::meter_t elevGoal);
   units::meter_t ElevatorGetHeight();
