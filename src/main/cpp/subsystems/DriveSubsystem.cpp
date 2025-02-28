@@ -16,6 +16,7 @@ DriveSubsystem::DriveSubsystem()
   /* Configure Pigeon2 */
   configs::Pigeon2Configuration toApply{};
 
+  // FIXME - might need to configure some pigeon parameters here
   /* User can change the configs if they want, or leave it empty for factory-default */
 
   m_gyro.GetConfigurator().Apply(toApply);
@@ -25,9 +26,7 @@ DriveSubsystem::DriveSubsystem()
   /**
    * When we teleop init, set the yaw of the Pigeon2 and wait for the setter to take affect.
    */
-  m_gyro.SetYaw(144_deg, 100_ms); // Set our yaw to 144 degrees and wait up to 100 milliseconds for the setter to take affect
-  m_gyro.GetYaw().WaitForUpdate(100_ms); // And wait up to 100 milliseconds for the yaw to take affect
-
+  m_gyro.SetYaw(DriveConstants::initialGyroAngle, 100_ms); // Set to initial yaw angle and wait up to 100 milliseconds for the setter to take affect
 }
 
 void DriveSubsystem::Periodic() {
