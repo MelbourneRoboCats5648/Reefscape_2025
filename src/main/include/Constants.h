@@ -148,7 +148,7 @@ namespace ElevatorConstants {
   //Smart Current Limit
   const int kCurrentLimit = 50;
 
-  //Second Stage PID Controller 
+  //First Stage PID Controller 
   const double kP = 0.1;
   const double kI = 0.0;
   const double kD = 0.0;
@@ -169,7 +169,7 @@ namespace ElevatorConstants {
   const units::turn_t resetEncoder = 0.0_tr;
 
   // Elevator limits
-  const units::meter_t extendSoftLimitSecondStage = 7.0_m;
+  const units::meter_t extendSoftLimitFirstStage = 7.0_m;
   const units::meter_t retractSoftLimit = -1.0_m;
   const units::meter_t extendSoftLimitThirdStage = 4.0_m;
 
@@ -180,7 +180,7 @@ namespace ElevatorConstants {
   const auto kA = 1.0_V / 1_mps_sq;
 
   // Maximum Elevator Heights
-  const units::meter_t kMaxSecondStageHeight = 1.5_m;
+  const units::meter_t kMaxFirstStageHeight = 1.5_m;
   const units::meter_t kMaxThirdStageHeight = 0.3_m;
 
   //Elevator Height Conversion:
@@ -191,7 +191,7 @@ namespace ElevatorConstants {
   0.1727876 m - 2nd stage
   0.1193805 m - 3rd stage
   DISTANCE PER TURN = CIRCUMFERENCE */
-  const units::meter_t distancePerTurnSecondStage = 0.1727876_m;
+  const units::meter_t distancePerTurnFirstStage = 0.1727876_m;
   const units::meter_t distancePerTurnThirdStage = 0.1193805_m;
 
   //Gear Ratio
