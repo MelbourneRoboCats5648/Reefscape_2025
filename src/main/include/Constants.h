@@ -59,9 +59,7 @@ namespace CAN_Constants {
   inline constexpr int kFrontRightDirectionEncoderID = 10;
   inline constexpr int kBackLeftDirectionEncoderID = 12;
   inline constexpr int kBackRightDirectionEncoderID = 13;
-  
-  //Gyro CAN IDs
-  inline constexpr std::string kCanID = "rio"; //Issue 90 CHANGE THIS
+
 }  
 
 namespace GoalConstants {
@@ -100,7 +98,7 @@ namespace LeftClimbConstants {
 
 namespace DriveConstants {
 
-  inline constexpr int kGyroDeviceID = 100; //Issue 90: CHANGE CONST
+  inline constexpr int kGyroDeviceID = 1; //Issue 90: CHANGE CONST
 
   //Max Speed and Acceleration Constanst
   inline constexpr auto kMaxSpeed = 3_mps;

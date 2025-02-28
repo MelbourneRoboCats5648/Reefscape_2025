@@ -57,7 +57,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
  private:
     //Gyro
-    Pigeon2::Pigeon2	(kGyroDeviceId, kCanID);
+    Pigeon2 m_gyro{kGyroDeviceID, "rio"};
 
 
     DriveModule m_frontLeftModule{kFrontLeftSpeedMotorID, kFrontLeftDirectionMotorID, 
