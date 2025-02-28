@@ -5,41 +5,41 @@ using namespace ElevatorConstants;
 
 ElevatorSubsystem::ElevatorSubsystem() {
   // Implementation of subsystem constructor goes here.
-  rev::spark::SparkMaxConfig elevatorMotorSecondStageLeftConfig;
-  rev::spark::SparkMaxConfig elevatorMotorSecondStageRightConfig;
-  rev::spark::SparkMaxConfig elevatorMotorThirdStageConfig;
+  rev::spark::SparkMaxConfig elevatorMotorFirstStageLeftConfig;
+  rev::spark::SparkMaxConfig elevatorMotorFirstStageRightConfig;
+  rev::spark::SparkMaxConfig elevatorMotorSecondStageConfig;
 
    //Set parameters that will apply to elevator motor.
-    elevatorMotorSecondStageLeftConfig.SmartCurrentLimit(ElevatorConstants::kCurrentLimit).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
-    elevatorMotorSecondStageRightConfig.SmartCurrentLimit(ElevatorConstants::kCurrentLimit).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
-    elevatorMotorThirdStageConfig.SmartCurrentLimit(ElevatorConstants::kCurrentLimit).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
+    elevatorMotorFirstStageLeftConfig.SmartCurrentLimit(ElevatorConstants::kCurrentLimit).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
+    elevatorMotorFirstStageRightConfig.SmartCurrentLimit(ElevatorConstants::kCurrentLimit).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
+    elevatorMotorSecondStageConfig.SmartCurrentLimit(ElevatorConstants::kCurrentLimit).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
 
-  // Second Stage Limits
+  // First Stage Limits
     // Enable limit switches to stop the motor when they are closed
-    elevatorMotorSecondStageLeftConfig.limitSwitch
+    elevatorMotorFirstStageLeftConfig.limitSwitch
       .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
       .ReverseLimitSwitchEnabled(true);
 
-    elevatorMotorSecondStageLeftConfig.softLimit
-      .ForwardSoftLimit(ElevatorConstants::extendSoftLimitSecondStage.value())
+    elevatorMotorFirstStageLeftConfig.softLimit
+      .ForwardSoftLimit(ElevatorConstants::extendSoftLimitFirstStage.value())
       .ForwardSoftLimitEnabled(true);
 
-  //Third Stage Limits
+  //Second Stage Limits
     // Enable limit switches to stop the motor when they are closed
-    elevatorMotorThirdStageConfig.limitSwitch
+    elevatorMotorSecondStageConfig.limitSwitch
       .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
       .ReverseLimitSwitchEnabled(true);
 
     // Set the soft limits to stop the motor at -50 and 50 rotations
     // will alter constants
-    elevatorMotorThirdStageConfig.softLimit
-      .ForwardSoftLimit(ElevatorConstants::extendSoftLimitThirdStage.value())
+    elevatorMotorSecondStageConfig.softLimit
+      .ForwardSoftLimit(ElevatorConstants::extendSoftLimitSecondStage.value())
       .ForwardSoftLimitEnabled(true);
 
   //PID Controller 
   /* Configure the closed loop controller. We want to make sure we set the
   * feedback sensor as the primary encoder. */
-  elevatorMotorSecondStageLeftConfig.closedLoop
+  elevatorMotorFirstStageLeftConfig.closedLoop
      .SetFeedbackSensor(rev::spark::ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
       // Set PID values for position control. We don't need to pass a closed
       // loop slot, as it will default to slot 0.
@@ -48,10 +48,10 @@ ElevatorSubsystem::ElevatorSubsystem() {
     .D(ElevatorConstants::kD)
     .OutputRange(-ElevatorConstants::maxOutput, ElevatorConstants::maxOutput);
 
-  //PID Controller Third Stage
+  //PID Controller Second Stage
   /* Configure the closed loop controller. We want to make sure we set the
   * feedback sensor as the primary encoder. */
-  elevatorMotorThirdStageConfig.closedLoop
+  elevatorMotorSecondStageConfig.closedLoop
      .SetFeedbackSensor(rev::spark::ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
       /* Set PID values for position control. We don't need to pass a closed
       * loop slot, as it will default to slot 0. */
@@ -61,14 +61,14 @@ ElevatorSubsystem::ElevatorSubsystem() {
     .OutputRange(-ElevatorConstants::maxOutput, ElevatorConstants::maxOutput);
 
   // Configure the encoder.
-  elevatorMotorSecondStageLeftConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatio).VelocityConversionFactor(ElevatorConstants::gearRatio);
-  elevatorMotorSecondStageRightConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatio).VelocityConversionFactor(ElevatorConstants::gearRatio);
-  elevatorMotorThirdStageConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatio).VelocityConversionFactor(ElevatorConstants::gearRatio);
+  elevatorMotorFirstStageLeftConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatio).VelocityConversionFactor(ElevatorConstants::gearRatio);
+  elevatorMotorFirstStageRightConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatio).VelocityConversionFactor(ElevatorConstants::gearRatio);
+  elevatorMotorSecondStageConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatio).VelocityConversionFactor(ElevatorConstants::gearRatio);
   
   //Hard and Soft limit switch run parameters
   // right motor will follow the inverted output of left motor to drive shaft
   bool invertOutput = true;
-  elevatorMotorSecondStageRightConfig.Follow(m_motorSecondStageLeft, invertOutput);
+  elevatorMotorFirstStageRightConfig.Follow(m_motorFirstStageLeft, invertOutput);
 
   /* Apply the configuration to the SPARK MAX.
    *
@@ -78,25 +78,25 @@ ElevatorSubsystem::ElevatorSubsystem() {
    * kPersistParameters is used to ensure the configuration is not lost when the SPARK MAX loses power. 
    * This is useful for power cycles that may occur mid-operation.*/
   
-  m_motorSecondStageLeft.Configure(elevatorMotorSecondStageLeftConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
+  m_motorFirstStageLeft.Configure(elevatorMotorFirstStageLeftConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                     rev::spark::SparkMax::PersistMode::kPersistParameters);
-  m_motorSecondStageRight.Configure(elevatorMotorSecondStageRightConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
+  m_motorFirstStageRight.Configure(elevatorMotorFirstStageRightConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                     rev::spark::SparkMax::PersistMode::kPersistParameters);
-  m_motorThirdStage.Configure(elevatorMotorThirdStageConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
+  m_motorSecondStage.Configure(elevatorMotorSecondStageConfig, rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                     rev::spark::SparkMax::PersistMode::kPersistParameters);
 
   // Reset the position to 0 to start within the range of the soft limits
   m_encoderLeft.SetPosition(ElevatorConstants::resetEncoder.value());
   m_encoderRight.SetPosition(ElevatorConstants::resetEncoder.value());
-  m_encoderThirdStage.SetPosition(ElevatorConstants::resetEncoder.value());
+  m_encoderSecondStage.SetPosition(ElevatorConstants::resetEncoder.value());
 
 }
 
 units::meter_t ElevatorSubsystem::GetElevatorHeight() {
   //using left encoder as position reference
-  return m_encoderLeft.GetPosition() * ElevatorConstants::distancePerTurnSecondStage;
-         m_encoderRight.GetPosition() * ElevatorConstants::distancePerTurnSecondStage;
-         m_encoderThirdStage.GetPosition() * ElevatorConstants::distancePerTurnThirdStage;
+  return m_encoderLeft.GetPosition() * ElevatorConstants::distancePerTurnFirstStage;
+         m_encoderRight.GetPosition() * ElevatorConstants::distancePerTurnFirstStage;
+         m_encoderSecondStage.GetPosition() * ElevatorConstants::distancePerTurnSecondStage;
 }
 
 void ElevatorSubsystem::UpdateSetpoint() {  
@@ -125,7 +125,7 @@ bool ElevatorSubsystem::IsGoalReached() {
 }
 
 void ElevatorSubsystem::ResetMotor() {  
-  m_motorSecondStageLeft.Set(0);
+  m_motorFirstStageLeft.Set(0);
 }
 
 void ElevatorSubsystem::ResetEncoder() {
@@ -135,7 +135,7 @@ void ElevatorSubsystem::ResetEncoder() {
 
 frc2::CommandPtr ElevatorSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_motorSecondStageLeft.Set(0.1); })
+  return Run([this] {m_motorFirstStageLeft.Set(0.1); })
       .FinallyDo([this] {
           ResetMotor();
           UpdateSetpoint();
@@ -144,7 +144,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveUpCommand() {
 
 frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_motorSecondStageLeft.Set(-0.1); })
+  return Run([this] {m_motorFirstStageLeft.Set(-0.1); })
       .FinallyDo([this] {
           ResetMotor();
           UpdateSetpoint();
@@ -154,14 +154,30 @@ frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
 frc2::CommandPtr ElevatorSubsystem::MoveToHeightCommand(units::meter_t heightGoal) {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
-  if(heightGoal <= ElevatorConstants::kMaxSecondStageHeight) {
-    return (MoveSecondStageToHeightCommand(heightGoal))
-    .AlongWith(MoveThirdStageToHeightCommand(0_m));
+  if(heightGoal <= ElevatorConstants::kMaxFirstStageHeight) {
+    return (MoveFirstStageToHeightCommand(heightGoal))
+    .AlongWith(MoveSecondStageToHeightCommand(0_m));
   }
   else {
-    return (MoveSecondStageToHeightCommand(ElevatorConstants::kMaxSecondStageHeight))
-    .AlongWith(MoveThirdStageToHeightCommand(heightGoal - ElevatorConstants::kMaxSecondStageHeight));
+    return (MoveFirstStageToHeightCommand(ElevatorConstants::kMaxFirstStageHeight))
+    .AlongWith(MoveSecondStageToHeightCommand(heightGoal - ElevatorConstants::kMaxFirstStageHeight));
   }
+}
+
+frc2::CommandPtr ElevatorSubsystem::MoveFirstStageToHeightCommand(units::meter_t goal) {
+  // Inline construction of command goes here.
+  // Subsystem::RunOnce implicitly requires `this` subsystem. */
+  return Run([this, goal] {
+            m_elevatorGoal = {goal, 0.0_mps }; //stop at goal
+            m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, m_elevatorGoal);
+            frc::SmartDashboard::PutNumber("trapazoidalFirstStageSetpoint", m_elevatorSetpoint.position.value());
+            m_closedLoopControllerLeft.SetReference(m_elevatorGoal.position.value(), 
+                                                rev::spark::SparkLowLevel::ControlType::kPosition,
+                                                rev::spark::kSlot0,
+                                                m_elevatorFeedforward.Calculate(m_elevatorSetpoint.velocity).value());
+            
+            })   
+        .FinallyDo([this] {m_motorFirstStageLeft.Set(0); });
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveSecondStageToHeightCommand(units::meter_t goal) {
@@ -171,28 +187,12 @@ frc2::CommandPtr ElevatorSubsystem::MoveSecondStageToHeightCommand(units::meter_
             m_elevatorGoal = {goal, 0.0_mps }; //stop at goal
             m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, m_elevatorGoal);
             frc::SmartDashboard::PutNumber("trapazoidalSecondStageSetpoint", m_elevatorSetpoint.position.value());
-            m_closedLoopControllerLeft.SetReference(m_elevatorGoal.position.value(), 
-                                                rev::spark::SparkLowLevel::ControlType::kPosition,
-                                                rev::spark::kSlot0,
-                                                m_elevatorFeedforward.Calculate(m_elevatorSetpoint.velocity).value());
-            
-            })   
-        .FinallyDo([this] {m_motorSecondStageLeft.Set(0); });
-}
-
-frc2::CommandPtr ElevatorSubsystem::MoveThirdStageToHeightCommand(units::meter_t goal) {
-  // Inline construction of command goes here.
-  // Subsystem::RunOnce implicitly requires `this` subsystem. */
-  return Run([this, goal] {
-            m_elevatorGoal = {goal, 0.0_mps }; //stop at goal
-            m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, m_elevatorGoal);
-            frc::SmartDashboard::PutNumber("trapazoidalThirdStageSetpoint", m_elevatorSetpoint.position.value());
-            m_closedLoopControllerThirdStage.SetReference(m_elevatorGoal.position.value(), 
+            m_closedLoopControllerSecondStage.SetReference(m_elevatorGoal.position.value(), 
                                                 rev::spark::SparkLowLevel::ControlType::kPosition,
                                                 rev::spark::kSlot0,
                                                 m_elevatorFeedforward.Calculate(m_elevatorSetpoint.velocity).value());
             })   
-        .FinallyDo([this]{m_motorThirdStage.Set(0);});
+        .FinallyDo([this]{m_motorSecondStage.Set(0);});
 }
 
 //To move down supply a negative
@@ -203,9 +203,9 @@ frc2::CommandPtr ElevatorSubsystem::MoveUpBy(units::meter_t height) {
 
 void ElevatorSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
-  frc::SmartDashboard::PutNumber("encoderSecondStageLeftValue", m_encoderLeft.GetPosition());
-  frc::SmartDashboard::PutNumber("encoderSecondStageRightValue", m_encoderRight.GetPosition());
-  frc::SmartDashboard::PutNumber("encoderThirdStageValue", m_encoderThirdStage.GetPosition());
+  frc::SmartDashboard::PutNumber("encoderFirstStageLeftValue", m_encoderLeft.GetPosition());
+  frc::SmartDashboard::PutNumber("encoderFirstStageRightValue", m_encoderRight.GetPosition());
+  frc::SmartDashboard::PutNumber("encoderSecondStageValue", m_encoderSecondStage.GetPosition());
 }
 
 void ElevatorSubsystem::OnLimitSwitchActivation() {
