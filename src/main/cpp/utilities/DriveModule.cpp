@@ -18,24 +18,6 @@ DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEn
                 {kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration}}
 
     {
-
-    m_directionMotor.SetPosition(m_directionEncoder.GetAbsolutePosition().
-                                WaitForUpdate(250_ms).GetValue());
-                                
-    m_directionMotor.SetNeutralMode(NeutralModeValue::Coast);
-    TalonFXConfiguration directionMotorConfig;
-    directionMotorConfig.Feedback.SensorToMechanismRatio = 150.0/7.0;
-    directionMotorConfig.ClosedLoopGeneral.ContinuousWrap = false;
-    directionMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    directionMotorConfig.CurrentLimits.SupplyCurrentLimit = 40_A;
-    directionMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 30_A;
-    directionMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1_s;
-    directionMotorConfig.MotorOutput.Inverted = true;  // +V should rotate the motor counter-clockwise
-    directionMotorConfig.MotorOutput.NeutralMode = NeutralModeValue::Brake;
-
-    // direction motor configuration
-    m_directionMotor.GetConfigurator().Apply(directionMotorConfig);
-
     // Config CANCoder   
     CANcoderConfiguration cancoderConfig;
     cancoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5_tr;
@@ -44,8 +26,15 @@ DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEn
     cancoderConfig.MagnetSensor.MagnetOffset = m_magOffset;
     m_directionEncoder.GetConfigurator().Apply(cancoderConfig);
 
-    // Drive motor config
-    // To setup the drive motor to be able to drive at a target speed
+    SpeedMotorConfig();
+    DriveMotorConfig();
+
+    m_turningPIDController.EnableContinuousInput(
+                units::angle::radian_t{-1.0*M_PI},
+                units::angle::radian_t{M_PI});
+    }
+
+void DriveModule::SpeedMotorConfig(){
     TalonFXConfiguration speedMotorConfig;
     speedMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue::RotorSensor;
     speedMotorConfig.Feedback.SensorToMechanismRatio = kDriveGearRatio;
@@ -61,14 +50,27 @@ DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEn
     speedMotorConfig.MotorOutput.Inverted = true;  // +V should rotate the motor counter-clockwise
     speedMotorConfig.MotorOutput.NeutralMode = NeutralModeValue::Brake;
     m_speedMotor.GetConfigurator().Apply(speedMotorConfig);
+}
 
-    m_turningPIDController.EnableContinuousInput(
-                units::angle::radian_t{-1.0*M_PI},
-                units::angle::radian_t{M_PI});
-    }
+void DriveModule::DriveMotorConfig(){
+    m_directionMotor.SetPosition(m_directionEncoder.GetAbsolutePosition().
+                                WaitForUpdate(250_ms).GetValue());
+                                
+    m_directionMotor.SetNeutralMode(NeutralModeValue::Coast);
 
+    TalonFXConfiguration directionMotorConfig;
+    directionMotorConfig.Feedback.SensorToMechanismRatio = 150.0/7.0;
+    directionMotorConfig.ClosedLoopGeneral.ContinuousWrap = false;
+    directionMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    directionMotorConfig.CurrentLimits.SupplyCurrentLimit = 40_A;
+    directionMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 30_A;
+    directionMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1_s;
+    directionMotorConfig.MotorOutput.Inverted = true;  // +V should rotate the motor counter-clockwise
+    directionMotorConfig.MotorOutput.NeutralMode = NeutralModeValue::Brake;
 
-
+    // direction motor configuration
+    m_directionMotor.GetConfigurator().Apply(directionMotorConfig);
+}
 
 void DriveModule::StopMotors()
 {
