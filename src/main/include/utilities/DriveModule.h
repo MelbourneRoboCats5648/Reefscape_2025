@@ -30,10 +30,11 @@ public:
     void OutputPositionToDashboard();
     frc::SwerveModuleState GetState();
 
+    CANcoder m_directionEncoder;
+
 private:
     TalonFX m_speedMotor;
     TalonFX m_directionMotor;
-    CANcoder m_directionEncoder;
     units::angle::turn_t m_magOffset;
     std::string m_name; 
     frc::ProfiledPIDController<units::radians> m_turningPIDController;

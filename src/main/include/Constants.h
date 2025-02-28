@@ -127,10 +127,10 @@ namespace DriveConstants {
   inline constexpr double kTurnKD = 0.0;
 
   //MagOffset Doubles
-  inline constexpr units::angle::turn_t kFrontLeftMagOffset = -0.3056640625_tr;
-  inline constexpr units::angle::turn_t kFrontRightMagOffset = 0.203369140625_tr;
-  inline constexpr units::angle::turn_t kBackLeftMagOffset = 0.01708984375_tr;
-  inline constexpr units::angle::turn_t kBackRightMagOffset = -0.24755859375_tr;
+  inline constexpr units::angle::turn_t kFrontLeftMagOffset = -0.306640625_tr;
+  inline constexpr units::angle::turn_t kFrontRightMagOffset = -0.236572265625_tr;
+  inline constexpr units::angle::turn_t kBackLeftMagOffset = 0.012939453125_tr;
+  inline constexpr units::angle::turn_t kBackRightMagOffset = 0.077880859375_tr;
 
   //Module Locations Translation 2D
   inline constexpr frc::Translation2d kFrontLeftLocation{+0.26_m, +0.26_m};
