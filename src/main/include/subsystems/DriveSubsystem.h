@@ -40,8 +40,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
     void Periodic() override;
     void SimulationPeriodic() override;
 
-      void ResetGyro();
-      units::degree_t GetHeading() const;
+    void ResetGyro();
+    units::degree_t  GetHeading() const;
 
     void Drive(units::meters_per_second_t xSpeed,
                            units::meters_per_second_t ySpeed,

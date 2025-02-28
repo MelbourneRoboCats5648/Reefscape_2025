@@ -1,4 +1,5 @@
 #include "subsystems/DriveSubsystem.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace DriveConstants;
 using namespace CAN_Constants;
@@ -21,6 +22,12 @@ DriveSubsystem::DriveSubsystem()
 
   /* Speed up signals to an appropriate rate */
   BaseStatusSignal::SetUpdateFrequencyForAll(100_Hz, m_gyro.GetYaw(), m_gyro.GetGravityVectorZ()); // ISSUE 90: IDK if this is NEEDED
+  /**
+   * When we teleop init, set the yaw of the Pigeon2 and wait for the setter to take affect.
+   */
+  m_gyro.SetYaw(144_deg, 100_ms); // Set our yaw to 144 degrees and wait up to 100 milliseconds for the setter to take affect
+  m_gyro.GetYaw().WaitForUpdate(100_ms); // And wait up to 100 milliseconds for the yaw to take affect
+
 }
 
 void DriveSubsystem::Periodic() {
@@ -45,7 +52,6 @@ void DriveSubsystem::SimulationPeriodic() {
 void DriveSubsystem::ResetGyro() {
   m_gyro.Reset();
 }
-
 units::degree_t DriveSubsystem::GetHeading() const {
   return units::degree_t(m_gyro.GetAngle());
 }
