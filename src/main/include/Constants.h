@@ -60,6 +60,7 @@ namespace CAN_Constants {
   inline constexpr int kBackLeftDirectionEncoderID = 12;
   inline constexpr int kBackRightDirectionEncoderID = 13;
 
+  const std::string kCanId = "rio";
 }  
 
 namespace GoalConstants {

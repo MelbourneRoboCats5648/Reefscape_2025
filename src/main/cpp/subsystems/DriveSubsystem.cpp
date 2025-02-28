@@ -1,13 +1,26 @@
 #include "subsystems/DriveSubsystem.h"
 
 using namespace DriveConstants;
+using namespace CAN_Constants;
+using namespace ctre::phoenix6;
 
-DriveSubsystem::DriveSubsystem() {
-  m_gyro.Calibrate();
+DriveSubsystem::DriveSubsystem()
+  : m_gyro(kGyroDeviceID, kCanId)
+   {
   m_statePublisher = nt::NetworkTableInstance::GetDefault()
       .GetStructArrayTopic<frc::SwerveModuleState>("DriveTrain/SwerveStates").Publish();
   m_headingPublisher = nt::NetworkTableInstance::GetDefault()
       .GetStructTopic<frc::Rotation2d>("DriveTrain/Heading").Publish();
+
+  /* Configure Pigeon2 */
+  configs::Pigeon2Configuration toApply{};
+
+  /* User can change the configs if they want, or leave it empty for factory-default */
+
+  m_gyro.GetConfigurator().Apply(toApply);
+
+  /* Speed up signals to an appropriate rate */
+  BaseStatusSignal::SetUpdateFrequencyForAll(100_Hz, m_gyro.GetYaw(), m_gyro.GetGravityVectorZ()); // ISSUE 90: IDK if this is NEEDED
 }
 
 void DriveSubsystem::Periodic() {
@@ -34,7 +47,7 @@ void DriveSubsystem::ResetGyro() {
 }
 
 units::degree_t DriveSubsystem::GetHeading() const {
-  return m_gyro.GetAngle();
+  return units::degree_t(m_gyro.GetAngle());
 }
 
 void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
@@ -58,20 +71,24 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   m_backRightModule.SetModule(br);
 }
 
-void DriveSubsystem::StopAllModules() {
+void DriveSubsystem::StopAllModules()
+{
   m_frontLeftModule.StopMotors();
   m_frontRightModule.StopMotors();
   m_backLeftModule.StopMotors();
   m_backRightModule.StopMotors();
 }
 
-frc2::CommandPtr DriveSubsystem::StopCommand() {
-  return Run([this] {StopAllModules(); });
+frc2::CommandPtr DriveSubsystem::StopCommand() 
+{
+return Run([this] {StopAllModules(); });
 }
 
-frc2::CommandPtr DriveSubsystem::SmartDashboardOutputCommand() {
-  return Run([this] {m_frontLeftModule.OutputPositionToDashboard();
+frc2::CommandPtr DriveSubsystem::SmartDashboardOutputCommand() 
+{
+return Run([this] {m_frontLeftModule.OutputPositionToDashboard();
                    m_frontRightModule.OutputPositionToDashboard();
                    m_backLeftModule.OutputPositionToDashboard();
                    m_backRightModule.OutputPositionToDashboard(); });
 }
+
