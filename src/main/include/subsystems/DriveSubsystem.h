@@ -125,5 +125,4 @@ class DriveSubsystem : public frc2::SubsystemBase {
   frc::SlewRateLimiter<units::meters_per_second> m_xLimiter{kSlewRateTranslation};
   frc::SlewRateLimiter<units::meters_per_second> m_yLimiter{kSlewRateTranslation};
   frc::SlewRateLimiter<units::radians_per_second> m_rotLimiter{kSlewRateRotation};
-
 };

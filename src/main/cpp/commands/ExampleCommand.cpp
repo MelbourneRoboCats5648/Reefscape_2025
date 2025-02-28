@@ -9,3 +9,4 @@ ExampleCommand::ExampleCommand(ExampleSubsystem* subsystem)
   // Register that this command requires the subsystem.
   AddRequirements(m_subsystem);
     }
+

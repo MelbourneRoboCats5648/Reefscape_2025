@@ -194,17 +194,16 @@ frc::ChassisSpeeds DriveSubsystem::GetRobotRelativeSpeeds() {
 }
 
 //Stops
-void DriveSubsystem::StopAllModules()
-{
+void DriveSubsystem::StopAllModules() {
+
   m_frontLeftModule.StopMotors();
   m_frontRightModule.StopMotors();
   m_backLeftModule.StopMotors();
   m_backRightModule.StopMotors();
 }
 
-frc2::CommandPtr DriveSubsystem::StopCommand() 
-{
-return Run([this] {StopAllModules(); });
+frc2::CommandPtr DriveSubsystem::StopCommand() {
+  return Run([this] {StopAllModules(); });
 }
 
 
@@ -221,8 +220,7 @@ void DriveSubsystem::ResetPosition(frc::Pose2d pose) {
 }
 
 //Reset Encoders               
-void DriveSubsystem::SetPositionToZeroDistance()
-{
+void DriveSubsystem::SetPositionToZeroDistance() {
   m_frontLeftModule.SetModulePositionToZeroDistance();
   m_frontRightModule.SetModulePositionToZeroDistance();
   m_backLeftModule.SetModulePositionToZeroDistance();
@@ -230,8 +228,7 @@ void DriveSubsystem::SetPositionToZeroDistance()
 }   
 
 //SmartDashboard
-frc2::CommandPtr DriveSubsystem::SmartDashboardOutputCommand() 
-{
+frc2::CommandPtr DriveSubsystem::SmartDashboardOutputCommand() {
 return Run([this] {m_frontLeftModule.OutputPositionToDashboard();
                    m_frontRightModule.OutputPositionToDashboard();
                    m_backLeftModule.OutputPositionToDashboard();
@@ -239,7 +236,6 @@ return Run([this] {m_frontLeftModule.OutputPositionToDashboard();
 }
 
 //Align
-frc2::CommandPtr DriveSubsystem::Allign(Direction direction)
-{
+frc2::CommandPtr DriveSubsystem::Allign(Direction direction) {
 
 }
