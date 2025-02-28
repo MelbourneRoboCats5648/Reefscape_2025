@@ -6,19 +6,17 @@ using namespace ctre::phoenix6::configs;
 using namespace DriveConstants;
 
 DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEncoderID, units::angle::turn_t magOffset, std::string name)
-            :m_speedMotor(speedMotorID, "rio"),
-            m_directionMotor(directionMotorID, "rio"),
-            m_directionEncoder(directionEncoderID, "rio"),
-            m_magOffset(magOffset),
-            m_name(name),
-            m_turningPIDController{
-                kTurnKP,
-                kTurnKI,
-                kTurnKD,
-                {kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration}}
-
-    {
-
+            : m_directionEncoder(directionEncoderID, "rio"),
+              m_speedMotor(speedMotorID, "rio"),
+              m_directionMotor(directionMotorID, "rio"),
+              m_magOffset(magOffset),
+              m_name(name),
+              m_turningPIDController{
+                  kTurnKP,
+                  kTurnKI,
+                  kTurnKD,
+                  {kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration}}
+{
     m_directionMotor.SetPosition(m_directionEncoder.GetAbsolutePosition().
                                 WaitForUpdate(250_ms).GetValue());
                                 
@@ -53,13 +51,9 @@ DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEn
     m_turningPIDController.EnableContinuousInput(
                 units::angle::radian_t{-1.0*M_PI},
                 units::angle::radian_t{M_PI});
-    }
+}
 
-
-
-
-void DriveModule::StopMotors()
-{
+void DriveModule::StopMotors(){
   m_directionMotor.Set(0);
   m_speedMotor.Set(0);
 }
@@ -97,6 +91,3 @@ frc::SwerveModuleState DriveModule::GetState() {
     m_directionEncoder.GetAbsolutePosition().GetValue()
   };
 }
-
-
-
