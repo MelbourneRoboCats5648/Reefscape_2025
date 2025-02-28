@@ -23,6 +23,18 @@ DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEn
                                 WaitForUpdate(250_ms).GetValue());
                                 
     m_directionMotor.SetNeutralMode(NeutralModeValue::Coast);
+    TalonFXConfiguration directionMotorConfig;
+    directionMotorConfig.Feedback.SensorToMechanismRatio = 150.0/7.0;
+    directionMotorConfig.ClosedLoopGeneral.ContinuousWrap = false;
+    directionMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    directionMotorConfig.CurrentLimits.SupplyCurrentLimit = 40_A;
+    directionMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 30_A;
+    directionMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1_s;
+    directionMotorConfig.MotorOutput.Inverted = true;  // +V should rotate the motor counter-clockwise
+    directionMotorConfig.MotorOutput.NeutralMode = NeutralModeValue::Brake;
+
+    // direction motor configuration
+    m_directionMotor.GetConfigurator().Apply(directionMotorConfig);
 
     // Config CANCoder   
     CANcoderConfiguration cancoderConfig;
@@ -89,7 +101,7 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
   const auto turnOutput = m_turningPIDController.Calculate(
     encoderCurrentAngleRadians, state.angle.Radians());
 
-  m_directionMotor.SetVoltage(units::voltage::volt_t{1.0 * turnOutput}); 
+  m_directionMotor.SetVoltage(units::voltage::volt_t{turnOutput}); 
 }
 
 frc::SwerveModuleState DriveModule::GetState() {
