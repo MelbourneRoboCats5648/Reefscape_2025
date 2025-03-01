@@ -46,6 +46,9 @@ class ArmSubsystem : public frc2::SubsystemBase {
   frc::TrapezoidProfile<units::turn>::State& GetSetpoint();
   frc::TrapezoidProfile<units::turn>::State& GetGoal();
   bool IsGoalReached();
+  
+  void SetpointControl(); // control using setpoint
+  frc2::CommandPtr SetpointControlCommand();
 
   void OnLimitSwitchActivation();
 
@@ -60,7 +63,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
   // acceleration constraints for the next setpoint.
 
   frc::TrapezoidProfile<units::turn> m_trapezoidalProfile{{ArmConstants::maximumVelocity, ArmConstants::maximumAcceleration}};
-  frc::TrapezoidProfile<units::turn>::State m_armGoal;
+  frc::TrapezoidProfile<units::turn>::State m_armGoal{ArmConstants::resetEncoder, 0.0_tps};
   frc::TrapezoidProfile<units::turn>::State m_armSetpoint{ArmConstants::resetEncoder, 0.0_tps};
   rev::spark::SparkClosedLoopController m_closedLoopController = m_armMotor.GetClosedLoopController();
 

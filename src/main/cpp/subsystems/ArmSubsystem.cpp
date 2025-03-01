@@ -53,6 +53,8 @@ ArmSubsystem::ArmSubsystem() {
                         rev::spark::SparkMax::PersistMode::kPersistParameters);
 
   m_armEncoder.SetPosition(ArmConstants::resetEncoder.value());
+
+  SetDefaultCommand(SetpointControlCommand());
 }
 
 void ArmSubsystem::UpdateSetpoint() {  
@@ -92,13 +94,13 @@ void ArmSubsystem::MoveArm(double speed) {
 frc2::CommandPtr ArmSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
   return Run([this] {m_armMotor.Set(-0.1); })
-          .FinallyDo([this]{m_armMotor.Set(0); });
+          .FinallyDo([this]{ m_armMotor.Set(0); UpdateSetpoint(); });
 }
 
 frc2::CommandPtr ArmSubsystem::MoveDownCommand() {
   // Inline construction of command goes here.
   return Run([this] {m_armMotor.Set(0.1); })
-          .FinallyDo([this]{m_armMotor.Set(0); });
+          .FinallyDo([this]{ m_armMotor.Set(0); UpdateSetpoint(); });
 }
 
 frc2::CommandPtr ArmSubsystem::MoveToAngleCommand(units::turn_t goal) {
@@ -106,18 +108,13 @@ frc2::CommandPtr ArmSubsystem::MoveToAngleCommand(units::turn_t goal) {
   // Subsystem::RunOnce implicitly requires `this` subsystem.
   return Run([this, goal] {
             m_armGoal = {goal, 0.0_tps }; //stop at goal
-            m_armSetpoint = m_trapezoidalProfile.Calculate(ArmConstants::kDt, m_armSetpoint, m_armGoal);
-
-            frc::SmartDashboard::PutNumber("positionSetpoint", m_armSetpoint.position.value());
-            frc::SmartDashboard::PutNumber("velocitySetpoint", m_armSetpoint.velocity.value());
-            frc::SmartDashboard::PutNumber("currentVelocity", m_armEncoder.GetVelocity() / 60.0);
-            m_closedLoopController.SetReference(m_armSetpoint.position.value(),
-                                                rev::spark::SparkLowLevel::ControlType::kPosition,
-                                                rev::spark::kSlot0,
-                                                m_armFeedforward.Calculate(m_armSetpoint.position, m_armSetpoint.velocity).value());
-                                                
-            });
-            //.Until([this] {return IsGoalReached();});
+            m_armSetpoint = m_trapezoidalProfile.Calculate(ArmConstants::kDt, m_armSetpoint, m_armGoal);     
+            SetpointControl();                     
+  })
+  .Until([this] {return IsGoalReached();})
+  .FinallyDo([this] {
+    UpdateSetpoint(); // update setpoint to current position and set velocity to 0 - then default command will keep this under control for us
+  });
 
                         // m_closedLoopController.SetReference(m_armGoal.position.value(), 
                         //                         rev::spark::SparkLowLevel::ControlType::kPosition,
@@ -148,9 +145,25 @@ double ArmSubsystem::GetPosition()
   return m_armEncoder.GetPosition();
 }
 
+void ArmSubsystem::SetpointControl() {
+  frc::SmartDashboard::PutNumber("positionSetpoint", m_armSetpoint.position.value());
+  frc::SmartDashboard::PutNumber("velocitySetpoint", m_armSetpoint.velocity.value());
+  frc::SmartDashboard::PutNumber("currentVelocity", m_armEncoder.GetVelocity() / 60.0);
+  m_closedLoopController.SetReference(m_armSetpoint.position.value(),
+                                      rev::spark::SparkLowLevel::ControlType::kPosition,
+                                      rev::spark::kSlot0,
+                                      m_armFeedforward.Calculate(m_armSetpoint.position, m_armSetpoint.velocity).value());
+}
+
+frc2::CommandPtr ArmSubsystem::SetpointControlCommand() {
+  return Run([this] {
+    SetpointControl();
+  });
+}
+
 void ArmSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
-  frc::SmartDashboard::PutNumber("armEncoderValue", m_armEncoder.GetPosition());
+  frc::SmartDashboard::PutNumber("armEncoderValue", m_armEncoder.GetPosition());  
 }
 
 void ArmSubsystem::OnLimitSwitchActivation() {
