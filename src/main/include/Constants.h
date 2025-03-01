@@ -44,7 +44,6 @@ namespace CAN_Constants {
   inline constexpr int kElevatorMotorLeftCAN_ID = 21;
   inline constexpr int kElevatorMotorRightCAN_ID = 22;
   inline constexpr int kElevatorMotorSecondStageCAN_ID = 23;
-  inline constexpr int kPigeonGryoCAN_ID = 14;
 
   // not configurated yet
   inline constexpr int kElevatorArmMotorCAN_ID = 24;
@@ -67,7 +66,7 @@ namespace CAN_Constants {
 
   // Gyro CAN IDs
   const std::string kCanId = "rio";
-  inline constexpr int kGyroDeviceID = 30; //Issue 90: might need to update this
+  inline constexpr int kGyroDeviceID = 14; 
 }  
 
 namespace GoalConstants {
