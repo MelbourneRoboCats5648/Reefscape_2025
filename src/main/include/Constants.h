@@ -22,10 +22,12 @@
 enum BuildSeason {Crescendo, Reefscape};
 
 enum Level {L0, L1, L2, L3, L4};
+enum TestLevel {NONE, ARM, FIRST_STAGE, SECOND_STAGE, DRIVE};
 
 namespace General {
   // Choose the bindings for which robot to build
   const BuildSeason KBuildSeason = BuildSeason::Reefscape;
+  const TestLevel KTestLevel = TestLevel::DRIVE;
 }
 
 // namespace OperatorConstants
