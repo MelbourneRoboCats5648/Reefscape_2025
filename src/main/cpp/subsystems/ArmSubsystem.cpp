@@ -52,8 +52,7 @@ ArmSubsystem::ArmSubsystem() {
                         rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                         rev::spark::SparkMax::PersistMode::kPersistParameters);
 
-  m_armEncoder.SetPosition(ArmConstants::resetEncoder.value());
-
+  ResetEncoder();
   SetDefaultCommand(SetpointControlCommand());
 }
 
@@ -137,7 +136,7 @@ void ArmSubsystem::StopMotor() {
 
 //reset encoder
 void ArmSubsystem::ResetEncoder() {
-  m_armEncoder.SetPosition(0.0); // fixme!!!!!!
+  m_armEncoder.SetPosition(ArmConstants::resetEncoder.value());
 }
 
 void ArmSubsystem::SetpointControl() {
