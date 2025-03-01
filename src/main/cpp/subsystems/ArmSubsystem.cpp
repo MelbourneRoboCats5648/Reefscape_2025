@@ -58,12 +58,12 @@ ArmSubsystem::ArmSubsystem() {
 }
 
 void ArmSubsystem::UpdateSetpoint() {  
-  m_armSetpoint.position = units::angle::turn_t(m_armEncoder.GetPosition());
+  m_armSetpoint.position = GetArmAngle();
   m_armSetpoint.velocity = 0.0_tps; 
 }
 
 units::turn_t ArmSubsystem::GetArmAngle() {
-  return units::turn_t(m_armEncoder.GetPosition() * ArmConstants::gearRatio); // why is it multiplied by gear ratio??? also, this would be the same thing as getPosition
+  return units::turn_t(m_armEncoder.GetPosition());
 }
 
 frc::TrapezoidProfile<units::turn>::State& ArmSubsystem::GetSetpoint() {
@@ -140,11 +140,6 @@ void ArmSubsystem::ResetEncoder() {
   m_armEncoder.SetPosition(0.0); // fixme!!!!!!
 }
 
-double ArmSubsystem::GetPosition()
-{
-  return m_armEncoder.GetPosition();
-}
-
 void ArmSubsystem::SetpointControl() {
   frc::SmartDashboard::PutNumber("positionSetpoint", m_armSetpoint.position.value());
   frc::SmartDashboard::PutNumber("velocitySetpoint", m_armSetpoint.velocity.value());
@@ -163,7 +158,7 @@ frc2::CommandPtr ArmSubsystem::SetpointControlCommand() {
 
 void ArmSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
-  frc::SmartDashboard::PutNumber("armEncoderValue", m_armEncoder.GetPosition());  
+  frc::SmartDashboard::PutNumber("armEncoderValue", GetArmAngle().value());  
 }
 
 void ArmSubsystem::OnLimitSwitchActivation() {

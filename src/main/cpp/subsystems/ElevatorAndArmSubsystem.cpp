@@ -118,7 +118,7 @@ frc2::CommandPtr ElevatorAndArmSubsystem::PlaceCoral() {
 
 void ElevatorAndArmSubsystem::LogEncoderOutputs()
 {
-  frc::SmartDashboard::PutNumber("ElevatorAndArmSubsystem/ArmPosition", m_armSubsystem.GetPosition());
+  frc::SmartDashboard::PutNumber("ElevatorAndArmSubsystem/ArmPosition", m_armSubsystem.GetArmAngle().value());
 }
 
 void ElevatorAndArmSubsystem::Periodic() {
