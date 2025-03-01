@@ -19,7 +19,7 @@ ArmSubsystem::ArmSubsystem() {
 
       armMotorConfig.softLimit
         .ForwardSoftLimit(ArmConstants::extendSoftLimit.value())
-        .ForwardSoftLimitEnabled(false);
+        .ForwardSoftLimitEnabled(true);
 
       armMotorConfig.softLimit
         .ReverseSoftLimit(ArmConstants::retractSoftLimit.value())
