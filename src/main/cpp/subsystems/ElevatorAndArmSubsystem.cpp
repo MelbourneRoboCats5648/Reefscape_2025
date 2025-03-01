@@ -8,8 +8,8 @@ ElevatorAndArmSubsystem::ElevatorAndArmSubsystem(ElevatorSubsystem& elevatorSub,
     m_armSubsystem(armSub) {
 }
 
-frc2::CommandPtr ElevatorAndArmSubsystem::MoveArm() {
-  return (m_armSubsystem.MoveArmCommand())
+frc2::CommandPtr ElevatorAndArmSubsystem::MoveArm(double speed) {
+  return (m_armSubsystem.MoveArmCommand(speed))
    .FinallyDo([this] {m_armSubsystem.StopMotor();});
 }
 
