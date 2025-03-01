@@ -42,12 +42,12 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   
   // Spark components
   //plan to add motors to hard switches
-  rev::spark::SparkMax m_motorSecondStageLeft{CAN_Constants::kElevatorMotorLeftCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
-  rev::spark::SparkMax m_motorSecondStageRight{CAN_Constants::kElevatorMotorRightCAN_ID, rev::spark::SparkMax::MotorType::kBrushless}; 
-  rev::spark::SparkMax m_motorThirdStage{CAN_Constants::kElevatorMotorThirdStageCAN_ID, rev::spark::SparkMax::MotorType::kBrushless}; 
-  rev::spark::SparkRelativeEncoder m_encoderLeft = m_motorSecondStageLeft.GetEncoder();
-  rev::spark::SparkRelativeEncoder m_encoderRight = m_motorSecondStageRight.GetEncoder(); 
-  rev::spark::SparkRelativeEncoder m_encoderThirdStage = m_motorThirdStage.GetEncoder();      
+  rev::spark::SparkMax m_motorFirstStageLeft{CAN_Constants::kElevatorMotorLeftCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
+  rev::spark::SparkMax m_motorFirstStageRight{CAN_Constants::kElevatorMotorRightCAN_ID, rev::spark::SparkMax::MotorType::kBrushless}; 
+  rev::spark::SparkMax m_motorSecondStage{CAN_Constants::kElevatorMotorThirdStageCAN_ID, rev::spark::SparkMax::MotorType::kBrushless}; 
+  rev::spark::SparkRelativeEncoder m_encoderLeft = m_motorFirstStageLeft.GetEncoder();
+  rev::spark::SparkRelativeEncoder m_encoderRight = m_motorFirstStageRight.GetEncoder(); 
+  rev::spark::SparkRelativeEncoder m_encoderSecondStage = m_motorSecondStage.GetEncoder();      
 
   //frc::SimpleMotorFeedforward<units::meters> m_feedforward{ 
   /* Note: These gains are fake, and will have to be tuned for your robot. feedforward will be used soon
@@ -58,16 +58,16 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   frc::TrapezoidProfile<units::meter> m_trapezoidalProfile{{ElevatorConstants::maximumVelocity, ElevatorConstants::maximumAcceleration}};
   frc::TrapezoidProfile<units::meter>::State m_elevatorGoal;
   frc::TrapezoidProfile<units::meter>::State m_elevatorSetpoint;
-  rev::spark::SparkClosedLoopController m_closedLoopControllerLeft = m_motorSecondStageLeft.GetClosedLoopController();
-  rev::spark::SparkClosedLoopController m_closedLoopControllerThirdStage = m_motorThirdStage.GetClosedLoopController();
+  rev::spark::SparkClosedLoopController m_closedLoopControllerLeft = m_motorFirstStageLeft.GetClosedLoopController();
+  rev::spark::SparkClosedLoopController m_closedLoopControllerSecondStage = m_motorSecondStage.GetClosedLoopController();
 
   // Create a new ElevatorFeedforward with gains kS, kV, and kA
   // Distance is measured in meters
   frc::ElevatorFeedforward m_elevatorFeedforward{ElevatorConstants::kS, ElevatorConstants::kG, ElevatorConstants::kV, ElevatorConstants::kA};
   
   void UpdateSetpoint();
-  frc2::CommandPtr MoveSecondStageToHeightCommand(units::meter_t goal);
-  frc2::CommandPtr MoveThirdStageToHeightCommand(units::meter_t goal);
+  frc2::CommandPtr MoveFirstStageToHeightCommand(units::meter_t goal);
+  frc2::CommandPtr MoveSecondStageToHeightCommand(units::meter_t goal)s;
 };
 
 

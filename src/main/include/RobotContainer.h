@@ -10,10 +10,6 @@
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
-#include "subsystems/ExampleSubsystem.h"
-#include "subsystems/IntakeSubsystem.h"
-#include "subsystems/ShooterSubsystem.h"
-#include "subsystems/IntakeAndShootSubsystem.h"
 #include "subsystems/LeftClimbSubsystem.h"
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/ArmSubsystem.h"
@@ -40,12 +36,8 @@ class RobotContainer {
   frc2::CommandJoystick m_joystick{OperatorConstants::kDriverJoystickPort};
 
   // The robot's subsystems are defined here...
-  ExampleSubsystem m_subsystem;
   DriveSubsystem m_drive;
-  IntakeSubsystem m_intakeSubsystem;
   LeftClimbSubsystem m_leftClimbSubsystem;
-  ShooterSubsystem m_shooterSubsystem;
-  IntakeAndShootSubsystem m_intakeAndShootSubsystem;
   ElevatorSubsystem m_elevatorSubsystem;
   ArmSubsystem m_armSubsystem;
   //this subsystem relies on the two subsystems above

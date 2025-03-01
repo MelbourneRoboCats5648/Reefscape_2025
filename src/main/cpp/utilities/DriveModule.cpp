@@ -6,34 +6,29 @@ using namespace ctre::phoenix6::configs;
 using namespace DriveConstants;
 
 DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEncoderID, units::angle::turn_t magOffset, std::string name)
-            :m_speedMotor(speedMotorID, "rio"),
-            m_directionMotor(directionMotorID, "rio"),
-            m_directionEncoder(directionEncoderID, "rio"),
-            m_magOffset(magOffset),
-            m_name(name),
-            m_turningPIDController{
-                kTurnKP,
-                kTurnKI,
-                kTurnKD,
-                {kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration}}
+            : m_speedMotor(speedMotorID, "rio"),
+              m_directionMotor(directionMotorID, "rio"),
+              m_directionEncoder(directionEncoderID, "rio"),
+              m_magOffset(magOffset),
+              m_name(name),
+              m_turningPIDController{
+                  kTurnKP,
+                  kTurnKI,
+                  kTurnKD,
+                  {kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration}}
+{
+    SetSpeedMotorConfig();
+    // Note that the order that the following functions execute matters.
+    // The direction motor config uses the direction encoder, so the encoder config should be set first 
+    SetDirectionEncoderConfig();
+    SetDirectionMotorConfig();
 
-    {
+    m_turningPIDController.EnableContinuousInput(
+                units::angle::radian_t{-1.0*M_PI},
+                units::angle::radian_t{M_PI});
+    }
 
-    m_directionMotor.SetPosition(m_directionEncoder.GetAbsolutePosition().
-                                WaitForUpdate(250_ms).GetValue());
-                                
-    m_directionMotor.SetNeutralMode(NeutralModeValue::Coast);
-
-    // Config CANCoder   
-    CANcoderConfiguration cancoderConfig;
-    cancoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5_tr;
-    
-    cancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue::CounterClockwise_Positive;
-    cancoderConfig.MagnetSensor.MagnetOffset = m_magOffset;
-    m_directionEncoder.GetConfigurator().Apply(cancoderConfig);
-
-    // Drive motor config
-    // To setup the drive motor to be able to drive at a target speed
+void DriveModule::SetSpeedMotorConfig(){
     TalonFXConfiguration speedMotorConfig;
     speedMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue::RotorSensor;
     speedMotorConfig.Feedback.SensorToMechanismRatio = kDriveGearRatio;
@@ -43,20 +38,40 @@ DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEn
     speedMotorConfig.Slot0.kD = kSpeedMotorKD;
     speedMotorConfig.Slot0.kV = kSpeedMotorkV;
     speedMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    speedMotorConfig.CurrentLimits.SupplyCurrentLimit = 50_A;      // Amps
-    speedMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 60_A;  // Amps
-    speedMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1_s;    // Seconds    
+    speedMotorConfig.CurrentLimits.SupplyCurrentLimit = 50_A;
+    speedMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 60_A;
+    speedMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1_s;
     speedMotorConfig.MotorOutput.Inverted = true;  // +V should rotate the motor counter-clockwise
     speedMotorConfig.MotorOutput.NeutralMode = NeutralModeValue::Brake;
+
     m_speedMotor.GetConfigurator().Apply(speedMotorConfig);
+}
 
-    m_turningPIDController.EnableContinuousInput(
-                units::angle::radian_t{-1.0*M_PI},
-                units::angle::radian_t{M_PI});
-    }
+void DriveModule::SetDirectionEncoderConfig(){
+    CANcoderConfiguration cancoderConfig;
+    cancoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5_tr;
+    cancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue::CounterClockwise_Positive;
+    cancoderConfig.MagnetSensor.MagnetOffset = m_magOffset;
 
+    m_directionEncoder.GetConfigurator().Apply(cancoderConfig);
+}
 
+void DriveModule::SetDirectionMotorConfig(){
+    TalonFXConfiguration directionMotorConfig;
+    directionMotorConfig.Feedback.SensorToMechanismRatio = 150.0/7.0; // fixme - make this a constant
+    directionMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
+    directionMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    directionMotorConfig.CurrentLimits.SupplyCurrentLimit = 40_A;
+    directionMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 30_A;
+    directionMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 0.1_s;
+    directionMotorConfig.MotorOutput.Inverted = true;  // +V should rotate the motor counter-clockwise
+    directionMotorConfig.MotorOutput.NeutralMode = NeutralModeValue::Brake; // fixme - check if this should be Brake or Coast
 
+    m_directionMotor.GetConfigurator().Apply(directionMotorConfig);
+
+    m_directionMotor.SetPosition(m_directionEncoder.GetAbsolutePosition().
+                                WaitForUpdate(250_ms).GetValue());
+}
 
 void DriveModule::StopMotors()
 {
@@ -80,7 +95,8 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
   // modules change directions. This results in smoother driving.
   state.CosineScale(encoderCurrentAngleRadians);
 
-  // to set the speed using control onboard the motor, use m_speedMotor.SetControl(ctre::phoenix6::controls::VelocityVoltage{desiredWheelSpeed}); // desiredWheelSpeed in turns per second
+  // to set the speed using control onboard the motor, use m_speedMotor.SetControl(ctre::phoenix6::controls::VelocityVoltage{desiredWheelSpeed}); 
+  // desiredWheelSpeed in turns per second
   units::angular_velocity::turns_per_second_t desiredWheelSpeed{(state.speed.value())/kWheelCircumference.value()};
   m_speedMotor.SetControl(ctre::phoenix6::controls::VelocityVoltage{desiredWheelSpeed*kDriveGearRatio});
 
@@ -88,7 +104,7 @@ void DriveModule::SetModule(frc::SwerveModuleState state) {
   const auto turnOutput = m_turningPIDController.Calculate(
     encoderCurrentAngleRadians, state.angle.Radians());
 
-  m_directionMotor.SetVoltage(units::voltage::volt_t{1.0 * turnOutput}); 
+  m_directionMotor.SetVoltage(units::voltage::volt_t{turnOutput}); 
 }
 
 frc::SwerveModuleState DriveModule::GetState() {
@@ -97,6 +113,3 @@ frc::SwerveModuleState DriveModule::GetState() {
     m_directionEncoder.GetAbsolutePosition().GetValue()
   };
 }
-
-
-
