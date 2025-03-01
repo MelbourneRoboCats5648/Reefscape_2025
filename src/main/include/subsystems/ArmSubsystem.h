@@ -61,7 +61,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   frc::TrapezoidProfile<units::turn> m_trapezoidalProfile{{ArmConstants::maximumVelocity, ArmConstants::maximumAcceleration}};
   frc::TrapezoidProfile<units::turn>::State m_armGoal;
-  frc::TrapezoidProfile<units::turn>::State m_armSetpoint;
+  frc::TrapezoidProfile<units::turn>::State m_armSetpoint{ArmConstants::resetEncoder, 0.0_tps};
   rev::spark::SparkClosedLoopController m_closedLoopController = m_armMotor.GetClosedLoopController();
 
   frc::ArmFeedforward m_armFeedforward{ArmConstants::kS, ArmConstants::kG, ArmConstants::kV, ArmConstants::kA};
