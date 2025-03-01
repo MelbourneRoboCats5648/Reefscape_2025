@@ -44,6 +44,7 @@ namespace CAN_Constants {
   inline constexpr int kElevatorMotorLeftCAN_ID = 21;
   inline constexpr int kElevatorMotorRightCAN_ID = 22;
   inline constexpr int kElevatorMotorSecondStageCAN_ID = 23;
+  inline constexpr int kPigeonGryoCAN_ID = 14;
 
   // not configurated yet
   inline constexpr int kElevatorArmMotorCAN_ID = 24;
