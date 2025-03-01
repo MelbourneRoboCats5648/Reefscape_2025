@@ -32,6 +32,7 @@ public:
 
 private:
     void SetSpeedMotorConfig();
+    void SetDirectionEncoderConfig();
     void SetDirectionMotorConfig();
     
 private:
