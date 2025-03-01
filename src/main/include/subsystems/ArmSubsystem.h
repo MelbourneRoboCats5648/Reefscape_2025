@@ -4,7 +4,7 @@
 #include <frc2/command/SubsystemBase.h>
 #include <rev/SparkMax.h>
 #include <Constants.h>
-
+#include <frc2/command/button/Trigger.h>
 #include <frc2/command/SubsystemBase.h>
 #include <frc/trajectory/TrapezoidProfile.h>
 #include <frc2/command/Commands.h>
@@ -22,6 +22,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   //digital input
   frc::DigitalInput m_limitSwitchArm{ArmConstants::k_limitSwitchArmPin};
+  
 
   public:
   ArmSubsystem();

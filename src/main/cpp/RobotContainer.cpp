@@ -30,8 +30,15 @@ using namespace DriveConstants;
 RobotContainer::RobotContainer()
    :m_elevatorSubsystem(),
     m_armSubsystem(),
-    m_elevatorAndArmSubsystem(m_elevatorSubsystem, m_armSubsystem)
+    m_elevatorAndArmSubsystem(m_elevatorSubsystem, m_armSubsystem),
+    m_limitSwitch{4}
 {
+
+  //m_limitSwitch.
+  frc::DigitalInput input{5};
+  frc2::Trigger limitSwitchArmTrigger([&input] { return input.Get(); });
+  limitSwitchArmTrigger.OnTrue();
+
 
   // Initialize all of your commands and subsystems here
 
@@ -59,8 +66,9 @@ RobotContainer::RobotContainer()
           yspeed, xspeed, rotspeed, false );
     },
     {&m_drive}));
-
+    
 }
+
 
 
 void RobotContainer::ConfigureBindings() {
