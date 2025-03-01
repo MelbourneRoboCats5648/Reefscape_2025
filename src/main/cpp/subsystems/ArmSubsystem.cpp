@@ -63,7 +63,7 @@ void ArmSubsystem::UpdateSetpoint() {
 }
 
 units::turn_t ArmSubsystem::GetArmAngle() {
-  return units::turn_t(m_armEncoder.GetPosition() * ArmConstants::gearRatio);
+  return units::turn_t(m_armEncoder.GetPosition() * ArmConstants::gearRatio); // why is it multiplied by gear ratio??? also, this would be the same thing as getPosition
 }
 
 frc::TrapezoidProfile<units::turn>::State& ArmSubsystem::GetSetpoint() {
@@ -137,7 +137,7 @@ void ArmSubsystem::StopMotor() {
 
 //reset encoder
 void ArmSubsystem::ResetEncoder() {
-  m_armEncoder.SetPosition(0.0);
+  m_armEncoder.SetPosition(0.0); // fixme!!!!!!
 }
 
 double ArmSubsystem::GetPosition()
