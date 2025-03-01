@@ -26,39 +26,35 @@ enum Level {L0, L1, L2, L3, L4};
 namespace General {
   // Choose the bindings for which robot to build
   const BuildSeason KBuildSeason = BuildSeason::Crescendo;
-}
+} // namespace General
 
-// namespace OperatorConstants
+
 namespace OperatorConstants {  
   inline constexpr int kDriverControllerPort = 0;
   inline constexpr int kDriverJoystickPort = 1;
   inline constexpr units::meters_per_second_squared_t kSlewRateTranslation = 6_mps_sq; //increase to reduce lag
   inline constexpr units::radians_per_second_squared_t kSlewRateRotation = 6_rad_per_s_sq;
   inline constexpr double kDeadband = 0.1;
-}  
+}  // namespace OperatorConstants
 
-// namespace CAN Constants
+
 namespace CAN_Constants {
   //Subsystem CAN IDs
-  inline constexpr int kClimbCAN_ID = 20;
-  inline constexpr int kElevatorMotorLeftCAN_ID = 21;
-  inline constexpr int kElevatorMotorRightCAN_ID = 22;
-  inline constexpr int kElevatorMotorSecondStageCAN_ID = 23;
-
+  inline constexpr int kElevatorMotorLeftCAN_ID = 9;
+  inline constexpr int kElevatorMotorRightCAN_ID = 15;
+  inline constexpr int kElevatorMotorThirdStageCAN_ID = 16;
   // not configurated yet
-  inline constexpr int kElevatorArmMotorCAN_ID = 24;
+  inline constexpr int kElevatorArmMotorCAN_ID = 14;
 
   //Drive CAN IDs
   inline constexpr int kFrontLeftSpeedMotorID = 3;
   inline constexpr int kFrontRightSpeedMotorID = 1;
   inline constexpr int kBackLeftSpeedMotorID = 5;
   inline constexpr int kBackRightSpeedMotorID = 7;
-
   inline constexpr int kFrontLeftDirectionMotorID = 4;
   inline constexpr int kFrontRightDirectionMotorID = 2;
   inline constexpr int kBackLeftDirectionMotorID = 6;
   inline constexpr int kBackRightDirectionMotorID = 8;
-  
   inline constexpr int kFrontLeftDirectionEncoderID = 11;
   inline constexpr int kFrontRightDirectionEncoderID = 10;
   inline constexpr int kBackLeftDirectionEncoderID = 12;
@@ -67,12 +63,12 @@ namespace CAN_Constants {
   // Gyro CAN IDs
   const std::string kCanId = "rio";
   inline constexpr int kGyroDeviceID = 14; 
-}  
+}  // namespace CAN Constants
 
 namespace GoalConstants {
   inline constexpr units::turn_t m_climbGoalL1 = 1.0_tr; 
   inline constexpr units::turn_t m_climbGoalRetract = 0.0_tr; 
-}
+} // namespace GoalConstants
 
 namespace LeftClimbConstants {
   //Motor ID
@@ -101,12 +97,9 @@ namespace LeftClimbConstants {
 
   //kDt
   const units::second_t kDt = 20_ms;
-}
+} // namespace LeftClimbConstants
 
 namespace DriveConstants {
-
-  const units::angle::degree_t initialGyroAngle = 0_deg;
-
   //Max Speed and Acceleration Constanst
   inline constexpr auto kMaxSpeed = 3_mps;
   inline constexpr auto kMaxAcceleration = 3_mps_sq;
@@ -140,17 +133,17 @@ namespace DriveConstants {
   inline constexpr double kTurnKD = 0.0;
 
   //MagOffset Doubles
-  inline constexpr units::angle::turn_t kFrontLeftMagOffset = -0.308349609375_tr;
-  inline constexpr units::angle::turn_t kFrontRightMagOffset = -0.25732421875_tr;
-  inline constexpr units::angle::turn_t kBackLeftMagOffset = 0.01611328125_tr;
-  inline constexpr units::angle::turn_t kBackRightMagOffset = 0.0732421875_tr; 
+  inline constexpr units::angle::turn_t kFrontLeftMagOffset = 0.302246_tr;
+  inline constexpr units::angle::turn_t kFrontRightMagOffset = 0.351074_tr;
+  inline constexpr units::angle::turn_t kBackLeftMagOffset = 0.062012_tr;
+  inline constexpr units::angle::turn_t kBackRightMagOffset = 0.012695_tr; 
 
   //Module Locations Translation 2D
   inline constexpr frc::Translation2d kFrontLeftLocation{+0.26_m, +0.26_m};
   inline constexpr frc::Translation2d kFrontRightLocation{+0.26_m, -0.26_m};
   inline constexpr frc::Translation2d kBackLeftLocation{-0.26_m, +0.26_m};
   inline constexpr frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
-}
+} // namespace DriveConstants
 
 
 namespace ElevatorConstants {
@@ -160,7 +153,7 @@ namespace ElevatorConstants {
   //Smart Current Limit
   const int kCurrentLimit = 50;
 
-  //First Stage PID Controller 
+  //Second Stage PID Controller 
   const double kP = 0.1;
   const double kI = 0.0;
   const double kD = 0.0;
@@ -216,7 +209,7 @@ namespace ElevatorConstants {
   
   //Elevator DIO port
   inline constexpr int k_limitSwitchElevatorPin = 1;
-}
+} // namespace ElevatorConstants
 
 namespace ArmConstants {
   //PID Profile
@@ -247,5 +240,5 @@ namespace ArmConstants {
 
   //Arm DIO port
   inline constexpr int k_limitSwitchArmPin = 2;
-}
+} // namespace ArmConstants
 

@@ -44,7 +44,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   //plan to add motors to hard switches
   rev::spark::SparkMax m_motorFirstStageLeft{CAN_Constants::kElevatorMotorLeftCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
   rev::spark::SparkMax m_motorFirstStageRight{CAN_Constants::kElevatorMotorRightCAN_ID, rev::spark::SparkMax::MotorType::kBrushless}; 
-  rev::spark::SparkMax m_motorSecondStage{CAN_Constants::kElevatorMotorSecondStageCAN_ID, rev::spark::SparkMax::MotorType::kBrushless}; 
+  rev::spark::SparkMax m_motorSecondStage{CAN_Constants::kElevatorMotorThirdStageCAN_ID, rev::spark::SparkMax::MotorType::kBrushless}; 
   rev::spark::SparkRelativeEncoder m_encoderLeft = m_motorFirstStageLeft.GetEncoder();
   rev::spark::SparkRelativeEncoder m_encoderRight = m_motorFirstStageRight.GetEncoder(); 
   rev::spark::SparkRelativeEncoder m_encoderSecondStage = m_motorSecondStage.GetEncoder();      
@@ -67,7 +67,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   
   void UpdateSetpoint();
   frc2::CommandPtr MoveFirstStageToHeightCommand(units::meter_t goal);
-  frc2::CommandPtr MoveSecondStageToHeightCommand(units::meter_t goal);
+  frc2::CommandPtr MoveSecondStageToHeightCommand(units::meter_t goal)s;
 };
 
 
