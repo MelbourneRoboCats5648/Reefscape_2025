@@ -31,8 +31,8 @@ public:
     frc::SwerveModuleState GetState();
 
 private:
-    void SpeedMotorConfig();
-    void DriveMotorConfig();
+    void SetSpeedMotorConfig();
+    void SetDirectionMotorConfig();
     
 private:
     TalonFX m_speedMotor;

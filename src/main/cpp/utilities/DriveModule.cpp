@@ -26,15 +26,15 @@ DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEn
     cancoderConfig.MagnetSensor.MagnetOffset = m_magOffset;
     m_directionEncoder.GetConfigurator().Apply(cancoderConfig);
 
-    SpeedMotorConfig();
-    DriveMotorConfig();
+    SetSpeedMotorConfig();
+    SetDirectionMotorConfig();
 
     m_turningPIDController.EnableContinuousInput(
                 units::angle::radian_t{-1.0*M_PI},
                 units::angle::radian_t{M_PI});
     }
 
-void DriveModule::SpeedMotorConfig(){
+void DriveModule::SetSpeedMotorConfig(){
     TalonFXConfiguration speedMotorConfig;
     speedMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue::RotorSensor;
     speedMotorConfig.Feedback.SensorToMechanismRatio = kDriveGearRatio;
@@ -52,7 +52,7 @@ void DriveModule::SpeedMotorConfig(){
     m_speedMotor.GetConfigurator().Apply(speedMotorConfig);
 }
 
-void DriveModule::DriveMotorConfig(){
+void DriveModule::SetDirectionMotorConfig(){
     m_directionMotor.SetPosition(m_directionEncoder.GetAbsolutePosition().
                                 WaitForUpdate(250_ms).GetValue());
                                 
@@ -60,7 +60,7 @@ void DriveModule::DriveMotorConfig(){
 
     TalonFXConfiguration directionMotorConfig;
     directionMotorConfig.Feedback.SensorToMechanismRatio = 150.0/7.0;
-    directionMotorConfig.ClosedLoopGeneral.ContinuousWrap = false;
+    directionMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
     directionMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     directionMotorConfig.CurrentLimits.SupplyCurrentLimit = 40_A;
     directionMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 30_A;
