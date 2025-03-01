@@ -66,7 +66,7 @@ namespace CAN_Constants {
 
   // Gyro CAN IDs
   const std::string kCanId = "rio";
-  inline constexpr int kGyroDeviceID = 30; //Issue 90: might need to update this
+  inline constexpr int kGyroDeviceID = 14; 
 }  
 
 namespace GoalConstants {
