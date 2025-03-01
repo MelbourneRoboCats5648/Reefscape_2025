@@ -1,4 +1,5 @@
 #include "subsystems/DriveSubsystem.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 
 //PathPlan Stuff
 #include <pathplanner/lib/auto/AutoBuilder.h>
@@ -10,20 +11,23 @@
 
 using namespace DriveConstants;
 using namespace pathplanner;
+using namespace CAN_Constants;
+using namespace ctre::phoenix6;
 
 DriveSubsystem::DriveSubsystem()   
-    : m_poseEstimator{kinematics,
+    : m_gyro(kGyroDeviceID, kCanId),
+      m_poseEstimator{kinematics,
       frc::Rotation2d{GetHeading()},
       {m_frontLeftModule.GetPosition(), m_frontRightModule.GetPosition(),
        m_backLeftModule.GetPosition(), m_backRightModule.GetPosition()},
        frc::Pose2d{}}
 {
-  m_gyro.Calibrate();
+  
   
   m_statePublisher = nt::NetworkTableInstance::GetDefault()
-      .GetStructArrayTopic<frc::SwerveModuleState>("/SwerveStates").Publish();
+      .GetStructArrayTopic<frc::SwerveModuleState>("DriveTrain/SwerveStates").Publish();
   m_headingPublisher = nt::NetworkTableInstance::GetDefault()
-      .GetStructTopic<frc::Rotation2d>("/DriveHeading").Publish();
+      .GetStructTopic<frc::Rotation2d>("DriveTrain/Heading").Publish();
 
   //PathPlanner
     // Load the RobotConfig from the GUI settings. You should probably
@@ -55,6 +59,21 @@ DriveSubsystem::DriveSubsystem()
         },
         this // Reference to this subsystem to set requirements
     );
+
+  /* Configure Pigeon2 */
+  configs::Pigeon2Configuration toApply{};
+
+  // FIXME - might need to configure some pigeon parameters here
+  /* User can change the configs if they want, or leave it empty for factory-default */
+
+  m_gyro.GetConfigurator().Apply(toApply);
+
+  /* Speed up signals to an appropriate rate */
+  BaseStatusSignal::SetUpdateFrequencyForAll(100_Hz, m_gyro.GetYaw(), m_gyro.GetGravityVectorZ()); // ISSUE 90: IDK if this is NEEDED
+  /**
+   * When we teleop init, set the yaw of the Pigeon2 and wait for the setter to take affect.
+   */
+  m_gyro.SetYaw(DriveConstants::initialGyroAngle, 100_ms); // Set to initial yaw angle and wait up to 100 milliseconds for the setter to take affect
 }
 
 void DriveSubsystem::Periodic() {
@@ -112,7 +131,7 @@ void DriveSubsystem::Periodic() {
         {
           LimelightHelpers::SetRobotOrientation("limelight", (double) m_poseEstimator.GetEstimatedPosition().Rotation().Degrees() , 0, 0, 0, 0, 0);
           LimelightHelpers::PoseEstimate mt2 = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-          if(units::math::abs(m_gyro.GetRate()) > units::angular_velocity::degrees_per_second_t(720)) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+          if(units::math::abs(m_gyro.GetAngularVelocityZWorld().GetValue()) > units::angular_velocity::degrees_per_second_t(720)) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
           {
             doRejectUpdate = true;
           }
@@ -140,9 +159,8 @@ void DriveSubsystem::SimulationPeriodic() {
 void DriveSubsystem::ResetGyro() {
   m_gyro.Reset();
 }
-
 units::degree_t DriveSubsystem::GetHeading() const {
-  return m_gyro.GetAngle();
+  return units::degree_t(m_gyro.GetAngle());
 }
 
 //Drive 
@@ -202,8 +220,9 @@ void DriveSubsystem::StopAllModules() {
   m_backRightModule.StopMotors();
 }
 
-frc2::CommandPtr DriveSubsystem::StopCommand() {
-  return Run([this] {StopAllModules(); });
+frc2::CommandPtr DriveSubsystem::StopCommand() 
+{
+return Run([this] {StopAllModules(); });
 }
 
 

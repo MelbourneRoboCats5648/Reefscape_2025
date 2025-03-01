@@ -65,6 +65,10 @@ namespace CAN_Constants {
   inline constexpr int kFrontRightDirectionEncoderID = 10;
   inline constexpr int kBackLeftDirectionEncoderID = 12;
   inline constexpr int kBackRightDirectionEncoderID = 13;
+
+  // Gyro CAN IDs
+  const std::string kCanId = "rio";
+  inline constexpr int kGyroDeviceID = 30; //Issue 90: might need to update this
 }  
 
 namespace GoalConstants {
@@ -102,6 +106,9 @@ namespace LeftClimbConstants {
 }
 
 namespace DriveConstants {
+
+  const units::angle::degree_t initialGyroAngle = 0_deg;
+
   //Max Speed and Acceleration Constanst
   inline constexpr auto kMaxSpeed = 3_mps;
   inline constexpr auto kMaxAcceleration = 3_mps_sq;
@@ -146,6 +153,7 @@ namespace DriveConstants {
   inline constexpr frc::Translation2d kBackLeftLocation{-0.26_m, +0.26_m};
   inline constexpr frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
 }
+
 
 namespace ElevatorConstants {
   //PID Trapezoidal Controller

@@ -3,7 +3,6 @@
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <ctre/phoenix6/CANcoder.hpp>
 #include <units/angle.h>
-#include <frc/ADIS16470_IMU.h>
 
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
@@ -25,6 +24,8 @@
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
 
+#include <ctre/phoenix6/Pigeon2.hpp>
+
 //Odometry 
 #include <frc/estimator/PoseEstimator.h>
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
@@ -39,7 +40,7 @@
 using namespace DriveConstants;
 using namespace OperatorConstants;
 using namespace CAN_Constants;
-
+using namespace ctre::phoenix6::hardware;
 
 class DriveSubsystem : public frc2::SubsystemBase {
  public:
@@ -91,7 +92,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
  private:
     //Gyro
-    frc::ADIS16470_IMU m_gyro;
+    Pigeon2 m_gyro{kGyroDeviceID, kCanId};
+
 
     DriveModule m_frontLeftModule{kFrontLeftSpeedMotorID, kFrontLeftDirectionMotorID, 
                                    kFrontLeftDirectionEncoderID, kFrontLeftMagOffset, "Front Left"};
