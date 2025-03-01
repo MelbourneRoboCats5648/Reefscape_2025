@@ -10,6 +10,7 @@
 #include <frc2/command/Commands.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/DigitalInput.h>
+#include <frc/controller/ArmFeedforward.h>
 
 class ArmSubsystem : public frc2::SubsystemBase {
   private:
@@ -62,6 +63,9 @@ class ArmSubsystem : public frc2::SubsystemBase {
   frc::TrapezoidProfile<units::turn>::State m_armGoal;
   frc::TrapezoidProfile<units::turn>::State m_armSetpoint;
   rev::spark::SparkClosedLoopController m_closedLoopController = m_armMotor.GetClosedLoopController();
+
+  frc::ArmFeedforward m_armFeedforward{ArmConstants::kS, ArmConstants::kG, ArmConstants::kV, ArmConstants::kA};
+
 };
 
 
