@@ -12,7 +12,8 @@ ArmSubsystem::ArmSubsystem() {
 
   //Set parameters that will apply to elevator motor.
     armMotorConfig.SmartCurrentLimit(50).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake); 
-
+    armMotorConfig.SetIdleMode(rev::spark::SparkBaseConfig::IdleMode::kBrake);
+    
       //armMotorConfig.limitSwitch
       //  .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
       //  .ReverseLimitSwitchEnabled(true);

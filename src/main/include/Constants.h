@@ -197,11 +197,11 @@ namespace ElevatorConstants {
 
   //Elevator Height Conversion:
   /* DIAMETERS OF THE MOTOR SPROCKETS:
-  55 mm - 2nd stage
-  38 mm - 3rd stage
+  55 mm - 1st stage
+  38 mm - 2nd stage
   CIRCUMFERENCE OF THE MOTOR SPROCKETS:
-  0.1727876 m - 2nd stage
-  0.1193805 m - 3rd stage
+  0.1727876 m - 1st stage
+  0.1193805 m - 2nd stage
   DISTANCE PER TURN = CIRCUMFERENCE */
   const units::meter_t distancePerTurnFirstStage = 0.1727876_m;
   const units::meter_t distancePerTurnSecondStage = 0.1193805_m;
@@ -226,22 +226,25 @@ namespace ArmConstants {
   //PID Trapezoidal Controller
   static constexpr units::second_t kDt = 20_ms;
 
+  // Arm limits
+  const units::turn_t extendSoftLimit = 0.15_tr;
+  const units::turn_t retractSoftLimit = -0.23_tr;
+
   //Arm Goals - this is the output of the gearbox (not the motor)
-  const units::turn_t aLevel0Goal = -0.25_tr;
+  const units::turn_t aLevel0Goal = retractSoftLimit;
   const units::turn_t aLevel1Goal = 0.0_tr;
   const units::turn_t aLevel2Goal = 0.125_tr;
   const units::turn_t aLevel3Goal = 0.125_tr;
   const units::turn_t aLevel4Goal = 0.0_tr;
 
-  const double gearRatio = 1.0 / 27.0;
+  constexpr double gearBoxGearRatio = 1.0 / 27.0;
+  // this is the ratio between the motor sprocket teeth and the teeth on sprocket connected to the arm
+  constexpr double motorSprocketRatio = 12.0 / 18.0;
+  constexpr double gearRatio = gearBoxGearRatio * motorSprocketRatio;
 
   const double kArmPositionToleranceTurns = 0.01; // issue 70 - update this tolerance
   const double kArmVelocityTolerancePerSecond = 0.1;
   const units::turn_t kArmPlaceCoral = -15_tr; // issue 70 - update this amount
-
-  // Arm limits
-  const units::turn_t extendSoftLimit = 0.0825_tr; // this is 29.7 degrees
-  const units::turn_t retractSoftLimit = -0.20_tr;
 
   //Encoder Position
   const units::turn_t resetEncoder = -0.25_tr;
