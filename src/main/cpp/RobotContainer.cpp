@@ -79,7 +79,7 @@ void RobotContainer::ConfigureBindings() {
   //m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
   //m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
   //m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
-  m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L4));
+//  m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L4));
 
   // issue 102 - testing arm goal command
   m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(0_tr)));
@@ -87,18 +87,18 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(-0.3_tr)));
 
   //Collect Command
-  m_driverController.LeftBumper().OnTrue(m_elevatorAndArmSubsystem.CollectCoral());
+//  m_driverController.LeftBumper().OnTrue(m_elevatorAndArmSubsystem.CollectCoral());
 
   //Place on Reef Command
-  m_driverController.RightBumper().OnTrue(m_elevatorAndArmSubsystem.PlaceCoral());
+//  m_driverController.RightBumper().OnTrue(m_elevatorAndArmSubsystem.PlaceCoral());
 
   // PID climb subsystem command (temporarily disabling LeftClimbUpCommand and LeftClimbDownCommand to test it)
   //m_joystick.Button(LeftClimbConstants::leftUpButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalL1));
   //m_joystick.Button(LeftClimbConstants::leftDownButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalRetract));
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is pressed, cancelling on release.
-  m_driverController.LeftTrigger().WhileTrue(m_elevatorAndArmSubsystem.ElevatorMoveUp());
-  m_driverController.RightTrigger().WhileTrue(m_elevatorAndArmSubsystem.ElevatorMoveDown());
+//  m_driverController.LeftTrigger().WhileTrue(m_elevatorAndArmSubsystem.ElevatorMoveUp());
+//  m_driverController.RightTrigger().WhileTrue(m_elevatorAndArmSubsystem.ElevatorMoveDown());
 }
 
 void RobotContainer::Configure2024Bindings() {

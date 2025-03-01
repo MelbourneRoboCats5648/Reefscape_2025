@@ -25,7 +25,7 @@ enum Level {L0, L1, L2, L3, L4};
 
 namespace General {
   // Choose the bindings for which robot to build
-  const BuildSeason KBuildSeason = BuildSeason::Crescendo;
+  const BuildSeason KBuildSeason = BuildSeason::Reefscape;
 }
 
 // namespace OperatorConstants
