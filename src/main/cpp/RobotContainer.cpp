@@ -47,18 +47,18 @@ RobotContainer::RobotContainer()
     }
   }
 
-  m_drive.SetDefaultCommand(frc2::RunCommand(
-    [this] {
-      // units::velocity::meters_per_second_t yspeed = -m_drive.m_yLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband) * kMaxSpeed);
-      // units::velocity::meters_per_second_t xspeed = -m_drive.m_xLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetLeftX(), kDeadband) * kMaxSpeed);
-      // units::angular_velocity::radians_per_second_t rotspeed = -m_drive.m_rotLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetRightX(), kDeadband) * kMaxAngularSpeed);
-      // m_drive.Drive(
-      //     // Multiply by max speed to map the joystick unitless inputs to
-      //     // actual units. This will map the [-1, 1] to [max speed backwards,
-      //     // max speed forwards], converting them to actual units.
-      //     yspeed, xspeed, rotspeed, false );
-    },
-    {&m_drive}));
+  // m_drive.SetDefaultCommand(frc2::RunCommand(
+  //   [this] {
+  //     units::velocity::meters_per_second_t yspeed = -m_drive.m_yLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband) * kMaxSpeed);
+  //     units::velocity::meters_per_second_t xspeed = -m_drive.m_xLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetLeftX(), kDeadband) * kMaxSpeed);
+  //     units::angular_velocity::radians_per_second_t rotspeed = -m_drive.m_rotLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetRightX(), kDeadband) * kMaxAngularSpeed);
+  //     m_drive.Drive(
+  //         // Multiply by max speed to map the joystick unitless inputs to
+  //         // actual units. This will map the [-1, 1] to [max speed backwards,
+  //         // max speed forwards], converting them to actual units.
+  //         yspeed, xspeed, rotspeed, false );
+  //   },
+  //   {&m_drive}));
 
   m_elevatorAndArmSubsystem.SetDefaultCommand(frc2::RunCommand(
     [this] {

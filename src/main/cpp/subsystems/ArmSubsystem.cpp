@@ -71,10 +71,9 @@ bool ArmSubsystem::IsGoalReached() {
   }  
 }
 
-frc2::CommandPtr ArmSubsystem::MoveArmCommand(double speed) {
+void ArmSubsystem::MoveArm(double speed) {
   // Inline construction of command goes here.
-  return Run([this, speed] {m_armMotor.Set(speed); })
-          .FinallyDo([this]{m_armMotor.Set(0.0); });
+  m_armMotor.Set(speed);
 }
 
 frc2::CommandPtr ArmSubsystem::MoveUpCommand() {

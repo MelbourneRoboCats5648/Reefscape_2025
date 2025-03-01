@@ -27,7 +27,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
   ArmSubsystem();
 
   //arm command factory method.
-  frc2::CommandPtr MoveArmCommand(double speed);
+  void MoveArm(double speed);
   frc2::CommandPtr MoveUpCommand();
   frc2::CommandPtr MoveDownCommand();
   frc2::CommandPtr MoveToAngleCommand(units::turn_t goal);

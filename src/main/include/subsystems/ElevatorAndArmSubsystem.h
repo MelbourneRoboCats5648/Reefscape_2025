@@ -12,7 +12,7 @@ class ElevatorAndArmSubsystem : public frc2::SubsystemBase {
   ElevatorAndArmSubsystem(ElevatorSubsystem& elevatorSub,
     ArmSubsystem& armSub);
 
-  frc2::CommandPtr MoveArm(double speed);
+  void MoveArm(double speed);
   frc2::CommandPtr MoveUp();
   frc2::CommandPtr MoveDown();
   frc2::CommandPtr ElevatorMoveUp();
