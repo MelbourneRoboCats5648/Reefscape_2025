@@ -117,9 +117,14 @@ frc2::CommandPtr ElevatorAndArmSubsystem::PlaceCoral() {
           .AlongWith(m_armSubsystem.RotateBy(kArmPlaceCoral));
 }
 
+void ElevatorAndArmSubsystem::LogEncoderOutputs()
+{
+  frc::SmartDashboard::PutNumber("ElevatorAndArmSubsystem/ArmPosition", m_armSubsystem.GetPosition());
+}
 
 void ElevatorAndArmSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
+  LogEncoderOutputs();
 }
 
 void ElevatorAndArmSubsystem::SimulationPeriodic() {

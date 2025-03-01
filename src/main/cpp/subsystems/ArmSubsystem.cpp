@@ -13,13 +13,13 @@ ArmSubsystem::ArmSubsystem() {
   //Set parameters that will apply to elevator motor.
     armMotorConfig.SmartCurrentLimit(50).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake); 
 
-      armMotorConfig.limitSwitch
-        .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
-        .ReverseLimitSwitchEnabled(true);
+      //armMotorConfig.limitSwitch
+      //  .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
+      //  .ReverseLimitSwitchEnabled(true);
 
       armMotorConfig.softLimit
         .ForwardSoftLimit(ArmConstants::extendSoftLimit.value())
-        .ForwardSoftLimitEnabled(true);
+        .ForwardSoftLimitEnabled(false);
 
       armMotorConfig.softLimit
         .ReverseSoftLimit(ArmConstants::retractSoftLimit.value())
@@ -118,6 +118,11 @@ void ArmSubsystem::StopMotor() {
 //reset encoder
 void ArmSubsystem::ResetEncoder() {
   m_armEncoder.SetPosition(0.0);
+}
+
+double ArmSubsystem::GetPosition()
+{
+  return m_armEncoder.GetPosition();
 }
 
 void ArmSubsystem::Periodic() {

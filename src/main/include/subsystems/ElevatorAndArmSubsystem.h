@@ -25,6 +25,8 @@ class ElevatorAndArmSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr MoveToLevel(Level level);
   frc2::CommandPtr CollectCoral();
   frc2::CommandPtr PlaceCoral();
+
+  void LogEncoderOutputs();
   
   void Periodic() override;
   void SimulationPeriodic() override;
