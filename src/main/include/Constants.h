@@ -227,19 +227,19 @@ namespace ArmConstants {
   static constexpr units::second_t kDt = 20_ms;
 
   //First Stage PID Controller 
-  const double kP = 1.0;
+  const double kP = 0.0;
   const double kI = 0.0;
   const double kD = 0.0;
   const double maxOutput = 1.0;
 
   //Arm feedforward
-  const units::volt_t kS = 1.0_V;
-  const units::volt_t kG = 1.0_V;
-  const auto kV = 1.0_V / 1_tps;
-  const auto kA = 1.0_V / 1_tr_per_s_sq;
+  const units::volt_t kS = 0.12_V;
+  const units::volt_t kG = 0.25_V;
+  const auto kV = 0.0_V / 1_tps;
+  const auto kA = 0.0_V / 1_tr_per_s_sq;
 
   // Arm limits
-  const units::turn_t extendSoftLimit = 0.15_tr;
+  const units::turn_t extendSoftLimit = 0.10_tr;
   const units::turn_t retractSoftLimit = -0.23_tr;
 
   //Arm Goals - this is the output of the gearbox (not the motor)

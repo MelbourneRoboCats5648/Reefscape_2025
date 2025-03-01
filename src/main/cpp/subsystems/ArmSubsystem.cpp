@@ -108,15 +108,16 @@ frc2::CommandPtr ArmSubsystem::MoveToAngleCommand(units::turn_t goal) {
             m_armGoal = {goal, 0.0_tps }; //stop at goal
             m_armSetpoint = m_trapezoidalProfile.Calculate(ArmConstants::kDt, m_armSetpoint, m_armGoal);
 
-            frc::SmartDashboard::PutNumber("trapazoidalSetpoint", m_armSetpoint.position.value());
-
+            frc::SmartDashboard::PutNumber("positionSetpoint", m_armSetpoint.position.value());
+            frc::SmartDashboard::PutNumber("velocitySetpoint", m_armSetpoint.velocity.value());
+            frc::SmartDashboard::PutNumber("currentVelocity", m_armEncoder.GetVelocity() / 60.0);
             m_closedLoopController.SetReference(m_armSetpoint.position.value(),
                                                 rev::spark::SparkLowLevel::ControlType::kPosition,
                                                 rev::spark::kSlot0,
                                                 m_armFeedforward.Calculate(m_armSetpoint.position, m_armSetpoint.velocity).value());
                                                 
-            })
-            .Until([this] {return IsGoalReached();});
+            });
+            //.Until([this] {return IsGoalReached();});
 
                         // m_closedLoopController.SetReference(m_armGoal.position.value(), 
                         //                         rev::spark::SparkLowLevel::ControlType::kPosition,

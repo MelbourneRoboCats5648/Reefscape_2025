@@ -60,12 +60,12 @@ RobotContainer::RobotContainer()
   //   },
   //   {&m_drive}));
 
-  m_elevatorAndArmSubsystem.SetDefaultCommand(frc2::RunCommand(
-    [this] {
-      double speed = frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband);
-      m_elevatorAndArmSubsystem.MoveArm(speed);
-    },
-    {&m_elevatorAndArmSubsystem}));
+  // m_elevatorAndArmSubsystem.SetDefaultCommand(frc2::RunCommand(
+  //   [this] {
+  //     double speed = frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband);
+  //     m_elevatorAndArmSubsystem.MoveArm(speed);
+  //   },
+  //   {&m_elevatorAndArmSubsystem}));
 
 }
 
@@ -73,7 +73,7 @@ RobotContainer::RobotContainer()
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
     //drivetrain commands
-  m_driverController.B().WhileTrue(m_drive.StopCommand());
+  //m_driverController.B().WhileTrue(m_drive.StopCommand());
 
   //PID elevator subsystem command
   //m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
@@ -85,6 +85,7 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(0_tr)));
   m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(-0.2_tr)));
   m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(-0.3_tr)));
+  m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(0.15_tr)));
 
   //Collect Command
 //  m_driverController.LeftBumper().OnTrue(m_elevatorAndArmSubsystem.CollectCoral());
