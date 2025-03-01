@@ -76,10 +76,15 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.B().WhileTrue(m_drive.StopCommand());
 
   //PID elevator subsystem command
-  m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
-  m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
-  m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
+  //m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
+  //m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
+  //m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
   m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L4));
+
+  // issue 102 - testing arm goal command
+  m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(0_tr)));
+  m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(-0.2_tr)));
+  m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(-0.3_tr)));
 
   //Collect Command
   m_driverController.LeftBumper().OnTrue(m_elevatorAndArmSubsystem.CollectCoral());

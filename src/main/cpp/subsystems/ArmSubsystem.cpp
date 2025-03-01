@@ -13,7 +13,7 @@ ArmSubsystem::ArmSubsystem() {
   //Set parameters that will apply to elevator motor.
     armMotorConfig.SmartCurrentLimit(50).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake); 
     armMotorConfig.SetIdleMode(rev::spark::SparkBaseConfig::IdleMode::kBrake);
-    
+
       //armMotorConfig.limitSwitch
       //  .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
       //  .ReverseLimitSwitchEnabled(true);
@@ -25,6 +25,18 @@ ArmSubsystem::ArmSubsystem() {
       armMotorConfig.softLimit
         .ReverseSoftLimit(ArmConstants::retractSoftLimit.value())
         .ReverseSoftLimitEnabled(true);
+
+  //PID Controller 
+  /* Configure the closed loop controller. We want to make sure we set the
+  * feedback sensor as the primary encoder. */
+  armMotorConfig.closedLoop
+     .SetFeedbackSensor(rev::spark::ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
+      // Set PID values for position control. We don't need to pass a closed
+      // loop slot, as it will default to slot 0.
+    .P(ArmConstants::kP)
+    .I(ArmConstants::kI)
+    .D(ArmConstants::kD)
+    .OutputRange(-ArmConstants::maxOutput, ArmConstants::maxOutput);
 
    armMotorConfig.encoder.PositionConversionFactor(ArmConstants::gearRatio).VelocityConversionFactor(ArmConstants::gearRatio);
 

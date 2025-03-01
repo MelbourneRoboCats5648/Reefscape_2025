@@ -226,6 +226,12 @@ namespace ArmConstants {
   //PID Trapezoidal Controller
   static constexpr units::second_t kDt = 20_ms;
 
+  //First Stage PID Controller 
+  const double kP = 1.0;
+  const double kI = 0.0;
+  const double kD = 0.0;
+  const double maxOutput = 1.0;
+
   // Arm limits
   const units::turn_t extendSoftLimit = 0.15_tr;
   const units::turn_t retractSoftLimit = -0.23_tr;
