@@ -25,10 +25,11 @@ frc2::CommandPtr coralCommands::PlaceOnReef(ElevatorAndArmSubsystem* elevatorAnd
     //pass command a level
     //moving elevator and arm to height (then positioning) then move arm and elevator down at the same time (not move to level but move by certain amount, eg 15degrees and down 10cm) 
     elevatorAndArm->MoveToLevel(level);
-    autos::VisionDrive(vision, drive);
+    //autos::VisionDrive(vision, drive);
     //drive->Align(drive, direction);//check joystick button here 
+  }
+  ).AndThen([elevatorAndArm]
+  {
     elevatorAndArm->PlaceCoral();
+  });
   }
-  );
-  }
-

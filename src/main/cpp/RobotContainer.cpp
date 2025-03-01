@@ -73,10 +73,10 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.B().WhileTrue(m_drive.StopCommand());
 
   //PID elevator subsystem command
-  m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
-  m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
-  m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
-  m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L4));
+  //m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
+  //m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
+  //m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
+  //m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L4));
 
   //Collect Command
   m_driverController.LeftBumper().OnTrue(m_elevatorAndArmSubsystem.CollectCoral());
@@ -91,6 +91,13 @@ void RobotContainer::ConfigureBindings() {
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is pressed, cancelling on release.
   m_driverController.LeftTrigger().WhileTrue(m_elevatorAndArmSubsystem.ElevatorMoveUp());
   m_driverController.RightTrigger().WhileTrue(m_elevatorAndArmSubsystem.ElevatorMoveDown());
+
+  //Complex Command Ones
+  //Idk what the levels are atm.
+  //m_driverController.A().OnTrue(coralCommands::PlaceOnReef(&m_elevatorAndArmSubsystem, &m_drive, &m_visionSubsystem, Level::L1, Direction::Right))
+  m_driverController.X().OnTrue(coralCommands::PlaceOnReef(&m_elevatorAndArmSubsystem, &m_drive, &m_visionSubsystem, Level::L2, Direction::Right));
+  m_driverController.Y().OnTrue(coralCommands::PlaceOnReef(&m_elevatorAndArmSubsystem, &m_drive, &m_visionSubsystem, Level::L3, Direction::Right));
+  m_driverController.B().OnTrue(coralCommands::PlaceOnReef(&m_elevatorAndArmSubsystem, &m_drive, &m_visionSubsystem, Level::L4, Direction::Right));
 }
 
 void RobotContainer::Configure2024Bindings() {
