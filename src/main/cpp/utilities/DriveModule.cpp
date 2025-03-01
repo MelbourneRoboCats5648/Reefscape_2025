@@ -6,18 +6,17 @@ using namespace ctre::phoenix6::configs;
 using namespace DriveConstants;
 
 DriveModule::DriveModule(int speedMotorID, int directionMotorID, int directionEncoderID, units::angle::turn_t magOffset, std::string name)
-            :m_speedMotor(speedMotorID, "rio"),
-            m_directionMotor(directionMotorID, "rio"),
-            m_directionEncoder(directionEncoderID, "rio"),
-            m_magOffset(magOffset),
-            m_name(name),
-            m_turningPIDController{
-                kTurnKP,
-                kTurnKI,
-                kTurnKD,
-                {kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration}}
-
-    {
+            : m_speedMotor(speedMotorID, "rio"),
+              m_directionMotor(directionMotorID, "rio"),
+              m_directionEncoder(directionEncoderID, "rio"),
+              m_magOffset(magOffset),
+              m_name(name),
+              m_turningPIDController{
+                  kTurnKP,
+                  kTurnKI,
+                  kTurnKD,
+                  {kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration}}
+{
     // Config CANCoder   
     CANcoderConfiguration cancoderConfig;
     cancoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5_tr;
@@ -112,6 +111,3 @@ frc::SwerveModuleState DriveModule::GetState() {
     m_directionEncoder.GetAbsolutePosition().GetValue()
   };
 }
-
-
-

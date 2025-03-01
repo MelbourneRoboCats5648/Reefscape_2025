@@ -40,25 +40,33 @@ namespace OperatorConstants {
 // namespace CAN Constants
 namespace CAN_Constants {
   //Subsystem CAN IDs
-  inline constexpr int kElevatorMotorLeftCAN_ID = 9;
-  inline constexpr int kElevatorMotorRightCAN_ID = 15;
-  inline constexpr int kElevatorMotorSecondStageCAN_ID = 16;
+  inline constexpr int kClimbCAN_ID = 20;
+  inline constexpr int kElevatorMotorLeftCAN_ID = 21;
+  inline constexpr int kElevatorMotorRightCAN_ID = 22;
+  inline constexpr int kElevatorMotorSecondStageCAN_ID = 23;
+
   // not configurated yet
-  inline constexpr int kElevatorArmMotorCAN_ID = 14;
+  inline constexpr int kElevatorArmMotorCAN_ID = 24;
 
   //Drive CAN IDs
   inline constexpr int kFrontLeftSpeedMotorID = 3;
   inline constexpr int kFrontRightSpeedMotorID = 1;
   inline constexpr int kBackLeftSpeedMotorID = 5;
   inline constexpr int kBackRightSpeedMotorID = 7;
+
   inline constexpr int kFrontLeftDirectionMotorID = 4;
   inline constexpr int kFrontRightDirectionMotorID = 2;
   inline constexpr int kBackLeftDirectionMotorID = 6;
   inline constexpr int kBackRightDirectionMotorID = 8;
+  
   inline constexpr int kFrontLeftDirectionEncoderID = 11;
   inline constexpr int kFrontRightDirectionEncoderID = 10;
   inline constexpr int kBackLeftDirectionEncoderID = 12;
   inline constexpr int kBackRightDirectionEncoderID = 13;
+
+  // Gyro CAN IDs
+  const std::string kCanId = "rio";
+  inline constexpr int kGyroDeviceID = 30; //Issue 90: might need to update this
 }  
 
 namespace GoalConstants {
@@ -96,6 +104,9 @@ namespace LeftClimbConstants {
 }
 
 namespace DriveConstants {
+
+  const units::angle::degree_t initialGyroAngle = 0_deg;
+
   //Max Speed and Acceleration Constanst
   inline constexpr auto kMaxSpeed = 3_mps;
   inline constexpr auto kMaxAcceleration = 3_mps_sq;
@@ -140,6 +151,7 @@ namespace DriveConstants {
   inline constexpr frc::Translation2d kBackLeftLocation{-0.26_m, +0.26_m};
   inline constexpr frc::Translation2d kBackRightLocation{-0.26_m, -0.26_m};
 }
+
 
 namespace ElevatorConstants {
   //PID Trapezoidal Controller
