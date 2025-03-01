@@ -21,6 +21,10 @@ ArmSubsystem::ArmSubsystem() {
         .ForwardSoftLimit(ArmConstants::extendSoftLimit.value())
         .ForwardSoftLimitEnabled(true);
 
+      armMotorConfig.softLimit
+        .ReverseSoftLimit(ArmConstants::retractSoftLimit.value())
+        .ReverseSoftLimitEnabled(true);
+
    armMotorConfig.encoder.PositionConversionFactor(ArmConstants::gearRatio).VelocityConversionFactor(ArmConstants::gearRatio);
 
   /* Apply the configuration to the SPARKs.

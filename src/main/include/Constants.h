@@ -241,6 +241,7 @@ namespace ArmConstants {
 
   // Arm limits
   const units::turn_t extendSoftLimit = 0.0825_tr; // this is 29.7 degrees
+  const units::turn_t retractSoftLimit = 0.0_tr; //figure out what this needsto be
 
   //Encoder Position
   const units::turn_t resetEncoder = -0.25_tr;
