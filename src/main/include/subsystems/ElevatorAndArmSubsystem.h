@@ -12,6 +12,7 @@ class ElevatorAndArmSubsystem : public frc2::SubsystemBase {
   ElevatorAndArmSubsystem(ElevatorSubsystem& elevatorSub,
     ArmSubsystem& armSub);
 
+  frc2::CommandPtr MoveArm();
   frc2::CommandPtr MoveUp();
   frc2::CommandPtr MoveDown();
   frc2::CommandPtr ElevatorMoveUp();
@@ -31,5 +32,8 @@ class ElevatorAndArmSubsystem : public frc2::SubsystemBase {
  private:
   ElevatorSubsystem& m_elevatorSubsystem;
   ArmSubsystem& m_armSubsystem;
+
+ public:
+  frc::SlewRateLimiter<units::meters_per_second> m_speedLimiter{kSlewRateTranslation};
 };
 

@@ -8,6 +8,11 @@ ElevatorAndArmSubsystem::ElevatorAndArmSubsystem(ElevatorSubsystem& elevatorSub,
     m_armSubsystem(armSub) {
 }
 
+frc2::CommandPtr ElevatorAndArmSubsystem::MoveArm() {
+  return (m_armSubsystem.MoveArmCommand())
+   .FinallyDo([this] {m_armSubsystem.StopMotor();});
+}
+
 frc2::CommandPtr ElevatorAndArmSubsystem::MoveUp() {
   return m_elevatorSubsystem.MoveUpCommand()
   .AndThen(m_armSubsystem.MoveUpCommand())

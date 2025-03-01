@@ -71,6 +71,12 @@ bool ArmSubsystem::IsGoalReached() {
   }  
 }
 
+frc2::CommandPtr ArmSubsystem::MoveArmCommand(double speed) {
+  // Inline construction of command goes here.
+  return Run([this, speed] {m_armMotor.Set(speed); })
+          .FinallyDo([this]{m_armMotor.Set(0.0); });
+}
+
 frc2::CommandPtr ArmSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
   return Run([this] {m_armMotor.Set(-0.1); })
@@ -95,6 +101,8 @@ frc2::CommandPtr ArmSubsystem::MoveToAngleCommand(units::turn_t goal) {
             m_closedLoopController.SetReference(m_armGoal.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);})
             .Until([this] {return IsGoalReached();});
 }
+
+
 
 //To move down supply a negative
 frc2::CommandPtr ArmSubsystem::RotateBy(units::turn_t angle) {

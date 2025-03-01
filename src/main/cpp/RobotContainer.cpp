@@ -59,7 +59,6 @@ RobotContainer::RobotContainer()
           yspeed, xspeed, rotspeed, false );
     },
     {&m_drive}));
-
 }
 
 
@@ -81,8 +80,8 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.RightBumper().OnTrue(m_elevatorAndArmSubsystem.PlaceCoral());
 
   // PID climb subsystem command (temporarily disabling LeftClimbUpCommand and LeftClimbDownCommand to test it)
-  m_joystick.Button(LeftClimbConstants::leftUpButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalL1));
-  m_joystick.Button(LeftClimbConstants::leftDownButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalRetract));
+  //m_joystick.Button(LeftClimbConstants::leftUpButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalL1));
+  //m_joystick.Button(LeftClimbConstants::leftDownButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalRetract));
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is pressed, cancelling on release.
   m_driverController.LeftTrigger().WhileTrue(m_elevatorAndArmSubsystem.ElevatorMoveUp());
