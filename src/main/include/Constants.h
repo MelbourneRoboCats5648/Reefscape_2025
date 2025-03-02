@@ -4,6 +4,8 @@
 #include <rev/config/SparkMaxConfig.h>
 //Feedforward + Motion profiling
 #include <frc/controller/SimpleMotorFeedforward.h>
+#include <frc/controller/ElevatorFeedforward.h>
+#include <frc/controller/ArmFeedforward.h>
 #include <frc/trajectory/TrapezoidProfile.h>
 // PID Profile and Controller stuff
 #include <units/acceleration.h>
@@ -23,6 +25,22 @@ enum BuildSeason {Crescendo, Reefscape};
 
 enum Level {L0, L1, L2, L3, L4};
 enum TestLevel {NONE, ARM, ELEVATOR, DRIVE};
+
+struct PIDConstants {
+  double kP, kI, kD;
+};
+
+struct ArmFeedforwardConstants {
+  units::volt_t kS, kG;
+  units::unit_t<frc::ArmFeedforward::kv_unit> kV;
+  units::unit_t<frc::ArmFeedforward::ka_unit> kA;
+};
+
+struct ElevatorFeedforwardConstants {
+  units::volt_t kS, kG;
+  units::unit_t<frc::ElevatorFeedforward::kv_unit> kV;
+  units::unit_t<frc::ElevatorFeedforward::ka_unit> kA;
+};
 
 namespace General {
   // Choose the bindings for which robot to build
@@ -162,10 +180,32 @@ namespace ElevatorConstants {
   //Smart Current Limit
   const int kCurrentLimit = 50;
 
-  //First Stage PID Controller 
-  const double kP = 1.3;
-  const double kI = 0.0;
-  const double kD = 0.0;
+  //First Stage Controller
+  const static PIDConstants kFirstStagePID = {
+    /* kP */ 1.3,
+    /* kI */ 0.0,
+    /* kD */ 0.0
+  };
+  const static ElevatorFeedforwardConstants kFirstStageFeedforward = {
+    /* kS */ 0.0_V,
+    /* kG */ 0.0_V,
+    /* kV */ 0.0_V / 1_mps,
+    /* kA */ 0.0_V / 1_mps_sq
+  };
+  
+  //Second Stage Controller
+  const static PIDConstants kSecondStagePID = {
+    /* kP */ 1.3,
+    /* kI */ 0.0,
+    /* kD */ 0.0
+  };
+  const static ElevatorFeedforwardConstants kSecondStageFeedforward = {
+    /* kS */ 0.0_V,
+    /* kG */ 0.0_V,
+    /* kV */ 0.0_V / 1_mps,
+    /* kA */ 0.0_V / 1_mps_sq
+  };
+
   const double maxOutput = 1.0;
 
   //PID Profile
@@ -188,15 +228,17 @@ namespace ElevatorConstants {
 
   const units::meter_t retractSoftLimit = 0.1_m;
 
-  //Elevator feedforward
-  const units::volt_t kS = 0.0_V;
-  const units::volt_t kG = 0.0_V;
-  const auto kV = 0.0_V / 1_mps;
-  const auto kA = 0.0_V / 1_mps_sq;
-
   // Maximum Elevator Heights
   const units::meter_t kMaxFirstStageHeight = 0.7_m;
   const units::meter_t kMaxSecondStageHeight = 0.67_m;
+
+  // Initial Elevator heights
+  const units::meter_t kInitFirstStageHeight = 0.0_m;
+  const units::meter_t kInitSecondStageHeight = 0.0_m;
+
+  // Limit Switch Locations
+  const units::meter_t kResetFirstStageHeight = 0.0_m;
+  const units::meter_t kResetSecondStageHeight = 0.0_m;
 
   //Elevator Height Conversion:
   /* DIAMETERS OF THE MOTOR SPROCKETS:
@@ -216,13 +258,15 @@ namespace ElevatorConstants {
     constexpr double gearRatioSecondStage = gearBoxGearRatio * distancePerTurnSecondStage.value();
 
 
-  const double kElevatorPositionToleranceMetres = 0.1; // issue 70 - update this tolerance
-  const double kElevatorVelocityTolerancePerSecond = 0.1;
+  const units::meter_t kElevatorPositionTolerance = 0.1_m;
+  const units::meters_per_second_t kElevatorVelocityTolerance = 0.1_mps;
+
   const units::meter_t kElevatorMinHeightCollect = 1_m; //issue 70 - update this position
   const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amount
   
   //Elevator DIO port
-  inline constexpr int k_limitSwitchElevatorPin = 1;
+  inline constexpr int kFirstStageLimitSwitchPin = 1;
+  inline constexpr int kSecondStageLimitSwitchPin = 2; // TODO
 }
 
 namespace ArmConstants {
