@@ -47,7 +47,10 @@ RobotContainer::RobotContainer()
     }
   }
 
-  switch(General::KBuildSeason) {
+  switch(General::KTestLevel) {
+    case (TestLevel::NONE): {
+      break;
+    }
     case (TestLevel::ARM): {
       m_elevatorAndArmSubsystem.SetDefaultCommand(frc2::RunCommand(
         [this] {
@@ -55,6 +58,8 @@ RobotContainer::RobotContainer()
           m_elevatorAndArmSubsystem.MoveArm(speed);
         },
         {&m_elevatorAndArmSubsystem}));
+
+        break;
     }
     case (TestLevel::SECOND_STAGE): {
       m_elevatorAndArmSubsystem.SetDefaultCommand(frc2::RunCommand(
@@ -63,6 +68,8 @@ RobotContainer::RobotContainer()
           m_elevatorAndArmSubsystem.MoveSecondStage(speed);
         },
         {&m_elevatorAndArmSubsystem}));
+
+        break;
     }
     case (TestLevel::DRIVE): {
       m_drive.SetDefaultCommand(frc2::RunCommand(
@@ -77,6 +84,8 @@ RobotContainer::RobotContainer()
               yspeed, xspeed, rotspeed, false );
         },
         {&m_drive}));
+
+        break;
     }
 
   }
