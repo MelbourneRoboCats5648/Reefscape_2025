@@ -66,8 +66,8 @@ units::meters_per_second_t ElevatorStageSubsystem::GetVelocity() {
 }
 
 bool ElevatorStageSubsystem::IsGoalReached() {
-  auto posErr = GetHeight() - m_goal.position;
-  auto velErr = GetVelocity() - m_goal.velocity;
+  auto posErr = units::math::abs(GetHeight() - m_goal.position);
+  auto velErr = units::math::abs(GetVelocity() - m_goal.velocity);
   
   if ((posErr <= ElevatorConstants::kElevatorPositionTolerance) &&
       (velErr <= ElevatorConstants::kElevatorVelocityTolerance))
