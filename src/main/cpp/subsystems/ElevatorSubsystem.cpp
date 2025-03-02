@@ -10,9 +10,9 @@ ElevatorSubsystem::ElevatorSubsystem() {
   rev::spark::SparkMaxConfig elevatorMotorSecondStageConfig;
 
    //Set parameters that will apply to elevator motor.
-    elevatorMotorFirstStageLeftConfig.SmartCurrentLimit(ElevatorConstants::kCurrentLimit).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
-    elevatorMotorFirstStageRightConfig.SmartCurrentLimit(ElevatorConstants::kCurrentLimit).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
-    elevatorMotorSecondStageConfig.SmartCurrentLimit(ElevatorConstants::kCurrentLimit).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
+    elevatorMotorFirstStageLeftConfig.SmartCurrentLimit(ElevatorConstants::kCurrentLimit).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kCoast);
+    elevatorMotorFirstStageRightConfig.SmartCurrentLimit(ElevatorConstants::kCurrentLimit).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kCoast);
+    elevatorMotorSecondStageConfig.SmartCurrentLimit(ElevatorConstants::kCurrentLimit).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kCoast);
 
   // First Stage Limits
     // Enable limit switches to stop the motor when they are closed
@@ -69,9 +69,9 @@ ElevatorSubsystem::ElevatorSubsystem() {
     .OutputRange(-ElevatorConstants::maxOutput, ElevatorConstants::maxOutput);
 
   // Configure the encoder.
-  elevatorMotorFirstStageLeftConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatio).VelocityConversionFactor(ElevatorConstants::gearRatio);
-  elevatorMotorFirstStageRightConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatio).VelocityConversionFactor(ElevatorConstants::gearRatio);
-  elevatorMotorSecondStageConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatio).VelocityConversionFactor(ElevatorConstants::gearRatio);
+  elevatorMotorFirstStageLeftConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatioFirstStage).VelocityConversionFactor(ElevatorConstants::gearRatioFirstStage);
+  elevatorMotorFirstStageRightConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatioFirstStage).VelocityConversionFactor(ElevatorConstants::gearRatioFirstStage);
+  elevatorMotorSecondStageConfig.encoder.PositionConversionFactor(ElevatorConstants::gearRatioSecondStage).VelocityConversionFactor(ElevatorConstants::gearRatioSecondStage);
   
   //Hard and Soft limit switch run parameters
   // right motor will follow the inverted output of left motor to drive shaft
@@ -132,7 +132,7 @@ frc::TrapezoidProfile<units::meter>::State& ElevatorSubsystem::GetFirstStageGoal
 }
 
 bool ElevatorSubsystem::IsFirstStageGoalReached() {
-  double errorPosition = std::abs(GetFirstStageSetpoint().position.value() - GetFirstStageGoal().position.value());
+  double errorPosition = std::abs(GetElevatorFirstStageHeight().value() - GetFirstStageGoal().position.value());
   double errorVelocity = std::abs(GetFirstStageSetpoint().velocity.value() - GetFirstStageGoal().velocity.value());
 
   if((errorPosition <= kElevatorPositionToleranceMetres) && (errorVelocity <= kElevatorVelocityTolerancePerSecond)) {
@@ -152,7 +152,7 @@ frc::TrapezoidProfile<units::meter>::State& ElevatorSubsystem::GetSecondStageGoa
 } 
 
 bool ElevatorSubsystem::IsSecondStageGoalReached() {
-  double errorPosition = std::abs(GetSecondStageSetpoint().position.value() - GetSecondStageGoal().position.value());
+  double errorPosition = std::abs(GetElevatorSecondStageHeight().value() - GetSecondStageGoal().position.value());
   double errorVelocity = std::abs(GetSecondStageSetpoint().velocity.value() - GetSecondStageGoal().velocity.value());
 
   if((errorPosition <= kElevatorPositionToleranceMetres) && (errorVelocity <= kElevatorVelocityTolerancePerSecond)) {
@@ -229,11 +229,11 @@ frc2::CommandPtr ElevatorSubsystem::MoveToHeightCommand(units::meter_t heightGoa
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
   if(heightGoal <= ElevatorConstants::kMaxSecondStageHeight) {
     return (MoveSecondStageToHeightCommand(heightGoal))
-    .AlongWith(MoveFirstStageToHeightCommand(0_m));
+    .AndThen(MoveFirstStageToHeightCommand(0_m));
   }
   else {
     return (MoveSecondStageToHeightCommand(ElevatorConstants::kMaxSecondStageHeight))
-    .AlongWith(MoveFirstStageToHeightCommand(heightGoal - ElevatorConstants::kMaxSecondStageHeight));
+    .AndThen(MoveFirstStageToHeightCommand(heightGoal - ElevatorConstants::kMaxSecondStageHeight));
   }
 }
 

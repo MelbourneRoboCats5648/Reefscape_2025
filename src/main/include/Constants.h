@@ -163,7 +163,7 @@ namespace ElevatorConstants {
   const int kCurrentLimit = 50;
 
   //First Stage PID Controller 
-  const double kP = 0.1;
+  const double kP = 1.3;
   const double kI = 0.0;
   const double kD = 0.0;
   const double maxOutput = 1.0;
@@ -175,27 +175,28 @@ namespace ElevatorConstants {
   //Elevator Goals
   const units::meter_t eLevel0Goal = 0.0_m;
   const units::meter_t eLevel1Goal = eLevel0Goal;
-  const units::meter_t eLevel2Goal = 0.5_m;
-  const units::meter_t eLevel3Goal = 1.0_m;
-  const units::meter_t eLevel4Goal = 1.5_m;
+  const units::meter_t eLevel2Goal = 0.3_m;
+  const units::meter_t eLevel3Goal = 0.6_m;
+  const units::meter_t eLevel4Goal = 0.8_m;
 
   //Encoder Position
   const units::meter_t resetEncoder = 0.0_m;
 
   // Elevator limits
-  const units::meter_t extendSoftLimitFirstStage = 7.0_m;
-  const units::meter_t retractSoftLimit = -1.0_m;
-  const units::meter_t extendSoftLimitSecondStage = 4.0_m;
+  const units::meter_t extendSoftLimitFirstStage = 0.7_m;
+  const units::meter_t extendSoftLimitSecondStage = 0.67_m; // this should be 0.67
+
+  const units::meter_t retractSoftLimit = 0.1_m;
 
   //Elevator feedforward
-  const units::volt_t kS = 1.0_V;
-  const units::volt_t kG = 1.0_V;
-  const auto kV = 1.0_V / 1_mps;
-  const auto kA = 1.0_V / 1_mps_sq;
+  const units::volt_t kS = 0.0_V;
+  const units::volt_t kG = 0.0_V;
+  const auto kV = 0.0_V / 1_mps;
+  const auto kA = 0.0_V / 1_mps_sq;
 
   // Maximum Elevator Heights
-  const units::meter_t kMaxFirstStageHeight = 1.5_m;
-  const units::meter_t kMaxSecondStageHeight = 0.3_m;
+  const units::meter_t kMaxFirstStageHeight = 0.7_m;
+  const units::meter_t kMaxSecondStageHeight = 0.67_m;
 
   //Elevator Height Conversion:
   /* DIAMETERS OF THE MOTOR SPROCKETS:
@@ -209,9 +210,13 @@ namespace ElevatorConstants {
   const units::meter_t distancePerTurnSecondStage = 0.1193805_m;
 
   //Gear Ratio
-  const double gearRatio = 1.0 / 27.0;
+  constexpr double gearBoxGearRatio = 1.0 / 27.0;
 
-  const double kElevatorPositionToleranceMetres = 0.01; // issue 70 - update this tolerance
+    constexpr double gearRatioFirstStage = gearBoxGearRatio * distancePerTurnFirstStage.value();
+    constexpr double gearRatioSecondStage = gearBoxGearRatio * distancePerTurnSecondStage.value();
+
+
+  const double kElevatorPositionToleranceMetres = 0.1; // issue 70 - update this tolerance
   const double kElevatorVelocityTolerancePerSecond = 0.1;
   const units::meter_t kElevatorMinHeightCollect = 1_m; //issue 70 - update this position
   const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amount
@@ -246,10 +251,10 @@ namespace ArmConstants {
 
   //Arm Goals - this is the output of the gearbox (not the motor)
   const units::turn_t aLevel0Goal = retractSoftLimit;
-  const units::turn_t aLevel1Goal = 0.0_tr;
-  const units::turn_t aLevel2Goal = 0.125_tr;
-  const units::turn_t aLevel3Goal = 0.125_tr;
-  const units::turn_t aLevel4Goal = 0.0_tr;
+  const units::turn_t aLevel1Goal = 0.15_tr;
+  const units::turn_t aLevel2Goal = 0.1_tr;
+  const units::turn_t aLevel3Goal = 0.0_tr;
+  const units::turn_t aLevel4Goal = -0.1_tr;
 
   constexpr double gearBoxGearRatio = 1.0 / 27.0;
   // this is the ratio between the motor sprocket teeth and the teeth on sprocket connected to the arm
@@ -261,7 +266,7 @@ namespace ArmConstants {
   const units::turn_t kArmPlaceCoral = -15_tr; // issue 70 - update this amount
 
   //Encoder Position
-  const units::turn_t resetEncoder = -0.25_tr;
+  const units::turn_t resetEncoder = 0.15_tr;
 
   //Arm DIO port
   inline constexpr int k_limitSwitchArmPin = 2;
