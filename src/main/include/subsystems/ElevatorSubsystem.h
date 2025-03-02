@@ -65,6 +65,8 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   // Distance is measured in meters
   frc::ElevatorFeedforward m_elevatorFeedforward{ElevatorConstants::kS, ElevatorConstants::kG, ElevatorConstants::kV, ElevatorConstants::kA};
   
+  void MoveSecondStage(double speed);
+
   void UpdateSetpoint();
   frc2::CommandPtr MoveFirstStageToHeightCommand(units::meter_t goal);
   frc2::CommandPtr MoveSecondStageToHeightCommand(units::meter_t goal);
