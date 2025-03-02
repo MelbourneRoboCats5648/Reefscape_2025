@@ -4,6 +4,8 @@
 #include <rev/config/SparkMaxConfig.h>
 //Feedforward + Motion profiling
 #include <frc/controller/SimpleMotorFeedforward.h>
+#include <frc/controller/ElevatorFeedforward.h>
+#include <frc/controller/ArmFeedforward.h>
 #include <frc/trajectory/TrapezoidProfile.h>
 // PID Profile and Controller stuff
 #include <units/acceleration.h>
@@ -22,7 +24,23 @@
 enum BuildSeason {Crescendo, Reefscape};
 
 enum Level {L0, L1, L2, L3, L4};
-enum TestLevel {NONE, ARM, FIRST_STAGE, SECOND_STAGE, DRIVE};
+enum TestLevel {NONE, ARM, ELEVATOR, DRIVE};
+
+struct PIDConstants {
+  double kP, kI, kD;
+};
+
+struct ArmFeedforwardConstants {
+  units::volt_t kS, kG;
+  units::unit_t<frc::ArmFeedforward::kv_unit> kV;
+  units::unit_t<frc::ArmFeedforward::ka_unit> kA;
+};
+
+struct ElevatorFeedforwardConstants {
+  units::volt_t kS, kG;
+  units::unit_t<frc::ElevatorFeedforward::kv_unit> kV;
+  units::unit_t<frc::ElevatorFeedforward::ka_unit> kA;
+};
 
 namespace General {
   // Choose the bindings for which robot to build
@@ -162,41 +180,67 @@ namespace ElevatorConstants {
   //Smart Current Limit
   const int kCurrentLimit = 50;
 
-  //First Stage PID Controller 
-  const double kP = 0.1;
-  const double kI = 0.0;
-  const double kD = 0.0;
+  //First Stage Controller
+  const static PIDConstants kFirstStagePID = {
+    /* kP */ 0.2,
+    /* kI */ 0.0,
+    /* kD */ 0.0
+  };
+  const static ElevatorFeedforwardConstants kFirstStageFeedforward = {
+    /* kS */ 0.11_V,
+    /* kG */ 0.1_V,
+    /* kV */ 19.5_V / 1_mps,
+    /* kA */ 0.0_V / 1_mps_sq
+  };
+  
+  //Second Stage Controller
+  const static PIDConstants kSecondStagePID = {
+    /* kP */ 0.2,
+    /* kI */ 0.0,
+    /* kD */ 0.0
+  };
+  const static ElevatorFeedforwardConstants kSecondStageFeedforward = {
+    /* kS */ 0.225_V,
+    /* kG */ 0.0_V,
+    /* kV */ 28.0_V / 1_mps,
+    /* kA */ 0.0_V / 1_mps_sq
+  };
+
   const double maxOutput = 1.0;
 
   //PID Profile
-  const units::meters_per_second_t maximumVelocity= 0.1_mps;
-  const units::meters_per_second_squared_t maximumAcceleration = 0.2_mps_sq;
+  static frc::TrapezoidProfile<units::meter> trapezoidProfileFirstStage{{0.5_mps, 2.0_mps_sq}};
+  static frc::TrapezoidProfile<units::meter> trapezoidProfileSecondStage{{0.3_mps, 1.0_mps_sq}};
 
   //Elevator Goals
   const units::meter_t eLevel0Goal = 0.0_m;
   const units::meter_t eLevel1Goal = eLevel0Goal;
-  const units::meter_t eLevel2Goal = 0.5_m;
-  const units::meter_t eLevel3Goal = 1.0_m;
-  const units::meter_t eLevel4Goal = 1.5_m;
+  const units::meter_t eLevel2Goal = 0.3_m;
+  const units::meter_t eLevel3Goal = 0.6_m;
+  const units::meter_t eLevel4Goal = 0.8_m;
 
   //Encoder Position
-  const units::turn_t resetEncoder = 0.0_tr;
+  const units::meter_t resetEncoder = 0.0_m;
 
   // Elevator limits
-  const units::meter_t extendSoftLimitFirstStage = 7.0_m;
-  const units::meter_t retractSoftLimit = -1.0_m;
-  const units::meter_t extendSoftLimitSecondStage = 4.0_m;
+  const units::meter_t extendSoftLimitFirstStage = 0.68_m;
+  const units::meter_t extendSoftLimitSecondStage = 0.62_m;
 
-  //Elevator feedforward
-  const units::volt_t kS = 1.0_V;
-  const units::volt_t kG = 1.0_V;
-  const auto kV = 1.0_V / 1_mps;
-  const auto kA = 1.0_V / 1_mps_sq;
+  const units::meter_t retractSoftLimitFirstStage = 0.0_m;
+  const units::meter_t retractSoftLimitSecondStage = 0.38873863697052_m;
+
 
   // Maximum Elevator Heights
-  const units::meter_t kMaxFirstStageHeight = 1.5_m;
-  const units::meter_t kMaxSecondStageHeight = 0.3_m;
+  const units::meter_t kMaxFirstStageHeight = extendSoftLimitFirstStage - 0.01_m;
+  const units::meter_t kMaxSecondStageHeight = extendSoftLimitSecondStage - 0.01_m;
 
+  // Initial Elevator heights
+  const units::meter_t kInitFirstStageHeight = 0.0_m;
+  const units::meter_t kInitSecondStageHeight = 0.37900087237358093_m;
+
+  // Limit Switch Locations
+  const units::meter_t kResetFirstStageHeight = 0.0_m;
+  const units::meter_t kResetSecondStageHeight = 0.0_m;
   //Elevator Height Conversion:
   /* DIAMETERS OF THE MOTOR SPROCKETS:
   55 mm - 1st stage
@@ -209,15 +253,21 @@ namespace ElevatorConstants {
   const units::meter_t distancePerTurnSecondStage = 0.1193805_m;
 
   //Gear Ratio
-  const double gearRatio = 1.0 / 27.0;
+  constexpr double gearBoxGearRatio = 1.0 / 27.0;
 
-  const double kElevatorPositionToleranceMetres = 0.01; // issue 70 - update this tolerance
-  const double kElevatorVelocityTolerancePerSecond = 0.1;
+    constexpr double gearRatioFirstStage = gearBoxGearRatio * distancePerTurnFirstStage.value();
+    constexpr double gearRatioSecondStage = gearBoxGearRatio * distancePerTurnSecondStage.value();
+
+
+  const units::meter_t kElevatorPositionTolerance = 0.03_m;
+  const units::meters_per_second_t kElevatorVelocityTolerance = 0.1_mps;
+
   const units::meter_t kElevatorMinHeightCollect = 1_m; //issue 70 - update this position
   const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amount
   
   //Elevator DIO port
-  inline constexpr int k_limitSwitchElevatorPin = 1;
+  inline constexpr int kFirstStageLimitSwitchPin = 1;
+  inline constexpr int kSecondStageLimitSwitchPin = 2; // TODO
 }
 
 namespace ArmConstants {
@@ -246,10 +296,10 @@ namespace ArmConstants {
 
   //Arm Goals - this is the output of the gearbox (not the motor)
   const units::turn_t aLevel0Goal = retractSoftLimit;
-  const units::turn_t aLevel1Goal = 0.0_tr;
-  const units::turn_t aLevel2Goal = 0.125_tr;
-  const units::turn_t aLevel3Goal = 0.125_tr;
-  const units::turn_t aLevel4Goal = 0.0_tr;
+  const units::turn_t aLevel1Goal = 0.15_tr;
+  const units::turn_t aLevel2Goal = 0.1_tr;
+  const units::turn_t aLevel3Goal = 0.0_tr;
+  const units::turn_t aLevel4Goal = -0.1_tr;
 
   constexpr double gearBoxGearRatio = 1.0 / 27.0;
   // this is the ratio between the motor sprocket teeth and the teeth on sprocket connected to the arm
@@ -261,9 +311,9 @@ namespace ArmConstants {
   const units::turn_t kArmPlaceCoral = -15_tr; // issue 70 - update this amount
 
   //Encoder Position
-  const units::turn_t resetEncoder = -0.25_tr;
+  const units::turn_t resetEncoder = 0.15_tr;
 
   //Arm DIO port
-  inline constexpr int k_limitSwitchArmPin = 2;
+  inline constexpr int k_limitSwitchArmPin = 3;
 }
 
