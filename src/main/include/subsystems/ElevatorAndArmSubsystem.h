@@ -12,6 +12,9 @@ class ElevatorAndArmSubsystem : public frc2::SubsystemBase {
   ElevatorAndArmSubsystem(ElevatorSubsystem& elevatorSub,
     ArmSubsystem& armSub);
 
+  void MoveArm(double speed);
+  void MoveSecondStage(double speed);
+
   frc2::CommandPtr MoveUp();
   frc2::CommandPtr MoveDown();
   frc2::CommandPtr ElevatorMoveUp();
@@ -24,6 +27,8 @@ class ElevatorAndArmSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr MoveToLevel(Level level);
   frc2::CommandPtr CollectCoral();
   frc2::CommandPtr PlaceCoral();
+
+  void LogEncoderOutputs();
   
   void Periodic() override;
   void SimulationPeriodic() override;
