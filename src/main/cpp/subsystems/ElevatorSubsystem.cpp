@@ -133,6 +133,11 @@ void ElevatorSubsystem::ResetEncoder() {
   m_encoderRight.SetPosition(0.0);
 }
 
+void ElevatorSubsystem::MoveSecondStage(double speed) {
+  // Inline construction of command goes here.
+  m_motorSecondStage.Set(speed);
+}
+
 frc2::CommandPtr ElevatorSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
   return Run([this] {m_motorFirstStageLeft.Set(0.1); })

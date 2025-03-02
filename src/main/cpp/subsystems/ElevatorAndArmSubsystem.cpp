@@ -8,6 +8,10 @@ ElevatorAndArmSubsystem::ElevatorAndArmSubsystem(ElevatorSubsystem& elevatorSub,
     m_armSubsystem(armSub) {
 }
 
+void ElevatorAndArmSubsystem::MoveArm(double speed) {
+  m_armSubsystem.MoveArm(speed);
+}
+
 frc2::CommandPtr ElevatorAndArmSubsystem::MoveUp() {
   return m_elevatorSubsystem.MoveUpCommand()
   .AndThen(m_armSubsystem.MoveUpCommand())
@@ -112,9 +116,14 @@ frc2::CommandPtr ElevatorAndArmSubsystem::PlaceCoral() {
           .AlongWith(m_armSubsystem.RotateBy(kArmPlaceCoral));
 }
 
+void ElevatorAndArmSubsystem::LogEncoderOutputs()
+{
+  frc::SmartDashboard::PutNumber("ElevatorAndArmSubsystem/ArmPosition", m_armSubsystem.GetArmAngle().value());
+}
 
 void ElevatorAndArmSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
+  LogEncoderOutputs();
 }
 
 void ElevatorAndArmSubsystem::SimulationPeriodic() {

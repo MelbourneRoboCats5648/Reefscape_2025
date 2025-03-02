@@ -22,10 +22,12 @@
 enum BuildSeason {Crescendo, Reefscape};
 
 enum Level {L0, L1, L2, L3, L4};
+enum TestLevel {NONE, ARM, FIRST_STAGE, SECOND_STAGE, DRIVE};
 
 namespace General {
   // Choose the bindings for which robot to build
-  const BuildSeason KBuildSeason = BuildSeason::Crescendo;
+  const BuildSeason KBuildSeason = BuildSeason::Reefscape;
+  const TestLevel KTestLevel = TestLevel::DRIVE;
 }
 
 // namespace OperatorConstants
@@ -197,11 +199,11 @@ namespace ElevatorConstants {
 
   //Elevator Height Conversion:
   /* DIAMETERS OF THE MOTOR SPROCKETS:
-  55 mm - 2nd stage
-  38 mm - 3rd stage
+  55 mm - 1st stage
+  38 mm - 2nd stage
   CIRCUMFERENCE OF THE MOTOR SPROCKETS:
-  0.1727876 m - 2nd stage
-  0.1193805 m - 3rd stage
+  0.1727876 m - 1st stage
+  0.1193805 m - 2nd stage
   DISTANCE PER TURN = CIRCUMFERENCE */
   const units::meter_t distancePerTurnFirstStage = 0.1727876_m;
   const units::meter_t distancePerTurnSecondStage = 0.1193805_m;
@@ -220,27 +222,43 @@ namespace ElevatorConstants {
 
 namespace ArmConstants {
   //PID Profile
-  const units::turns_per_second_t maximumVelocity= 0.1_tps;
-  const units::turns_per_second_squared_t maximumAcceleration = 0.2_tr_per_s_sq;
+  const units::turns_per_second_t maximumVelocity= 0.8_tps;
+  const units::turns_per_second_squared_t maximumAcceleration = 4.0_tr_per_s_sq;
 
   //PID Trapezoidal Controller
   static constexpr units::second_t kDt = 20_ms;
 
+  //First Stage PID Controller 
+  const double kP = 0.5;
+  const double kI = 0.0;
+  const double kD = 0.0;
+  const double maxOutput = 1.0;
+
+  //Arm feedforward
+  const units::volt_t kS = 0.12_V;
+  const units::volt_t kG = 0.25_V;
+  const auto kV = 4.7_V / 1_tps;
+  const auto kA = 0.0_V / 1_tr_per_s_sq;
+
+  // Arm limits
+  const units::turn_t extendSoftLimit = 0.10_tr;
+  const units::turn_t retractSoftLimit = -0.23_tr;
+
   //Arm Goals - this is the output of the gearbox (not the motor)
-  const units::turn_t aLevel0Goal = -0.25_tr;
+  const units::turn_t aLevel0Goal = retractSoftLimit;
   const units::turn_t aLevel1Goal = 0.0_tr;
   const units::turn_t aLevel2Goal = 0.125_tr;
   const units::turn_t aLevel3Goal = 0.125_tr;
   const units::turn_t aLevel4Goal = 0.0_tr;
 
-  const double gearRatio = 1.0 / 27.0;
+  constexpr double gearBoxGearRatio = 1.0 / 27.0;
+  // this is the ratio between the motor sprocket teeth and the teeth on sprocket connected to the arm
+  constexpr double motorSprocketRatio = 12.0 / 18.0;
+  constexpr double gearRatio = gearBoxGearRatio * motorSprocketRatio;
 
   const double kArmPositionToleranceTurns = 0.01; // issue 70 - update this tolerance
   const double kArmVelocityTolerancePerSecond = 0.1;
   const units::turn_t kArmPlaceCoral = -15_tr; // issue 70 - update this amount
-
-  // Arm limits
-  const units::turn_t extendSoftLimit = 0.0825_tr; // this is 29.7 degrees
 
   //Encoder Position
   const units::turn_t resetEncoder = -0.25_tr;

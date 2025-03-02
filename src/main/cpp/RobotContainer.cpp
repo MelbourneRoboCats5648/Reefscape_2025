@@ -47,46 +47,90 @@ RobotContainer::RobotContainer()
     }
   }
 
-  m_drive.SetDefaultCommand(frc2::RunCommand(
-    [this] {
-      units::velocity::meters_per_second_t yspeed = -m_drive.m_yLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband) * kMaxSpeed);
-      units::velocity::meters_per_second_t xspeed = -m_drive.m_xLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetLeftX(), kDeadband) * kMaxSpeed);
-      units::angular_velocity::radians_per_second_t rotspeed = -m_drive.m_rotLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetRightX(), kDeadband) * kMaxAngularSpeed);
-      m_drive.Drive(
-          // Multiply by max speed to map the joystick unitless inputs to
-          // actual units. This will map the [-1, 1] to [max speed backwards,
-          // max speed forwards], converting them to actual units.
-          yspeed, xspeed, rotspeed, false );
-    },
-    {&m_drive}));
+  switch(General::KTestLevel) {
+    case (TestLevel::NONE): {
+      break;
+    }
+    case (TestLevel::ARM): {
+      m_elevatorAndArmSubsystem.SetDefaultCommand(frc2::RunCommand(
+        [this] {
+          double speed = frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband);
+          m_elevatorAndArmSubsystem.MoveArm(speed);
+        },
+        {&m_elevatorAndArmSubsystem}));
+
+        break;
+    }
+    case (TestLevel::SECOND_STAGE): {
+      m_elevatorAndArmSubsystem.SetDefaultCommand(frc2::RunCommand(
+        [this] {
+          double speed = frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband);
+          m_elevatorAndArmSubsystem.MoveSecondStage(speed);
+        },
+        {&m_elevatorAndArmSubsystem}));
+
+        break;
+    }
+    case (TestLevel::DRIVE): {
+      m_drive.SetDefaultCommand(frc2::RunCommand(
+        [this] {
+          units::velocity::meters_per_second_t yspeed = -m_drive.m_yLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband) * kMaxSpeed);
+          units::velocity::meters_per_second_t xspeed = -m_drive.m_xLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetLeftX(), kDeadband) * kMaxSpeed);
+          units::angular_velocity::radians_per_second_t rotspeed = -m_drive.m_rotLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetRightX(), kDeadband) * kMaxAngularSpeed);
+          m_drive.Drive(
+              // Multiply by max speed to map the joystick unitless inputs to
+              // actual units. This will map the [-1, 1] to [max speed backwards,
+              // max speed forwards], converting them to actual units.
+              yspeed, xspeed, rotspeed, false );
+        },
+        {&m_drive}));
+
+        break;
+    }
+
+  }
+
+  
+
+
+
+
 
 }
+
+
 
 
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
     //drivetrain commands
-  m_driverController.B().WhileTrue(m_drive.StopCommand());
+  //m_driverController.B().WhileTrue(m_drive.StopCommand());
 
   //PID elevator subsystem command
-  m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
-  m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
-  m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
-  m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L4));
+  //m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
+  //m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
+  //m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
+//  m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L4));
+
+  // issue 102 - testing arm goal command
+  m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(0_tr)));
+  m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(-0.2_tr)));
+  m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(-0.3_tr)));
+  m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(0.15_tr)));
 
   //Collect Command
-  m_driverController.LeftBumper().OnTrue(m_elevatorAndArmSubsystem.CollectCoral());
+//  m_driverController.LeftBumper().OnTrue(m_elevatorAndArmSubsystem.CollectCoral());
 
   //Place on Reef Command
-  m_driverController.RightBumper().OnTrue(m_elevatorAndArmSubsystem.PlaceCoral());
+//  m_driverController.RightBumper().OnTrue(m_elevatorAndArmSubsystem.PlaceCoral());
 
   // PID climb subsystem command (temporarily disabling LeftClimbUpCommand and LeftClimbDownCommand to test it)
-  m_joystick.Button(LeftClimbConstants::leftUpButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalL1));
-  m_joystick.Button(LeftClimbConstants::leftDownButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalRetract));
+  //m_joystick.Button(LeftClimbConstants::leftUpButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalL1));
+  //m_joystick.Button(LeftClimbConstants::leftDownButton).OnTrue(m_leftClimbSubsystem.LeftClimbCommand(GoalConstants::m_climbGoalRetract));
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is pressed, cancelling on release.
-  m_driverController.LeftTrigger().WhileTrue(m_elevatorAndArmSubsystem.ElevatorMoveUp());
-  m_driverController.RightTrigger().WhileTrue(m_elevatorAndArmSubsystem.ElevatorMoveDown());
+//  m_driverController.LeftTrigger().WhileTrue(m_elevatorAndArmSubsystem.ElevatorMoveUp());
+//  m_driverController.RightTrigger().WhileTrue(m_elevatorAndArmSubsystem.ElevatorMoveDown());
 }
 
 void RobotContainer::Configure2024Bindings() {

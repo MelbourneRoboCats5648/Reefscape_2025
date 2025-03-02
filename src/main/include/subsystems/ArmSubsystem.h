@@ -10,6 +10,7 @@
 #include <frc2/command/Commands.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/DigitalInput.h>
+#include <frc/controller/ArmFeedforward.h>
 
 class ArmSubsystem : public frc2::SubsystemBase {
   private:
@@ -27,11 +28,11 @@ class ArmSubsystem : public frc2::SubsystemBase {
   ArmSubsystem();
 
   //arm command factory method.
+  void MoveArm(double speed);
   frc2::CommandPtr MoveUpCommand();
   frc2::CommandPtr MoveDownCommand();
   frc2::CommandPtr MoveToAngleCommand(units::turn_t goal);
   frc2::CommandPtr RotateBy(units::turn_t angle);
-
 
   //todo - figure out commands for arm
 
@@ -43,6 +44,9 @@ class ArmSubsystem : public frc2::SubsystemBase {
   frc::TrapezoidProfile<units::turn>::State& GetSetpoint();
   frc::TrapezoidProfile<units::turn>::State& GetGoal();
   bool IsGoalReached();
+  
+  void SetpointControl(); // control using setpoint
+  frc2::CommandPtr SetpointControlCommand();
 
   void OnLimitSwitchActivation();
 
@@ -57,9 +61,12 @@ class ArmSubsystem : public frc2::SubsystemBase {
   // acceleration constraints for the next setpoint.
 
   frc::TrapezoidProfile<units::turn> m_trapezoidalProfile{{ArmConstants::maximumVelocity, ArmConstants::maximumAcceleration}};
-  frc::TrapezoidProfile<units::turn>::State m_armGoal;
-  frc::TrapezoidProfile<units::turn>::State m_armSetpoint;
+  frc::TrapezoidProfile<units::turn>::State m_armGoal{ArmConstants::resetEncoder, 0.0_tps};
+  frc::TrapezoidProfile<units::turn>::State m_armSetpoint{ArmConstants::resetEncoder, 0.0_tps};
   rev::spark::SparkClosedLoopController m_closedLoopController = m_armMotor.GetClosedLoopController();
+
+  frc::ArmFeedforward m_armFeedforward{ArmConstants::kS, ArmConstants::kG, ArmConstants::kV, ArmConstants::kA};
+
 };
 
 
