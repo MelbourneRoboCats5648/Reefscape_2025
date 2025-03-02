@@ -16,25 +16,33 @@ ElevatorSubsystem::ElevatorSubsystem() {
 
   // First Stage Limits
     // Enable limit switches to stop the motor when they are closed
-    elevatorMotorFirstStageLeftConfig.limitSwitch
-      .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
-      .ReverseLimitSwitchEnabled(true);
+    // elevatorMotorFirstStageLeftConfig.limitSwitch
+    //   .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
+    //   .ReverseLimitSwitchEnabled(true);
 
     elevatorMotorFirstStageLeftConfig.softLimit
       .ForwardSoftLimit(ElevatorConstants::extendSoftLimitFirstStage.value())
       .ForwardSoftLimitEnabled(true);
 
+    elevatorMotorFirstStageLeftConfig.softLimit
+      .ReverseSoftLimit(ElevatorConstants::retractSoftLimit.value())
+      .ReverseSoftLimitEnabled(true);
+
   //Second Stage Limits
     // Enable limit switches to stop the motor when they are closed
-    elevatorMotorSecondStageConfig.limitSwitch
-      .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
-      .ReverseLimitSwitchEnabled(true);
+    // elevatorMotorSecondStageConfig.limitSwitch
+    //   .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
+    //   .ReverseLimitSwitchEnabled(true);
 
     // Set the soft limits to stop the motor at -50 and 50 rotations
     // will alter constants
     elevatorMotorSecondStageConfig.softLimit
       .ForwardSoftLimit(ElevatorConstants::extendSoftLimitSecondStage.value())
       .ForwardSoftLimitEnabled(true);
+
+    elevatorMotorSecondStageConfig.softLimit
+      .ReverseSoftLimit(ElevatorConstants::retractSoftLimit.value())
+      .ReverseSoftLimitEnabled(true);
 
   //PID Controller 
   /* Configure the closed loop controller. We want to make sure we set the

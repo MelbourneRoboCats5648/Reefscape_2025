@@ -106,17 +106,29 @@ void RobotContainer::ConfigureBindings() {
     //drivetrain commands
   //m_driverController.B().WhileTrue(m_drive.StopCommand());
 
-  //PID elevator subsystem command
-  //m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
-  //m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
-  //m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
-//  m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L4));
+  // //PID elevator subsystem command
+  m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
+  m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
+  m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
+  m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L4));
 
   // issue 102 - testing arm goal command
-  m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(0_tr)));
-  m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(-0.2_tr)));
-  m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(-0.3_tr)));
-  m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(0.15_tr)));
+  // m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(0_tr)));
+  // m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(-0.2_tr)));
+  // m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(-0.3_tr)));
+  // m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(0.15_tr)));
+
+
+  // // Move to height
+  // m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(units::meter_t(0.3_m)));
+  // m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(units::meter_t(0.6_m)));
+  // m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(units::meter_t(0.8_m)));
+  // m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(units::meter_t(1.2_m)));
+
+
+
+
+
 
   //Collect Command
 //  m_driverController.LeftBumper().OnTrue(m_elevatorAndArmSubsystem.CollectCoral());
