@@ -22,7 +22,7 @@
 enum BuildSeason {Crescendo, Reefscape};
 
 enum Level {L0, L1, L2, L3, L4};
-enum TestLevel {NONE, ARM, FIRST_STAGE, SECOND_STAGE, DRIVE};
+enum TestLevel {NONE, ARM, ELEVATOR, DRIVE};
 
 namespace General {
   // Choose the bindings for which robot to build
@@ -180,7 +180,7 @@ namespace ElevatorConstants {
   const units::meter_t eLevel4Goal = 1.5_m;
 
   //Encoder Position
-  const units::turn_t resetEncoder = 0.0_tr;
+  const units::meter_t resetEncoder = 0.0_m;
 
   // Elevator limits
   const units::meter_t extendSoftLimitFirstStage = 7.0_m;

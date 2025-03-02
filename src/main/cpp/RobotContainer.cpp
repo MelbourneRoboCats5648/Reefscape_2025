@@ -52,22 +52,22 @@ RobotContainer::RobotContainer()
       break;
     }
     case (TestLevel::ARM): {
-      m_elevatorAndArmSubsystem.SetDefaultCommand(frc2::RunCommand(
-        [this] {
-          double speed = frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband);
-          m_elevatorAndArmSubsystem.MoveArm(speed);
-        },
-        {&m_elevatorAndArmSubsystem}));
+      // m_elevatorAndArmSubsystem.SetDefaultCommand(frc2::RunCommand(
+      //   [this] {
+      //     double speed = frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband);
+      //     m_elevatorAndArmSubsystem.MoveArm(speed);
+      //   },
+      //   {&m_elevatorAndArmSubsystem}));
 
         break;
     }
-    case (TestLevel::SECOND_STAGE): {
-      m_elevatorAndArmSubsystem.SetDefaultCommand(frc2::RunCommand(
-        [this] {
-          double speed = frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband);
-          m_elevatorAndArmSubsystem.MoveSecondStage(speed);
-        },
-        {&m_elevatorAndArmSubsystem}));
+    case (TestLevel::ELEVATOR): {
+      // m_elevatorAndArmSubsystem.SetDefaultCommand(frc2::RunCommand(
+      //   [this] {
+      //     double speed = frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband);
+      //     m_elevatorAndArmSubsystem.MoveSecondStage(speed);
+      //   },
+      //   {&m_elevatorAndArmSubsystem}));
 
         break;
     }

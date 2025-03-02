@@ -12,10 +12,21 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   public:
   ElevatorSubsystem();
   
+  units::meter_t GetElevatorFirstStageHeight();
+  units::meter_t GetElevatorSecondStageHeight();
   units::meter_t GetElevatorHeight();
-  frc::TrapezoidProfile<units::meter>::State& GetSetpoint();
-  frc::TrapezoidProfile<units::meter>::State& GetGoal();
-  bool IsGoalReached();
+
+  frc::TrapezoidProfile<units::meter>::State& GetFirstStageSetpoint();
+  frc::TrapezoidProfile<units::meter>::State& GetFirstStageGoal();
+  bool IsFirstStageGoalReached();
+
+  frc::TrapezoidProfile<units::meter>::State& GetSecondStageSetpoint();
+  frc::TrapezoidProfile<units::meter>::State& GetSecondStageGoal();
+  bool IsSecondStageGoalReached();
+
+  void FirstStageSetpointControl(); // control using setpoint
+  void SecondStageSetpointControl(); // control using setpoint
+  frc2::CommandPtr SetpointControlCommand();
 
   void ResetMotor();
   void OnLimitSwitchActivation();
@@ -56,8 +67,10 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   // Create a motion profile with the given maximum velocity and maximum
   // acceleration constraints for the next setpoint.
   frc::TrapezoidProfile<units::meter> m_trapezoidalProfile{{ElevatorConstants::maximumVelocity, ElevatorConstants::maximumAcceleration}};
-  frc::TrapezoidProfile<units::meter>::State m_elevatorGoal;
-  frc::TrapezoidProfile<units::meter>::State m_elevatorSetpoint;
+  frc::TrapezoidProfile<units::meter>::State m_elevatorFirstStageGoal{ElevatorConstants::resetEncoder, 0.0_mps};
+  frc::TrapezoidProfile<units::meter>::State m_elevatorFirstStageSetpoint{ElevatorConstants::resetEncoder, 0.0_mps};
+  frc::TrapezoidProfile<units::meter>::State m_elevatorSecondStageGoal{ElevatorConstants::resetEncoder, 0.0_mps};
+  frc::TrapezoidProfile<units::meter>::State m_elevatorSecondStageSetpoint{ElevatorConstants::resetEncoder, 0.0_mps};
   rev::spark::SparkClosedLoopController m_closedLoopControllerLeft = m_motorFirstStageLeft.GetClosedLoopController();
   rev::spark::SparkClosedLoopController m_closedLoopControllerSecondStage = m_motorSecondStage.GetClosedLoopController();
 
@@ -67,7 +80,9 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   
   void MoveSecondStage(double speed);
 
-  void UpdateSetpoint();
+  void UpdateFirstStageSetpoint();
+  void UpdateSecondStageSetpoint();
+
   frc2::CommandPtr MoveFirstStageToHeightCommand(units::meter_t goal);
   frc2::CommandPtr MoveSecondStageToHeightCommand(units::meter_t goal);
 };

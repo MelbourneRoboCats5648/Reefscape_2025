@@ -86,35 +86,66 @@ ElevatorSubsystem::ElevatorSubsystem() {
                     rev::spark::SparkMax::PersistMode::kPersistParameters);
 
   // Reset the position to 0 to start within the range of the soft limits
-  m_encoderLeft.SetPosition(ElevatorConstants::resetEncoder.value());
-  m_encoderRight.SetPosition(ElevatorConstants::resetEncoder.value());
-  m_encoderSecondStage.SetPosition(ElevatorConstants::resetEncoder.value());
+  ResetEncoder();
 
+  SetDefaultCommand(SetpointControlCommand());
+}
+
+units::meter_t ElevatorSubsystem::GetElevatorFirstStageHeight() {
+  //using left encoder as position reference
+  return m_encoderLeft.GetPosition() * ElevatorConstants::distancePerTurnFirstStage;
+}
+
+units::meter_t ElevatorSubsystem::GetElevatorSecondStageHeight() {
+  //using left encoder as position reference
+  return m_encoderSecondStage.GetPosition() * ElevatorConstants::distancePerTurnSecondStage;
 }
 
 units::meter_t ElevatorSubsystem::GetElevatorHeight() {
-  //using left encoder as position reference
-  return m_encoderLeft.GetPosition() * ElevatorConstants::distancePerTurnFirstStage;
-         m_encoderRight.GetPosition() * ElevatorConstants::distancePerTurnFirstStage;
-         m_encoderSecondStage.GetPosition() * ElevatorConstants::distancePerTurnSecondStage;
+  return GetElevatorFirstStageHeight() + GetElevatorSecondStageHeight();
 }
 
-void ElevatorSubsystem::UpdateSetpoint() {  
-  m_elevatorSetpoint.position = GetElevatorHeight();
-  m_elevatorSetpoint.velocity = 0.0_mps; 
+void ElevatorSubsystem::UpdateFirstStageSetpoint() {  
+  m_elevatorFirstStageSetpoint.position = GetElevatorFirstStageHeight();
+  m_elevatorFirstStageSetpoint.velocity = 0.0_mps;
 }
 
-frc::TrapezoidProfile<units::meter>::State& ElevatorSubsystem::GetSetpoint() {
-  return  m_elevatorSetpoint;
+void ElevatorSubsystem::UpdateSecondStageSetpoint() {  
+  m_elevatorFirstStageSetpoint.position = GetElevatorSecondStageHeight();
+  m_elevatorFirstStageSetpoint.velocity = 0.0_mps;
+}
+
+frc::TrapezoidProfile<units::meter>::State& ElevatorSubsystem::GetFirstStageSetpoint() {
+  return  m_elevatorFirstStageSetpoint;
 } 
 
-frc::TrapezoidProfile<units::meter>::State& ElevatorSubsystem::GetGoal() {
-  return  m_elevatorGoal;
+frc::TrapezoidProfile<units::meter>::State& ElevatorSubsystem::GetFirstStageGoal() {
+  return  m_elevatorFirstStageGoal;
+}
+
+bool ElevatorSubsystem::IsFirstStageGoalReached() {
+  double errorPosition = std::abs(GetFirstStageSetpoint().position.value() - GetFirstStageGoal().position.value());
+  double errorVelocity = std::abs(GetFirstStageSetpoint().velocity.value() - GetFirstStageGoal().velocity.value());
+
+  if((errorPosition <= kElevatorPositionToleranceMetres) && (errorVelocity <= kElevatorVelocityTolerancePerSecond)) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+frc::TrapezoidProfile<units::meter>::State& ElevatorSubsystem::GetSecondStageSetpoint() {
+  return  m_elevatorSecondStageSetpoint;
 } 
 
-bool ElevatorSubsystem::IsGoalReached() {
-  double errorPosition = std::abs(GetSetpoint().position.value() - GetGoal().position.value());
-  double errorVelocity = std::abs(GetSetpoint().velocity.value() - GetGoal().velocity.value());
+frc::TrapezoidProfile<units::meter>::State& ElevatorSubsystem::GetSecondStageGoal() {
+  return  m_elevatorSecondStageGoal;
+} 
+
+bool ElevatorSubsystem::IsSecondStageGoalReached() {
+  double errorPosition = std::abs(GetSecondStageSetpoint().position.value() - GetSecondStageGoal().position.value());
+  double errorVelocity = std::abs(GetSecondStageSetpoint().velocity.value() - GetSecondStageGoal().velocity.value());
 
   if((errorPosition <= kElevatorPositionToleranceMetres) && (errorVelocity <= kElevatorVelocityTolerancePerSecond)) {
     return true;
@@ -129,8 +160,37 @@ void ElevatorSubsystem::ResetMotor() {
 }
 
 void ElevatorSubsystem::ResetEncoder() {
-  m_encoderLeft.SetPosition(0.0);
-  m_encoderRight.SetPosition(0.0);
+  double encoderValue = ElevatorConstants::resetEncoder.value();
+  m_encoderLeft.SetPosition(encoderValue);
+  m_encoderRight.SetPosition(encoderValue);
+  m_encoderSecondStage.SetPosition(encoderValue);
+}
+
+void ElevatorSubsystem::FirstStageSetpointControl() {
+  frc::SmartDashboard::PutNumber("ElevatorFirstStage/positionSetpoint", m_elevatorFirstStageSetpoint.position.value());
+  frc::SmartDashboard::PutNumber("ElevatorFirstStage/velocitySetpoint", m_elevatorFirstStageSetpoint.velocity.value());
+  frc::SmartDashboard::PutNumber("ElevatorFirstStage/currentVelocity", m_encoderLeft.GetVelocity() / 60.0);
+  m_closedLoopControllerLeft.SetReference(m_elevatorFirstStageSetpoint.position.value(), 
+                                      rev::spark::SparkLowLevel::ControlType::kPosition,
+                                      rev::spark::kSlot0,
+                                      m_elevatorFeedforward.Calculate(m_elevatorFirstStageSetpoint.velocity).value());
+}
+
+void ElevatorSubsystem::SecondStageSetpointControl() {
+  frc::SmartDashboard::PutNumber("ElevatorSecondStage/positionSetpoint", m_elevatorSecondStageSetpoint.position.value());
+  frc::SmartDashboard::PutNumber("ElevatorSecondStage/velocitySetpoint", m_elevatorSecondStageSetpoint.velocity.value());
+  frc::SmartDashboard::PutNumber("ElevatorSecondStage/currentVelocity", m_encoderSecondStage.GetVelocity() / 60.0);
+  m_closedLoopControllerSecondStage.SetReference(m_elevatorSecondStageSetpoint.position.value(), 
+                                      rev::spark::SparkLowLevel::ControlType::kPosition,
+                                      rev::spark::kSlot0,
+                                      m_elevatorFeedforward.Calculate(m_elevatorSecondStageSetpoint.velocity).value());
+}
+
+frc2::CommandPtr ElevatorSubsystem::SetpointControlCommand() {
+  return Run([this] {
+    FirstStageSetpointControl();
+    SecondStageSetpointControl();
+  });
 }
 
 void ElevatorSubsystem::MoveSecondStage(double speed) {
@@ -143,7 +203,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveUpCommand() {
   return Run([this] {m_motorFirstStageLeft.Set(0.1); })
       .FinallyDo([this] {
           ResetMotor();
-          UpdateSetpoint();
+          UpdateFirstStageSetpoint();
          });
 }
 
@@ -152,7 +212,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveDownCommand() {
   return Run([this] {m_motorFirstStageLeft.Set(-0.1); })
       .FinallyDo([this] {
           ResetMotor();
-          UpdateSetpoint();
+          UpdateFirstStageSetpoint();
          });
 }
 
@@ -165,7 +225,7 @@ frc2::CommandPtr ElevatorSubsystem::MoveToHeightCommand(units::meter_t heightGoa
   }
   else {
     return (MoveSecondStageToHeightCommand(ElevatorConstants::kMaxSecondStageHeight))
-    .AndThen(MoveFirstStageToHeightCommand(heightGoal - ElevatorConstants::kMaxSecondStageHeight));
+    .AlongWith(MoveFirstStageToHeightCommand(heightGoal - ElevatorConstants::kMaxSecondStageHeight));
   }
 }
 
@@ -173,31 +233,24 @@ frc2::CommandPtr ElevatorSubsystem::MoveFirstStageToHeightCommand(units::meter_t
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
   return Run([this, goal] {
-            m_elevatorGoal = {goal, 0.0_mps }; //stop at goal
-            m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, m_elevatorGoal);
-            frc::SmartDashboard::PutNumber("trapazoidalFirstStageSetpoint", m_elevatorSetpoint.position.value());
-            m_closedLoopControllerLeft.SetReference(m_elevatorGoal.position.value(), 
-                                                rev::spark::SparkLowLevel::ControlType::kPosition,
-                                                rev::spark::kSlot0,
-                                                m_elevatorFeedforward.Calculate(m_elevatorSetpoint.velocity).value());
-            
-            })   
-        .FinallyDo([this] {m_motorFirstStageLeft.Set(0); });
+            m_elevatorFirstStageGoal = {goal, 0.0_mps }; //stop at goal
+            m_elevatorFirstStageSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorFirstStageSetpoint, m_elevatorFirstStageGoal);
+            FirstStageSetpointControl();
+        })
+        .Until([this] {return IsFirstStageGoalReached();})
+        .FinallyDo([this] {UpdateFirstStageSetpoint(); });
 }
 
 frc2::CommandPtr ElevatorSubsystem::MoveSecondStageToHeightCommand(units::meter_t goal) {
   // Inline construction of command goes here.
   // Subsystem::RunOnce implicitly requires `this` subsystem. */
   return Run([this, goal] {
-            m_elevatorGoal = {goal, 0.0_mps }; //stop at goal
-            m_elevatorSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSetpoint, m_elevatorGoal);
-            frc::SmartDashboard::PutNumber("trapazoidalSecondStageSetpoint", m_elevatorSetpoint.position.value());
-            m_closedLoopControllerSecondStage.SetReference(m_elevatorGoal.position.value(), 
-                                                rev::spark::SparkLowLevel::ControlType::kPosition,
-                                                rev::spark::kSlot0,
-                                                m_elevatorFeedforward.Calculate(m_elevatorSetpoint.velocity).value());
-            })   
-        .FinallyDo([this]{m_motorSecondStage.Set(0);});
+            m_elevatorSecondStageGoal = {goal, 0.0_mps }; //stop at goal
+            m_elevatorSecondStageSetpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_elevatorSecondStageSetpoint, m_elevatorSecondStageGoal);
+            SecondStageSetpointControl();
+        })
+        .Until([this] {return IsSecondStageGoalReached();})
+        .FinallyDo([this] {UpdateSecondStageSetpoint(); });
 }
 
 //To move down supply a negative
