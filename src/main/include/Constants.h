@@ -220,14 +220,14 @@ namespace ElevatorConstants {
 
 namespace ArmConstants {
   //PID Profile
-  const units::turns_per_second_t maximumVelocity= 0.1_tps;
-  const units::turns_per_second_squared_t maximumAcceleration = 0.2_tr_per_s_sq;
+  const units::turns_per_second_t maximumVelocity= 0.8_tps;
+  const units::turns_per_second_squared_t maximumAcceleration = 4.0_tr_per_s_sq;
 
   //PID Trapezoidal Controller
   static constexpr units::second_t kDt = 20_ms;
 
   //First Stage PID Controller 
-  const double kP = 0.0;
+  const double kP = 0.5;
   const double kI = 0.0;
   const double kD = 0.0;
   const double maxOutput = 1.0;
@@ -235,7 +235,7 @@ namespace ArmConstants {
   //Arm feedforward
   const units::volt_t kS = 0.12_V;
   const units::volt_t kG = 0.25_V;
-  const auto kV = 0.0_V / 1_tps;
+  const auto kV = 4.7_V / 1_tps;
   const auto kA = 0.0_V / 1_tr_per_s_sq;
 
   // Arm limits
