@@ -195,14 +195,14 @@ namespace ElevatorConstants {
   
   //Second Stage Controller
   const static PIDConstants kSecondStagePID = {
-    /* kP */ 0.0,
+    /* kP */ 0.2,
     /* kI */ 0.0,
     /* kD */ 0.0
   };
   const static ElevatorFeedforwardConstants kSecondStageFeedforward = {
-    /* kS */ 0.0_V,
+    /* kS */ 0.225_V,
     /* kG */ 0.0_V,
-    /* kV */ 0.0_V / 1_mps,
+    /* kV */ 28.0_V / 1_mps,
     /* kA */ 0.0_V / 1_mps_sq
   };
 
