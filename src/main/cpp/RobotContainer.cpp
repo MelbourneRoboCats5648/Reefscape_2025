@@ -113,10 +113,10 @@ void RobotContainer::ConfigureBindings() {
   // m_driverController.A().WhileTrue(m_elevatorSubsystem.m_secondStage.MoveDownCommand());
 
   // elevator position ctrl
-  m_driverController.Y().WhileTrue(m_elevatorSubsystem.m_firstStage.MoveToHeightCommand(ElevatorConstants::kMaxFirstStageHeight));
-  m_driverController.X().WhileTrue(m_elevatorSubsystem.m_firstStage.MoveToHeightCommand(ElevatorConstants::kInitFirstStageHeight + 0.05_m));
-  m_driverController.B().WhileTrue(m_elevatorSubsystem.m_secondStage.MoveToHeightCommand(ElevatorConstants::kMaxSecondStageHeight));
-  m_driverController.A().WhileTrue(m_elevatorSubsystem.m_secondStage.MoveToHeightCommand(ElevatorConstants::kInitSecondStageHeight + 0.05_m));
+  // m_driverController.Y().WhileTrue(m_elevatorSubsystem.m_firstStage.MoveToHeightCommand(ElevatorConstants::kMaxFirstStageHeight));
+  // m_driverController.X().WhileTrue(m_elevatorSubsystem.m_firstStage.MoveToHeightCommand(ElevatorConstants::kInitFirstStageHeight + 0.05_m));
+  // m_driverController.B().WhileTrue(m_elevatorSubsystem.m_secondStage.MoveToHeightCommand(ElevatorConstants::kMaxSecondStageHeight));
+  // m_driverController.A().WhileTrue(m_elevatorSubsystem.m_secondStage.MoveToHeightCommand(ElevatorConstants::kInitSecondStageHeight + 0.05_m));
 
   // //PID elevator subsystem command
   // m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
@@ -132,10 +132,10 @@ void RobotContainer::ConfigureBindings() {
 
 
   // // Move to height
-  // m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(units::meter_t(0.3_m)));
-  // m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(units::meter_t(0.6_m)));
-  // m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(units::meter_t(0.8_m)));
-  // m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(units::meter_t(1.2_m)));
+  m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::retractSoftLimitSecondStage));
+  m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxSecondStageHeight));
+  m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight));
+  m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight + ElevatorConstants::kMaxSecondStageHeight));
 
 
 

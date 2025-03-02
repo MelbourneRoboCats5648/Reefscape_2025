@@ -259,7 +259,7 @@ namespace ElevatorConstants {
     constexpr double gearRatioSecondStage = gearBoxGearRatio * distancePerTurnSecondStage.value();
 
 
-  const units::meter_t kElevatorPositionTolerance = 0.1_m;
+  const units::meter_t kElevatorPositionTolerance = 0.03_m;
   const units::meters_per_second_t kElevatorVelocityTolerance = 0.1_mps;
 
   const units::meter_t kElevatorMinHeightCollect = 1_m; //issue 70 - update this position
