@@ -209,8 +209,8 @@ namespace ElevatorConstants {
   const double maxOutput = 1.0;
 
   //PID Profile
-  const units::meters_per_second_t maximumVelocity= 0.5_mps;
-  const units::meters_per_second_squared_t maximumAcceleration = 2.0_mps_sq;
+  static frc::TrapezoidProfile<units::meter> trapezoidProfileFirstStage{{0.5_mps, 2.0_mps_sq}};
+  static frc::TrapezoidProfile<units::meter> trapezoidProfileSecondStage{{0.3_mps, 1.0_mps_sq}};
 
   //Elevator Goals
   const units::meter_t eLevel0Goal = 0.0_m;

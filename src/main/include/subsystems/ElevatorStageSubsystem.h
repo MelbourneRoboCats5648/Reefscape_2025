@@ -16,6 +16,7 @@ class ElevatorStageSubsystem : public frc2::SubsystemBase {
     units::meter_t initHeight, units::meter_t resetHeight,
     units::meter_t distancePerTurn,
     PIDConstants pidConst, ElevatorFeedforwardConstants ffConst,
+    frc::TrapezoidProfile<units::meter> pidProfile,
     int canID, int limitSwitchPin, int followerID = -1
   );
   
@@ -51,7 +52,7 @@ class ElevatorStageSubsystem : public frc2::SubsystemBase {
   rev::spark::SparkRelativeEncoder m_encoder;
   rev::spark::SparkClosedLoopController m_closedLoopController;
 
-  frc::TrapezoidProfile<units::meter> m_trapezoidalProfile{{ElevatorConstants::maximumVelocity, ElevatorConstants::maximumAcceleration}};
+  frc::TrapezoidProfile<units::meter> m_trapezoidalProfile;
   frc::TrapezoidProfile<units::meter>::State m_goal;
   frc::TrapezoidProfile<units::meter>::State m_setpoint;
 
