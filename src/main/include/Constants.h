@@ -222,23 +222,24 @@ namespace ElevatorConstants {
   //Encoder Position
   const units::meter_t resetEncoder = 0.0_m;
 
-  // Elevator limits
-  const units::meter_t extendSoftLimitFirstStage = 0.7_m;
-  const units::meter_t extendSoftLimitSecondStage = 0.67_m; // this should be 0.67
-
-  const units::meter_t retractSoftLimit = 0.1_m;
-
   // Maximum Elevator Heights
-  const units::meter_t kMaxFirstStageHeight = 0.7_m;
-  const units::meter_t kMaxSecondStageHeight = 0.67_m;
+  const units::meter_t kMaxFirstStageHeight = 0.67_m;
+  const units::meter_t kMaxSecondStageHeight = 0.62_m;
 
   // Initial Elevator heights
   const units::meter_t kInitFirstStageHeight = 0.0_m;
-  const units::meter_t kInitSecondStageHeight = 0.0_m;
+  const units::meter_t kInitSecondStageHeight = 0.37900087237358093_m;
 
   // Limit Switch Locations
   const units::meter_t kResetFirstStageHeight = 0.0_m;
   const units::meter_t kResetSecondStageHeight = 0.0_m;
+
+  // Elevator limits
+  const units::meter_t extendSoftLimitFirstStage = kMaxFirstStageHeight;
+  const units::meter_t extendSoftLimitSecondStage = kMaxSecondStageHeight; // this should be 0.67
+
+  const units::meter_t retractSoftLimitFirstStage = 0.0_m;
+  const units::meter_t retractSoftLimitSecondStage = 0.38373863697052_m;
 
   //Elevator Height Conversion:
   /* DIAMETERS OF THE MOTOR SPROCKETS:
@@ -313,6 +314,6 @@ namespace ArmConstants {
   const units::turn_t resetEncoder = 0.15_tr;
 
   //Arm DIO port
-  inline constexpr int k_limitSwitchArmPin = 2;
+  inline constexpr int k_limitSwitchArmPin = 3;
 }
 

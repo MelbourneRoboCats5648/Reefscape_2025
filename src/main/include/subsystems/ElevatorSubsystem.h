@@ -26,7 +26,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   
   ElevatorStageSubsystem m_firstStage{
     "ElevatorStage1",
-    ElevatorConstants::retractSoftLimit, ElevatorConstants::kMaxFirstStageHeight,
+    ElevatorConstants::retractSoftLimitFirstStage, ElevatorConstants::kMaxFirstStageHeight,
     ElevatorConstants::kInitFirstStageHeight, ElevatorConstants::kResetFirstStageHeight,
     ElevatorConstants::distancePerTurnFirstStage,
     ElevatorConstants::kFirstStagePID, ElevatorConstants::kFirstStageFeedforward,
@@ -35,12 +35,11 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   };
   ElevatorStageSubsystem m_secondStage{
     "ElevatorStage2",
-    ElevatorConstants::retractSoftLimit, ElevatorConstants::kMaxSecondStageHeight,
+    ElevatorConstants::retractSoftLimitSecondStage, ElevatorConstants::kMaxSecondStageHeight,
     ElevatorConstants::kInitSecondStageHeight, ElevatorConstants::kResetSecondStageHeight,
     ElevatorConstants::distancePerTurnSecondStage,
     ElevatorConstants::kSecondStagePID, ElevatorConstants::kSecondStageFeedforward,
-    CAN_Constants::kElevatorMotorLeftCAN_ID, ElevatorConstants::kSecondStageLimitSwitchPin,
-    CAN_Constants::kElevatorMotorRightCAN_ID
+    CAN_Constants::kElevatorMotorSecondStageCAN_ID, ElevatorConstants::kSecondStageLimitSwitchPin
   };
 };
 
