@@ -87,9 +87,6 @@ class DriveSubsystem : public frc2::SubsystemBase {
       void ResetPosition(frc::Pose2d pose);
       void SetPositionToZeroDistance();
 
-      frc2::CommandPtr Allign(Direction direction);
-
-
  private:
     //Gyro
     Pigeon2 m_gyro{kGyroDeviceID, kCanId};

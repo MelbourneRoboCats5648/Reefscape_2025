@@ -42,8 +42,8 @@ DriveSubsystem::DriveSubsystem()
         [this](frc::ChassisSpeeds speeds /*,auto feedforwards*/){ 
                 Drive(speeds.vx, speeds.vy, speeds.omega, false); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
         std::make_shared<PPHolonomicDriveController>( // PPHolonomicController is the built in path following controller for holonomic drive trains
-            PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-            PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+            pathplanner::PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            pathplanner::PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
         ),
         config, // The robot configuration
         []() {
@@ -252,9 +252,4 @@ return Run([this] {m_frontLeftModule.OutputPositionToDashboard();
                    m_frontRightModule.OutputPositionToDashboard();
                    m_backLeftModule.OutputPositionToDashboard();
                    m_backRightModule.OutputPositionToDashboard(); });
-}
-
-//Align
-frc2::CommandPtr DriveSubsystem::Allign(Direction direction) {
-
 }
