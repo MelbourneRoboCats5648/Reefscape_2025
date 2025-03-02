@@ -223,7 +223,7 @@ namespace ElevatorConstants {
   const units::meter_t resetEncoder = 0.0_m;
 
   // Maximum Elevator Heights
-  const units::meter_t kMaxFirstStageHeight = 0.67_m;
+  const units::meter_t kMaxFirstStageHeight = 0.68_m;
   const units::meter_t kMaxSecondStageHeight = 0.62_m;
 
   // Initial Elevator heights
@@ -239,7 +239,7 @@ namespace ElevatorConstants {
   const units::meter_t extendSoftLimitSecondStage = kMaxSecondStageHeight; // this should be 0.67
 
   const units::meter_t retractSoftLimitFirstStage = 0.0_m;
-  const units::meter_t retractSoftLimitSecondStage = 0.38373863697052_m;
+  const units::meter_t retractSoftLimitSecondStage = 0.38873863697052_m;
 
   //Elevator Height Conversion:
   /* DIAMETERS OF THE MOTOR SPROCKETS:
