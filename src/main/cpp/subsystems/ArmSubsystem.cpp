@@ -116,15 +116,9 @@ frc2::CommandPtr ArmSubsystem::MoveToAngleCommand(units::turn_t goal) {
                                                 rev::spark::kSlot0,
                                                 m_armFeedforward.Calculate(m_armSetpoint.position, m_armSetpoint.velocity).value());
                                                 
-            });
-            //.Until([this] {return IsGoalReached();});
-
-                        // m_closedLoopController.SetReference(m_armGoal.position.value(), 
-                        //                         rev::spark::SparkLowLevel::ControlType::kPosition,
-                        //                         rev::spark::kSlot0,
-                        //                         m_armFeedforward.Calculate(m_armSetpoint.velocity).value());
+            })
+            .Until([this] {return IsGoalReached();});
 }
-
 
 
 //To move down supply a negative
