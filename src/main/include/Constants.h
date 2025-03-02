@@ -182,20 +182,20 @@ namespace ElevatorConstants {
 
   //First Stage Controller
   const static PIDConstants kFirstStagePID = {
-    /* kP */ 1.3,
+    /* kP */ 0.2,
     /* kI */ 0.0,
     /* kD */ 0.0
   };
   const static ElevatorFeedforwardConstants kFirstStageFeedforward = {
-    /* kS */ 0.0_V,
-    /* kG */ 0.0_V,
-    /* kV */ 0.0_V / 1_mps,
+    /* kS */ 0.11_V,
+    /* kG */ 0.1_V,
+    /* kV */ 19.5_V / 1_mps,
     /* kA */ 0.0_V / 1_mps_sq
   };
   
   //Second Stage Controller
   const static PIDConstants kSecondStagePID = {
-    /* kP */ 1.3,
+    /* kP */ 0.0,
     /* kI */ 0.0,
     /* kD */ 0.0
   };
@@ -209,8 +209,8 @@ namespace ElevatorConstants {
   const double maxOutput = 1.0;
 
   //PID Profile
-  const units::meters_per_second_t maximumVelocity= 0.1_mps;
-  const units::meters_per_second_squared_t maximumAcceleration = 0.2_mps_sq;
+  const units::meters_per_second_t maximumVelocity= 0.5_mps;
+  const units::meters_per_second_squared_t maximumAcceleration = 2.0_mps_sq;
 
   //Elevator Goals
   const units::meter_t eLevel0Goal = 0.0_m;
@@ -222,9 +222,17 @@ namespace ElevatorConstants {
   //Encoder Position
   const units::meter_t resetEncoder = 0.0_m;
 
+  // Elevator limits
+  const units::meter_t extendSoftLimitFirstStage = 0.68_m;
+  const units::meter_t extendSoftLimitSecondStage = 0.62_m;
+
+  const units::meter_t retractSoftLimitFirstStage = 0.0_m;
+  const units::meter_t retractSoftLimitSecondStage = 0.38873863697052_m;
+
+
   // Maximum Elevator Heights
-  const units::meter_t kMaxFirstStageHeight = 0.68_m;
-  const units::meter_t kMaxSecondStageHeight = 0.62_m;
+  const units::meter_t kMaxFirstStageHeight = extendSoftLimitFirstStage - 0.01_m;
+  const units::meter_t kMaxSecondStageHeight = extendSoftLimitSecondStage - 0.01_m;
 
   // Initial Elevator heights
   const units::meter_t kInitFirstStageHeight = 0.0_m;
@@ -233,14 +241,6 @@ namespace ElevatorConstants {
   // Limit Switch Locations
   const units::meter_t kResetFirstStageHeight = 0.0_m;
   const units::meter_t kResetSecondStageHeight = 0.0_m;
-
-  // Elevator limits
-  const units::meter_t extendSoftLimitFirstStage = kMaxFirstStageHeight;
-  const units::meter_t extendSoftLimitSecondStage = kMaxSecondStageHeight; // this should be 0.67
-
-  const units::meter_t retractSoftLimitFirstStage = 0.0_m;
-  const units::meter_t retractSoftLimitSecondStage = 0.38873863697052_m;
-
   //Elevator Height Conversion:
   /* DIAMETERS OF THE MOTOR SPROCKETS:
   55 mm - 1st stage

@@ -106,11 +106,23 @@ void RobotContainer::ConfigureBindings() {
     //drivetrain commands
   //m_driverController.B().WhileTrue(m_drive.StopCommand());
 
+  // elevator move up/down
+  // m_driverController.Y().WhileTrue(m_elevatorSubsystem.m_firstStage.MoveUpCommand());
+  // m_driverController.X().WhileTrue(m_elevatorSubsystem.m_firstStage.MoveDownCommand());
+  // m_driverController.B().WhileTrue(m_elevatorSubsystem.m_secondStage.MoveUpCommand());
+  // m_driverController.A().WhileTrue(m_elevatorSubsystem.m_secondStage.MoveDownCommand());
+
+  // elevator position ctrl
+  m_driverController.Y().WhileTrue(m_elevatorSubsystem.m_firstStage.MoveToHeightCommand(ElevatorConstants::kMaxFirstStageHeight));
+  m_driverController.X().WhileTrue(m_elevatorSubsystem.m_firstStage.MoveToHeightCommand(ElevatorConstants::kInitFirstStageHeight + 0.05_m));
+  m_driverController.B().WhileTrue(m_elevatorSubsystem.m_secondStage.MoveToHeightCommand(ElevatorConstants::kMaxSecondStageHeight));
+  m_driverController.A().WhileTrue(m_elevatorSubsystem.m_secondStage.MoveToHeightCommand(ElevatorConstants::kInitSecondStageHeight + 0.05_m));
+
   // //PID elevator subsystem command
-  m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
-  m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
-  m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
-  m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L4));
+  // m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
+  // m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
+  // m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
+  // m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L4));
 
   // issue 102 - testing arm goal command
   // m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(0_tr)));
