@@ -266,8 +266,8 @@ namespace ElevatorConstants {
   const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amount
   
   //Elevator DIO port
-  inline constexpr int kFirstStageLimitSwitchPin = 1;
-  inline constexpr int kSecondStageLimitSwitchPin = 2; // TODO
+  inline constexpr int kFirstStageLimitSwitchPin = 0;
+  inline constexpr int kSecondStageLimitSwitchPin = 1;
 }
 
 namespace ArmConstants {

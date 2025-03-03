@@ -30,8 +30,6 @@ class RobotContainer {
  private:
   void ConfigureBindings();
   void Configure2024Bindings();
- 
-  frc::DigitalInput m_limitSwitch;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   frc2::CommandXboxController m_driverController{OperatorConstants::kDriverControllerPort};
