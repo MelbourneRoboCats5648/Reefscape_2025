@@ -268,7 +268,9 @@ namespace ElevatorConstants {
   //Elevator DIO port
   inline constexpr int kFirstStageLimitSwitchPin = 1;
   inline constexpr int kSecondStageLimitSwitchPin = 2; // TODO
-}
+
+  const units::meter_t kElevatorClearanceThreshold = 0.15_m;
+  }
 
 namespace ArmConstants {
   //PID Profile
@@ -315,5 +317,6 @@ namespace ArmConstants {
 
   //Arm DIO port
   inline constexpr int k_limitSwitchArmPin = 3;
+  const units::turn_t kArmClearanceThreshold = -0.2_tr; //ISSUE 112 - update this
 }
 

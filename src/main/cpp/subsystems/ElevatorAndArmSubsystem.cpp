@@ -45,7 +45,7 @@ frc2::CommandPtr ElevatorAndArmSubsystem::ArmMoveDown() {
 }
 
 frc2::CommandPtr ElevatorAndArmSubsystem::ArmMoveToAngle(units::turn_t armGoal) {
-  return m_armSubsystem.MoveToAngleCommand(armGoal);
+    return m_armSubsystem.MoveToAngleCommand(armGoal);
 }
 
 frc2::CommandPtr ElevatorAndArmSubsystem::ElevatorMoveToHeight(units::meter_t elevGoal) {
@@ -90,9 +90,22 @@ frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel(Level level) {
       // do nothing
     }
   }
-
   return m_elevatorSubsystem.MoveToHeightCommand(elevGoal)
-            .AlongWith(m_armSubsystem.MoveToAngleCommand(armGoal));
+            .AlongWith(
+              frc2::cmd::WaitUntil([this, armGoal] {
+                units::turn_t currentAngle = m_armSubsystem.GetArmAngle();
+                if ((currentAngle - kArmClearanceThreshold).value() * (armGoal - kArmClearanceThreshold).value() > 0) return true;
+
+                if (m_elevatorSubsystem.m_secondStage.GetHeight() > kElevatorClearanceThreshold)
+                {
+                  return true;
+                }
+                else
+                {
+                  return false;
+                }
+              }).AndThen(m_armSubsystem.MoveToAngleCommand(armGoal)
+            ));
 }
 
 //For collecting coral, if elevator height is not high enough, 
