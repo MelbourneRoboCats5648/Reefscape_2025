@@ -3,7 +3,7 @@
 ElevatorStageSubsystem::ElevatorStageSubsystem(
   std::string name,
   units::meter_t minLimit, units::meter_t maxLimit,
-  units::meter_t initHeight, units::meter_t resetHeight,
+  units::meter_t initHeight, units::meter_t hardLimitHeight,
   units::meter_t distancePerTurn,
   PIDConstants pidConst, ElevatorFeedforwardConstants ffConst,
   frc::TrapezoidProfile<units::meter> pidProfile,
@@ -17,7 +17,7 @@ ElevatorStageSubsystem::ElevatorStageSubsystem(
     m_goal({initHeight, 0.0_mps}),
     m_setpoint(m_goal),
     m_feedforward(ffConst.kS, ffConst.kG, ffConst.kV, ffConst.kA),
-    m_minLimit(minLimit), m_maxLimit(maxLimit), m_resetHeight(resetHeight),
+    m_minSoftLimit(minLimit), m_maxSoftLimit(maxLimit), m_hardLimitHeight(hardLimitHeight),
     m_gearRatio(ElevatorConstants::gearBoxGearRatio * distancePerTurn.value())
  {
     rev::spark::SparkMaxConfig motorConfig;
@@ -67,6 +67,10 @@ units::meters_per_second_t ElevatorStageSubsystem::GetVelocity() {
   return units::meters_per_second_t(m_encoder.GetVelocity() / 60.0); // GetVelocity() returns metres per minute
 }
 
+frc::DigitalInput& ElevatorStageSubsystem::GetLimitSwitch() {
+  return m_limitSwitch;
+}
+
 bool ElevatorStageSubsystem::IsGoalReached() {
   auto posErr = units::math::abs(GetHeight() - m_goal.position);
   auto velErr = units::math::abs(GetVelocity() - m_goal.velocity);
@@ -96,23 +100,26 @@ void ElevatorStageSubsystem::UpdateSetpoint() {
   m_setpoint = { GetHeight(), 0.0_mps };
 }
 
-void ElevatorStageSubsystem::ResetMotor() {
+void ElevatorStageSubsystem::StopMotor() {
+  this->GetCurrentCommand()->Cancel();
   m_motor.Set(0);
 }
 
 void ElevatorStageSubsystem::ResetEncoder() {
-  m_encoder.SetPosition(m_resetHeight.value());
+  m_encoder.SetPosition(m_hardLimitHeight.value());
 }
 
-void ElevatorStageSubsystem::OnLimitSwitchActivation() {
-  ResetMotor();
-  ResetEncoder();
+frc2::CommandPtr ElevatorStageSubsystem::LimitSwitchActivationCommand() {
+  return Run([this] {
+              StopMotor();
+              ResetEncoder();
+              UpdateSetpoint();});
 }
 
 frc2::CommandPtr ElevatorStageSubsystem::MoveUpCommand() {
   return Run([this] { m_motor.Set(0.1); })
          .FinallyDo([this] {
-            ResetMotor();
+            StopMotor();
             UpdateSetpoint();
          });
 }
@@ -121,7 +128,7 @@ frc2::CommandPtr ElevatorStageSubsystem::MoveDownCommand() {
   return
     Run([this] { m_motor.Set(-0.1); })
     .FinallyDo([this] {
-      ResetMotor();
+      StopMotor();
       UpdateSetpoint();
     });
 }
