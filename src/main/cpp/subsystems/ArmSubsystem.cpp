@@ -160,13 +160,6 @@ void ArmSubsystem::Periodic() {
   frc::SmartDashboard::PutNumber("armEncoderValue", GetArmAngle().value());  
 }
 
-void ArmSubsystem::OnLimitSwitchActivation() {
-      if(m_limitSwitchArm.Get()) {
-      StopMotor();
-      ResetEncoder();
-      }
-}
-
 void ArmSubsystem::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.
 }

@@ -313,7 +313,5 @@ namespace ArmConstants {
   //Encoder Position
   const units::turn_t resetEncoder = 0.15_tr;
 
-  //Arm DIO port
-  inline constexpr int k_limitSwitchArmPin = 3;
 }
 

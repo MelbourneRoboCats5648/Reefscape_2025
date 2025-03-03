@@ -20,9 +20,6 @@ class ArmSubsystem : public frc2::SubsystemBase {
   // Initialize the motor
   rev::spark::SparkMax m_armMotor{CAN_Constants::kElevatorArmMotorCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
   rev::spark::SparkRelativeEncoder m_armEncoder = m_armMotor.GetEncoder();
-
-  //digital input
-  frc::DigitalInput m_limitSwitchArm{ArmConstants::k_limitSwitchArmPin};
   
 
   public:
@@ -48,8 +45,6 @@ class ArmSubsystem : public frc2::SubsystemBase {
   
   void SetpointControl(); // control using setpoint
   frc2::CommandPtr SetpointControlCommand();
-
-  void OnLimitSwitchActivation();
 
   //Will be called periodically whenever the CommandScheduler runs.
   void Periodic() override;
