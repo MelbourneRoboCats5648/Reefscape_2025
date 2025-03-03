@@ -270,7 +270,9 @@ namespace ElevatorConstants {
   //Elevator DIO port
   inline constexpr int kFirstStageLimitSwitchPin = 1;
   inline constexpr int kSecondStageLimitSwitchPin = 2; // TODO
-}
+
+  const units::meter_t kElevatorClearanceThreshold = kInitSecondStageHeight + 0.15_m;
+  }
 
 namespace ArmConstants {
   //PID Profile
@@ -293,15 +295,15 @@ namespace ArmConstants {
   const auto kA = 0.0_V / 1_tr_per_s_sq;
 
   // Arm limits
-  const units::turn_t extendSoftLimit = 0.10_tr;
+  const units::turn_t extendSoftLimit = 0.18_tr;
   const units::turn_t retractSoftLimit = -0.23_tr;
 
   //Arm Goals - this is the output of the gearbox (not the motor)
   const units::turn_t aLevel0Goal = retractSoftLimit;
-  const units::turn_t aLevel1Goal = 0.15_tr;
-  const units::turn_t aLevel2Goal = 0.1_tr;
+  const units::turn_t aLevel1Goal = -0.15_tr;
+  const units::turn_t aLevel2Goal = -0.1_tr;
   const units::turn_t aLevel3Goal = 0.0_tr;
-  const units::turn_t aLevel4Goal = -0.1_tr;
+  const units::turn_t aLevel4Goal = 0.1_tr;
 
   constexpr double gearBoxGearRatio = 1.0 / 27.0;
   // this is the ratio between the motor sprocket teeth and the teeth on sprocket connected to the arm
@@ -313,9 +315,10 @@ namespace ArmConstants {
   const units::turn_t kArmPlaceCoral = -15_tr; // issue 70 - update this amount
 
   //Encoder Position
-  const units::turn_t resetEncoder = 0.15_tr;
+  const units::turn_t resetEncoder = -0.23_tr;
 
   //Arm DIO port
   inline constexpr int k_limitSwitchArmPin = 3;
+  const units::turn_t kArmClearanceThreshold = -0.17_tr; //ISSUE 112 - update this
 }
 
