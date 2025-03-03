@@ -268,6 +268,9 @@ namespace ElevatorConstants {
   //Elevator DIO port
   inline constexpr int kFirstStageLimitSwitchPin = 0;
   inline constexpr int kSecondStageLimitSwitchPin = 1;
+
+  static const bool kFirstStageLimitMountedTop = false;
+  static const bool kSecondStageLimitMountedTop = true;
 }
 
 namespace ArmConstants {

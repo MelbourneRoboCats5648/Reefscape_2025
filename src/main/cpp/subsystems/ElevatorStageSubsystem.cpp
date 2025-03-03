@@ -7,7 +7,7 @@ ElevatorStageSubsystem::ElevatorStageSubsystem(
   units::meter_t distancePerTurn,
   PIDConstants pidConst, ElevatorFeedforwardConstants ffConst,
   frc::TrapezoidProfile<units::meter> pidProfile,
-  int canID, int limitSwitchPin, int followerID
+  int limitSwitchPin, bool limitSwitchMountedTop, int canID, int followerID
 ) : m_name(name),
     m_limitSwitch(limitSwitchPin),
     m_motor(canID, rev::spark::SparkMax::MotorType::kBrushless),
@@ -24,6 +24,18 @@ ElevatorStageSubsystem::ElevatorStageSubsystem(
     motorConfig
       .SmartCurrentLimit(ElevatorConstants::kCurrentLimit)
       .SetIdleMode(rev::spark::SparkMaxConfig::kCoast);
+    
+    if (true == limitSwitchMountedTop) {
+      motorConfig.limitSwitch
+        .ForwardLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen) // issue 97 - check if wiring of limit switch is normally open or closed
+        .ForwardLimitSwitchEnabled(true);
+    }
+    else {
+      motorConfig.limitSwitch
+        .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen) // issue 97 - check if wiring of limit switch is normally open or closed
+        .ReverseLimitSwitchEnabled(true);
+    }
+
     motorConfig.softLimit
       .ForwardSoftLimit(maxLimit.value()).ForwardSoftLimitEnabled(true)
       .ReverseSoftLimit(minLimit.value()).ReverseSoftLimitEnabled(true);
