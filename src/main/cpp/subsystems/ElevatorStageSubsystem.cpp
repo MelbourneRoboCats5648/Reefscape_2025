@@ -113,7 +113,6 @@ void ElevatorStageSubsystem::UpdateSetpoint() {
 }
 
 void ElevatorStageSubsystem::StopMotor() {
-  this->GetCurrentCommand()->Cancel();
   m_motor.Set(0);
 }
 

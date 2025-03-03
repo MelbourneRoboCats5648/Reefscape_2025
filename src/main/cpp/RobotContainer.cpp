@@ -35,12 +35,14 @@ RobotContainer::RobotContainer()
   // Elevator hard limit switch bindings
   frc2::Trigger firstStageLimitSwitchTrigger([this] { return m_elevatorSubsystem.m_firstStage.GetLimitSwitch().Get(); });
   firstStageLimitSwitchTrigger.OnTrue(
-    m_elevatorSubsystem.m_firstStage.LimitSwitchActivationCommand()
+    m_elevatorSubsystem.CancelFirstStageCommand()
+    .AndThen(m_elevatorSubsystem.m_firstStage.LimitSwitchActivationCommand())
   );
 
   frc2::Trigger secondStageLimitSwitchTrigger([this] { return m_elevatorSubsystem.m_secondStage.GetLimitSwitch().Get(); });
   secondStageLimitSwitchTrigger.OnTrue(
-    m_elevatorSubsystem.m_secondStage.LimitSwitchActivationCommand()
+    m_elevatorSubsystem.CancelSecondStageCommand()
+    .AndThen(m_elevatorSubsystem.m_secondStage.LimitSwitchActivationCommand())
   );
 
   // Configure the button bindings

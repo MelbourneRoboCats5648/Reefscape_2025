@@ -41,6 +41,14 @@ frc2::CommandPtr ElevatorSubsystem::MoveUpBy(units::meter_t height) {
       return MoveToHeightCommand(moveGoal);
 }
 
+frc2::CommandPtr ElevatorSubsystem::CancelFirstStageCommand() {
+  return Run([this] {m_firstStage.GetCurrentCommand()->Cancel();});
+}
+
+frc2::CommandPtr ElevatorSubsystem::CancelSecondStageCommand() {
+  return Run([this] {m_firstStage.GetCurrentCommand()->Cancel();});
+}
+
 void ElevatorSubsystem::Periodic() {
   
 }
