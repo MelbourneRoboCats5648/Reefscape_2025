@@ -5,6 +5,7 @@
 #include <Constants.h>
 #include <rev/SparkMax.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/controller/ProfiledPIDController.h>
 #include <frc/controller/ElevatorFeedforward.h>
 #include <frc/DigitalInput.h>
 
@@ -50,12 +51,8 @@ class ElevatorStageSubsystem : public frc2::SubsystemBase {
   
   rev::spark::SparkMax m_motor;
   rev::spark::SparkRelativeEncoder m_encoder;
-  rev::spark::SparkClosedLoopController m_closedLoopController;
 
-  frc::TrapezoidProfile<units::meter> m_trapezoidalProfile;
-  frc::TrapezoidProfile<units::meter>::State m_goal;
-  frc::TrapezoidProfile<units::meter>::State m_setpoint;
-
+  frc::ProfiledPIDController<units::meter> m_controller;
   frc::ElevatorFeedforward m_feedforward;
 
   const units::meter_t m_minLimit, m_maxLimit;
