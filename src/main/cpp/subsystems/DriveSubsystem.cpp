@@ -52,7 +52,7 @@ void DriveSubsystem::ResetGyro() {
   m_gyro.Reset();
 }
 units::degree_t DriveSubsystem::GetHeading() const {
-  return units::degree_t(m_gyro.GetAngle());
+  return m_gyro.GetRotation2d().Degrees(); // GetYaw() didn't work for some reason
 }
 
 void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
