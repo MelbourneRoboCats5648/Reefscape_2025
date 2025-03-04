@@ -27,7 +27,6 @@ class ElevatorStageSubsystem : public frc2::SubsystemBase {
 
   /* control using setpoint */
   void SetpointControl();
-  void UpdateSetpoint();
 
   void ResetMotor();
   void ResetEncoder();
