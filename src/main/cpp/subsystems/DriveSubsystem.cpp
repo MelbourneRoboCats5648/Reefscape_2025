@@ -81,9 +81,16 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
                            units::meters_per_second_t ySpeed,
                            units::radians_per_second_t rot,
                            units::second_t period) {
+  Drive(xSpeed, ySpeed, rot, m_fieldRelative, period);
+}
+
+void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
+                           units::meters_per_second_t ySpeed,
+                           units::radians_per_second_t rot, bool fieldRelative,
+                           units::second_t period) {
    auto states =
        kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
-           m_fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
+           fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
                                xSpeed, ySpeed, rot, frc::Rotation2d{GetFieldHeading()})
                          : frc::ChassisSpeeds{xSpeed, ySpeed, rot},
            period));
