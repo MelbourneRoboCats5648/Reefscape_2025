@@ -81,7 +81,7 @@ RobotContainer::RobotContainer()
               // Multiply by max speed to map the joystick unitless inputs to
               // actual units. This will map the [-1, 1] to [max speed backwards,
               // max speed forwards], converting them to actual units.
-              yspeed, xspeed, rotspeed, false );
+              yspeed, xspeed, rotspeed);
         },
         {&m_drive}));
 

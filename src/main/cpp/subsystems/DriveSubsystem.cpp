@@ -62,11 +62,11 @@ units::degree_t DriveSubsystem::GetHeading() const {
 
 void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
                            units::meters_per_second_t ySpeed,
-                           units::radians_per_second_t rot, bool fieldRelative,
+                           units::radians_per_second_t rot,
                            units::second_t period) {
    auto states =
        kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
-           fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
+           m_fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
                                xSpeed, ySpeed, rot, frc::Rotation2d{GetHeading()})
                          : frc::ChassisSpeeds{xSpeed, ySpeed, rot},
            period));
@@ -79,6 +79,18 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   m_frontRightModule.SetModule(fr);
   m_backLeftModule.SetModule(bl);
   m_backRightModule.SetModule(br);
+}
+
+frc2::CommandPtr DriveSubsystem::SwitchRobotRelativeCommand() {
+  return RunOnce([this] { m_fieldRelative = false; });
+}
+
+frc2::CommandPtr DriveSubsystem::SwitchFieldRelativeCommand() {
+  return RunOnce([this] { m_fieldRelative = true; });
+}
+
+frc2::CommandPtr DriveSubsystem::ToggleFieldRelativeCommand() {
+  return RunOnce([this] { m_fieldRelative = !m_fieldRelative; });
 }
 
 void DriveSubsystem::StopAllModules()

@@ -47,7 +47,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     void Drive(units::meters_per_second_t xSpeed,
                            units::meters_per_second_t ySpeed,
-                           units::radians_per_second_t rot, bool fieldRelative,
+                           units::radians_per_second_t rot,
                            units::second_t period = DriveConstants::kDrivePeriod);
 
     void SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
@@ -55,7 +55,10 @@ class DriveSubsystem : public frc2::SubsystemBase {
     frc2::CommandPtr StopCommand();
     frc2::CommandPtr SmartDashboardOutputCommand();
 
-
+    bool m_fieldRelative = false; // robot-centric by default
+    frc2::CommandPtr SwitchRobotRelativeCommand();
+    frc2::CommandPtr SwitchFieldRelativeCommand();
+    frc2::CommandPtr ToggleFieldRelativeCommand();
 
  private:
     //Gyro
@@ -78,7 +81,6 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     nt::StructArrayPublisher<frc::SwerveModuleState> m_statePublisher; 
     nt::StructPublisher<frc::Rotation2d> m_headingPublisher; 
-
                                             
   public:
   frc::SlewRateLimiter<units::meters_per_second> m_xLimiter{kSlewRateTranslation};
