@@ -51,6 +51,11 @@ void DriveSubsystem::SimulationPeriodic() {
 void DriveSubsystem::ResetGyro() {
   m_gyro.Reset();
 }
+
+frc2::CommandPtr DriveSubsystem::ResetGyroCommand() {
+  return RunOnce([this] { ResetGyro(); });
+}
+
 units::degree_t DriveSubsystem::GetHeading() const {
   return m_gyro.GetRotation2d().Degrees(); // GetYaw() didn't work for some reason
 }
