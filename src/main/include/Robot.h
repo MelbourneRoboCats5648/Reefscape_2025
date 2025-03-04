@@ -14,6 +14,7 @@
 class Robot : public frc::TimedRobot {
  public:
   Robot();
+  // void RobotInit() override;
   void RobotPeriodic() override;
   void DisabledInit() override;
   void DisabledPeriodic() override;
@@ -31,5 +32,6 @@ class Robot : public frc::TimedRobot {
   // doesn't have undefined behavior and potentially crash.
   std::optional<frc2::CommandPtr> m_autonomousCommand;
   std::optional<frc2::CommandPtr> m_testCommand;
+  std::optional<frc2::CommandPtr> m_initCommand;
   RobotContainer m_container;
 };

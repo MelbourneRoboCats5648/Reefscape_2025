@@ -10,6 +10,10 @@
 
 Robot::Robot() {}
 
+// void Robot::RobotInit() {
+
+// }
+
 /**
  * This function is called every 20 ms, no matter the mode. Use
  * this for items like diagnostics that you want to run during disabled,
@@ -54,6 +58,12 @@ void Robot::TeleopInit() {
   // this line or comment it out.
   if (m_autonomousCommand) {
     m_autonomousCommand->Cancel();
+  }
+  
+  m_initCommand = m_container.GetInitCommand();
+
+  if (m_initCommand) {
+    m_initCommand->Schedule();
   }
 }
 

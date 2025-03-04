@@ -23,7 +23,7 @@
 
 enum BuildSeason {Crescendo, Reefscape};
 
-enum Level {L0, L1, L2, L3, L4};
+enum Level {COLLECT, DEFAULT, L1, L2, L3};
 enum TestLevel {NONE, ARM, ELEVATOR, DRIVE};
 
 struct PIDConstants {
@@ -294,7 +294,7 @@ namespace ArmConstants {
 
   // Arm limits
   const units::turn_t extendSoftLimit = 0.18_tr;
-  const units::turn_t retractSoftLimit = -0.23_tr;
+  const units::turn_t retractSoftLimit = -0.25_tr;
 
   //Arm Goals - this is the output of the gearbox (not the motor)
   const units::turn_t aLevel0Goal = retractSoftLimit;
@@ -313,10 +313,22 @@ namespace ArmConstants {
   const units::turn_t kArmPlaceCoral = -15_tr; // issue 70 - update this amount
 
   //Encoder Position
-  const units::turn_t resetEncoder = -0.23_tr;
+  const units::turn_t resetEncoder = -0.23_tr; // with backlash
 
   //Arm DIO port
   inline constexpr int k_limitSwitchArmPin = 3;
   const units::turn_t kArmClearanceThreshold = -0.17_tr; //ISSUE 112 - update this
 }
 
+struct ElevatorArmGoal {
+  units::meter_t elevator;
+  units::turn_t arm;
+};
+
+namespace ElevatorAndArmConstants {
+  static constexpr ElevatorArmGoal kCollectGoal = {ElevatorConstants::kInitFirstStageHeight + ElevatorConstants::kInitSecondStageHeight, ArmConstants::retractSoftLimit};
+  static constexpr ElevatorArmGoal kDefaultGoal = {ElevatorConstants::kMaxSecondStageHeight, ArmConstants::retractSoftLimit};
+  static constexpr ElevatorArmGoal kLevel1Goal = {0.3040386140346527_m, 0.1474258303642273_tr};
+  static constexpr ElevatorArmGoal kLevel2Goal = {0.03550218418240547_m + 0.6347883343696594_m, 0.13860741257667542_tr};
+  static constexpr ElevatorArmGoal kLevel3Goal = {0.6335731148719788_m + 0.6346830129623413_m, 0.18034803867340088_tr};
+};
