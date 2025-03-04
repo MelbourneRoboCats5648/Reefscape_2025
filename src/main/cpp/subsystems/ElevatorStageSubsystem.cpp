@@ -54,7 +54,7 @@ ElevatorStageSubsystem::ElevatorStageSubsystem(
     m_controller.SetTolerance(ElevatorConstants::kElevatorPositionTolerance, ElevatorConstants::kElevatorVelocityTolerance);
     m_controller.SetGoal(initHeight); // so we don't immediately go to random places
 
-    SetDefaultCommand(SetpointControlCommand());
+    SetDefaultCommand(HoldPositionCommand());
 }
 
 units::meter_t ElevatorStageSubsystem::GetHeight() {
@@ -80,6 +80,13 @@ void ElevatorStageSubsystem::SetpointControl() {
 
 frc2::CommandPtr ElevatorStageSubsystem::SetpointControlCommand() {
   return Run([this] { SetpointControl(); });
+}
+
+frc2::CommandPtr ElevatorStageSubsystem::HoldPositionCommand() {
+  return StartRun(
+    [this] { m_controller.SetGoal(GetHeight()); },
+    [this] { SetpointControl(); }
+  );
 }
 
 void ElevatorStageSubsystem::ResetMotor() {

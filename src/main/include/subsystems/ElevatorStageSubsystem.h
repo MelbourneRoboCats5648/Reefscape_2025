@@ -35,6 +35,7 @@ class ElevatorStageSubsystem : public frc2::SubsystemBase {
 
   /* elevator commands */
   frc2::CommandPtr SetpointControlCommand();
+  frc2::CommandPtr HoldPositionCommand();
   frc2::CommandPtr MoveUpCommand();
   frc2::CommandPtr MoveDownCommand();
   frc2::CommandPtr MoveToHeightCommand(units::meter_t heightGoal);
