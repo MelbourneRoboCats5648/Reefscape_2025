@@ -7,6 +7,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/controller/ElevatorFeedforward.h>
 #include <frc/DigitalInput.h>
+#include <frc/filter/Debouncer.h>
 
 class ElevatorStageSubsystem : public frc2::SubsystemBase {
   public:
@@ -17,27 +18,28 @@ class ElevatorStageSubsystem : public frc2::SubsystemBase {
     units::meter_t distancePerTurn,
     PIDConstants pidConst, ElevatorFeedforwardConstants ffConst,
     frc::TrapezoidProfile<units::meter> pidProfile,
-    int canID, int limitSwitchPin, int followerID = -1
+    int limitSwitchPin, bool limitSwitchMountedTop, int canID, int followerID = -1
   );
   
   units::meter_t GetHeight();
   units::meters_per_second_t GetVelocity();
+  bool limitSwitchReached();
   bool IsGoalReached();
 
   /* control using setpoint */
   void SetpointControl();
   void UpdateSetpoint();
 
-  void ResetMotor();
+  void StopMotor();
   void ResetEncoder();
-  void OnLimitSwitchActivation();
-
+  
   /* elevator commands */
   frc2::CommandPtr SetpointControlCommand();
   frc2::CommandPtr MoveUpCommand();
   frc2::CommandPtr MoveDownCommand();
   frc2::CommandPtr MoveToHeightCommand(units::meter_t heightGoal);
   frc2::CommandPtr MoveUpBy(units::meter_t height);
+  frc2::CommandPtr LimitSwitchActivationCommand();
 
   void Periodic() override;
   void SimulationPeriodic() override;
@@ -47,6 +49,7 @@ class ElevatorStageSubsystem : public frc2::SubsystemBase {
 
   //digital input
   frc::DigitalInput m_limitSwitch;
+  frc::Debouncer m_debouncer;
   
   rev::spark::SparkMax m_motor;
   rev::spark::SparkRelativeEncoder m_encoder;
@@ -58,8 +61,8 @@ class ElevatorStageSubsystem : public frc2::SubsystemBase {
 
   frc::ElevatorFeedforward m_feedforward;
 
-  const units::meter_t m_minLimit, m_maxLimit;
-  const units::meter_t m_resetHeight;
+  const units::meter_t m_minSoftLimit, m_maxSoftLimit;
+  const units::meter_t m_hardLimitHeight;
   
   const double m_gearRatio;
 };

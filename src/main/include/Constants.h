@@ -266,8 +266,13 @@ namespace ElevatorConstants {
   const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amount
   
   //Elevator DIO port
-  inline constexpr int kFirstStageLimitSwitchPin = 1;
-  inline constexpr int kSecondStageLimitSwitchPin = 2; // TODO
+  inline constexpr int kFirstStageLimitSwitchPin = 0;
+  inline constexpr int kSecondStageLimitSwitchPin = 1;
+
+  static const bool kFirstStageLimitMountedTop = false;
+  static const bool kSecondStageLimitMountedTop = true;
+
+  static const units::second_t kLimitSwitchDebounceTime = 50_ms;  // issue 97 - test debounce time
 }
 
 namespace ArmConstants {
@@ -313,7 +318,5 @@ namespace ArmConstants {
   //Encoder Position
   const units::turn_t resetEncoder = 0.15_tr;
 
-  //Arm DIO port
-  inline constexpr int k_limitSwitchArmPin = 3;
 }
 

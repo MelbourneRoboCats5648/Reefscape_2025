@@ -7,7 +7,7 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/button/CommandJoystick.h>
-
+#include <frc2/command/button/Trigger.h>
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LeftClimbSubsystem.h"
@@ -30,7 +30,7 @@ class RobotContainer {
  private:
   void ConfigureBindings();
   void Configure2024Bindings();
- 
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   frc2::CommandXboxController m_driverController{OperatorConstants::kDriverControllerPort};
   frc2::CommandJoystick m_joystick{OperatorConstants::kDriverJoystickPort};

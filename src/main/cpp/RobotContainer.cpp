@@ -32,8 +32,18 @@ RobotContainer::RobotContainer()
     m_armSubsystem(),
     m_elevatorAndArmSubsystem(m_elevatorSubsystem, m_armSubsystem)
 {
+  // Elevator hard limit switch bindings
+  frc2::Trigger firstStageLimitSwitchTrigger([this] { return m_elevatorSubsystem.m_firstStage.limitSwitchReached(); });
+  firstStageLimitSwitchTrigger.OnTrue(
+    m_elevatorSubsystem.CancelFirstStageCommand()
+    .AndThen(m_elevatorSubsystem.m_firstStage.LimitSwitchActivationCommand())
+  );
 
-  // Initialize all of your commands and subsystems here
+  frc2::Trigger secondStageLimitSwitchTrigger([this] { return m_elevatorSubsystem.m_secondStage.limitSwitchReached(); });
+  secondStageLimitSwitchTrigger.OnTrue(
+    m_elevatorSubsystem.CancelSecondStageCommand()
+    .AndThen(m_elevatorSubsystem.m_secondStage.LimitSwitchActivationCommand())
+  );
 
   // Configure the button bindings
   switch(General::KBuildSeason) {
@@ -90,15 +100,7 @@ RobotContainer::RobotContainer()
 
   }
 
-  
-
-
-
-
-
 }
-
-
 
 
 void RobotContainer::ConfigureBindings() {
@@ -136,10 +138,6 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxSecondStageHeight));
   m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight));
   m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight + ElevatorConstants::kMaxSecondStageHeight));
-
-
-
-
 
 
   //Collect Command
