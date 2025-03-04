@@ -52,7 +52,6 @@ ElevatorStageSubsystem::ElevatorStageSubsystem(
     
     /* set up PID controller */
     m_controller.SetTolerance(ElevatorConstants::kElevatorPositionTolerance, ElevatorConstants::kElevatorVelocityTolerance);
-    m_controller.SetGoal(initHeight); // so we don't immediately go to random places
 
     SetDefaultCommand(HoldPositionCommand());
 }
