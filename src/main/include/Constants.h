@@ -305,8 +305,8 @@ namespace ArmConstants {
   constexpr double motorSprocketRatio = 12.0 / 18.0;
   constexpr double gearRatio = gearBoxGearRatio * motorSprocketRatio;
 
-  const double kArmPositionToleranceTurns = 0.01; // issue 70 - update this tolerance
-  const double kArmVelocityTolerancePerSecond = 0.1;
+  const units::turn_t kArmPositionTolerance = 0.01_tr; // issue 70 - update this tolerance
+  const units::turns_per_second_t kArmVelocityTolerance = 0.1_tps;
   const units::turn_t kArmPlaceCoral = -15_tr; // issue 70 - update this amount
 
   //Encoder Position

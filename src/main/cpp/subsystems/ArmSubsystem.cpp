@@ -27,7 +27,7 @@ ArmSubsystem::ArmSubsystem() {
         .ReverseSoftLimitEnabled(true);
 
   //PID Controller 
-  m_controller.SetTolerance(units::turn_t(ArmConstants::kArmPositionToleranceTurns), units::turns_per_second_t(ArmConstants::kArmVelocityTolerancePerSecond));
+  m_controller.SetTolerance(ArmConstants::kArmPositionTolerance, ArmConstants::kArmVelocityTolerance);
 
   armMotorConfig.encoder.PositionConversionFactor(ArmConstants::gearRatio).VelocityConversionFactor(ArmConstants::gearRatio);
 
