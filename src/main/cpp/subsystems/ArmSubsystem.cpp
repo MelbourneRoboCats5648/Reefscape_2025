@@ -75,7 +75,7 @@ frc2::CommandPtr ArmSubsystem::MoveToAngleCommand(units::turn_t goal) {
   // Subsystem::RunOnce implicitly requires `this` subsystem.
   return
     StartRun(
-      [this, goal] { m_controller.SetGoal(goal); },
+      [this, goal] { ResetController(); m_controller.SetGoal(goal); },
       [this] { SetpointControlCommand(); }
     )
     .Until([this] { return IsGoalReached(); });
@@ -120,9 +120,13 @@ frc2::CommandPtr ArmSubsystem::SetpointControlCommand() {
   });
 }
 
+void ArmSubsystem::ResetController() {
+  m_controller.Reset(GetArmAngle(), units::turns_per_second_t(m_armEncoder.GetVelocity() / 60.0));
+}
+
 frc2::CommandPtr ArmSubsystem::HoldPositionCommand() {
   return StartRun(
-    [this] { m_controller.SetGoal(GetArmAngle()); },
+    [this] { ResetController(); m_controller.SetGoal(GetArmAngle()); },
     [this] { SetpointControl(); }
   );
 }

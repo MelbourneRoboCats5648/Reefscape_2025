@@ -60,6 +60,8 @@ class ArmSubsystem : public frc2::SubsystemBase {
 
   frc::ProfiledPIDController<units::turn> m_controller{ArmConstants::kP, ArmConstants::kI, ArmConstants::kD, ArmConstants::trapezoidProfile, ArmConstants::kDt};
   frc::ArmFeedforward m_armFeedforward{ArmConstants::kS, ArmConstants::kG, ArmConstants::kV, ArmConstants::kA};
+
+  void ResetController();
 };
 
 

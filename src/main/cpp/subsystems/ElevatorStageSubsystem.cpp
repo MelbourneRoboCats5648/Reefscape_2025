@@ -81,9 +81,13 @@ frc2::CommandPtr ElevatorStageSubsystem::SetpointControlCommand() {
   return Run([this] { SetpointControl(); });
 }
 
+void ElevatorStageSubsystem::ResetController() {
+  m_controller.Reset(GetHeight(), GetVelocity());
+}
+
 frc2::CommandPtr ElevatorStageSubsystem::HoldPositionCommand() {
   return StartRun(
-    [this] { m_controller.SetGoal(GetHeight()); },
+    [this] { ResetController(); m_controller.SetGoal(GetHeight()); },
     [this] { SetpointControl(); }
   );
 }
@@ -112,7 +116,7 @@ frc2::CommandPtr ElevatorStageSubsystem::MoveDownCommand() {
 frc2::CommandPtr ElevatorStageSubsystem::MoveToHeightCommand(units::meter_t heightGoal) {
   return
     StartRun(
-      [this, heightGoal] { m_controller.SetGoal(heightGoal); },
+      [this, heightGoal] { ResetController(); m_controller.SetGoal(heightGoal); },
       [this] { SetpointControlCommand(); }
     )
     .Until([this] { return IsGoalReached(); });

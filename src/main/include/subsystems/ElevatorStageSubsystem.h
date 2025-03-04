@@ -59,6 +59,8 @@ class ElevatorStageSubsystem : public frc2::SubsystemBase {
   const units::meter_t m_resetHeight;
   
   const double m_gearRatio;
+
+  void ResetController();
 };
 
 
