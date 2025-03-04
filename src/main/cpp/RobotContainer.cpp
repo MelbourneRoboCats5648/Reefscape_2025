@@ -106,6 +106,10 @@ void RobotContainer::ConfigureBindings() {
     //drivetrain commands
   //m_driverController.B().WhileTrue(m_drive.StopCommand());
 
+  // drive mode
+  m_driverController.LeftTrigger().OnTrue(m_drive.ResetGyroCommand());
+  m_driverController.RightTrigger().OnTrue(m_drive.ToggleFieldRelativeCommand());
+
   // elevator move up/down
   // m_driverController.Y().WhileTrue(m_elevatorSubsystem.m_firstStage.MoveUpCommand());
   // m_driverController.X().WhileTrue(m_elevatorSubsystem.m_firstStage.MoveDownCommand());
