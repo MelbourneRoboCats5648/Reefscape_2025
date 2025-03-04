@@ -128,7 +128,7 @@ namespace DriveConstants {
   const units::angle::degree_t initialGyroAngle = 0_deg;
 
   //Max Speed and Acceleration Constanst
-  inline constexpr auto kMaxSpeed = 3_mps;
+  inline constexpr auto kMaxSpeed = 1.5_mps;
   inline constexpr auto kMaxAcceleration = 3_mps_sq;
   inline constexpr auto kMaxAngularSpeed = 3.142_rad_per_s;
   inline constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;

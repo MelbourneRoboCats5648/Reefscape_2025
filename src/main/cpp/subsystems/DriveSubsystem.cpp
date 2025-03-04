@@ -12,6 +12,8 @@ DriveSubsystem::DriveSubsystem()
       .GetStructArrayTopic<frc::SwerveModuleState>("DriveTrain/SwerveStates").Publish();
   m_headingPublisher = nt::NetworkTableInstance::GetDefault()
       .GetStructTopic<frc::Rotation2d>("DriveTrain/Heading").Publish();
+  m_fieldHeadingPublisher = nt::NetworkTableInstance::GetDefault()
+      .GetStructTopic<frc::Rotation2d>("DriveTrain/FieldHeading").Publish();
 
   /* Configure Pigeon2 */
   configs::Pigeon2Configuration toApply{};
@@ -42,6 +44,9 @@ void DriveSubsystem::Periodic() {
     m_headingPublisher.Set(
       GetHeading()
     );
+    m_fieldHeadingPublisher.Set(
+      GetFieldHeading()
+    );
 }
 
 void DriveSubsystem::SimulationPeriodic() {
@@ -56,8 +61,20 @@ frc2::CommandPtr DriveSubsystem::ResetGyroCommand() {
   return RunOnce([this] { ResetGyro(); });
 }
 
+void DriveSubsystem::ResetFieldGyroOffset() {
+  m_fieldGyroOffset = GetHeading();
+}
+
+frc2::CommandPtr DriveSubsystem::ResetFieldGyroOffsetCommand() {
+  return RunOnce([this] { ResetFieldGyroOffset(); });
+}
+
 units::degree_t DriveSubsystem::GetHeading() const {
   return m_gyro.GetRotation2d().Degrees(); // GetYaw() didn't work for some reason
+}
+
+units::degree_t DriveSubsystem::GetFieldHeading() const {
+  return GetHeading() - m_fieldGyroOffset;
 }
 
 void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
@@ -67,7 +84,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
    auto states =
        kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
            m_fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-                               xSpeed, ySpeed, rot, frc::Rotation2d{GetHeading()})
+                               xSpeed, ySpeed, rot, frc::Rotation2d{GetFieldHeading()})
                          : frc::ChassisSpeeds{xSpeed, ySpeed, rot},
            period));
 

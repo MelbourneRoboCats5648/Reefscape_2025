@@ -43,7 +43,11 @@ class DriveSubsystem : public frc2::SubsystemBase {
     void ResetGyro();
     frc2::CommandPtr ResetGyroCommand();
 
+    void ResetFieldGyroOffset();
+    frc2::CommandPtr ResetFieldGyroOffsetCommand();
+
     units::degree_t  GetHeading() const;
+    units::degree_t  GetFieldHeading() const;
 
     void Drive(units::meters_per_second_t xSpeed,
                            units::meters_per_second_t ySpeed,
@@ -80,7 +84,10 @@ class DriveSubsystem : public frc2::SubsystemBase {
                                             kBackRightLocation};
 
     nt::StructArrayPublisher<frc::SwerveModuleState> m_statePublisher; 
-    nt::StructPublisher<frc::Rotation2d> m_headingPublisher; 
+    nt::StructPublisher<frc::Rotation2d> m_headingPublisher;
+    nt::StructPublisher<frc::Rotation2d> m_fieldHeadingPublisher;
+
+    units::degree_t m_fieldGyroOffset = 0.0_deg;
                                             
   public:
   frc::SlewRateLimiter<units::meters_per_second> m_xLimiter{kSlewRateTranslation};
