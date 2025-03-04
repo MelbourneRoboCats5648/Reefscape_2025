@@ -271,6 +271,8 @@ namespace ElevatorConstants {
 
   static const bool kFirstStageLimitMountedTop = false;
   static const bool kSecondStageLimitMountedTop = true;
+
+  static const units::second_t kLimitSwitchDebounceTime = 50_ms;  // issue 97 - test debounce time
 }
 
 namespace ArmConstants {

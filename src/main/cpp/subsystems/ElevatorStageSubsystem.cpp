@@ -10,6 +10,7 @@ ElevatorStageSubsystem::ElevatorStageSubsystem(
   int limitSwitchPin, bool limitSwitchMountedTop, int canID, int followerID
 ) : m_name(name),
     m_limitSwitch(limitSwitchPin),
+    m_debouncer(ElevatorConstants::kLimitSwitchDebounceTime, frc::Debouncer::DebounceType::kFalling),   // issue 97 - check if limit switch is active high/low
     m_motor(canID, rev::spark::SparkMax::MotorType::kBrushless),
     m_encoder(m_motor.GetEncoder()),
     m_closedLoopController(m_motor.GetClosedLoopController()),
@@ -27,12 +28,12 @@ ElevatorStageSubsystem::ElevatorStageSubsystem(
     
     if (true == limitSwitchMountedTop) {
       motorConfig.limitSwitch
-        .ForwardLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen) // issue 97 - check if wiring of limit switch is normally open or closed
+        .ForwardLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen) // digital limit switch is active low (normally high)
         .ForwardLimitSwitchEnabled(true);
     }
     else {
       motorConfig.limitSwitch
-        .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen) // issue 97 - check if wiring of limit switch is normally open or closed
+        .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
         .ReverseLimitSwitchEnabled(true);
     }
 
@@ -79,8 +80,8 @@ units::meters_per_second_t ElevatorStageSubsystem::GetVelocity() {
   return units::meters_per_second_t(m_encoder.GetVelocity() / 60.0); // GetVelocity() returns metres per minute
 }
 
-frc::DigitalInput& ElevatorStageSubsystem::GetLimitSwitch() {
-  return m_limitSwitch;
+bool ElevatorStageSubsystem::limitSwitchReached() {
+  return m_debouncer.Calculate(m_limitSwitch.Get());
 }
 
 bool ElevatorStageSubsystem::IsGoalReached() {

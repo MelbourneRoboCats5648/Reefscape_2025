@@ -7,6 +7,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/controller/ElevatorFeedforward.h>
 #include <frc/DigitalInput.h>
+#include <frc/filter/Debouncer.h>
 
 class ElevatorStageSubsystem : public frc2::SubsystemBase {
   public:
@@ -22,7 +23,7 @@ class ElevatorStageSubsystem : public frc2::SubsystemBase {
   
   units::meter_t GetHeight();
   units::meters_per_second_t GetVelocity();
-  frc::DigitalInput& GetLimitSwitch();
+  bool limitSwitchReached();
   bool IsGoalReached();
 
   /* control using setpoint */
@@ -48,6 +49,7 @@ class ElevatorStageSubsystem : public frc2::SubsystemBase {
 
   //digital input
   frc::DigitalInput m_limitSwitch;
+  frc::Debouncer m_debouncer;
   
   rev::spark::SparkMax m_motor;
   rev::spark::SparkRelativeEncoder m_encoder;
