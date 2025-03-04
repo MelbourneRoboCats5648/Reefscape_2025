@@ -60,7 +60,7 @@ class ArmSubsystem : public frc2::SubsystemBase {
   // Create a motion profile with the given maximum velocity and maximum
   // acceleration constraints for the next setpoint.
 
-  frc::TrapezoidProfile<units::turn> m_trapezoidalProfile{{ArmConstants::maximumVelocity, ArmConstants::maximumAcceleration}};
+  frc::TrapezoidProfile<units::turn> m_trapezoidalProfile{ArmConstants::trapezoidProfile};
   frc::TrapezoidProfile<units::turn>::State m_armGoal{ArmConstants::resetEncoder, 0.0_tps};
   frc::TrapezoidProfile<units::turn>::State m_armSetpoint{ArmConstants::resetEncoder, 0.0_tps};
   rev::spark::SparkClosedLoopController m_closedLoopController = m_armMotor.GetClosedLoopController();

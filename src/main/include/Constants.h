@@ -272,9 +272,8 @@ namespace ElevatorConstants {
 
 namespace ArmConstants {
   //PID Profile
-  const units::turns_per_second_t maximumVelocity= 0.8_tps;
-  const units::turns_per_second_squared_t maximumAcceleration = 4.0_tr_per_s_sq;
-
+  static frc::TrapezoidProfile<units::turn>::Constraints trapezoidProfile{0.8_tps, 4.0_tr_per_s_sq};
+  
   //PID Trapezoidal Controller
   static constexpr units::second_t kDt = 20_ms;
 
