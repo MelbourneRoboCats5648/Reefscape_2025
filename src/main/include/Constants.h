@@ -293,7 +293,7 @@ namespace ArmConstants {
 
   // Arm limits
   const units::turn_t extendSoftLimit = 0.18_tr;
-  const units::turn_t retractSoftLimit = -0.25_tr;
+  const units::turn_t retractSoftLimit = -0.285_tr;
 
   //Arm Goals - this is the output of the gearbox (not the motor)
   const units::turn_t aLevel0Goal = retractSoftLimit;
@@ -307,7 +307,7 @@ namespace ArmConstants {
   constexpr double motorSprocketRatio = 12.0 / 18.0;
   constexpr double gearRatio = gearBoxGearRatio * motorSprocketRatio;
 
-  const units::turn_t kArmPositionTolerance = 0.01_tr; // issue 70 - update this tolerance
+  const units::turn_t kArmPositionTolerance = 0.02_tr; // issue 70 - update this tolerance
   const units::turns_per_second_t kArmVelocityTolerance = 0.1_tps;
   const units::turn_t kArmPlaceCoral = -15_tr; // issue 70 - update this amount
 
