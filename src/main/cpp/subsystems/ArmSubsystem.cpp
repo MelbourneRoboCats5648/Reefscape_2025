@@ -133,7 +133,16 @@ frc2::CommandPtr ArmSubsystem::HoldPositionCommand() {
 
 void ArmSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
-  frc::SmartDashboard::PutNumber("armEncoderValue", GetArmAngle().value());  
+  auto setpoint = m_controller.GetSetpoint();
+  frc::SmartDashboard::PutNumber("Arm/setpoint/position", setpoint.position.value());
+  frc::SmartDashboard::PutNumber("Arm/setpoint/velocity", setpoint.velocity.value());
+
+  auto goal = m_controller.GetGoal();
+  frc::SmartDashboard::PutNumber("Arm/goal/position", goal.position.value());
+  frc::SmartDashboard::PutNumber("Arm/goal/velocity", goal.velocity.value());
+
+  frc::SmartDashboard::PutNumber("Arm/encoder/position", GetArmAngle().value());
+  frc::SmartDashboard::PutNumber("Arm/encoder/velocity", m_armEncoder.GetVelocity() / 60.0);
 }
 
 void ArmSubsystem::OnLimitSwitchActivation() {
