@@ -27,18 +27,9 @@ ArmSubsystem::ArmSubsystem() {
         .ReverseSoftLimitEnabled(true);
 
   //PID Controller 
-  /* Configure the closed loop controller. We want to make sure we set the
-  * feedback sensor as the primary encoder. */
-  armMotorConfig.closedLoop
-     .SetFeedbackSensor(rev::spark::ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
-      // Set PID values for position control. We don't need to pass a closed
-      // loop slot, as it will default to slot 0.
-    .P(ArmConstants::kP)
-    .I(ArmConstants::kI)
-    .D(ArmConstants::kD)
-    .OutputRange(-ArmConstants::maxOutput, ArmConstants::maxOutput);
+  m_controller.SetTolerance(ArmConstants::kArmPositionTolerance, ArmConstants::kArmVelocityTolerance);
 
-   armMotorConfig.encoder.PositionConversionFactor(ArmConstants::gearRatio).VelocityConversionFactor(ArmConstants::gearRatio);
+  armMotorConfig.encoder.PositionConversionFactor(ArmConstants::gearRatio).VelocityConversionFactor(ArmConstants::gearRatio);
 
   /* Apply the configuration to the SPARKs.
    *
@@ -53,36 +44,15 @@ ArmSubsystem::ArmSubsystem() {
                         rev::spark::SparkMax::PersistMode::kPersistParameters);
 
   ResetEncoder();
-  SetDefaultCommand(SetpointControlCommand());
-}
-
-void ArmSubsystem::UpdateSetpoint() {  
-  m_armSetpoint.position = GetArmAngle();
-  m_armSetpoint.velocity = 0.0_tps; 
+  SetDefaultCommand(HoldPositionCommand());
 }
 
 units::turn_t ArmSubsystem::GetArmAngle() {
   return units::turn_t(m_armEncoder.GetPosition());
 }
 
-frc::TrapezoidProfile<units::turn>::State& ArmSubsystem::GetSetpoint() {
-  return  m_armSetpoint;
-} 
-
-frc::TrapezoidProfile<units::turn>::State& ArmSubsystem::GetGoal() {
-  return  m_armGoal;
-} 
-
 bool ArmSubsystem::IsGoalReached() {
-  double errorPosition = std::abs(GetSetpoint().position.value() - GetGoal().position.value());
-  double errorVelocity = std::abs(GetSetpoint().velocity.value() - GetGoal().velocity.value());
-
-  if ((errorPosition <= kArmPositionToleranceTurns) && (errorVelocity <= kArmVelocityTolerancePerSecond)){
-    return true;
-  }
-  else {
-    return false;
-  }  
+  return m_controller.AtGoal();
 }
 
 void ArmSubsystem::MoveArm(double speed) {
@@ -92,28 +62,23 @@ void ArmSubsystem::MoveArm(double speed) {
 
 frc2::CommandPtr ArmSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_armMotor.Set(-0.1); })
-          .FinallyDo([this]{ m_armMotor.Set(0); UpdateSetpoint(); });
+  return Run([this] {m_armMotor.Set(-0.1); });
 }
 
 frc2::CommandPtr ArmSubsystem::MoveDownCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_armMotor.Set(0.1); })
-          .FinallyDo([this]{ m_armMotor.Set(0); UpdateSetpoint(); });
+  return Run([this] {m_armMotor.Set(0.1); });
 }
 
 frc2::CommandPtr ArmSubsystem::MoveToAngleCommand(units::turn_t goal) {
   // Inline construction of command goes here. 
   // Subsystem::RunOnce implicitly requires `this` subsystem.
-  return Run([this, goal] {
-            m_armGoal = {goal, 0.0_tps }; //stop at goal
-            m_armSetpoint = m_trapezoidalProfile.Calculate(ArmConstants::kDt, m_armSetpoint, m_armGoal);     
-            SetpointControl();                     
-  })
-  .Until([this] {return IsGoalReached();})
-  .FinallyDo([this] {
-    UpdateSetpoint(); // update setpoint to current position and set velocity to 0 - then default command will keep this under control for us
-  });
+  return
+    StartRun(
+      [this, goal] { ResetController(); m_controller.SetGoal(goal); },
+      [this] { SetpointControlCommand(); }
+    )
+    .Until([this] { return IsGoalReached(); });
 
                         // m_closedLoopController.SetReference(m_armGoal.position.value(), 
                         //                         rev::spark::SparkLowLevel::ControlType::kPosition,
@@ -140,19 +105,30 @@ void ArmSubsystem::ResetEncoder() {
 }
 
 void ArmSubsystem::SetpointControl() {
-  frc::SmartDashboard::PutNumber("positionSetpoint", m_armSetpoint.position.value());
-  frc::SmartDashboard::PutNumber("velocitySetpoint", m_armSetpoint.velocity.value());
-  frc::SmartDashboard::PutNumber("currentVelocity", m_armEncoder.GetVelocity() / 60.0);
-  m_closedLoopController.SetReference(m_armSetpoint.position.value(),
-                                      rev::spark::SparkLowLevel::ControlType::kPosition,
-                                      rev::spark::kSlot0,
-                                      m_armFeedforward.Calculate(m_armSetpoint.position, m_armSetpoint.velocity).value());
+  units::turn_t position = GetArmAngle();
+  double output = 
+    m_controller.Calculate(position) // profiled PID
+    + (m_armFeedforward.Calculate(position, m_controller.GetSetpoint().velocity) / frc::RobotController::GetBatteryVoltage()); // feedforward, normalised
+  output = std::clamp(output, -ArmConstants::maxOutput, ArmConstants::maxOutput); // clamp to [-maxOutput, maxOutput]
+
+  m_armMotor.Set(output);
 }
 
 frc2::CommandPtr ArmSubsystem::SetpointControlCommand() {
   return Run([this] {
     SetpointControl();
   });
+}
+
+void ArmSubsystem::ResetController() {
+  m_controller.Reset(GetArmAngle(), units::turns_per_second_t(m_armEncoder.GetVelocity() / 60.0));
+}
+
+frc2::CommandPtr ArmSubsystem::HoldPositionCommand() {
+  return StartRun(
+    [this] { ResetController(); m_controller.SetGoal(GetArmAngle()); },
+    [this] { SetpointControl(); }
+  );
 }
 
 void ArmSubsystem::Periodic() {

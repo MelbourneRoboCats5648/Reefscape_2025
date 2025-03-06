@@ -209,8 +209,8 @@ namespace ElevatorConstants {
   const double maxOutput = 1.0;
 
   //PID Profile
-  static frc::TrapezoidProfile<units::meter> trapezoidProfileFirstStage{{0.5_mps, 2.0_mps_sq}};
-  static frc::TrapezoidProfile<units::meter> trapezoidProfileSecondStage{{0.3_mps, 1.0_mps_sq}};
+  static frc::TrapezoidProfile<units::meter>::Constraints trapezoidProfileFirstStage{0.5_mps, 2.0_mps_sq};
+  static frc::TrapezoidProfile<units::meter>::Constraints trapezoidProfileSecondStage{0.3_mps, 1.0_mps_sq};
 
   //Elevator Goals
   const units::meter_t eLevel0Goal = 0.0_m;
@@ -274,9 +274,8 @@ namespace ElevatorConstants {
 
 namespace ArmConstants {
   //PID Profile
-  const units::turns_per_second_t maximumVelocity= 0.8_tps;
-  const units::turns_per_second_squared_t maximumAcceleration = 4.0_tr_per_s_sq;
-
+  static frc::TrapezoidProfile<units::turn>::Constraints trapezoidProfile{0.8_tps, 4.0_tr_per_s_sq};
+  
   //PID Trapezoidal Controller
   static constexpr units::second_t kDt = 20_ms;
 
@@ -308,8 +307,8 @@ namespace ArmConstants {
   constexpr double motorSprocketRatio = 12.0 / 18.0;
   constexpr double gearRatio = gearBoxGearRatio * motorSprocketRatio;
 
-  const double kArmPositionToleranceTurns = 0.01; // issue 70 - update this tolerance
-  const double kArmVelocityTolerancePerSecond = 0.1;
+  const units::turn_t kArmPositionTolerance = 0.01_tr; // issue 70 - update this tolerance
+  const units::turns_per_second_t kArmVelocityTolerance = 0.1_tps;
   const units::turn_t kArmPlaceCoral = -15_tr; // issue 70 - update this amount
 
   //Encoder Position
