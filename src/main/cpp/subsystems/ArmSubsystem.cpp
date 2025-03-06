@@ -76,7 +76,7 @@ frc2::CommandPtr ArmSubsystem::MoveToAngleCommand(units::turn_t goal) {
   return
     StartRun(
       [this, goal] { ResetController(); m_controller.SetGoal(goal); },
-      [this] { SetpointControlCommand(); }
+      [this] { SetpointControl(); }
     )
     .Until([this] { return IsGoalReached(); });
 

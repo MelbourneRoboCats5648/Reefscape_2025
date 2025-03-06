@@ -117,7 +117,7 @@ frc2::CommandPtr ElevatorStageSubsystem::MoveToHeightCommand(units::meter_t heig
   return
     StartRun(
       [this, heightGoal] { ResetController(); m_controller.SetGoal(heightGoal); },
-      [this] { SetpointControlCommand(); }
+      [this] { SetpointControl(); }
     )
     .Until([this] { return IsGoalReached(); });
 }
