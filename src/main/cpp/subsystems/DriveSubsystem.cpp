@@ -28,6 +28,8 @@ DriveSubsystem::DriveSubsystem()
       .GetStructArrayTopic<frc::SwerveModuleState>("DriveTrain/SwerveStates").Publish();
   m_headingPublisher = nt::NetworkTableInstance::GetDefault()
       .GetStructTopic<frc::Rotation2d>("DriveTrain/Heading").Publish();
+  m_fieldHeadingPublisher = nt::NetworkTableInstance::GetDefault()
+      .GetStructTopic<frc::Rotation2d>("DriveTrain/FieldHeading").Publish();
 
   //PathPlanner
     // Load the RobotConfig from the GUI settings. You should probably
@@ -89,6 +91,9 @@ void DriveSubsystem::Periodic() {
   m_headingPublisher.Set(
     GetHeading()
   );
+    m_fieldHeadingPublisher.Set(
+      GetFieldHeading()
+    );
 
   m_poseEstimator.Update(frc::Rotation2d{GetHeading()}, //idk if this should be m_odometry and m_poseestimator https://github.com/LimelightVision/limelight-examples/blob/main/java-wpilib/swerve-megatag-odometry/src/main/java/frc/robot/Drivetrain.java#L88
       {m_frontLeftModule.GetPosition(), m_frontRightModule.GetPosition(),
@@ -159,8 +164,32 @@ void DriveSubsystem::SimulationPeriodic() {
 void DriveSubsystem::ResetGyro() {
   m_gyro.Reset();
 }
+
+frc2::CommandPtr DriveSubsystem::ResetGyroCommand() {
+  return RunOnce([this] { ResetGyro(); });
+}
+
+void DriveSubsystem::ResetFieldGyroOffset() {
+  m_fieldGyroOffset = GetHeading();
+}
+
+frc2::CommandPtr DriveSubsystem::ResetFieldGyroOffsetCommand() {
+  return RunOnce([this] { ResetFieldGyroOffset(); });
+}
+
 units::degree_t DriveSubsystem::GetHeading() const {
-  return units::degree_t(m_gyro.GetAngle());
+  return m_gyro.GetRotation2d().Degrees(); // GetYaw() didn't work for some reason
+}
+
+units::degree_t DriveSubsystem::GetFieldHeading() const {
+  return GetHeading() - m_fieldGyroOffset;
+}
+
+void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
+                           units::meters_per_second_t ySpeed,
+                           units::radians_per_second_t rot,
+                           units::second_t period) {
+  Drive(xSpeed, ySpeed, rot, m_fieldRelative, period);
 }
 
 //Drive 
@@ -178,7 +207,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
    auto states =
        kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
            fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-                               xSpeed, ySpeed, rot, frc::Rotation2d{GetHeading()})
+                               xSpeed, ySpeed, rot, frc::Rotation2d{GetFieldHeading()})
                          : frc::ChassisSpeeds{xSpeed, ySpeed, rot},
             period));
 
@@ -190,7 +219,18 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   m_frontRightModule.SetModule(fr);
   m_backLeftModule.SetModule(bl);
   m_backRightModule.SetModule(br);
+}
 
+frc2::CommandPtr DriveSubsystem::SwitchRobotRelativeCommand() {
+  return RunOnce([this] { m_fieldRelative = false; });
+}
+
+frc2::CommandPtr DriveSubsystem::SwitchFieldRelativeCommand() {
+  return RunOnce([this] { m_fieldRelative = true; });
+}
+
+frc2::CommandPtr DriveSubsystem::ToggleFieldRelativeCommand() {
+  return RunOnce([this] { m_fieldRelative = !m_fieldRelative; });
 }
 
 void DriveSubsystem::SetModuleStates(

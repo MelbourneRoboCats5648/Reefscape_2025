@@ -84,7 +84,7 @@ RobotContainer::RobotContainer()
               // Multiply by max speed to map the joystick unitless inputs to
               // actual units. This will map the [-1, 1] to [max speed backwards,
               // max speed forwards], converting them to actual units.
-              yspeed, xspeed, rotspeed, false );
+              yspeed, xspeed, rotspeed);
         },
         {&m_drive}));
 
@@ -109,6 +109,10 @@ void RobotContainer::ConfigureBindings() {
   // Issue 70  Fix This m_visionSubsystem.m_aprilTagIDTrigger.WhileTrue(coralCommands::PlaceOnReef(&m_elevatorAndArmSubsystem, &m_drive, &m_visionSubsystem, Level::L1));
     //drivetrain commands
   //m_driverController.B().WhileTrue(m_drive.StopCommand());
+
+  // drive mode
+  m_driverController.LeftTrigger().OnTrue(m_drive.ResetFieldGyroOffsetCommand());
+  m_driverController.RightTrigger().OnTrue(m_drive.ToggleFieldRelativeCommand());
 
   // elevator move up/down
   // m_driverController.Y().WhileTrue(m_elevatorSubsystem.m_firstStage.MoveUpCommand());

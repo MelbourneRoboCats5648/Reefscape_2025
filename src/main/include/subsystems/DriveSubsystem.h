@@ -49,14 +49,24 @@ class DriveSubsystem : public frc2::SubsystemBase {
     void Periodic() override;
     void SimulationPeriodic() override;
 
-    //Gyro
-      void ResetGyro();
-      units::degree_t GetHeading() const;
-    //Drive + Kinematics
-      void Drive(units::meters_per_second_t xSpeed,
-                            units::meters_per_second_t ySpeed,
-                            units::radians_per_second_t rot, bool fieldRelative,
-                            units::second_t period = DriveConstants::kDrivePeriod);
+    void ResetGyro();
+    frc2::CommandPtr ResetGyroCommand();
+
+    void ResetFieldGyroOffset();
+    frc2::CommandPtr ResetFieldGyroOffsetCommand();
+
+    units::degree_t  GetHeading() const;
+    units::degree_t  GetFieldHeading() const;
+
+    void Drive(units::meters_per_second_t xSpeed,
+                           units::meters_per_second_t ySpeed,
+                           units::radians_per_second_t rot,
+                           units::second_t period = DriveConstants::kDrivePeriod);
+    
+    void Drive(units::meters_per_second_t xSpeed,
+                           units::meters_per_second_t ySpeed,
+                           units::radians_per_second_t rot, bool fieldRelative,
+                           units::second_t period = DriveConstants::kDrivePeriod);
 
       void SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
 
@@ -68,7 +78,10 @@ class DriveSubsystem : public frc2::SubsystemBase {
     //SmartDashboard
       frc2::CommandPtr SmartDashboardOutputCommand();
 
-    //Odometry
+    bool m_fieldRelative = false; // robot-centric by default
+    frc2::CommandPtr SwitchRobotRelativeCommand();
+    frc2::CommandPtr SwitchFieldRelativeCommand();
+    frc2::CommandPtr ToggleFieldRelativeCommand();    //Odometry
         
       //void UpdateOdometry(frc::Pose2d m_pose);
 
@@ -108,8 +121,10 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     
     nt::StructArrayPublisher<frc::SwerveModuleState> m_statePublisher; 
-    nt::StructPublisher<frc::Rotation2d> m_headingPublisher; 
+    nt::StructPublisher<frc::Rotation2d> m_headingPublisher;
+    nt::StructPublisher<frc::Rotation2d> m_fieldHeadingPublisher;
 
+    units::degree_t m_fieldGyroOffset = 0.0_deg;
     // PoseEstimator class for tracking robot pose
     // 4 defines the number of modules
     frc::SwerveDrivePoseEstimator<4> m_poseEstimator{kinematics, frc::Rotation2d{GetHeading()},
