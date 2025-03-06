@@ -1,5 +1,6 @@
 #include "subsystems/DriveSubsystem.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <iostream>
 
 using namespace DriveConstants;
 using namespace CAN_Constants;
@@ -88,6 +89,10 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
                            units::meters_per_second_t ySpeed,
                            units::radians_per_second_t rot, bool fieldRelative,
                            units::second_t period) {
+  
+  if (fieldRelative) std::cout << "FIELD CENTRIC "; else std::cout << "ROBOT CENTRIC ";
+  std::cout << "x=" << xSpeed.value() << " y=" << ySpeed.value() << " rot=" << rot.value() << std::endl;
+
    auto states =
        kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
            fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
