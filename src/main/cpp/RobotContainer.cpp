@@ -122,10 +122,10 @@ void RobotContainer::ConfigureBindings() {
   // m_driverController.A().WhileTrue(m_elevatorSubsystem.m_secondStage.MoveToHeightCommand(ElevatorConstants::kInitSecondStageHeight + 0.05_m));
 
   // //PID elevator subsystem command
-  m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.CollectCoral());
-  m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
-  m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
-  m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
+  m_mechController.A().OnTrue(m_elevatorAndArmSubsystem.CollectCoral());
+  m_mechController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
+  m_mechController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
+  m_mechController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
 
   // issue 102 - testing arm goal command
   // m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(0_tr)));
