@@ -99,7 +99,7 @@ RobotContainer::RobotContainer()
   }
 
   /* elevator velocity control override */
-  frc2::Trigger elevatorOverrideTrigger([this] { return GetMechLeftY() == 0.0; });
+  frc2::Trigger elevatorOverrideTrigger([this] { return GetMechLeftY() != 0.0; });
   elevatorOverrideTrigger.WhileTrue(
     /* control 2nd stage */
     frc2::RunCommand([this] {
@@ -117,7 +117,7 @@ RobotContainer::RobotContainer()
   );
 
   /* arm velocity control override */
-  frc2::Trigger armOverrideTrigger([this] { return GetMechRightY() == 0.0; });
+  frc2::Trigger armOverrideTrigger([this] { return GetMechRightY() != 0.0; });
   armOverrideTrigger.WhileTrue(frc2::RunCommand([this] {
     m_armSubsystem.VelocityControl(-GetMechRightY() * ArmConstants::kManualMaxVelocity); // so that up makes the arm go up
   }, { &m_armSubsystem }).ToPtr());
