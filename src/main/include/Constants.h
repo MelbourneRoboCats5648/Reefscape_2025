@@ -160,10 +160,10 @@ namespace DriveConstants {
   inline constexpr double kTurnKD = 0.0;
 
   //MagOffset Doubles
-  inline constexpr units::angle::turn_t kFrontLeftMagOffset = -0.308349609375_tr;
-  inline constexpr units::angle::turn_t kFrontRightMagOffset = -0.25732421875_tr;
-  inline constexpr units::angle::turn_t kBackLeftMagOffset = 0.01611328125_tr;
-  inline constexpr units::angle::turn_t kBackRightMagOffset = 0.0732421875_tr; 
+  inline constexpr units::angle::turn_t kFrontLeftMagOffset = -0.308349609375_tr; // CAN ID 11
+  inline constexpr units::angle::turn_t kFrontRightMagOffset = -0.257080078125_tr; // CAN ID 10
+  inline constexpr units::angle::turn_t kBackLeftMagOffset = 0.01611328125_tr; // CAN ID 12
+  inline constexpr units::angle::turn_t kBackRightMagOffset = 0.072509765625_tr;  // CAN ID 13
 
   //Module Locations Translation 2D
   inline constexpr frc::Translation2d kFrontLeftLocation{+0.26_m, +0.26_m};
@@ -263,7 +263,7 @@ namespace ElevatorConstants {
   const units::meters_per_second_t kElevatorVelocityTolerance = 0.1_mps;
 
   const units::meter_t kElevatorMinHeightCollect = 1_m; //issue 70 - update this position
-  const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amount
+  const units::meter_t kElevatorPlaceCoral = -0.1_m; // issue 70 - update this amount
   
   //Elevator DIO port
   inline constexpr int kFirstStageLimitSwitchPin = 1;
