@@ -20,7 +20,8 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
    */
   frc2::CommandPtr LeftClimbUpCommand();
   frc2::CommandPtr LeftClimbDownCommand();
-  frc2::CommandPtr LeftClimbCommand(units::turn_t goal);
+  frc2::CommandPtr LeftClimbDefaultCommand(units::turn_t goal);
+  frc2::CommandPtr MoveToClimbLevel(ClimbLevel climbLevel);
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.

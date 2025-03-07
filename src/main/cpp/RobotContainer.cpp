@@ -137,6 +137,9 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight));
   m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight + ElevatorConstants::kMaxSecondStageHeight));
 
+  // PID climb subsystem command - version 2
+  m_joystick.Button(LeftClimbConstants::leftUpButton).OnTrue(m_leftClimbSubsystem.MoveToClimbLevel(ClimbLevel::C1)); //retract funtion
+  m_joystick.Button(LeftClimbConstants::leftDownButton).OnTrue(m_leftClimbSubsystem.MoveToClimbLevel(ClimbLevel::C2)); //extend functon
 
 
 

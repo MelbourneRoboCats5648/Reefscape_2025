@@ -25,6 +25,7 @@ enum BuildSeason {Crescendo, Reefscape};
 
 enum Level {L0, L1, L2, L3, L4};
 enum TestLevel {NONE, ARM, ELEVATOR, DRIVE};
+enum ClimbLevel {C1, C2};
 
 struct PIDConstants {
   double kP, kI, kD;

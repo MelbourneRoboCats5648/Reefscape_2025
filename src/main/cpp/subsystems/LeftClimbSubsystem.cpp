@@ -46,13 +46,29 @@ frc2::CommandPtr LeftClimbSubsystem::LeftClimbDownCommand() {
           .FinallyDo([this]{RobotReset();});
 }
 
-frc2::CommandPtr LeftClimbSubsystem::LeftClimbCommand(units::turn_t goal) {
+frc2::CommandPtr LeftClimbSubsystem::LeftClimbDefaultCommand(units::turn_t goal) {
   return Run([this, goal] {
           frc::TrapezoidProfile<units::turn>::State goalState = { goal, 0.0_tps }; // stop at goal
           m_leftClimbSetpoint = m_TrapezoidalProfile.Calculate(LeftClimbConstants::kDt, m_leftClimbSetpoint, goalState);
           m_closedLoopController.SetReference(m_leftClimbSetpoint.position.value(), rev::spark::SparkLowLevel::ControlType::kPosition);
         })
         .FinallyDo([this]{RobotReset();});
+}
+
+frc2::CommandPtr LeftClimbSubsystem::MoveToClimbLevel(ClimbLevel climbLevel) { 
+  units::turn_t climbGoal;
+  switch(climbLevel) {
+    case (ClimbLevel::C2): {
+      climbGoal = GoalConstants::m_climbGoalL1;
+      break;
+    }
+    case (ClimbLevel::C1): {
+      climbGoal = GoalConstants::m_climbGoalRetract;
+      break;
+    }
+    default: {
+      climbGoal = GoalConstants::m_climbGoalRetract;    }
+  }
 }
 
 void LeftClimbSubsystem::Periodic() {
