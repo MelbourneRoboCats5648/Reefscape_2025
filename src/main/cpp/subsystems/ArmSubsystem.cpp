@@ -113,6 +113,10 @@ void ArmSubsystem::SetpointControl() {
   m_armMotor.Set(output);
 }
 
+void ArmSubsystem::VelocityControl(units::turns_per_second_t velocity) {
+  m_armMotor.SetVoltage(m_armFeedforward.Calculate(GetArmAngle(), velocity));
+}
+
 frc2::CommandPtr ArmSubsystem::SetpointControlCommand() {
   return Run([this] {
     SetpointControl();

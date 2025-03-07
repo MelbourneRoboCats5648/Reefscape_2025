@@ -46,6 +46,8 @@ class ArmSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr SetpointControlCommand();
   frc2::CommandPtr HoldPositionCommand();
 
+  void VelocityControl(units::turns_per_second_t velocity);
+
   void OnLimitSwitchActivation();
 
   //Will be called periodically whenever the CommandScheduler runs.

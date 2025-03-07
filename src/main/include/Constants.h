@@ -317,6 +317,8 @@ namespace ArmConstants {
   //Arm DIO port
   inline constexpr int k_limitSwitchArmPin = 3;
   const units::turn_t kArmClearanceThreshold = -0.17_tr; //ISSUE 112 - update this
+
+  const units::turns_per_second_t kManualMaxVelocity = 1.2_tps; // TODO: update this
 }
 
 struct ElevatorArmGoal {

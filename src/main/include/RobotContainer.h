@@ -29,6 +29,8 @@ class RobotContainer {
   frc2::CommandPtr GetTestCommand();
 
  private:
+  double GetMechRightY();
+  
   void ConfigureBindings();
   void Configure2024Bindings();
  

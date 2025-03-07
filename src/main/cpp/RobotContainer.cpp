@@ -16,6 +16,7 @@
 #include <frc2/command/Commands.h>
 #include <frc2/command/RunCommand.h>
 #include <frc2/command/InstantCommand.h>
+#include <frc2/command/ConditionalCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/SwerveControllerCommand.h>
 #include <frc2/command/button/JoystickButton.h>
@@ -26,6 +27,10 @@
 #include <frc/Joystick.h>
 
 using namespace DriveConstants;
+
+double RobotContainer::GetMechRightY() {
+  return frc::ApplyDeadband(m_mechController.GetRightY(), kDeadband);
+}
 
 RobotContainer::RobotContainer()
    :m_elevatorSubsystem(),
@@ -90,12 +95,18 @@ RobotContainer::RobotContainer()
 
   }
 
-  
+  /* override arm subsystem default command to add override */
+  m_armSubsystem.SetDefaultCommand(frc2::ConditionalCommand(
+    /* on true - hold position */
+    m_armSubsystem.HoldPositionCommand().Unwrap(),
 
+    /* on false - velocity control */
+    frc2::RunCommand([this] {
+      m_armSubsystem.VelocityControl(-GetMechRightY() * ArmConstants::kManualMaxVelocity); // so that up makes the arm go up
+    }, { &m_armSubsystem }).ToPtr().Unwrap(),
 
-
-
-
+    [this] { return GetMechRightY() == 0.0; }
+  ));
 }
 
 
