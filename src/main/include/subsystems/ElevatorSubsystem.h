@@ -16,7 +16,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr MoveDownCommand();
 
   frc2::CommandPtr MoveToHeightCommand(units::meter_t heightGoal);
-  frc2::CommandPtr MoveUpBy(units::meter_t height);
+  // frc2::CommandPtr MoveUpBy(units::meter_t height); // broken
 
   //Will be called periodically whenever the CommandScheduler runs.
   void Periodic() override;

@@ -123,8 +123,16 @@ frc2::CommandPtr ElevatorStageSubsystem::MoveToHeightCommand(units::meter_t heig
 }
 
 frc2::CommandPtr ElevatorStageSubsystem::MoveUpBy(units::meter_t height) {
-  units::meter_t moveGoal = (GetHeight() + height);
-  return MoveToHeightCommand(moveGoal);
+  return
+    StartRun(
+      [this, height] { ResetController(); m_controller.SetGoal(GetHeight() + height); },
+      [this] { SetpointControl(); }
+    )
+    .Until([this] { return IsGoalReached(); });
+}
+
+void ElevatorStageSubsystem::SetPower(double power) {
+  m_motor.Set(power);
 }
 
 void ElevatorStageSubsystem::Periodic() {

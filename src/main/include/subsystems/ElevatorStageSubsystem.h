@@ -40,6 +40,8 @@ class ElevatorStageSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr MoveToHeightCommand(units::meter_t heightGoal);
   frc2::CommandPtr MoveUpBy(units::meter_t height);
 
+  void SetPower(double power);
+
   void Periodic() override;
   void SimulationPeriodic() override;
 

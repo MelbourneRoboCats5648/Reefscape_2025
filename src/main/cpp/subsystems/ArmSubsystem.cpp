@@ -79,19 +79,18 @@ frc2::CommandPtr ArmSubsystem::MoveToAngleCommand(units::turn_t goal) {
       [this] { SetpointControl(); }
     )
     .Until([this] { return IsGoalReached(); });
-
-                        // m_closedLoopController.SetReference(m_armGoal.position.value(), 
-                        //                         rev::spark::SparkLowLevel::ControlType::kPosition,
-                        //                         rev::spark::kSlot0,
-                        //                         m_armFeedforward.Calculate(m_armSetpoint.velocity).value());
 }
 
 
 
 //To move down supply a negative
 frc2::CommandPtr ArmSubsystem::RotateBy(units::turn_t angle) {
-      units::turn_t moveGoal = (GetArmAngle() + angle);
-      return MoveToAngleCommand(moveGoal);
+  return
+    StartRun(
+      [this, angle] { ResetController(); m_controller.SetGoal(GetArmAngle() + angle); },
+      [this] { SetpointControl(); }
+    )
+    .Until([this] { return IsGoalReached(); });
 }
 
 //stops motor
