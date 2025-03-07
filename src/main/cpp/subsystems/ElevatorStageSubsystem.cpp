@@ -1,4 +1,5 @@
 #include <subsystems/ElevatorStageSubsystem.h>
+#include <algorithm>
 
 ElevatorStageSubsystem::ElevatorStageSubsystem(
   std::string name,
@@ -6,17 +7,14 @@ ElevatorStageSubsystem::ElevatorStageSubsystem(
   units::meter_t initHeight, units::meter_t hardLimitHeight,
   units::meter_t distancePerTurn,
   PIDConstants pidConst, ElevatorFeedforwardConstants ffConst,
-  frc::TrapezoidProfile<units::meter> pidProfile,
+  frc::TrapezoidProfile<units::meter>::Constraints pidProfile,
   int limitSwitchPin, int canID, int followerID
 ) : m_name(name),
     m_limitSwitch(limitSwitchPin),
     m_debouncer(ElevatorConstants::kLimitSwitchDebounceTime, frc::Debouncer::DebounceType::kFalling),   // issue 97 - check if limit switch is active high/low
     m_motor(canID, rev::spark::SparkMax::MotorType::kBrushless),
     m_encoder(m_motor.GetEncoder()),
-    m_closedLoopController(m_motor.GetClosedLoopController()),
-    m_trapezoidalProfile(pidProfile),
-    m_goal({initHeight, 0.0_mps}),
-    m_setpoint(m_goal),
+    m_controller(pidConst.kP, pidConst.kI, pidConst.kD, pidProfile, ElevatorConstants::kDt),
     m_feedforward(ffConst.kS, ffConst.kG, ffConst.kV, ffConst.kA),
     m_minSoftLimit(minLimit), m_maxSoftLimit(maxLimit), m_hardLimitHeight(hardLimitHeight),
     m_gearRatio(ElevatorConstants::gearBoxGearRatio * distancePerTurn.value())
@@ -29,10 +27,6 @@ ElevatorStageSubsystem::ElevatorStageSubsystem(
     motorConfig.softLimit
       .ForwardSoftLimit(maxLimit.value()).ForwardSoftLimitEnabled(true)
       .ReverseSoftLimit(minLimit.value()).ReverseSoftLimitEnabled(true);
-    motorConfig.closedLoop
-      .SetFeedbackSensor(rev::spark::ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
-      .P(pidConst.kP).I(pidConst.kI).D(pidConst.kD)
-      .OutputRange(-ElevatorConstants::maxOutput, ElevatorConstants::maxOutput);
     motorConfig.encoder
       .PositionConversionFactor(m_gearRatio)
       .VelocityConversionFactor(m_gearRatio);
@@ -57,8 +51,11 @@ ElevatorStageSubsystem::ElevatorStageSubsystem(
         rev::spark::SparkMax::PersistMode::kPersistParameters
       );
     }
+    
+    /* set up PID controller */
+    m_controller.SetTolerance(ElevatorConstants::kElevatorPositionTolerance, ElevatorConstants::kElevatorVelocityTolerance);
 
-    SetDefaultCommand(SetpointControlCommand());
+    SetDefaultCommand(HoldPositionCommand());
 }
 
 units::meter_t ElevatorStageSubsystem::GetHeight() {
@@ -74,32 +71,31 @@ bool ElevatorStageSubsystem::limitSwitchReached() {
 }
 
 bool ElevatorStageSubsystem::IsGoalReached() {
-  auto posErr = units::math::abs(GetHeight() - m_goal.position);
-  auto velErr = units::math::abs(GetVelocity() - m_goal.velocity);
-  
-  if ((posErr <= ElevatorConstants::kElevatorPositionTolerance) &&
-      (velErr <= ElevatorConstants::kElevatorVelocityTolerance))
-  {
-    return true;
-  }
-  else {
-    return false;
-  }
+  return m_controller.AtGoal();
 }
 
 void ElevatorStageSubsystem::SetpointControl() {
-  m_closedLoopController.SetReference(m_setpoint.position.value(), 
-                                      rev::spark::SparkLowLevel::ControlType::kPosition,
-                                      rev::spark::kSlot0,
-                                      m_feedforward.Calculate(m_setpoint.velocity).value());
+  double output = 
+    m_controller.Calculate(GetHeight()) // profiled PID
+    + (m_feedforward.Calculate(m_controller.GetSetpoint().velocity) / frc::RobotController::GetBatteryVoltage()); // feedforward, normalised
+  output = std::clamp(output, -ElevatorConstants::maxOutput, ElevatorConstants::maxOutput); // clamp to [-maxOutput, maxOutput]
+
+  m_motor.Set(output);
 }
 
 frc2::CommandPtr ElevatorStageSubsystem::SetpointControlCommand() {
   return Run([this] { SetpointControl(); });
 }
 
-void ElevatorStageSubsystem::UpdateSetpoint() {
-  m_setpoint = { GetHeight(), 0.0_mps };
+void ElevatorStageSubsystem::ResetController() {
+  m_controller.Reset(GetHeight(), GetVelocity());
+}
+
+frc2::CommandPtr ElevatorStageSubsystem::HoldPositionCommand() {
+  return StartRun(
+    [this] { ResetController(); m_controller.SetGoal(GetHeight()); },
+    [this] { SetpointControl(); }
+  );
 }
 
 void ElevatorStageSubsystem::StopMotor() {
@@ -111,38 +107,27 @@ void ElevatorStageSubsystem::ResetEncoder() {
 }
 
 frc2::CommandPtr ElevatorStageSubsystem::LimitSwitchActivationCommand() {
-  return Run([this] {
-              StopMotor();
-              ResetEncoder();
-              UpdateSetpoint();});
+  return RunOnce([this] { 
+    ResetEncoder();
+    ResetController();
+  });
 }
 
 frc2::CommandPtr ElevatorStageSubsystem::MoveUpCommand() {
-  return Run([this] { m_motor.Set(0.1); })
-         .FinallyDo([this] {
-            StopMotor();
-            UpdateSetpoint();
-         });
+  return Run([this] { m_motor.Set(0.1); }); // default command will take over upon cancellation
 }
 
 frc2::CommandPtr ElevatorStageSubsystem::MoveDownCommand() {
-  return
-    Run([this] { m_motor.Set(-0.1); })
-    .FinallyDo([this] {
-      StopMotor();
-      UpdateSetpoint();
-    });
+  return Run([this] { m_motor.Set(-0.1); });
 }
 
 frc2::CommandPtr ElevatorStageSubsystem::MoveToHeightCommand(units::meter_t heightGoal) {
   return
-    Run([this, heightGoal] {
-      m_goal = { heightGoal, 0.0_mps };
-      m_setpoint = m_trapezoidalProfile.Calculate(ElevatorConstants::kDt, m_setpoint, m_goal);
-      SetpointControl();
-    })
-    .Until([this] { return IsGoalReached(); })
-    .FinallyDo([this] { UpdateSetpoint(); });
+    StartRun(
+      [this, heightGoal] { ResetController(); m_controller.SetGoal(heightGoal); },
+      [this] { SetpointControl(); }
+    )
+    .Until([this] { return IsGoalReached(); });
 }
 
 frc2::CommandPtr ElevatorStageSubsystem::MoveUpBy(units::meter_t height) {
@@ -151,10 +136,14 @@ frc2::CommandPtr ElevatorStageSubsystem::MoveUpBy(units::meter_t height) {
 }
 
 void ElevatorStageSubsystem::Periodic() {
-  frc::SmartDashboard::PutNumber(m_name + "/setpoint/position", m_setpoint.position.value());
-  frc::SmartDashboard::PutNumber(m_name + "/setpoint/velocity", m_setpoint.velocity.value());
-  frc::SmartDashboard::PutNumber(m_name + "/goal/position", m_goal.position.value());
-  frc::SmartDashboard::PutNumber(m_name + "/goal/velocity", m_goal.velocity.value());
+  auto setpoint = m_controller.GetSetpoint();
+  frc::SmartDashboard::PutNumber(m_name + "/setpoint/position", setpoint.position.value());
+  frc::SmartDashboard::PutNumber(m_name + "/setpoint/velocity", setpoint.velocity.value());
+
+  auto goal = m_controller.GetGoal();
+  frc::SmartDashboard::PutNumber(m_name + "/goal/position", goal.position.value());
+  frc::SmartDashboard::PutNumber(m_name + "/goal/velocity", goal.velocity.value());
+
   frc::SmartDashboard::PutNumber(m_name + "/encoder/position", GetHeight().value());
   frc::SmartDashboard::PutNumber(m_name + "/encoder/velocity", GetVelocity().value());
 }
