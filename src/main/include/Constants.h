@@ -309,7 +309,7 @@ namespace ArmConstants {
 
   const units::turn_t kArmPositionTolerance = 0.02_tr; // issue 70 - update this tolerance
   const units::turns_per_second_t kArmVelocityTolerance = 0.1_tps;
-  const units::turn_t kArmPlaceCoral = -15_tr; // issue 70 - update this amount
+  const units::turn_t kArmPlaceCoral = -0.1_tr; // issue 70 - update this amount
 
   //Encoder Position
   const units::turn_t resetEncoder = -0.23_tr; // with backlash
