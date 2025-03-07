@@ -270,6 +270,9 @@ namespace ElevatorConstants {
   inline constexpr int kSecondStageLimitSwitchPin = 2; // TODO
 
   const units::meter_t kElevatorClearanceThreshold = kInitSecondStageHeight + 0.15_m;
+
+  const units::meters_per_second_t kManualMaxVelocity = 0.3_mps;
+  const units::meter_t kManualRetractLimitTolerance = 0.01_m;
   }
 
 namespace ArmConstants {

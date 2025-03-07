@@ -41,6 +41,7 @@ class ElevatorStageSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr MoveUpBy(units::meter_t height);
 
   void SetPower(double power);
+  void VelocityControl(units::meters_per_second_t velocity);
 
   void Periodic() override;
   void SimulationPeriodic() override;

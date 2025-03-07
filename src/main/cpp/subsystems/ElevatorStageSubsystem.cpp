@@ -77,6 +77,10 @@ void ElevatorStageSubsystem::SetpointControl() {
   m_motor.Set(output);
 }
 
+void ElevatorStageSubsystem::VelocityControl(units::meters_per_second_t velocity) {
+  m_motor.SetVoltage(m_feedforward.Calculate(velocity));
+}
+
 frc2::CommandPtr ElevatorStageSubsystem::SetpointControlCommand() {
   return Run([this] { SetpointControl(); });
 }

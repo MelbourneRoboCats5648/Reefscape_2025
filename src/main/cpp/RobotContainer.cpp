@@ -27,6 +27,10 @@
 
 using namespace DriveConstants;
 
+double RobotContainer::GetMechLeftY() {
+  return frc::ApplyDeadband(m_mechController.GetLeftY(), kDeadband);
+}
+
 double RobotContainer::GetMechRightY() {
   return frc::ApplyDeadband(m_mechController.GetRightY(), kDeadband);
 }
@@ -93,6 +97,24 @@ RobotContainer::RobotContainer()
     }
 
   }
+
+  /* elevator velocity control override */
+  frc2::Trigger elevatorOverrideTrigger([this] { return GetMechLeftY() == 0.0; });
+  elevatorOverrideTrigger.WhileTrue(
+    /* control 2nd stage */
+    frc2::RunCommand([this] {
+      m_elevatorSubsystem.m_secondStage.VelocityControl(-GetMechLeftY() * ElevatorConstants::kManualMaxVelocity);
+    }, { &m_elevatorSubsystem.m_secondStage }).ToPtr()
+    .Until([this] { return m_elevatorSubsystem.m_secondStage.GetHeight() >= ElevatorConstants::kMaxSecondStageHeight; }) // FIXME: this might not work if we attempt to pull 2nd stage down while it's at max height
+
+    /* control 1st stage */
+    .AndThen(
+      frc2::RunCommand([this] {
+        m_elevatorSubsystem.m_secondStage.VelocityControl(-GetMechLeftY() * ElevatorConstants::kManualMaxVelocity);
+      }, { &m_elevatorSubsystem.m_firstStage }).ToPtr()
+      .Until([this] { return m_elevatorSubsystem.m_firstStage.GetHeight() <= ElevatorConstants::retractSoftLimitFirstStage + ElevatorConstants::kManualRetractLimitTolerance; })
+    )
+  );
 
   /* arm velocity control override */
   frc2::Trigger armOverrideTrigger([this] { return GetMechRightY() == 0.0; });
