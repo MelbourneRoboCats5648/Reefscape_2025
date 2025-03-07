@@ -96,19 +96,12 @@ namespace GoalConstants {
 }
 
 namespace LeftClimbConstants {
-  //Motor ID
-  const int motorClimbLeftID = 1;
-
   // Speeds
   const double leftClimbUpSpeed = 1.0; //was 0.25
   const double leftClimbDownSpeed = -1.0;
 
-  // Joystick buttons
-  const int leftUpButton = 3;
-  const int leftDownButton = 5;
-
   // Soft Limits
-  const int  extendSoftLimit = 50;
+  const int  extendSoftLimit = 50; // issue 119 - need to work out using Advantage scope
   const int  retractSoftLimit= -50;
 
   //PID Controller constants
@@ -117,8 +110,8 @@ namespace LeftClimbConstants {
   const double kD = 0.0;
 
   //PID Profile 
-  const units::turns_per_second_t maximumVelocity = 1.5_tps;
-  const units::turns_per_second_squared_t maximumAcceleration = 1.0_tr_per_s_sq;
+  const units::turns_per_second_t maximumVelocity = 0.5_tps;
+  const units::turns_per_second_squared_t maximumAcceleration = 0.5_tr_per_s_sq;
 
   //kDt
   const units::second_t kDt = 20_ms;
