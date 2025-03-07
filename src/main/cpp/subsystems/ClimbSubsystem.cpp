@@ -48,7 +48,7 @@ ClimbSubsystem::ClimbSubsystem() {
                         rev::spark::SparkMax::PersistMode::kPersistParameters);
 
   ResetEncoder();
-  ReleaseRatchet();
+  LockRatchet();
 }
 
 void ClimbSubsystem::UpdateSetpoint() {  
@@ -100,7 +100,10 @@ frc2::CommandPtr ClimbSubsystem::MoveDownCommand() {
 frc2::CommandPtr ClimbSubsystem::MoveToAngleCommand(units::turn_t goal) {
   // Inline construction of command goes here. 
   // Subsystem::RunOnce implicitly requires `this` subsystem.
-  return Run([this, goal] {
+  return Run([this]{
+    ReleaseClimbCommand();
+  }).
+  AndThen([this, goal] {
             m_climbGoal = {goal, 0.0_tps }; //stop at goal
             m_climbSetpoint = m_trapezoidalProfile.Calculate(ClimbConstants::kDt, m_climbSetpoint, m_climbGoal);     
             SetpointControl();                     
@@ -131,6 +134,13 @@ frc2::CommandPtr ClimbSubsystem::LockClimbCommand()
   return Run([this] {
     StopMotor();
     LockRatchet();
+  });
+}
+
+frc2::CommandPtr ClimbSubsystem::ReleaseClimbCommand()
+{
+  return Run([this] {
+    ReleaseRatchet();
   });
 }
 

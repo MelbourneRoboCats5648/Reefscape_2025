@@ -31,6 +31,7 @@ class ClimbSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr MoveDownCommand();
   frc2::CommandPtr MoveToAngleCommand(units::turn_t goal);
   frc2::CommandPtr LockClimbCommand();
+  frc2::CommandPtr ReleaseClimbCommand();
 
   void StopMotor();
   void LockRatchet();
