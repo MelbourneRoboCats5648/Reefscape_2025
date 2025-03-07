@@ -32,6 +32,8 @@ class ElevatorStageSubsystem : public frc2::SubsystemBase {
 
   void StopMotor();
   void ResetEncoder();
+
+  void SetPower(double power);
   
   /* elevator commands */
   frc2::CommandPtr SetpointControlCommand();

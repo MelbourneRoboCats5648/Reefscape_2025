@@ -98,16 +98,21 @@ frc2::CommandPtr ElevatorStageSubsystem::HoldPositionCommand() {
   );
 }
 
+void ElevatorStageSubsystem::SetPower(double power) {
+  m_motor.Set(power);
+}
+
 void ElevatorStageSubsystem::StopMotor() {
   m_motor.Set(0);
 }
 
 void ElevatorStageSubsystem::ResetEncoder() {
+  frc::SmartDashboard::PutNumber(m_name + "/Encoder/ResetPosition", GetHeight().value());
   m_encoder.SetPosition(m_hardLimitHeight.value());
 }
 
 frc2::CommandPtr ElevatorStageSubsystem::LimitSwitchActivationCommand() {
-  return RunOnce([this] { 
+  return RunOnce([this] {
     ResetEncoder();
     ResetController();
   });
