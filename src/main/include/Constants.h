@@ -346,9 +346,9 @@ namespace ClimbConstants {
   static const units::turn_t retractSoftLimit = retractGoal + softLimitTolerance;  // issue 119 - check this prior to test
 
   // issue 119 - check all the below
-  constexpr double gearBoxGearRatio = 1.0 / 27.0;
+  constexpr double gearBoxGearRatio = 1.0 / (36.0 * 4.0);
   // this is the ratio between the motor sprocket teeth and the teeth on sprocket connected to the climb
-  constexpr double motorSprocketRatio = 1.0 / 10.0;
+  constexpr double motorSprocketRatio = 1.0 / 1.0;
   constexpr double gearRatio = gearBoxGearRatio * motorSprocketRatio;
 
   const double kClimbPositionToleranceTurns = 0.01;

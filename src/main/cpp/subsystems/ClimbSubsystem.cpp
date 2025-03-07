@@ -48,7 +48,6 @@ ClimbSubsystem::ClimbSubsystem() {
                         rev::spark::SparkMax::PersistMode::kPersistParameters);
 
   ResetEncoder();
-  SetDefaultCommand(SetpointControlCommand());
 }
 
 void ClimbSubsystem::UpdateSetpoint() {  
@@ -110,12 +109,6 @@ frc2::CommandPtr ClimbSubsystem::MoveToAngleCommand(units::turn_t goal) {
     UpdateSetpoint(); // update setpoint to current position and set velocity to 0 - then default command will keep this under control for us
   });
 
-}
-
-//To move down supply a negative
-frc2::CommandPtr ClimbSubsystem::RotateBy(units::turn_t angle) {
-      units::turn_t moveGoal = (GetClimbAngle() + angle);
-      return MoveToAngleCommand(moveGoal);
 }
 
 //stops motor
