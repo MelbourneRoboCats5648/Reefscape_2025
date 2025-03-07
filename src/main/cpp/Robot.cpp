@@ -7,6 +7,7 @@
 #include <frc2/command/CommandScheduler.h>
 #include <frc/RobotController.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include "cameraserver/CameraServer.h"
 
 Robot::Robot() {}
 
@@ -14,6 +15,11 @@ Robot::Robot() {}
 
 // }
 
+void Robot::RobotInit() {
+  cs::UsbCamera usbCamera = frc::CameraServer::StartAutomaticCapture();
+  usbCamera.SetResolution(640, 480);
+
+}
 /**
  * This function is called every 20 ms, no matter the mode. Use
  * this for items like diagnostics that you want to run during disabled,
