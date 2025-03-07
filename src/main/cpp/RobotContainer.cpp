@@ -171,9 +171,9 @@ void RobotContainer::ConfigureBindings() {
   //Complex Command Ones
   //Idk what the levels are atm.
   //m_driverController.A().OnTrue(coralCommands::PlaceOnReef(&m_elevatorAndArmSubsystem, &m_drive, &m_visionSubsystem, Level::L1, Direction::Right))
-  m_driverController.X().OnTrue(coralCommands::PlaceOnReef(&m_elevatorAndArmSubsystem, &m_drive, &m_visionSubsystem, Level::L2, Direction::Right));
-  m_driverController.Y().OnTrue(coralCommands::PlaceOnReef(&m_elevatorAndArmSubsystem, &m_drive, &m_visionSubsystem, Level::L3, Direction::Right));
-  m_driverController.B().OnTrue(coralCommands::PlaceOnReef(&m_elevatorAndArmSubsystem, &m_drive, &m_visionSubsystem, Level::L4, Direction::Right));
+  // m_driverController.X().OnTrue(coralCommands::PlaceOnReef(&m_elevatorAndArmSubsystem, &m_drive, &m_visionSubsystem, Level::L2, Direction::Right));
+  // m_driverController.Y().OnTrue(coralCommands::PlaceOnReef(&m_elevatorAndArmSubsystem, &m_drive, &m_visionSubsystem, Level::L3, Direction::Right));
+  // m_driverController.B().OnTrue(coralCommands::PlaceOnReef(&m_elevatorAndArmSubsystem, &m_drive, &m_visionSubsystem, Level::L4, Direction::Right));
 //  m_driverController.LeftTrigger().WhileTrue(m_elevatorAndArmSubsystem.ElevatorMoveUp());
 //  m_driverController.RightTrigger().WhileTrue(m_elevatorAndArmSubsystem.ElevatorMoveDown());
 }
