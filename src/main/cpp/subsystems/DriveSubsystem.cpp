@@ -1,5 +1,6 @@
 #include "subsystems/DriveSubsystem.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <iostream>
 
 //PathPlan Stuff
 #include <pathplanner/lib/auto/AutoBuilder.h>
@@ -203,6 +204,9 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
     store chassis speed in private member variable;
     convert the chassis speed to states (discritize etc.)
   */
+  
+  if (fieldRelative) std::cout << "FIELD CENTRIC "; else std::cout << "ROBOT CENTRIC ";
+  std::cout << "x=" << xSpeed.value() << " y=" << ySpeed.value() << " rot=" << rot.value() << std::endl;
 
    auto states =
        kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(

@@ -111,7 +111,7 @@ void RobotContainer::ConfigureBindings() {
   //m_driverController.B().WhileTrue(m_drive.StopCommand());
 
   // drive mode
-  m_driverController.LeftTrigger().OnTrue(m_drive.ResetFieldGyroOffsetCommand());
+  // m_driverController.LeftTrigger().OnTrue(m_drive.ResetFieldGyroOffsetCommand());
   m_driverController.RightTrigger().OnTrue(m_drive.ToggleFieldRelativeCommand());
 
   // elevator move up/down
@@ -127,10 +127,12 @@ void RobotContainer::ConfigureBindings() {
   // m_driverController.A().WhileTrue(m_elevatorSubsystem.m_secondStage.MoveToHeightCommand(ElevatorConstants::kInitSecondStageHeight + 0.05_m));
 
   // //PID elevator subsystem command
-  // m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
-  // m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
-  // m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
-  // m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L4));
+  m_mechController.A().OnTrue(m_elevatorAndArmSubsystem.CollectCoral());
+  m_mechController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
+  m_mechController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
+  m_mechController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
+  m_mechController.RightTrigger().OnTrue(m_elevatorAndArmSubsystem.PlaceCoral());
+  m_mechController.LeftTrigger().OnTrue(m_elevatorAndArmSubsystem.DefaultPositionCommand());
 
   // issue 102 - testing arm goal command
   // m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(0_tr)));
@@ -140,10 +142,10 @@ void RobotContainer::ConfigureBindings() {
 
 
   // // Move to height
-  m_mechController.A().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::retractSoftLimitSecondStage));
-  m_mechController.B().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxSecondStageHeight));
-  m_mechController.X().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight));
-  m_mechController.Y().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight + ElevatorConstants::kMaxSecondStageHeight));
+  // m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::retractSoftLimitSecondStage));
+  // m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxSecondStageHeight));
+  // m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight));
+  // m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight + ElevatorConstants::kMaxSecondStageHeight));
 
 
 
@@ -177,6 +179,10 @@ void RobotContainer::ConfigureBindings() {
 }
 
 void RobotContainer::Configure2024Bindings() {
+}
+
+frc2::CommandPtr RobotContainer::GetInitCommand() {
+  return m_elevatorAndArmSubsystem.DefaultPositionCommand();
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

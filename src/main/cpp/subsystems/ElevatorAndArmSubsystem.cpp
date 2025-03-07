@@ -57,76 +57,54 @@ units::meter_t ElevatorAndArmSubsystem::ElevatorGetHeight() {
 }
 
 frc2::CommandPtr ElevatorAndArmSubsystem::MoveToLevel(Level level) { 
-  units::meter_t elevGoal;
-  units::turn_t armGoal;
-
-  switch(level) {
-    case (Level::L0): {
-      elevGoal = ElevatorConstants::eLevel0Goal;
-      armGoal = ArmConstants::aLevel0Goal;
-      break;
-    }
-    case (Level::L1): {
-      elevGoal = ElevatorConstants::eLevel1Goal;
-      armGoal = ArmConstants::aLevel1Goal;
-      break;
-    }
-    case (Level::L2): {
-      elevGoal = ElevatorConstants::eLevel2Goal;
-      armGoal = ArmConstants::aLevel2Goal;
-      break;
-    }
-    case (Level::L3): {
-      elevGoal = ElevatorConstants::eLevel3Goal;
-      armGoal = ArmConstants::aLevel3Goal;
-      break;
-    }
-    case (Level::L4): {
-      elevGoal = ElevatorConstants::eLevel4Goal;
-      armGoal = ArmConstants::aLevel4Goal;
-      break;
-    }
-    default: {
-      // do nothing
-    }
+  ElevatorArmGoal goal;
+  switch (level) {
+    case DEFAULT: return DefaultPositionCommand();
+    case L1: goal = ElevatorAndArmConstants::kLevel1Goal; break;
+    case L2: goal = ElevatorAndArmConstants::kLevel2Goal; break;
+    case L3: goal = ElevatorAndArmConstants::kLevel3Goal; break;
+    default: return frc2::InstantCommand([]{}).ToPtr(); // do nothing - for correctness
   }
-  return m_elevatorSubsystem.MoveToHeightCommand(elevGoal)
-            .AlongWith(
-              frc2::cmd::WaitUntil([this, armGoal] {
-                units::turn_t currentAngle = m_armSubsystem.GetArmAngle();
-                if ((currentAngle - kArmClearanceThreshold).value() * (armGoal - kArmClearanceThreshold).value() > 0) return true;
 
-                if (m_elevatorSubsystem.m_secondStage.GetHeight() > kElevatorClearanceThreshold)
-                {
-                  return true;
-                }
-                else
-                {
-                  return false;
-                }
-              }).AndThen(m_armSubsystem.MoveToAngleCommand(armGoal)
-            ));
+  return m_elevatorSubsystem.MoveToHeightCommand(goal.elevator)
+            .AlongWith(m_armSubsystem.MoveToAngleCommand(goal.arm))
+            .AndThen(frc2::InstantCommand([this, level] { m_level = level; }).ToPtr());
 }
 
 //For collecting coral, if elevator height is not high enough, 
 //arm will not be able to rotate and then elevator move down to collect coral, 
 //so in this case the arm must move upwards
 frc2::CommandPtr ElevatorAndArmSubsystem::CollectCoral() {
-  if(ElevatorGetHeight() >= kElevatorMinHeightCollect) {
-      return (ArmMoveToAngle(aLevel0Goal))
-              .AndThen(ElevatorMoveToHeight(eLevel0Goal));
-  }
-  else {
-      //issue 70 make this a new goal
-      return ElevatorMoveToHeight(eLevel2Goal)
-              .AndThen(ArmMoveToAngle(aLevel0Goal))
-              .AndThen(ElevatorMoveToHeight(eLevel0Goal));
-  }
+  return
+    DefaultPositionCommand() // ensure that we're in the default position before collecting
+    .AndThen(
+      m_elevatorSubsystem.MoveToHeightCommand(ElevatorAndArmConstants::kCollectGoal.elevator)
+    )
+    .AndThen(
+      DefaultPositionCommand()
+    );
 }
 
 frc2::CommandPtr ElevatorAndArmSubsystem::PlaceCoral() {
-  return m_elevatorSubsystem.MoveUpBy(kElevatorPlaceCoral)
+  return m_elevatorSubsystem.m_secondStage.MoveUpBy(kElevatorPlaceCoral)
           .AlongWith(m_armSubsystem.RotateBy(kArmPlaceCoral));
+}
+
+frc2::CommandPtr ElevatorAndArmSubsystem::DefaultPositionCommand() {
+  return 
+    m_elevatorSubsystem.MoveToHeightCommand(ElevatorAndArmConstants::kDefaultGoal.elevator)
+    .AlongWith(
+      frc2::cmd::WaitUntil([this] {
+        if (m_elevatorSubsystem.m_secondStage.GetHeight() > kElevatorClearanceThreshold)
+        {
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+      }).AndThen(m_armSubsystem.MoveToAngleCommand(ElevatorAndArmConstants::kDefaultGoal.arm))
+    ).AndThen(frc2::InstantCommand([this] { m_level = DEFAULT; }).ToPtr());
 }
 
 void ElevatorAndArmSubsystem::LogEncoderOutputs()
