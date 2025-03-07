@@ -100,17 +100,15 @@ frc2::CommandPtr ClimbSubsystem::MoveDownCommand() {
 frc2::CommandPtr ClimbSubsystem::MoveToAngleCommand(units::turn_t goal) {
   // Inline construction of command goes here. 
   // Subsystem::RunOnce implicitly requires `this` subsystem.
-  return Run([this]{
-    ReleaseClimbCommand();
-  }).
-  AndThen([this, goal] {
+  return ReleaseClimbCommand()
+  .AndThen([this, goal] {
             m_climbGoal = {goal, 0.0_tps }; //stop at goal
             m_climbSetpoint = m_trapezoidalProfile.Calculate(ClimbConstants::kDt, m_climbSetpoint, m_climbGoal);     
             SetpointControl();                     
   })
   .Until([this] {return IsGoalReached();})
-  .AndThen(LockClimbCommand())
   .FinallyDo([this] {
+    ReleaseRatchet();
     UpdateSetpoint(); // update setpoint to current position and set velocity to 0 - then default command will keep this under control for us
   });
 
@@ -131,7 +129,7 @@ void ClimbSubsystem::ReleaseRatchet(){
 
 frc2::CommandPtr ClimbSubsystem::LockClimbCommand()
 {
-  return Run([this] {
+  return RunOnce([this] {
     StopMotor();
     LockRatchet();
   });
@@ -139,7 +137,7 @@ frc2::CommandPtr ClimbSubsystem::LockClimbCommand()
 
 frc2::CommandPtr ClimbSubsystem::ReleaseClimbCommand()
 {
-  return Run([this] {
+  return RunOnce([this] {
     ReleaseRatchet();
   });
 }
