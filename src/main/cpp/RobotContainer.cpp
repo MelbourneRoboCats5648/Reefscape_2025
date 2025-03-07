@@ -198,7 +198,7 @@ frc2::CommandPtr RobotContainer::GetInitCommand() {
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
   return frc2::RunCommand([this] {
-    m_drive.Drive(1.5_mps, 0.0_mps, 0.0_rad_per_s);
+    m_drive.Drive(-0.75_mps, 0.0_mps, 0.0_rad_per_s);
   }, {&m_drive}).FinallyDo([this] {
     m_drive.Drive(0.0_mps, 0.0_mps, 0.0_rad_per_s);
   }).WithTimeout(2_s);
