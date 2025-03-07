@@ -77,7 +77,7 @@ bool ClimbSubsystem::IsGoalReached() {
   }
   else {
     return false;
-  }  
+  }
 }
 
 void ClimbSubsystem::MoveClimb(double speed) {

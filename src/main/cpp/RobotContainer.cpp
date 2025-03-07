@@ -87,9 +87,7 @@ RobotContainer::RobotContainer()
 
         break;
     }
-
   }
-
 }
 
 
@@ -109,9 +107,10 @@ void RobotContainer::ConfigureBindings() {
   m_mechController.X().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight));
   m_mechController.Y().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight + ElevatorConstants::kMaxSecondStageHeight));
 
-  //
-  //m_driverController.Y().OnTrue(m_leftClimbSubsystem.MoveToClimbLevel(ClimbLevel::C2)); //extend functon
-  //m_driverController.A().OnTrue(m_leftClimbSubsystem.MoveToClimbLevel(ClimbLevel::C1)); //retract funtion
+
+  // issue 119 - check bindings with driver
+  m_driverController.Y().OnTrue(m_climbSubsystem.MoveToAngleCommand(ClimbConstants::extendGoal));
+  m_driverController.A().OnTrue(m_climbSubsystem.MoveToAngleCommand(ClimbConstants::retractGoal));
 
 
   //Collect Command
