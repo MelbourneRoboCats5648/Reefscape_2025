@@ -48,6 +48,7 @@ ClimbSubsystem::ClimbSubsystem() {
                         rev::spark::SparkMax::PersistMode::kPersistParameters);
 
   ResetEncoder();
+  ReleaseRatchet();
 }
 
 void ClimbSubsystem::UpdateSetpoint() {  
@@ -105,6 +106,7 @@ frc2::CommandPtr ClimbSubsystem::MoveToAngleCommand(units::turn_t goal) {
             SetpointControl();                     
   })
   .Until([this] {return IsGoalReached();})
+  .AndThen(LockClimbCommand())
   .FinallyDo([this] {
     UpdateSetpoint(); // update setpoint to current position and set velocity to 0 - then default command will keep this under control for us
   });
@@ -114,6 +116,22 @@ frc2::CommandPtr ClimbSubsystem::MoveToAngleCommand(units::turn_t goal) {
 //stops motor
 void ClimbSubsystem::StopMotor() {
   m_climbMotor.Set(0.0);
+}
+
+void ClimbSubsystem::LockRatchet(){
+  ratchetServo.Set(ClimbConstants::lockValue);  // issue 119 - Check that this is lock
+}
+
+void ClimbSubsystem::ReleaseRatchet(){
+    ratchetServo.Set(ClimbConstants::releaseValue);  // issue 119 - Check that this is lock
+}
+
+frc2::CommandPtr ClimbSubsystem::LockClimbCommand()
+{
+  return Run([this] {
+    StopMotor();
+    LockRatchet();
+  });
 }
 
 //reset encoder

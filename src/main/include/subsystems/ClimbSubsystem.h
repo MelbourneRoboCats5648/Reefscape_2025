@@ -10,6 +10,8 @@
 #include <frc2/command/Commands.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/controller/ArmFeedforward.h>
+#include <frc/Servo.h>
+
 
 class ClimbSubsystem : public frc2::SubsystemBase {
   private:
@@ -28,9 +30,12 @@ class ClimbSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr MoveUpCommand();
   frc2::CommandPtr MoveDownCommand();
   frc2::CommandPtr MoveToAngleCommand(units::turn_t goal);
-  frc2::CommandPtr RotateBy(units::turn_t angle);
+  frc2::CommandPtr LockClimbCommand();
 
   void StopMotor();
+  void LockRatchet();
+  void ReleaseRatchet();
+
   void ResetEncoder();
   
   void UpdateSetpoint();
@@ -49,6 +54,8 @@ class ClimbSubsystem : public frc2::SubsystemBase {
   void SimulationPeriodic() override;
 
   private:
+  frc::Servo ratchetServo {ClimbConstants::servoPWM_Pin};
+
   // Create a motion profile with the given maximum velocity and maximum
   // acceleration constraints for the next setpoint.
 
