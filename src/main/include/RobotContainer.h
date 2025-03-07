@@ -11,6 +11,7 @@
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LeftClimbSubsystem.h"
+#include "subsystems/ClimbSubsystem.h"
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/ArmSubsystem.h"
 #include "subsystems/ElevatorAndArmSubsystem.h"
@@ -41,7 +42,7 @@ class RobotContainer {
 
   // The robot's subsystems are defined here...
   DriveSubsystem m_drive;
-  LeftClimbSubsystem m_leftClimbSubsystem;
+  ClimbSubsystem m_climbSubsystem;
   ElevatorSubsystem m_elevatorSubsystem;
   ArmSubsystem m_armSubsystem;
   //this subsystem relies on the two subsystems above

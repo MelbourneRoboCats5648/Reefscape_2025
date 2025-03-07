@@ -25,6 +25,7 @@ enum BuildSeason {Crescendo, Reefscape};
 
 enum Level {COLLECT, DEFAULT, L1, L2, L3};
 enum TestLevel {NONE, ARM, ELEVATOR, DRIVE};
+enum ClimbState {INITIAL, EXTENDED, RETRACTED};
 
 struct PIDConstants {
   double kP, kI, kD;
@@ -95,19 +96,12 @@ namespace GoalConstants {
 }
 
 namespace LeftClimbConstants {
-  //Motor ID
-  const int motorClimbLeftID = 1;
-
   // Speeds
   const double leftClimbUpSpeed = 1.0; //was 0.25
   const double leftClimbDownSpeed = -1.0;
 
-  // Joystick buttons
-  const int leftUpButton = 3;
-  const int leftDownButton = 5;
-
   // Soft Limits
-  const int  extendSoftLimit = 50;
+  const int  extendSoftLimit = 50; // issue 119 - need to work out using Advantage scope
   const int  retractSoftLimit= -50;
 
   //PID Controller constants
@@ -116,8 +110,8 @@ namespace LeftClimbConstants {
   const double kD = 0.0;
 
   //PID Profile 
-  const units::turns_per_second_t maximumVelocity = 1.5_tps;
-  const units::turns_per_second_squared_t maximumAcceleration = 1.0_tr_per_s_sq;
+  const units::turns_per_second_t maximumVelocity = 0.5_tps;
+  const units::turns_per_second_squared_t maximumAcceleration = 0.5_tr_per_s_sq;
 
   //kDt
   const units::second_t kDt = 20_ms;
@@ -289,9 +283,9 @@ namespace ArmConstants {
   const double maxOutput = 1.0;
 
   //Arm feedforward
-  const units::volt_t kS = 0.12_V;
-  const units::volt_t kG = 0.25_V;
-  const auto kV = 4.7_V / 1_tps;
+  const units::volt_t kS = 0.0_V;
+  const units::volt_t kG = 0.0_V;
+  const auto kV = 0.0_V / 1_tps;
   const auto kA = 0.0_V / 1_tr_per_s_sq;
 
   // Arm limits
@@ -306,7 +300,7 @@ namespace ArmConstants {
   const units::turn_t aLevel4Goal = 0.1_tr;
 
   constexpr double gearBoxGearRatio = 1.0 / 27.0;
-  // this is the ratio between the motor sprocket teeth and the teeth on sprocket connected to the arm
+  // this is the ratio between the motor sprocket teeth and the teeth on sprocket connected to the climb
   constexpr double motorSprocketRatio = 12.0 / 18.0;
   constexpr double gearRatio = gearBoxGearRatio * motorSprocketRatio;
 
@@ -336,3 +330,51 @@ namespace ElevatorAndArmConstants {
   static constexpr ElevatorArmGoal kLevel2Goal = {0.03550218418240547_m + 0.6347883343696594_m, 0.13860741257667542_tr};
   static constexpr ElevatorArmGoal kLevel3Goal = {0.6335731148719788_m + 0.6346830129623413_m, 0.18034803867340088_tr};
 };
+//fixme - issue 119 need to tune these values
+namespace ClimbConstants {
+  //PID Profile
+  static const units::turns_per_second_t maximumVelocity= 0.5_tps;
+  static const units::turns_per_second_squared_t maximumAcceleration = 1.0_tr_per_s_sq;
+
+  //PID Trapezoidal Controller
+  constexpr units::second_t kDt = 20_ms;
+
+  //First Stage PID Controller 
+  const double kP = 1.0;  // issue 119 - calibrate this value
+  const double kI = 0.0;
+  const double kD = 0.0;
+  const double maxOutput = 1.0;
+
+  //Climb feedforward
+  const units::volt_t kS = 0.0_V;
+  const units::volt_t kG = 0.0_V;
+  const auto kV = 0.0_V / 1_tps;
+  const auto kA = 0.0_V / 1_tr_per_s_sq;
+
+  //Encoder Position
+  const units::turn_t resetEncoder = 0.25_tr; // assuming starting position (vertical up) is +0.25 turns
+
+  //Climb Goals - this is the output of the gearbox (not the motor)
+  // issue 119 - check all these values
+  const units::turn_t extendGoal = resetEncoder - 0.25_tr;
+  const units::turn_t retractGoal = resetEncoder + 0.08_tr;
+
+  // Climb limits
+  static const units::turn_t softLimitTolerance = 0.015_tr;
+  static const units::turn_t extendSoftLimit = extendGoal - softLimitTolerance;   // climb is extended out
+  static const units::turn_t retractSoftLimit = retractGoal + softLimitTolerance;  // issue 119 - check this prior to test
+
+  // issue 119 - check all the below
+  constexpr double gearBoxGearRatio = 1.0 / (36.0 * 4.0);
+  // this is the ratio between the motor sprocket teeth and the teeth on sprocket connected to the climb
+  constexpr double motorSprocketRatio = 1.0 / 1.0;
+  constexpr double gearRatio = gearBoxGearRatio * motorSprocketRatio;
+
+  const double kClimbPositionToleranceTurns = 0.01;
+  const double kClimbVelocityTolerancePerSecond = 0.1;
+
+  static const int servoPWM_Pin = 0;
+  static const double releaseValue = 1.0;
+  static const double lockValue = 0;
+
+}
