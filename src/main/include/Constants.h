@@ -25,7 +25,7 @@ enum BuildSeason {Crescendo, Reefscape};
 
 enum Level {L0, L1, L2, L3, L4};
 enum TestLevel {NONE, ARM, ELEVATOR, DRIVE};
-enum ClimbLevel {C1, C2};
+enum ClimbState {INITIAL, EXTENDED, RETRACTED};
 
 struct PIDConstants {
   double kP, kI, kD;
@@ -296,7 +296,7 @@ namespace ArmConstants {
   const units::turn_t aLevel4Goal = -0.1_tr;
 
   constexpr double gearBoxGearRatio = 1.0 / 27.0;
-  // this is the ratio between the motor sprocket teeth and the teeth on sprocket connected to the arm
+  // this is the ratio between the motor sprocket teeth and the teeth on sprocket connected to the climb
   constexpr double motorSprocketRatio = 12.0 / 18.0;
   constexpr double gearRatio = gearBoxGearRatio * motorSprocketRatio;
 
@@ -311,3 +311,47 @@ namespace ArmConstants {
   inline constexpr int k_limitSwitchArmPin = 3;
 }
 
+//fixme - issue 119 need to tune these values
+namespace ClimbConstants {
+  //PID Profile
+  static const units::turns_per_second_t maximumVelocity= 0.8_tps;
+  static const units::turns_per_second_squared_t maximumAcceleration = 4.0_tr_per_s_sq;
+
+  //PID Trapezoidal Controller
+  constexpr units::second_t kDt = 20_ms;
+
+  //First Stage PID Controller 
+  const double kP = 0.5;
+  const double kI = 0.0;
+  const double kD = 0.0;
+  const double maxOutput = 1.0;
+
+  //Climb feedforward
+  const units::volt_t kS = 0.12_V;
+  const units::volt_t kG = 0.25_V;
+  const auto kV = 4.7_V / 1_tps;
+  const auto kA = 0.0_V / 1_tr_per_s_sq;
+
+  // Climb limits
+  const units::turn_t extendSoftLimit = 0.10_tr;
+  const units::turn_t retractSoftLimit = -0.23_tr;
+
+  //Climb Goals - this is the output of the gearbox (not the motor)
+  const units::turn_t aLevel0Goal = retractSoftLimit;
+  const units::turn_t aLevel1Goal = 0.15_tr;
+  const units::turn_t aLevel2Goal = 0.1_tr;
+  const units::turn_t aLevel3Goal = 0.0_tr;
+  const units::turn_t aLevel4Goal = -0.1_tr;
+
+  constexpr double gearBoxGearRatio = 1.0 / 27.0;
+  // this is the ratio between the motor sprocket teeth and the teeth on sprocket connected to the climb
+  constexpr double motorSprocketRatio = 12.0 / 18.0;
+  constexpr double gearRatio = gearBoxGearRatio * motorSprocketRatio;
+
+  const double kClimbPositionToleranceTurns = 0.01; // issue 70 - update this tolerance
+  const double kClimbVelocityTolerancePerSecond = 0.1;
+  const units::turn_t kClimbPlaceCoral = -15_tr; // issue 70 - update this amount
+
+  //Encoder Position
+  const units::turn_t resetEncoder = 0.15_tr;
+}

@@ -22,7 +22,7 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr LeftClimbDownCommand();
   
   frc2::CommandPtr LeftClimbDefaultCommand(units::turn_t goal);
-  frc2::CommandPtr MoveToClimbLevel(ClimbLevel climbLevel);
+  frc2::CommandPtr MoveToClimbLevel(ClimbState climbLevel);
 
   void StopMotor();
   void ResetEncoder();

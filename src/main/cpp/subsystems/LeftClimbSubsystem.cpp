@@ -55,14 +55,14 @@ frc2::CommandPtr LeftClimbSubsystem::LeftClimbDefaultCommand(units::turn_t goal)
         .FinallyDo([this]{RobotReset();});
 }
 
-frc2::CommandPtr LeftClimbSubsystem::MoveToClimbLevel(ClimbLevel climbLevel) { 
+frc2::CommandPtr LeftClimbSubsystem::MoveToClimbLevel(ClimbState climbState) { 
   units::turn_t climbGoal;
-  switch(climbLevel) {
-    case (ClimbLevel::C2): {
+  switch(climbState) {
+    case (ClimbState::INITIAL): {
       climbGoal = GoalConstants::m_climbGoalL1;
       break;
     }
-    case (ClimbLevel::C1): {
+    case (ClimbState::EXTENDED): {
       climbGoal = GoalConstants::m_climbGoalRetract;
       break;
     }
