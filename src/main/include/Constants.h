@@ -321,15 +321,15 @@ namespace ClimbConstants {
   constexpr units::second_t kDt = 20_ms;
 
   //First Stage PID Controller 
-  const double kP = 0.2;  // issue 119 - calibrate this value
+  const double kP = 1.0;  // issue 119 - calibrate this value
   const double kI = 0.0;
   const double kD = 0.0;
   const double maxOutput = 1.0;
 
   //Climb feedforward
-  const units::volt_t kS = 0.12_V;
-  const units::volt_t kG = 0.25_V;
-  const auto kV = 4.7_V / 1_tps;
+  const units::volt_t kS = 0.0_V;
+  const units::volt_t kG = 0.0_V;
+  const auto kV = 0.0_V / 1_tps;
   const auto kA = 0.0_V / 1_tr_per_s_sq;
 
   //Encoder Position
@@ -355,7 +355,7 @@ namespace ClimbConstants {
   const double kClimbVelocityTolerancePerSecond = 0.1;
 
   static const int servoPWM_Pin = 0;
-  static const double releaseValue = 0;
+  static const double releaseValue = 1.0;
   static const double lockValue = 0;
 
 }
