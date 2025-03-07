@@ -23,7 +23,7 @@
 
 enum BuildSeason {Crescendo, Reefscape};
 
-enum Level {L0, L1, L2, L3, L4};
+enum Level {COLLECT, DEFAULT, L1, L2, L3};
 enum TestLevel {NONE, ARM, ELEVATOR, DRIVE};
 
 struct PIDConstants {
@@ -209,8 +209,8 @@ namespace ElevatorConstants {
   const double maxOutput = 1.0;
 
   //PID Profile
-  static frc::TrapezoidProfile<units::meter> trapezoidProfileFirstStage{{0.5_mps, 2.0_mps_sq}};
-  static frc::TrapezoidProfile<units::meter> trapezoidProfileSecondStage{{0.3_mps, 1.0_mps_sq}};
+  static frc::TrapezoidProfile<units::meter>::Constraints trapezoidProfileFirstStage{0.5_mps, 2.0_mps_sq};
+  static frc::TrapezoidProfile<units::meter>::Constraints trapezoidProfileSecondStage{0.3_mps, 1.0_mps_sq};
 
   //Elevator Goals
   const units::meter_t eLevel0Goal = 0.0_m;
@@ -266,15 +266,18 @@ namespace ElevatorConstants {
   const units::meter_t kElevatorPlaceCoral = 0.1_m; // issue 70 - update this amount
   
   //Elevator DIO port
-  inline constexpr int kFirstStageLimitSwitchPin = 1;
-  inline constexpr int kSecondStageLimitSwitchPin = 2; // TODO
+  inline constexpr int kFirstStageLimitSwitchPin = 0;
+  inline constexpr int kSecondStageLimitSwitchPin = 1;
+
+  static const units::second_t kLimitSwitchDebounceTime = 50_ms;  // issue 97 - test debounce time
+
+  const units::meter_t kElevatorClearanceThreshold = kInitSecondStageHeight + 0.15_m;
 }
 
 namespace ArmConstants {
   //PID Profile
-  const units::turns_per_second_t maximumVelocity= 0.8_tps;
-  const units::turns_per_second_squared_t maximumAcceleration = 4.0_tr_per_s_sq;
-
+  static frc::TrapezoidProfile<units::turn>::Constraints trapezoidProfile{0.8_tps, 4.0_tr_per_s_sq};
+  
   //PID Trapezoidal Controller
   static constexpr units::second_t kDt = 20_ms;
 
@@ -291,29 +294,42 @@ namespace ArmConstants {
   const auto kA = 0.0_V / 1_tr_per_s_sq;
 
   // Arm limits
-  const units::turn_t extendSoftLimit = 0.10_tr;
-  const units::turn_t retractSoftLimit = -0.23_tr;
+  const units::turn_t extendSoftLimit = 0.18_tr;
+  const units::turn_t retractSoftLimit = -0.285_tr;
 
   //Arm Goals - this is the output of the gearbox (not the motor)
   const units::turn_t aLevel0Goal = retractSoftLimit;
-  const units::turn_t aLevel1Goal = 0.15_tr;
-  const units::turn_t aLevel2Goal = 0.1_tr;
+  const units::turn_t aLevel1Goal = -0.15_tr;
+  const units::turn_t aLevel2Goal = -0.1_tr;
   const units::turn_t aLevel3Goal = 0.0_tr;
-  const units::turn_t aLevel4Goal = -0.1_tr;
+  const units::turn_t aLevel4Goal = 0.1_tr;
 
   constexpr double gearBoxGearRatio = 1.0 / 27.0;
   // this is the ratio between the motor sprocket teeth and the teeth on sprocket connected to the arm
   constexpr double motorSprocketRatio = 12.0 / 18.0;
   constexpr double gearRatio = gearBoxGearRatio * motorSprocketRatio;
 
-  const double kArmPositionToleranceTurns = 0.01; // issue 70 - update this tolerance
-  const double kArmVelocityTolerancePerSecond = 0.1;
+  const units::turn_t kArmPositionTolerance = 0.02_tr; // issue 70 - update this tolerance
+  const units::turns_per_second_t kArmVelocityTolerance = 0.1_tps;
   const units::turn_t kArmPlaceCoral = -15_tr; // issue 70 - update this amount
 
   //Encoder Position
-  const units::turn_t resetEncoder = 0.15_tr;
+  const units::turn_t resetEncoder = -0.23_tr; // with backlash
 
   //Arm DIO port
   inline constexpr int k_limitSwitchArmPin = 3;
+  const units::turn_t kArmClearanceThreshold = -0.17_tr; //ISSUE 112 - update this
 }
 
+struct ElevatorArmGoal {
+  units::meter_t elevator;
+  units::turn_t arm;
+};
+
+namespace ElevatorAndArmConstants {
+  static constexpr ElevatorArmGoal kCollectGoal = {ElevatorConstants::kInitFirstStageHeight + ElevatorConstants::kInitSecondStageHeight, ArmConstants::retractSoftLimit};
+  static constexpr ElevatorArmGoal kDefaultGoal = {ElevatorConstants::kMaxSecondStageHeight, ArmConstants::retractSoftLimit};
+  static constexpr ElevatorArmGoal kLevel1Goal = {0.3040386140346527_m, 0.1474258303642273_tr};
+  static constexpr ElevatorArmGoal kLevel2Goal = {0.03550218418240547_m + 0.6347883343696594_m, 0.13860741257667542_tr};
+  static constexpr ElevatorArmGoal kLevel3Goal = {0.6335731148719788_m + 0.6346830129623413_m, 0.18034803867340088_tr};
+};

@@ -28,6 +28,8 @@ class ElevatorAndArmSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr CollectCoral();
   frc2::CommandPtr PlaceCoral();
 
+  frc2::CommandPtr DefaultPositionCommand();
+
   void LogEncoderOutputs();
   
   void Periodic() override;
@@ -36,5 +38,7 @@ class ElevatorAndArmSubsystem : public frc2::SubsystemBase {
  private:
   ElevatorSubsystem& m_elevatorSubsystem;
   ArmSubsystem& m_armSubsystem;
+
+  Level m_level = COLLECT;
 };
 

@@ -18,6 +18,9 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr MoveToHeightCommand(units::meter_t heightGoal);
   frc2::CommandPtr MoveUpBy(units::meter_t height);
 
+  frc2::CommandPtr CancelFirstStageCommand();
+  frc2::CommandPtr CancelSecondStageCommand();
+
   //Will be called periodically whenever the CommandScheduler runs.
   void Periodic() override;
 
@@ -31,8 +34,8 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
     ElevatorConstants::distancePerTurnFirstStage,
     ElevatorConstants::kFirstStagePID, ElevatorConstants::kFirstStageFeedforward,
     ElevatorConstants::trapezoidProfileFirstStage,
-    CAN_Constants::kElevatorMotorLeftCAN_ID, ElevatorConstants::kFirstStageLimitSwitchPin,
-    CAN_Constants::kElevatorMotorRightCAN_ID
+    ElevatorConstants::kFirstStageLimitSwitchPin,
+    CAN_Constants::kElevatorMotorLeftCAN_ID, CAN_Constants::kElevatorMotorRightCAN_ID
   };
   ElevatorStageSubsystem m_secondStage{
     "ElevatorStage2",
@@ -41,7 +44,8 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
     ElevatorConstants::distancePerTurnSecondStage,
     ElevatorConstants::kSecondStagePID, ElevatorConstants::kSecondStageFeedforward,
     ElevatorConstants::trapezoidProfileSecondStage,
-    CAN_Constants::kElevatorMotorSecondStageCAN_ID, ElevatorConstants::kSecondStageLimitSwitchPin
+    ElevatorConstants::kSecondStageLimitSwitchPin,
+    CAN_Constants::kElevatorMotorSecondStageCAN_ID
   };
 };
 
