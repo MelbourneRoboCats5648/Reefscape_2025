@@ -41,8 +41,19 @@ class DriveSubsystem : public frc2::SubsystemBase {
     void SimulationPeriodic() override;
 
     void ResetGyro();
-    units::degree_t  GetHeading() const;
+    frc2::CommandPtr ResetGyroCommand();
 
+    void ResetFieldGyroOffset();
+    frc2::CommandPtr ResetFieldGyroOffsetCommand();
+
+    units::degree_t  GetHeading() const;
+    units::degree_t  GetFieldHeading() const;
+
+    void Drive(units::meters_per_second_t xSpeed,
+                           units::meters_per_second_t ySpeed,
+                           units::radians_per_second_t rot,
+                           units::second_t period = DriveConstants::kDrivePeriod);
+    
     void Drive(units::meters_per_second_t xSpeed,
                            units::meters_per_second_t ySpeed,
                            units::radians_per_second_t rot, bool fieldRelative,
@@ -53,7 +64,10 @@ class DriveSubsystem : public frc2::SubsystemBase {
     frc2::CommandPtr StopCommand();
     frc2::CommandPtr SmartDashboardOutputCommand();
 
-
+    bool m_fieldRelative = false; // robot-centric by default
+    frc2::CommandPtr SwitchRobotRelativeCommand();
+    frc2::CommandPtr SwitchFieldRelativeCommand();
+    frc2::CommandPtr ToggleFieldRelativeCommand();
 
  private:
     //Gyro
@@ -75,8 +89,10 @@ class DriveSubsystem : public frc2::SubsystemBase {
                                             kBackRightLocation};
 
     nt::StructArrayPublisher<frc::SwerveModuleState> m_statePublisher; 
-    nt::StructPublisher<frc::Rotation2d> m_headingPublisher; 
+    nt::StructPublisher<frc::Rotation2d> m_headingPublisher;
+    nt::StructPublisher<frc::Rotation2d> m_fieldHeadingPublisher;
 
+    units::degree_t m_fieldGyroOffset = 0.0_deg;
                                             
   public:
   frc::SlewRateLimiter<units::meters_per_second> m_xLimiter{kSlewRateTranslation};
