@@ -7,7 +7,7 @@ ElevatorStageSubsystem::ElevatorStageSubsystem(
   units::meter_t distancePerTurn,
   PIDConstants pidConst, ElevatorFeedforwardConstants ffConst,
   frc::TrapezoidProfile<units::meter> pidProfile,
-  int limitSwitchPin, bool limitSwitchMountedTop, int canID, int followerID
+  int limitSwitchPin, int canID, int followerID
 ) : m_name(name),
     m_limitSwitch(limitSwitchPin),
     m_debouncer(ElevatorConstants::kLimitSwitchDebounceTime, frc::Debouncer::DebounceType::kFalling),   // issue 97 - check if limit switch is active high/low
@@ -25,17 +25,6 @@ ElevatorStageSubsystem::ElevatorStageSubsystem(
     motorConfig
       .SmartCurrentLimit(ElevatorConstants::kCurrentLimit)
       .SetIdleMode(rev::spark::SparkMaxConfig::kCoast);
-    
-    if (true == limitSwitchMountedTop) {
-      motorConfig.limitSwitch
-        .ForwardLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen) // digital limit switch is active low (normally high)
-        .ForwardLimitSwitchEnabled(true);
-    }
-    else {
-      motorConfig.limitSwitch
-        .ReverseLimitSwitchType(rev::spark::LimitSwitchConfig::Type::kNormallyOpen)
-        .ReverseLimitSwitchEnabled(true);
-    }
 
     motorConfig.softLimit
       .ForwardSoftLimit(maxLimit.value()).ForwardSoftLimitEnabled(true)

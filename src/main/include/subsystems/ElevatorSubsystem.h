@@ -34,7 +34,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
     ElevatorConstants::distancePerTurnFirstStage,
     ElevatorConstants::kFirstStagePID, ElevatorConstants::kFirstStageFeedforward,
     ElevatorConstants::trapezoidProfileFirstStage,
-    ElevatorConstants::kFirstStageLimitSwitchPin, ElevatorConstants::kFirstStageLimitMountedTop,
+    ElevatorConstants::kFirstStageLimitSwitchPin,
     CAN_Constants::kElevatorMotorLeftCAN_ID, CAN_Constants::kElevatorMotorRightCAN_ID
   };
   ElevatorStageSubsystem m_secondStage{
@@ -44,7 +44,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
     ElevatorConstants::distancePerTurnSecondStage,
     ElevatorConstants::kSecondStagePID, ElevatorConstants::kSecondStageFeedforward,
     ElevatorConstants::trapezoidProfileSecondStage,
-    ElevatorConstants::kSecondStageLimitSwitchPin, ElevatorConstants::kSecondStageLimitMountedTop,
+    ElevatorConstants::kSecondStageLimitSwitchPin,
     CAN_Constants::kElevatorMotorSecondStageCAN_ID
   };
 };

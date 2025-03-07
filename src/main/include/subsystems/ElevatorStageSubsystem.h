@@ -18,7 +18,7 @@ class ElevatorStageSubsystem : public frc2::SubsystemBase {
     units::meter_t distancePerTurn,
     PIDConstants pidConst, ElevatorFeedforwardConstants ffConst,
     frc::TrapezoidProfile<units::meter> pidProfile,
-    int limitSwitchPin, bool limitSwitchMountedTop, int canID, int followerID = -1
+    int limitSwitchPin, int canID, int followerID = -1
   );
   
   units::meter_t GetHeight();
