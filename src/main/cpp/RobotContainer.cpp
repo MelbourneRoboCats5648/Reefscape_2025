@@ -143,6 +143,10 @@ void RobotContainer::ConfigureBindings() {
     //drivetrain commands
   //m_driverController.B().WhileTrue(m_drive.StopCommand());
 
+  // climb
+  m_driverController.X().OnTrue(m_climbSubsystem.MoveToAngleCommand(ClimbConstants::extendGoal));
+  m_driverController.Y().OnTrue(m_climbSubsystem.MoveToAngleCommand(ClimbConstants::retractGoal));
+
   // drive mode
   // m_driverController.LeftTrigger().OnTrue(m_drive.ResetFieldGyroOffsetCommand());
   m_driverController.RightTrigger().OnTrue(m_drive.ToggleFieldRelativeCommand());
