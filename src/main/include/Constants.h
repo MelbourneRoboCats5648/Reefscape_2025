@@ -332,7 +332,7 @@ struct ElevatorArmGoal {
 namespace ElevatorAndArmConstants {
   static constexpr ElevatorArmGoal kCollectGoal = {ElevatorConstants::kInitFirstStageHeight + ElevatorConstants::kInitSecondStageHeight, ArmConstants::retractSoftLimit};
   static constexpr ElevatorArmGoal kDefaultGoal = {ElevatorConstants::kMaxSecondStageHeight, ArmConstants::retractSoftLimit};
-  static constexpr ElevatorArmGoal kLevel1Goal = {0.3040386140346527_m, 0.1474258303642273_tr};
-  static constexpr ElevatorArmGoal kLevel2Goal = {0.03550218418240547_m + 0.6347883343696594_m, 0.13860741257667542_tr};
+  static constexpr ElevatorArmGoal kLevel1Goal = {0.21507354080677032_m + 0.0003047217323910445_m, 0.17623277008533478_tr};
+  static constexpr ElevatorArmGoal kLevel2Goal = {0.06033877283334732_m + 0.6304726004600525_m, 0.1756448596715927_tr};
   static constexpr ElevatorArmGoal kLevel3Goal = {0.6335731148719788_m + 0.6346830129623413_m, 0.18034803867340088_tr};
 };
