@@ -27,6 +27,14 @@
 
 using namespace DriveConstants;
 
+double RobotContainer::GetMechLeftY() {
+  return frc::ApplyDeadband(m_mechController.GetLeftY(), kDeadband);
+}
+
+double RobotContainer::GetMechRightY() {
+  return frc::ApplyDeadband(m_mechController.GetRightY(), kDeadband);
+}
+
 RobotContainer::RobotContainer()
    :m_elevatorSubsystem(),
     m_armSubsystem(),
@@ -81,7 +89,7 @@ RobotContainer::RobotContainer()
               // Multiply by max speed to map the joystick unitless inputs to
               // actual units. This will map the [-1, 1] to [max speed backwards,
               // max speed forwards], converting them to actual units.
-              yspeed, xspeed, rotspeed, false );
+              yspeed, xspeed, rotspeed);
         },
         {&m_drive}));
 
@@ -90,12 +98,29 @@ RobotContainer::RobotContainer()
 
   }
 
-  
+  /* elevator velocity control override */
+  frc2::Trigger elevatorOverrideTrigger([this] { return GetMechLeftY() != 0.0; });
+  elevatorOverrideTrigger.WhileTrue(
+    /* control 2nd stage */
+    frc2::RunCommand([this] {
+      m_elevatorSubsystem.m_secondStage.VelocityControl(-GetMechLeftY() * ElevatorConstants::kManualMaxVelocity);
+    }, { &m_elevatorSubsystem.m_secondStage }).ToPtr()
+    .Until([this] { return m_elevatorSubsystem.m_secondStage.GetHeight() >= ElevatorConstants::kMaxSecondStageHeight; }) // FIXME: this might not work if we attempt to pull 2nd stage down while it's at max height
 
+    /* control 1st stage */
+    .AndThen(
+      frc2::RunCommand([this] {
+        m_elevatorSubsystem.m_secondStage.VelocityControl(-GetMechLeftY() * ElevatorConstants::kManualMaxVelocity);
+      }, { &m_elevatorSubsystem.m_firstStage }).ToPtr()
+      .Until([this] { return m_elevatorSubsystem.m_firstStage.GetHeight() <= ElevatorConstants::retractSoftLimitFirstStage + ElevatorConstants::kManualRetractLimitTolerance; })
+    )
+  );
 
-
-
-
+  /* arm velocity control override */
+  frc2::Trigger armOverrideTrigger([this] { return GetMechRightY() != 0.0; });
+  armOverrideTrigger.WhileTrue(frc2::RunCommand([this] {
+    m_armSubsystem.VelocityControl(-GetMechRightY() * ArmConstants::kManualMaxVelocity); // so that up makes the arm go up
+  }, { &m_armSubsystem }).ToPtr());
 }
 
 
@@ -105,6 +130,10 @@ void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
     //drivetrain commands
   //m_driverController.B().WhileTrue(m_drive.StopCommand());
+
+  // drive mode
+  // m_driverController.LeftTrigger().OnTrue(m_drive.ResetFieldGyroOffsetCommand());
+  m_driverController.RightTrigger().OnTrue(m_drive.ToggleFieldRelativeCommand());
 
   // elevator move up/down
   // m_driverController.Y().WhileTrue(m_elevatorSubsystem.m_firstStage.MoveUpCommand());
@@ -119,10 +148,12 @@ void RobotContainer::ConfigureBindings() {
   // m_driverController.A().WhileTrue(m_elevatorSubsystem.m_secondStage.MoveToHeightCommand(ElevatorConstants::kInitSecondStageHeight + 0.05_m));
 
   // //PID elevator subsystem command
-  // m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
-  // m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
-  // m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
-  // m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L4));
+  m_mechController.A().OnTrue(m_elevatorAndArmSubsystem.CollectCoral());
+  m_mechController.X().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L1));
+  m_mechController.Y().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L2));
+  m_mechController.B().OnTrue(m_elevatorAndArmSubsystem.MoveToLevel(Level::L3));
+  m_mechController.RightTrigger().OnTrue(m_elevatorAndArmSubsystem.PlaceCoral());
+  m_mechController.LeftTrigger().OnTrue(m_elevatorAndArmSubsystem.DefaultPositionCommand());
 
   // issue 102 - testing arm goal command
   // m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.ArmMoveToAngle(units::turn_t(0_tr)));
@@ -132,10 +163,10 @@ void RobotContainer::ConfigureBindings() {
 
 
   // // Move to height
-  m_mechController.A().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::retractSoftLimitSecondStage));
-  m_mechController.B().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxSecondStageHeight));
-  m_mechController.X().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight));
-  m_mechController.Y().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight + ElevatorConstants::kMaxSecondStageHeight));
+  // m_driverController.A().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::retractSoftLimitSecondStage));
+  // m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxSecondStageHeight));
+  // m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight));
+  // m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight + ElevatorConstants::kMaxSecondStageHeight));
 
 
 
@@ -160,9 +191,17 @@ void RobotContainer::ConfigureBindings() {
 void RobotContainer::Configure2024Bindings() {
 }
 
+frc2::CommandPtr RobotContainer::GetInitCommand() {
+  return m_elevatorAndArmSubsystem.DefaultPositionCommand();
+}
+
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
-  return autos::ExampleAuto(&m_armSubsystem);
+  return frc2::RunCommand([this] {
+    m_drive.Drive(-0.75_mps, 0.0_mps, 0.0_rad_per_s);
+  }, {&m_drive}).FinallyDo([this] {
+    m_drive.Drive(0.0_mps, 0.0_mps, 0.0_rad_per_s);
+  }).WithTimeout(2_s);
 }
 
 frc2::CommandPtr RobotContainer::GetTestCommand() {

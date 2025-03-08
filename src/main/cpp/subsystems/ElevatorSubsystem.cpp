@@ -36,10 +36,11 @@ frc2::CommandPtr ElevatorSubsystem::MoveToHeightCommand(units::meter_t heightGoa
 }
 
 //To move down supply a negative
-frc2::CommandPtr ElevatorSubsystem::MoveUpBy(units::meter_t height) {
-      units::meter_t moveGoal = (GetElevatorHeight() + height);
-      return MoveToHeightCommand(moveGoal);
-}
+// frc2::CommandPtr ElevatorSubsystem::MoveUpBy(units::meter_t height) {
+
+//       units::meter_t moveGoal = (GetElevatorHeight() + height);
+//       return MoveToHeightCommand(moveGoal);
+// }
 
 void ElevatorSubsystem::Periodic() {
   

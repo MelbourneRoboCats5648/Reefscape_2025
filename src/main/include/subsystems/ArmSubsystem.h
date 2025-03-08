@@ -6,10 +6,10 @@
 #include <Constants.h>
 
 #include <frc2/command/SubsystemBase.h>
-#include <frc/trajectory/TrapezoidProfile.h>
 #include <frc2/command/Commands.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/DigitalInput.h>
+#include <frc/controller/ProfiledPIDController.h>
 #include <frc/controller/ArmFeedforward.h>
 
 class ArmSubsystem : public frc2::SubsystemBase {
@@ -39,14 +39,14 @@ class ArmSubsystem : public frc2::SubsystemBase {
   void StopMotor();
   void ResetEncoder();
   
-  void UpdateSetpoint();
   units::turn_t GetArmAngle();
-  frc::TrapezoidProfile<units::turn>::State& GetSetpoint();
-  frc::TrapezoidProfile<units::turn>::State& GetGoal();
   bool IsGoalReached();
   
   void SetpointControl(); // control using setpoint
   frc2::CommandPtr SetpointControlCommand();
+  frc2::CommandPtr HoldPositionCommand();
+
+  void VelocityControl(units::turns_per_second_t velocity);
 
   void OnLimitSwitchActivation();
 
@@ -60,13 +60,10 @@ class ArmSubsystem : public frc2::SubsystemBase {
   // Create a motion profile with the given maximum velocity and maximum
   // acceleration constraints for the next setpoint.
 
-  frc::TrapezoidProfile<units::turn> m_trapezoidalProfile{{ArmConstants::maximumVelocity, ArmConstants::maximumAcceleration}};
-  frc::TrapezoidProfile<units::turn>::State m_armGoal{ArmConstants::resetEncoder, 0.0_tps};
-  frc::TrapezoidProfile<units::turn>::State m_armSetpoint{ArmConstants::resetEncoder, 0.0_tps};
-  rev::spark::SparkClosedLoopController m_closedLoopController = m_armMotor.GetClosedLoopController();
-
+  frc::ProfiledPIDController<units::turn> m_controller{ArmConstants::kP, ArmConstants::kI, ArmConstants::kD, ArmConstants::trapezoidProfile, ArmConstants::kDt};
   frc::ArmFeedforward m_armFeedforward{ArmConstants::kS, ArmConstants::kG, ArmConstants::kV, ArmConstants::kA};
 
+  void ResetController();
 };
 
 

@@ -11,6 +11,10 @@
 
 Robot::Robot() {}
 
+// void Robot::RobotInit() {
+
+// }
+
 void Robot::RobotInit() {
   cs::UsbCamera usbCamera = frc::CameraServer::StartAutomaticCapture();
   usbCamera.SetResolution(640, 480);
@@ -61,7 +65,12 @@ void Robot::TeleopInit() {
   if (m_autonomousCommand) {
     m_autonomousCommand->Cancel();
   }
+  
+  m_initCommand = m_container.GetInitCommand();
 
+  if (m_initCommand) {
+    m_initCommand->Schedule();
+  }
 }
 
 /**

@@ -24,10 +24,14 @@ class RobotContainer {
  public:
   RobotContainer();
 
+  frc2::CommandPtr GetInitCommand();
   frc2::CommandPtr GetAutonomousCommand();
   frc2::CommandPtr GetTestCommand();
 
  private:
+  double GetMechLeftY();
+  double GetMechRightY();
+  
   void ConfigureBindings();
   void Configure2024Bindings();
  
