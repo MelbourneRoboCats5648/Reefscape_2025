@@ -10,8 +10,8 @@ ClimbSubsystem::ClimbSubsystem() {
   rev::spark::SparkMaxConfig climbMotorConfig;
 
   //Set parameters that will apply to elevator motor.
-    climbMotorConfig.SmartCurrentLimit(50).SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake); 
-    climbMotorConfig.SetIdleMode(rev::spark::SparkBaseConfig::IdleMode::kBrake);
+    climbMotorConfig.SmartCurrentLimit(50);
+    climbMotorConfig.SetIdleMode(rev::spark::SparkBaseConfig::IdleMode::kCoast);
 
       climbMotorConfig.softLimit
         .ForwardSoftLimit(ClimbConstants::extendSoftLimit.value())
@@ -69,8 +69,8 @@ frc::TrapezoidProfile<units::turn>::State& ClimbSubsystem::GetGoal() {
 } 
 
 bool ClimbSubsystem::IsGoalReached() {
-  double errorPosition = std::abs(GetSetpoint().position.value() - GetGoal().position.value());
-  double errorVelocity = std::abs(GetSetpoint().velocity.value() - GetGoal().velocity.value());
+  double errorPosition = std::abs(GetClimbAngle().value() - GetGoal().position.value());
+  double errorVelocity = std::abs(m_climbEncoder.GetVelocity() / 60.0 - GetGoal().velocity.value());
 
   if ((errorPosition <= kClimbPositionToleranceTurns) && (errorVelocity <= kClimbVelocityTolerancePerSecond)){
     return true;
@@ -87,28 +87,30 @@ void ClimbSubsystem::MoveClimb(double speed) {
 
 frc2::CommandPtr ClimbSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_climbMotor.Set(-0.1); })
+  return Run([this] {m_climbMotor.Set(-0.5); })
           .FinallyDo([this]{ m_climbMotor.Set(0); UpdateSetpoint(); });
 }
 
 frc2::CommandPtr ClimbSubsystem::MoveDownCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_climbMotor.Set(0.1); })
+  return Run([this] {m_climbMotor.Set(0.5); })
           .FinallyDo([this]{ m_climbMotor.Set(0); UpdateSetpoint(); });
 }
+
+#include <iostream>
 
 frc2::CommandPtr ClimbSubsystem::MoveToAngleCommand(units::turn_t goal) {
   // Inline construction of command goes here. 
   // Subsystem::RunOnce implicitly requires `this` subsystem.
   return ReleaseClimbCommand()
-  .AndThen([this, goal] {
-            m_climbGoal = {goal, 0.0_tps }; //stop at goal
-            m_climbSetpoint = m_trapezoidalProfile.Calculate(ClimbConstants::kDt, m_climbSetpoint, m_climbGoal);     
+  .AndThen(Run([this, goal] {
+    std::cout << "running setpoint" << std::endl;
+            m_climbGoal = m_climbSetpoint = {goal, 0.0_tps }; //stop at goal
+            // m_climbSetpoint = m_trapezoidalProfile.Calculate(ClimbConstants::kDt, m_climbSetpoint, m_climbGoal);     
             SetpointControl();                     
-  })
-  .Until([this] {return IsGoalReached();})
+  }).Until([this] {return IsGoalReached();}))  
   .FinallyDo([this] {
-    ReleaseRatchet();
+    // ReleaseRatchet();
     UpdateSetpoint(); // update setpoint to current position and set velocity to 0 - then default command will keep this under control for us
   });
 
@@ -137,9 +139,9 @@ frc2::CommandPtr ClimbSubsystem::LockClimbCommand()
 
 frc2::CommandPtr ClimbSubsystem::ReleaseClimbCommand()
 {
-  return RunOnce([this] {
+  return Run([this] {
     ReleaseRatchet();
-  });
+  }).WithTimeout(0.5_s);
 }
 
 //reset encoder
@@ -163,9 +165,17 @@ frc2::CommandPtr ClimbSubsystem::SetpointControlCommand() {
   });
 }
 
-void ClimbSubsystem::Periodic() {
-  // Implementation of subsystem periodic method goes here.
-  frc::SmartDashboard::PutNumber("climbEncoderValue", GetClimbAngle().value());  
+void ClimbSubsystem::Periodic() {// Implementation of subsystem periodic method goes here.
+  auto setpoint = m_climbSetpoint;
+  frc::SmartDashboard::PutNumber("Climb/setpoint/position", setpoint.position.value());
+  frc::SmartDashboard::PutNumber("Climb/setpoint/velocity", setpoint.velocity.value());
+
+  auto goal = m_climbGoal;
+  frc::SmartDashboard::PutNumber("Climb/goal/position", goal.position.value());
+  frc::SmartDashboard::PutNumber("Climb/goal/velocity", goal.velocity.value());
+
+  frc::SmartDashboard::PutNumber("Climb/encoder/position", GetClimbAngle().value());
+  frc::SmartDashboard::PutNumber("Climb/encoder/velocity", m_climbEncoder.GetVelocity() / 60.0);
 }
 
 void ClimbSubsystem::SimulationPeriodic() {
