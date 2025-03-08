@@ -10,16 +10,20 @@ ClimbSubsystem::ClimbSubsystem() {
   rev::spark::SparkMaxConfig climbMotorConfig;
 
   //Set parameters that will apply to elevator motor.
-    climbMotorConfig.SmartCurrentLimit(50);
-    climbMotorConfig.SetIdleMode(rev::spark::SparkBaseConfig::IdleMode::kCoast);
+  climbMotorConfig.SmartCurrentLimit(50);
+  climbMotorConfig.SetIdleMode(rev::spark::SparkBaseConfig::IdleMode::kCoast);
 
-      climbMotorConfig.softLimit
-        .ForwardSoftLimit(ClimbConstants::extendSoftLimit.value())
-        .ForwardSoftLimitEnabled(true);
+  climbMotorConfig.limitSwitch
+    .ForwardLimitSwitchEnabled(false)
+    .ReverseLimitSwitchEnabled(false);
 
-      climbMotorConfig.softLimit
-        .ReverseSoftLimit(ClimbConstants::retractSoftLimit.value())
-        .ReverseSoftLimitEnabled(true);
+  climbMotorConfig.softLimit
+    .ForwardSoftLimit(ClimbConstants::extendSoftLimit.value())
+    .ForwardSoftLimitEnabled(true);
+
+  climbMotorConfig.softLimit
+    .ReverseSoftLimit(ClimbConstants::retractSoftLimit.value())
+    .ReverseSoftLimitEnabled(true);
 
   //PID Controller 
   /* Configure the closed loop controller. We want to make sure we set the
