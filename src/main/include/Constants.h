@@ -321,7 +321,7 @@ namespace ArmConstants {
   inline constexpr int k_limitSwitchArmPin = 3;
   const units::turn_t kArmClearanceThreshold = -0.17_tr; //ISSUE 112 - update this
 
-  const units::turns_per_second_t kManualMaxVelocity = 0.6_tps; // TODO: update this
+  const units::turns_per_second_t kManualMaxVelocity = 0.3_tps; // TODO: update this
 }
 
 struct ElevatorArmGoal {
