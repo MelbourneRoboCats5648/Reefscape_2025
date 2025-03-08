@@ -295,7 +295,7 @@ namespace ArmConstants {
   const auto kA = 0.0_V / 1_tr_per_s_sq;
 
   // Arm limits
-  const units::turn_t extendSoftLimit = 0.18_tr;
+  const units::turn_t extendSoftLimit = 0.22_tr;
   const units::turn_t retractSoftLimit = -0.285_tr;
 
   //Arm Goals - this is the output of the gearbox (not the motor)
