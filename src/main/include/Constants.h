@@ -377,11 +377,11 @@ namespace ClimbConstants {
   constexpr double motorSprocketRatio = 1.0 / 1.0;
   constexpr double gearRatio = gearBoxGearRatio * motorSprocketRatio;
 
-  const double kClimbPositionToleranceTurns = 0.01;
-  const double kClimbVelocityTolerancePerSecond = 0.1;
+  const units::turn_t kClimbPositionTolerance = 0.05_tr;
+  const units::turns_per_second_t kClimbVelocityTolerance = 0.01_tps;
 
   static const int servoPWM_Pin = 0;
   static const double releaseValue = 1.0;
-  static const double lockValue = 0.75;
+  static const double lockValue = 0.5;
 
 }

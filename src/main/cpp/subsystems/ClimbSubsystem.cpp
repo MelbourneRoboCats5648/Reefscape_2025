@@ -31,6 +31,8 @@ ClimbSubsystem::ClimbSubsystem() {
                         rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                         rev::spark::SparkMax::PersistMode::kPersistParameters);
 
+  m_controller.SetTolerance(ClimbConstants::kClimbPositionTolerance, ClimbConstants::kClimbVelocityTolerance);
+
   ResetEncoder();
   LockRatchet();
 }
@@ -54,14 +56,16 @@ void ClimbSubsystem::MoveClimb(double speed) {
 
 frc2::CommandPtr ClimbSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_climbMotor.Set(-0.5); })
-          .FinallyDo([this]{ m_climbMotor.Set(0); });
+  return ReleaseClimbCommand()
+    .AndThen(Run([this] {m_climbMotor.Set(-0.5); }))
+    .FinallyDo([this]{ m_climbMotor.Set(0); LockRatchet(); });
 }
 
 frc2::CommandPtr ClimbSubsystem::MoveDownCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_climbMotor.Set(0.5); })
-          .FinallyDo([this]{ m_climbMotor.Set(0); });
+  return ReleaseClimbCommand()
+    .AndThen(Run([this] {m_climbMotor.Set(0.5); }))
+    .FinallyDo([this]{ m_climbMotor.Set(0); LockRatchet(); });
 }
 
 void ClimbSubsystem::SetpointControl() {
