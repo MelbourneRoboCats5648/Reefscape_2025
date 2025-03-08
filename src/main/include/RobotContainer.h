@@ -34,6 +34,8 @@ class RobotContainer {
   
   void ConfigureBindings();
   void Configure2024Bindings();
+
+  double ScaleJoystickInput(double input);
  
   // Replace with CommandPS4Controller or CommandJoystick if needed
   frc2::CommandXboxController m_driverController{OperatorConstants::kDriverControllerPort};
