@@ -6,7 +6,7 @@
 #include <Constants.h>
 
 #include <frc2/command/SubsystemBase.h>
-#include <frc/trajectory/TrapezoidProfile.h>
+#include <frc/controller/ProfiledPIDController.h>
 #include <frc2/command/Commands.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/controller/ArmFeedforward.h>
@@ -33,20 +33,17 @@ class ClimbSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr LockClimbCommand();
   frc2::CommandPtr ReleaseClimbCommand();
 
+  void SetpointControl();
+
   void StopMotor();
   void LockRatchet();
   void ReleaseRatchet();
 
   void ResetEncoder();
-  
-  void UpdateSetpoint();
+
   units::turn_t GetClimbAngle();
-  frc::TrapezoidProfile<units::turn>::State& GetSetpoint();
-  frc::TrapezoidProfile<units::turn>::State& GetGoal();
+  units::turns_per_second_t GetClimbVelocity();
   bool IsGoalReached();
-  
-  void SetpointControl(); // control using setpoint
-  frc2::CommandPtr SetpointControlCommand();
 
   //Will be called periodically whenever the CommandScheduler runs.
   void Periodic() override;
@@ -60,11 +57,11 @@ class ClimbSubsystem : public frc2::SubsystemBase {
   // Create a motion profile with the given maximum velocity and maximum
   // acceleration constraints for the next setpoint.
 
-  frc::TrapezoidProfile<units::turn> m_trapezoidalProfile{{ClimbConstants::maximumVelocity, ClimbConstants::maximumAcceleration}};
-  frc::TrapezoidProfile<units::turn>::State m_climbGoal{ClimbConstants::resetEncoder, 0.0_tps};
-  frc::TrapezoidProfile<units::turn>::State m_climbSetpoint{ClimbConstants::resetEncoder, 0.0_tps};
-  rev::spark::SparkClosedLoopController m_closedLoopController = m_climbMotor.GetClosedLoopController();
-
+  frc::ProfiledPIDController<units::turn> m_controller{
+    ClimbConstants::kP, ClimbConstants::kI, ClimbConstants::kD,
+    {ClimbConstants::maximumVelocity, ClimbConstants::maximumAcceleration},
+    ClimbConstants::kDt
+  };
   frc::ArmFeedforward m_climbFeedforward{ClimbConstants::kS, ClimbConstants::kG, ClimbConstants::kV, ClimbConstants::kA};
 
 };
