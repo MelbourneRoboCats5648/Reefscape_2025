@@ -144,6 +144,8 @@ void RobotContainer::ConfigureBindings() {
   //m_driverController.B().WhileTrue(m_drive.StopCommand());
 
   // climb
+  m_driverController.A().WhileTrue(m_climbSubsystem.MoveDownCommand());
+  m_driverController.B().WhileTrue(m_climbSubsystem.MoveUpCommand());
   m_driverController.X().OnTrue(m_climbSubsystem.MoveToAngleCommand(ClimbConstants::extendGoal));
   m_driverController.Y().OnTrue(m_climbSubsystem.MoveToAngleCommand(ClimbConstants::retractGoal));
 
