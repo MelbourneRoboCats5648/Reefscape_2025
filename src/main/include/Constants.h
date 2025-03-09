@@ -365,7 +365,7 @@ namespace ClimbConstants {
 
   // Climb limits
   static const units::turn_t extendSoftLimit = 0.5254823565483093_tr;   // climb is extended out
-  static const units::turn_t retractSoftLimit = 0.1727856546640396_tr;  // issue 119 - check this prior to test
+  static const units::turn_t retractSoftLimit = 0.1727856546640396_tr + 3_deg;  // issue 119 - check this prior to test
 
   // issue 119 - check all these values
   const units::turn_t extendGoal = extendSoftLimit;
