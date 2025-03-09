@@ -295,7 +295,7 @@ namespace ArmConstants {
   const auto kA = 0.0_V / 1_tr_per_s_sq;
 
   // Arm limits
-  const units::turn_t extendSoftLimit = 0.22_tr;
+  const units::turn_t extendSoftLimit = 0.23_tr;
   const units::turn_t retractSoftLimit = -0.24_tr;
 
   //Arm Goals - this is the output of the gearbox (not the motor)
@@ -334,7 +334,7 @@ namespace ElevatorAndArmConstants {
   static constexpr ElevatorArmGoal kDefaultGoal = {ElevatorConstants::kMaxSecondStageHeight, ArmConstants::retractSoftLimit};
   static constexpr ElevatorArmGoal kLevel1Goal = {0.21507354080677032_m + 0.0003047217323910445_m, 0.17623277008533478_tr};
   static constexpr ElevatorArmGoal kLevel2Goal = {0.06033877283334732_m + 0.6304726004600525_m, 0.1756448596715927_tr};
-  static constexpr ElevatorArmGoal kLevel3Goal = {0.6335731148719788_m + 0.6346830129623413_m, 0.18034803867340088_tr};
+  static constexpr ElevatorArmGoal kLevel3Goal = {0.6771453022956848_m + 0.6319462656974792_m, 0.23_tr};
 };
 
 //fixme - issue 119 need to tune these values
