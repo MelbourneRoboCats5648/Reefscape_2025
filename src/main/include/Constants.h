@@ -128,8 +128,8 @@ namespace DriveConstants {
   const units::angle::degree_t initialGyroAngle = 0_deg;
 
   //Max Speed and Acceleration Constanst
-  inline constexpr auto kMaxSpeed = 3_mps;
-  inline constexpr auto kMaxAcceleration = 3_mps_sq;
+  inline constexpr auto kMaxSpeed = 2.5_mps;
+  inline constexpr auto kMaxAcceleration = 2.2_mps_sq;
   inline constexpr auto kMaxAngularSpeed = 3.142_rad_per_s;
   inline constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;
 
@@ -296,7 +296,7 @@ namespace ArmConstants {
 
   // Arm limits
   const units::turn_t extendSoftLimit = 0.22_tr;
-  const units::turn_t retractSoftLimit = -0.285_tr;
+  const units::turn_t retractSoftLimit = -0.24_tr;
 
   //Arm Goals - this is the output of the gearbox (not the motor)
   const units::turn_t aLevel0Goal = retractSoftLimit;
@@ -347,7 +347,7 @@ namespace ClimbConstants {
   constexpr units::second_t kDt = 20_ms;
 
   //First Stage PID Controller 
-  const double kP = 1.0;  // issue 119 - calibrate this value
+  const double kP = 2.0;  // issue 119 - calibrate this value
   const double kI = 0.0;
   const double kD = 0.0;
   const double maxOutput = 1.0;
@@ -363,13 +363,13 @@ namespace ClimbConstants {
 
   //Climb Goals - this is the output of the gearbox (not the motor)
   // issue 119 - check all these values
-  const units::turn_t extendGoal = 0.45_tr;
-  const units::turn_t retractGoal = 0.22_tr;
+  const units::turn_t extendGoal = 0.48_tr;
+  const units::turn_t retractGoal = 0.215_tr;
 
   // Climb limits
   static const units::turn_t softLimitTolerance = 0.015_tr;
   static const units::turn_t extendSoftLimit = 0.489_tr;   // climb is extended out
-  static const units::turn_t retractSoftLimit = 0.211_tr;  // issue 119 - check this prior to test
+  static const units::turn_t retractSoftLimit = 0.20_tr;  // issue 119 - check this prior to test
 
   // issue 119 - check all the below
   constexpr double gearBoxGearRatio = 1.0 / (36.0 * 4.0);
@@ -377,11 +377,13 @@ namespace ClimbConstants {
   constexpr double motorSprocketRatio = 1.0 / 1.0;
   constexpr double gearRatio = gearBoxGearRatio * motorSprocketRatio;
 
-  const units::turn_t kClimbPositionTolerance = 0.05_tr;
+  const units::turn_t kClimbPositionTolerance = 0.02_tr;
   const units::turns_per_second_t kClimbVelocityTolerance = 0.01_tps;
 
   static const int servoPWM_Pin = 0;
   static const double releaseValue = 1.0;
   static const double lockValue = 0.5;
 
+  const double kClimbOverrideSpeed = 0.3;
+  const units::second_t kServoActuationTime = 0.2_s;
 }
