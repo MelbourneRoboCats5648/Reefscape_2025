@@ -54,6 +54,13 @@ void ClimbSubsystem::MoveClimb(double speed) {
   m_climbMotor.Set(speed);
 }
 
+frc2::CommandPtr ClimbSubsystem::MoveClimbCommand(double speed) {
+  // Inline construction of command goes here.
+  return ReleaseClimbCommand()
+    .AndThen(Run([this, speed] {m_climbMotor.Set(speed); }))
+    .FinallyDo([this]{ m_climbMotor.Set(0); LockRatchet(); });
+}
+
 frc2::CommandPtr ClimbSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
   return ReleaseClimbCommand()

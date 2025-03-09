@@ -362,14 +362,14 @@ namespace ClimbConstants {
   const units::turn_t resetEncoder = 0.25_tr; // assuming starting position (vertical up) is +0.25 turns
 
   //Climb Goals - this is the output of the gearbox (not the motor)
-  // issue 119 - check all these values
-  const units::turn_t extendGoal = 0.48_tr;
-  const units::turn_t retractGoal = 0.215_tr;
 
   // Climb limits
-  static const units::turn_t softLimitTolerance = 0.015_tr;
-  static const units::turn_t extendSoftLimit = 0.489_tr;   // climb is extended out
-  static const units::turn_t retractSoftLimit = 0.20_tr;  // issue 119 - check this prior to test
+  static const units::turn_t extendSoftLimit = 0.5254823565483093_tr;   // climb is extended out
+  static const units::turn_t retractSoftLimit = 0.1727856546640396_tr;  // issue 119 - check this prior to test
+
+  // issue 119 - check all these values
+  const units::turn_t extendGoal = extendSoftLimit;
+  const units::turn_t retractGoal = retractSoftLimit;
 
   // issue 119 - check all the below
   constexpr double gearBoxGearRatio = 1.0 / (36.0 * 4.0);
@@ -377,7 +377,7 @@ namespace ClimbConstants {
   constexpr double motorSprocketRatio = 1.0 / 1.0;
   constexpr double gearRatio = gearBoxGearRatio * motorSprocketRatio;
 
-  const units::turn_t kClimbPositionTolerance = 0.02_tr;
+  const units::turn_t kClimbPositionTolerance = 5_deg;
   const units::turns_per_second_t kClimbVelocityTolerance = 0.01_tps;
 
   static const int servoPWM_Pin = 0;
