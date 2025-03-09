@@ -31,6 +31,8 @@ ClimbSubsystem::ClimbSubsystem() {
                         rev::spark::SparkMax::ResetMode::kResetSafeParameters,
                         rev::spark::SparkMax::PersistMode::kPersistParameters);
 
+  m_controller.SetTolerance(ClimbConstants::kClimbPositionTolerance, ClimbConstants::kClimbVelocityTolerance);
+
   ResetEncoder();
   LockRatchet();
 }
@@ -52,16 +54,25 @@ void ClimbSubsystem::MoveClimb(double speed) {
   m_climbMotor.Set(speed);
 }
 
+frc2::CommandPtr ClimbSubsystem::MoveClimbCommand(double speed) {
+  // Inline construction of command goes here.
+  return ReleaseClimbCommand()
+    .AndThen(Run([this, speed] {m_climbMotor.Set(speed); }))
+    .FinallyDo([this]{ m_climbMotor.Set(0); LockRatchet(); });
+}
+
 frc2::CommandPtr ClimbSubsystem::MoveUpCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_climbMotor.Set(-0.5); })
-          .FinallyDo([this]{ m_climbMotor.Set(0); });
+  return ReleaseClimbCommand()
+    .AndThen(Run([this] {m_climbMotor.Set(-ClimbConstants::kClimbOverrideSpeed); }))
+    .FinallyDo([this]{ m_climbMotor.Set(0); LockRatchet(); });
 }
 
 frc2::CommandPtr ClimbSubsystem::MoveDownCommand() {
   // Inline construction of command goes here.
-  return Run([this] {m_climbMotor.Set(0.5); })
-          .FinallyDo([this]{ m_climbMotor.Set(0); });
+  return ReleaseClimbCommand()
+    .AndThen(Run([this] {m_climbMotor.Set(ClimbConstants::kClimbOverrideSpeed); }))
+    .FinallyDo([this]{ m_climbMotor.Set(0); LockRatchet(); });
 }
 
 void ClimbSubsystem::SetpointControl() {
@@ -109,14 +120,14 @@ frc2::CommandPtr ClimbSubsystem::LockClimbCommand()
   return Run([this] {
     StopMotor();
     LockRatchet();
-  }).WithTimeout(0.5_s);
+  }).WithTimeout(ClimbConstants::kServoActuationTime);
 }
 
 frc2::CommandPtr ClimbSubsystem::ReleaseClimbCommand()
 {
   return Run([this] {
     ReleaseRatchet();
-  }).WithTimeout(0.5_s);
+  }).WithTimeout(ClimbConstants::kServoActuationTime);
 }
 
 //reset encoder
