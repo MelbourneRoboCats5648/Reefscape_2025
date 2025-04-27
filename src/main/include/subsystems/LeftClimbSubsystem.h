@@ -20,7 +20,12 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
    */
   frc2::CommandPtr LeftClimbUpCommand();
   frc2::CommandPtr LeftClimbDownCommand();
-  frc2::CommandPtr LeftClimbCommand(units::turn_t goal);
+  
+  frc2::CommandPtr LeftClimbDefaultCommand(units::turn_t goal);
+  frc2::CommandPtr MoveToClimbLevel(ClimbState climbLevel);
+
+  void StopMotor();
+  void ResetEncoder();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -36,7 +41,7 @@ class LeftClimbSubsystem : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
       //frc::VictorSP m_motorClimbLeft{motorClimbLeftPort};
-      rev::spark::SparkMax m_motorController{LeftClimbConstants::motorClimbLeftID, rev::spark::SparkMax::MotorType::kBrushless};
+      rev::spark::SparkMax m_motorController{CAN_Constants::kClimbCAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
       rev::spark::SparkClosedLoopController m_closedLoopController = m_motorController.GetClosedLoopController();
       rev::spark::SparkRelativeEncoder m_encoder = m_motorController.GetEncoder();
       frc::TrapezoidProfile<units::turn> m_TrapezoidalProfile{{LeftClimbConstants::maximumVelocity, LeftClimbConstants::maximumAcceleration}};

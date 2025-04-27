@@ -35,6 +35,18 @@ double RobotContainer::GetMechRightY() {
   return frc::ApplyDeadband(m_mechController.GetRightY(), kDeadband);
 }
 
+double RobotContainer::ScaleJoystickInput(double input) {
+  /* no scaling */
+  // return input;
+
+  /* square scaling */
+  double sign = (input < 0.0) ? -1.0 : 1.0; // since we'll be losing the sign when we square
+  return sign * input * input;
+
+  /* cube scaling */
+  // return input * input * input;
+}
+
 RobotContainer::RobotContainer()
    :m_elevatorSubsystem(),
     m_armSubsystem(),
@@ -82,9 +94,9 @@ RobotContainer::RobotContainer()
     case (TestLevel::DRIVE): {
       m_drive.SetDefaultCommand(frc2::RunCommand(
         [this] {
-          units::velocity::meters_per_second_t yspeed = -m_drive.m_yLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband) * kMaxSpeed);
-          units::velocity::meters_per_second_t xspeed = -m_drive.m_xLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetLeftX(), kDeadband) * kMaxSpeed);
-          units::angular_velocity::radians_per_second_t rotspeed = -m_drive.m_rotLimiter.Calculate(frc::ApplyDeadband(m_driverController.GetRightX(), kDeadband) * kMaxAngularSpeed);
+          units::velocity::meters_per_second_t yspeed = -m_drive.m_yLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband)) * kMaxSpeed);
+          units::velocity::meters_per_second_t xspeed = -m_drive.m_xLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetLeftX(), kDeadband)) * kMaxSpeed);
+          units::angular_velocity::radians_per_second_t rotspeed = -m_drive.m_rotLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetRightX(), kDeadband)) * kMaxAngularSpeed);
           m_drive.Drive(
               // Multiply by max speed to map the joystick unitless inputs to
               // actual units. This will map the [-1, 1] to [max speed backwards,
@@ -119,7 +131,7 @@ RobotContainer::RobotContainer()
   /* arm velocity control override */
   frc2::Trigger armOverrideTrigger([this] { return GetMechRightY() != 0.0; });
   armOverrideTrigger.WhileTrue(frc2::RunCommand([this] {
-    m_armSubsystem.VelocityControl(-GetMechRightY() * ArmConstants::kManualMaxVelocity); // so that up makes the arm go up
+    m_armSubsystem.VelocityControl(-ScaleJoystickInput(GetMechRightY()) * ArmConstants::kManualMaxVelocity); // so that up makes the arm go up - TODO: check if we want to scale joystick input here
   }, { &m_armSubsystem }).ToPtr());
 }
 
@@ -130,6 +142,12 @@ void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
     //drivetrain commands
   //m_driverController.B().WhileTrue(m_drive.StopCommand());
+
+  // climb
+  m_driverController.A().WhileTrue(m_climbSubsystem.MoveDownCommand());
+  m_driverController.B().WhileTrue(m_climbSubsystem.MoveClimbCommand(-1.0));
+  m_driverController.X().OnTrue(m_climbSubsystem.MoveToAngleCommand(ClimbConstants::extendGoal));
+  m_driverController.Y().OnTrue(m_climbSubsystem.MoveToAngleCommand(ClimbConstants::retractGoal));
 
   // drive mode
   // m_driverController.LeftTrigger().OnTrue(m_drive.ResetFieldGyroOffsetCommand());
@@ -167,11 +185,6 @@ void RobotContainer::ConfigureBindings() {
   // m_driverController.B().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxSecondStageHeight));
   // m_driverController.X().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight));
   // m_driverController.Y().OnTrue(m_elevatorAndArmSubsystem.ElevatorMoveToHeight(ElevatorConstants::kMaxFirstStageHeight + ElevatorConstants::kMaxSecondStageHeight));
-
-
-
-
-
 
   //Collect Command
 //  m_driverController.LeftBumper().OnTrue(m_elevatorAndArmSubsystem.CollectCoral());
