@@ -5,6 +5,8 @@
 #include <Constants.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
+#include <photon/PhotonCamera.h>
+
 class VisionSubsystem : public frc2::SubsystemBase {
   public:
   VisionSubsystem();
@@ -15,4 +17,6 @@ class VisionSubsystem : public frc2::SubsystemBase {
   //Will be called periodically whenever the CommandScheduler runs during simulation.
   void SimulationPeriodic() override;
 
+  private:
+    photon::PhotonCamera camera{"photonvision"}; //check this name is what we gave it on the UI
 };
