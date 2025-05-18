@@ -6,6 +6,8 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include <photon/PhotonCamera.h>
+#include <photon/PhotonPoseEstimator.h>
+#include <photon/PhotonCamera.h>
 
 
 
@@ -21,4 +23,8 @@ class VisionSubsystem : public frc2::SubsystemBase {
 
   private:
     photon::PhotonCamera camera{"photonvision"}; //check this name is what we gave it on the UI
+    photon::PhotonPoseEstimator photonEstimator{
+      VisionConstants::kTagLayout,
+      photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR,
+      VisionConstants::kRobotToCam};
 };

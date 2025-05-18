@@ -384,7 +384,7 @@ namespace ClimbConstants {
   const units::second_t kServoActuationTime = 0.2_s;
 }
 
-namespace VisionConstanst {
+namespace VisionConstants {
   inline const frc::AprilTagFieldLayout kTagLayout{
     frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::kDefaultField)};
 
