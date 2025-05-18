@@ -20,6 +20,8 @@
 #include <frc/TimedRobot.h>
 #include <frc/geometry/Translation2d.h>
 
+#include <frc/apriltag/AprilTagFieldLayout.h>
+
 
 enum BuildSeason {Crescendo, Reefscape};
 
@@ -380,4 +382,14 @@ namespace ClimbConstants {
 
   const double kClimbOverrideSpeed = 0.3;
   const units::second_t kServoActuationTime = 0.2_s;
+}
+
+namespace VisionConstanst {
+  inline const frc::AprilTagFieldLayout kTagLayout{
+    frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::kDefaultField)};
+
+  inline const frc::Transform3d kRobotToCam{
+    frc::Translation3d{0.5_m, 0.0_m, 0.5_m},
+    frc::Rotation3d{0_rad, -30_deg, 0_rad}};
+
 }

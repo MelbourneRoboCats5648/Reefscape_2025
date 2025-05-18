@@ -7,6 +7,8 @@
 
 #include <photon/PhotonCamera.h>
 
+
+
 class VisionSubsystem : public frc2::SubsystemBase {
   public:
   VisionSubsystem();
