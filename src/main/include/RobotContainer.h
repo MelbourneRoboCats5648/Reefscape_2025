@@ -14,6 +14,7 @@
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/ArmSubsystem.h"
 #include "subsystems/ElevatorAndArmSubsystem.h"
+#include "subsystems/VisionSubsystem.h"
 
 /* This class is where the bulk of the robot should be declared.  Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -48,4 +49,5 @@ class RobotContainer {
   ArmSubsystem m_armSubsystem;
   //this subsystem relies on the two subsystems above
   ElevatorAndArmSubsystem m_elevatorAndArmSubsystem;
+  VisionSubsystem m_visionSubsystem;
 };

@@ -198,3 +198,8 @@ return Run([this] {m_frontLeftModule.OutputPositionToDashboard();
                    m_backRightModule.OutputPositionToDashboard(); });
 }
 
+
+frc::SwerveDrivePoseEstimator<4>& DriveSubsystem::getPoseEstimator()
+{
+  return m_poseEstimator;
+}

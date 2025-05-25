@@ -48,9 +48,11 @@ double RobotContainer::ScaleJoystickInput(double input) {
 }
 
 RobotContainer::RobotContainer()
-   :m_elevatorSubsystem(),
+   :m_drive(),
+    m_elevatorSubsystem(),
     m_armSubsystem(),
-    m_elevatorAndArmSubsystem(m_elevatorSubsystem, m_armSubsystem)
+    m_elevatorAndArmSubsystem(m_elevatorSubsystem, m_armSubsystem),
+    m_visionSubsystem(m_drive)
 {
 
   // Initialize all of your commands and subsystems here

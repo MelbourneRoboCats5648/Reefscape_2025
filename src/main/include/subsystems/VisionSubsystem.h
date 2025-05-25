@@ -9,11 +9,11 @@
 #include <photon/PhotonPoseEstimator.h>
 #include <photon/PhotonCamera.h>
 
-
+#include "subsystems/DriveSubsystem.h"
 
 class VisionSubsystem : public frc2::SubsystemBase {
   public:
-  VisionSubsystem();
+  VisionSubsystem(DriveSubsystem& driveSub);
 
   //Will be called periodically whenever the CommandScheduler runs.
   void Periodic() override;
@@ -27,4 +27,7 @@ class VisionSubsystem : public frc2::SubsystemBase {
       VisionConstants::kTagLayout,
       photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR,
       VisionConstants::kRobotToCam};
+    photon::PhotonPipelineResult m_latestResult;
+
+    DriveSubsystem& m_drive;
 };
