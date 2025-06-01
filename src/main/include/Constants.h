@@ -155,7 +155,7 @@ namespace DriveConstants {
 
   //MagOffset Doubles
   inline constexpr units::angle::turn_t kFrontLeftMagOffset = -0.306640625_tr; // CAN ID 11
-  inline constexpr units::angle::turn_t kFrontRightMagOffset = -0.2099609375_tr; // CAN ID 10
+  inline constexpr units::angle::turn_t kFrontRightMagOffset = -0.1748046875_tr; // CAN ID 10
   inline constexpr units::angle::turn_t kBackLeftMagOffset = 0.01953125_tr; // CAN ID 12
   inline constexpr units::angle::turn_t kBackRightMagOffset = 0.07421875_tr;  // CAN ID 13
 
