@@ -52,9 +52,6 @@ class DriveSubsystem : public frc2::SubsystemBase {
     void ResetGyro();
     frc2::CommandPtr ResetGyroCommand();
 
-    void ResetFieldGyroOffset();
-    frc2::CommandPtr ResetFieldGyroOffsetCommand();
-
     units::degree_t  GetHeading() const;
     units::degree_t  GetFieldHeading() const;
 

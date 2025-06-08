@@ -75,14 +75,6 @@ frc2::CommandPtr DriveSubsystem::ResetGyroCommand() {
   return RunOnce([this] { ResetGyro(); });
 }
 
-void DriveSubsystem::ResetFieldGyroOffset() {
-  m_fieldGyroOffset = GetHeading();
-}
-
-frc2::CommandPtr DriveSubsystem::ResetFieldGyroOffsetCommand() {
-  return RunOnce([this] { ResetFieldGyroOffset(); });
-}
-
 units::degree_t DriveSubsystem::GetHeading() const {
   return m_gyro.GetRotation2d().Degrees(); // GetYaw() didn't work for some reason
 }

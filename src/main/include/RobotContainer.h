@@ -34,7 +34,7 @@ class RobotContainer {
   double GetMechRightY();
   
   void ConfigureBindings();
-  void Configure2024Bindings();
+  
 
   double ScaleJoystickInput(double input);
  
