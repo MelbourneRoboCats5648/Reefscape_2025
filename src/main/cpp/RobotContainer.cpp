@@ -19,7 +19,6 @@
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/SwerveControllerCommand.h>
 #include <frc2/command/button/JoystickButton.h>
-
 #include "commands/Autos.h"
 
 #include <frc/filter/SlewRateLimiter.h>
@@ -52,20 +51,10 @@ RobotContainer::RobotContainer()
     m_armSubsystem(),
     m_elevatorAndArmSubsystem(m_elevatorSubsystem, m_armSubsystem)
 {
-
   // Initialize all of your commands and subsystems here
 
   // Configure the button bindings
-  switch(General::KBuildSeason) {
-    case (BuildSeason::Reefscape): {
-      ConfigureBindings();
-      break;
-    }    
-    case (BuildSeason::Crescendo): {
-      Configure2024Bindings();
-      break;
-    }
-  }
+  ConfigureBindings();
 
   switch(General::KTestLevel) {
     case (TestLevel::NONE): {
@@ -201,8 +190,6 @@ void RobotContainer::ConfigureBindings() {
 //  m_driverController.RightTrigger().WhileTrue(m_elevatorAndArmSubsystem.ElevatorMoveDown());
 }
 
-void RobotContainer::Configure2024Bindings() {
-}
 
 frc2::CommandPtr RobotContainer::GetInitCommand() {
   return m_elevatorAndArmSubsystem.DefaultPositionCommand();

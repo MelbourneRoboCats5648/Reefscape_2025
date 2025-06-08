@@ -21,8 +21,6 @@
 #include <frc/geometry/Translation2d.h>
 
 
-enum BuildSeason {Crescendo, Reefscape};
-
 enum Level {COLLECT, DEFAULT, L1, L2, L3};
 enum TestLevel {NONE, ARM, ELEVATOR, DRIVE};
 enum ClimbState {INITIAL, EXTENDED, RETRACTED};
@@ -45,7 +43,6 @@ struct ElevatorFeedforwardConstants {
 
 namespace General {
   // Choose the bindings for which robot to build
-  const BuildSeason KBuildSeason = BuildSeason::Reefscape;
   const TestLevel KTestLevel = TestLevel::DRIVE;
 }
 
