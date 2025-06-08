@@ -70,7 +70,7 @@ RobotContainer::RobotContainer()
     {&m_drive}));
 
   /* elevator velocity control override */
-  frc2::Trigger elevatorOverrideTrigger([this] { return GetMechLeftY() != 0.0; });
+  frc2::Trigger elevatorOverrideTrigger([this] { return std::abs(GetMechLeftY()) > General::kFloatTolerance; });
   elevatorOverrideTrigger.WhileTrue(
     /* control 2nd stage */
     frc2::RunCommand([this] {
@@ -88,7 +88,7 @@ RobotContainer::RobotContainer()
   );
 
   /* arm velocity control override */
-  frc2::Trigger armOverrideTrigger([this] { return GetMechRightY() != 0.0; });
+  frc2::Trigger armOverrideTrigger([this] { return std::abs(GetMechRightY()) > General::kFloatTolerance; });
   armOverrideTrigger.WhileTrue(frc2::RunCommand([this] {
     m_armSubsystem.VelocityControl(-ScaleJoystickInput(GetMechRightY()) * ArmConstants::kManualMaxVelocity); // so that up makes the arm go up - TODO: check if we want to scale joystick input here
   }, { &m_armSubsystem }).ToPtr());

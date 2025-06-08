@@ -40,6 +40,10 @@ struct ElevatorFeedforwardConstants {
   units::unit_t<frc::ElevatorFeedforward::ka_unit> kA;
 };
 
+namespace General {
+  inline constexpr double kFloatTolerance = 0.0001;
+}
+
 // namespace OperatorConstants
 namespace OperatorConstants {  
   inline constexpr int kDriverControllerPort = 0;
