@@ -22,7 +22,6 @@
 
 
 enum Level {COLLECT, DEFAULT, L1, L2, L3};
-enum TestLevel {NONE, ARM, ELEVATOR, DRIVE};
 enum ClimbState {INITIAL, EXTENDED, RETRACTED};
 
 struct PIDConstants {
@@ -40,11 +39,6 @@ struct ElevatorFeedforwardConstants {
   units::unit_t<frc::ElevatorFeedforward::kv_unit> kV;
   units::unit_t<frc::ElevatorFeedforward::ka_unit> kA;
 };
-
-namespace General {
-  // Choose the bindings for which robot to build
-  const TestLevel KTestLevel = TestLevel::DRIVE;
-}
 
 // namespace OperatorConstants
 namespace OperatorConstants {  

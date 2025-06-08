@@ -56,48 +56,18 @@ RobotContainer::RobotContainer()
   // Configure the button bindings
   ConfigureBindings();
 
-  switch(General::KTestLevel) {
-    case (TestLevel::NONE): {
-      break;
-    }
-    case (TestLevel::ARM): {
-      // m_elevatorAndArmSubsystem.SetDefaultCommand(frc2::RunCommand(
-      //   [this] {
-      //     double speed = frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband);
-      //     m_elevatorAndArmSubsystem.MoveArm(speed);
-      //   },
-      //   {&m_elevatorAndArmSubsystem}));
-
-        break;
-    }
-    case (TestLevel::ELEVATOR): {
-      // m_elevatorAndArmSubsystem.SetDefaultCommand(frc2::RunCommand(
-      //   [this] {
-      //     double speed = frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband);
-      //     m_elevatorAndArmSubsystem.MoveSecondStage(speed);
-      //   },
-      //   {&m_elevatorAndArmSubsystem}));
-
-        break;
-    }
-    case (TestLevel::DRIVE): {
-      m_drive.SetDefaultCommand(frc2::RunCommand(
-        [this] {
-          units::velocity::meters_per_second_t yspeed = -m_drive.m_yLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband)) * kMaxSpeed);
-          units::velocity::meters_per_second_t xspeed = -m_drive.m_xLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetLeftX(), kDeadband)) * kMaxSpeed);
-          units::angular_velocity::radians_per_second_t rotspeed = -m_drive.m_rotLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetRightX(), kDeadband)) * kMaxAngularSpeed);
-          m_drive.Drive(
-              // Multiply by max speed to map the joystick unitless inputs to
-              // actual units. This will map the [-1, 1] to [max speed backwards,
-              // max speed forwards], converting them to actual units.
-              yspeed, xspeed, rotspeed);
-        },
-        {&m_drive}));
-
-        break;
-    }
-
-  }
+  m_drive.SetDefaultCommand(frc2::RunCommand(
+    [this] {
+      units::velocity::meters_per_second_t yspeed = -m_drive.m_yLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband)) * kMaxSpeed);
+      units::velocity::meters_per_second_t xspeed = -m_drive.m_xLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetLeftX(), kDeadband)) * kMaxSpeed);
+      units::angular_velocity::radians_per_second_t rotspeed = -m_drive.m_rotLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetRightX(), kDeadband)) * kMaxAngularSpeed);
+      m_drive.Drive(
+          // Multiply by max speed to map the joystick unitless inputs to
+          // actual units. This will map the [-1, 1] to [max speed backwards,
+          // max speed forwards], converting them to actual units.
+          yspeed, xspeed, rotspeed);
+    },
+    {&m_drive}));
 
   /* elevator velocity control override */
   frc2::Trigger elevatorOverrideTrigger([this] { return GetMechLeftY() != 0.0; });
