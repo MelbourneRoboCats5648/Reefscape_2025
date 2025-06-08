@@ -83,7 +83,7 @@ namespace CAN_Constants {
   // Gyro CAN IDs
   const std::string kCanId = "rio";
   inline constexpr int kGyroDeviceID = 14; 
-}  
+}
 
 namespace GoalConstants {
   inline constexpr units::turn_t m_climbGoalL1 = 1.0_tr; 
@@ -307,7 +307,6 @@ namespace ArmConstants {
 
   //Arm DIO port
   inline constexpr int k_limitSwitchArmPin = 3;
-  inline constexpr units::turn_t kArmClearanceThreshold = -0.17_tr; //ISSUE 112 - update this
 
   inline constexpr units::turns_per_second_t kManualMaxVelocity = 0.3_tps; // TODO: update this
 }
@@ -348,8 +347,6 @@ namespace ClimbConstants {
 
   //Encoder Position
   inline constexpr units::turn_t resetEncoder = 0.25_tr; // assuming starting position (vertical up) is +0.25 turns
-
-  //Climb Goals - this is the output of the gearbox (not the motor)
 
   // Climb limits
   inline constexpr units::turn_t extendSoftLimit = 0.5254823565483093_tr;   // climb is extended out

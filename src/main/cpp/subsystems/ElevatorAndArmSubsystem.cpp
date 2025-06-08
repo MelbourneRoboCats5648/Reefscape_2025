@@ -49,7 +49,7 @@ frc2::CommandPtr ElevatorAndArmSubsystem::ArmMoveToAngle(units::turn_t armGoal) 
 }
 
 frc2::CommandPtr ElevatorAndArmSubsystem::ElevatorMoveToHeight(units::meter_t elevGoal) {
-    return m_elevatorSubsystem.MoveToHeightCommand(elevGoal);           
+    return m_elevatorSubsystem.MoveToHeightCommand(elevGoal);
 }
 
 units::meter_t ElevatorAndArmSubsystem::ElevatorGetHeight() {
