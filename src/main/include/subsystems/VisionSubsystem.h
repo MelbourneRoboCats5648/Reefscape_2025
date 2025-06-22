@@ -8,6 +8,8 @@
 #include <photon/PhotonCamera.h>
 #include <photon/PhotonPoseEstimator.h>
 #include <photon/PhotonCamera.h>
+#include "PhotonTrackedTarget.h"
+
 
 #include "subsystems/DriveSubsystem.h"
 
@@ -28,6 +30,8 @@ class VisionSubsystem : public frc2::SubsystemBase {
       photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR,
       VisionConstants::kRobotToCam};
     photon::PhotonPipelineResult m_latestResult;
+
+    nt::StructArrayPublisher<const PhotonTrackedTarget> m_statePublisher; 
 
     DriveSubsystem& m_drive;
 };

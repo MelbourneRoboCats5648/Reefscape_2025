@@ -9,7 +9,6 @@ VisionSubsystem::VisionSubsystem(DriveSubsystem& driveSub)
 
 void VisionSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
-  {
     // Run each new pipeline result through our pose estimator
     for (const auto& result : camera.GetAllUnreadResults()) {
       // cache result and update pose estimator
@@ -21,8 +20,12 @@ void VisionSubsystem::Periodic() {
                                                         visionEst->timestamp);
                                      //GetEstimationStdDevs(visionEst->estimatedPose.ToPose2d()));
       }
+       if (result.HasTargets()) {
+        auto targets = result.GetTargets();
+        frc::SmartDashboard::PutNumber("Vision/fiducial", targets);
+
+      
     }
-  }
 }
 
 void VisionSubsystem::SimulationPeriodic() {
