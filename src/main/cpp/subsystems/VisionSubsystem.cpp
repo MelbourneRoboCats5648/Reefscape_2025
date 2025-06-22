@@ -81,6 +81,11 @@ void VisionSubsystem::AimAndRange() {
 
 }
 
+frc2::CommandPtr VisionSubsystem::AimAndRangeCommand() {
+  // Inline construction of command goes here.
+  return Run([this] {AimAndRange(); });
+}
+
 void VisionSubsystem::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.
 }

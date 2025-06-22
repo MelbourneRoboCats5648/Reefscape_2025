@@ -22,6 +22,7 @@ class VisionSubsystem : public frc2::SubsystemBase {
   void Periodic() override;
 
   void AimAndRange();
+  frc2::CommandPtr AimAndRangeCommand();
 
   //Will be called periodically whenever the CommandScheduler runs during simulation.
   void SimulationPeriodic() override;
