@@ -26,26 +26,40 @@ void VisionSubsystem::Periodic() {
 }
 
 void VisionSubsystem::AimAndRange() {
+  std::cout << "AIMING AND RANGING" << std::endl;
+
   //so this will be called by a button.
   bool targetVisible = false;
   units::degree_t targetYaw = 0.0_deg;
   units::meter_t targetRange = 0.0_m;
   std::set<int> aprilTagSet = {1, 2, 3, 4, 5}; // to be changed
 
-  auto results = camera.GetAllUnreadResults();
-  if (results.size() > 0) 
+  //auto results = camera.GetAllUnreadResults();
+  //std::cout << "CAMERA NAME = " << camera.GetCameraName() << std::endl;
+  //std::cout << "RESULT SIZE = " << results.size() << std::endl;
+  
+  auto latestResult = camera.GetLatestResult();
+  if (latestResult.HasTargets())
   {
+    std::cout << "LATEST RESULT HAS TARGET!!" << std::endl;
+  //}
+
+  //if (results.size() > 0) 
+  //{
     // Camera processed a new frame since last
     // Get the last one in the list.
-    auto result = results[results.size() - 1];
-    if (result.HasTargets()) 
-    {
+    //auto result = results[results.size() - 1];
+    //if (result.HasTargets()) 
+    //{
+
       // At least one AprilTag was seen by the camera
       //for (auto& target : result.GetTargets()) 
-      auto target = result.GetBestTarget();
+      auto target = latestResult.GetBestTarget();
       //{
         if (aprilTagSet.contains(target.GetFiducialId())) 
         {
+          std::cout << "TARGET HAS ID = " << target.GetFiducialId() << std::endl;
+
           // Found Tag in the targeted apriltage set, record its information
           targetYaw = units::degree_t{target.GetYaw()};
           targetRange = photon::PhotonUtils::CalculateDistanceToTarget(
@@ -57,7 +71,7 @@ void VisionSubsystem::AimAndRange() {
         }
       //}
     }
-  }
+  
   units::meters_per_second_t xSpeed = 0_mps;
   units::meters_per_second_t ySpeed = 0_mps;
   units::radians_per_second_t rotSpeed = 0_rad_per_s;
@@ -65,6 +79,8 @@ void VisionSubsystem::AimAndRange() {
     // Auto-align
   if (targetVisible) 
   {
+    std::cout << "TARGET VISIBLE" << std::endl;
+
     // Driver wants auto-alignment to tag x
     // And, tag x is in sight, so we can turn toward it.
     // Override the driver's turn command with an automatic one that turns
@@ -76,10 +92,10 @@ void VisionSubsystem::AimAndRange() {
   }
 
   // Command drivetrain motors based on target speeds
- 
+  std::cout << "xSpeed = " << xSpeed.value() << std::endl;
+  std::cout << "rotSpeed = " << rotSpeed.value() << std::endl;
+
   m_drive.Drive(xSpeed, ySpeed, rotSpeed);
-
-
 }
 
 

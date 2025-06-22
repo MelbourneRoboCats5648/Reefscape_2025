@@ -28,7 +28,7 @@ class VisionSubsystem : public frc2::SubsystemBase {
 
 
   private:
-    photon::PhotonCamera camera{"photonvision"}; //check this name is what we gave it on the UI
+    photon::PhotonCamera camera{"photonvision"};
     photon::PhotonPoseEstimator photonEstimator
     {
       VisionConstants::kTagLayout,
@@ -43,5 +43,5 @@ class VisionSubsystem : public frc2::SubsystemBase {
   static constexpr double visionTurnKP = 0.01; 
   static constexpr auto reefDesiredAngle = 0.0_deg;
   static constexpr double visionStrafeKP = 0.5;
-  static constexpr units::meter_t reefDesiredRange = 1_m;
+  static constexpr units::meter_t reefDesiredRange = 0.1_m;
 };
