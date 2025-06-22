@@ -109,6 +109,8 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.Y().OnTrue(m_climbSubsystem.MoveToAngleCommand(ClimbConstants::retractGoal));
 
   m_driverController.RightTrigger().OnTrue(m_drive.ToggleFieldRelativeCommand());
+
+  m_driverController.LeftTrigger().WhileTrue(m_visionSubsystem.AimAndRangeCommand());
 }
 
 
