@@ -22,7 +22,6 @@ class VisionSubsystem : public frc2::SubsystemBase {
   void Periodic() override;
 
   void AimAndRange();
-  frc2::CommandPtr AimAndRangeCommand();
 
   //Will be called periodically whenever the CommandScheduler runs during simulation.
   void SimulationPeriodic() override;
@@ -44,5 +43,5 @@ class VisionSubsystem : public frc2::SubsystemBase {
   static constexpr double visionTurnKP = 0.01; 
   static constexpr auto reefDesiredAngle = 0.0_deg;
   static constexpr double visionStrafeKP = 0.5;
-  static constexpr units::meter_t reefDesiredRange = 1.25_m;
+  static constexpr units::meter_t reefDesiredRange = 1_m;
 };

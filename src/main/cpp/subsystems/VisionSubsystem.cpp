@@ -49,8 +49,8 @@ void VisionSubsystem::AimAndRange() {
           // Found Tag in the targeted apriltage set, record its information
           targetYaw = units::degree_t{target.GetYaw()};
           targetRange = photon::PhotonUtils::CalculateDistanceToTarget(
-              0.5_m,      // height of camera
-              1.435_m,    // height of april tage
+              0.2_m,      // height of camera
+              1_m,    // height of april tage
               -30.0_deg,  // camera pitch angle
               units::degree_t{target.GetPitch()});
           targetVisible = true;
@@ -79,12 +79,9 @@ void VisionSubsystem::AimAndRange() {
  
   m_drive.Drive(xSpeed, ySpeed, rotSpeed);
 
+
 }
 
-frc2::CommandPtr VisionSubsystem::AimAndRangeCommand() {
-  // Inline construction of command goes here.
-  return Run([this] {AimAndRange(); });
-}
 
 void VisionSubsystem::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.
