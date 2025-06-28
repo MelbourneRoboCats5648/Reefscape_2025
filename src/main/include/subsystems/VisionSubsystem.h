@@ -9,6 +9,8 @@
 #include <photon/PhotonPoseEstimator.h>
 #include <photon/PhotonCamera.h>
 
+#include <frc/filter/SlewRateLimiter.h>
+
 #include "subsystems/DriveSubsystem.h"
 
 #include <photon/PhotonUtils.h>
@@ -44,4 +46,12 @@ class VisionSubsystem : public frc2::SubsystemBase {
   static constexpr auto reefDesiredAngle = 0.0_deg;
   static constexpr double visionStrafeKP = 0.5;
   static constexpr units::meter_t reefDesiredRange = 0.1_m;
+  
+  //Change these to suit.
+  static constexpr units::meters_per_second_squared_t kVisionSlewRateTranslation = 6_mps_sq; //increase to reduce lag
+  static constexpr units::radians_per_second_squared_t kVisionSlewRateRotation = 6_rad_per_s_sq;
+
+  frc::SlewRateLimiter<units::meters_per_second> m_xLimiter{kVisionSlewRateTranslation};
+  frc::SlewRateLimiter<units::meters_per_second> m_yLimiter{kVisionSlewRateTranslation};
+  frc::SlewRateLimiter<units::radians_per_second> m_rotLimiter{kVisionSlewRateRotation};
 };

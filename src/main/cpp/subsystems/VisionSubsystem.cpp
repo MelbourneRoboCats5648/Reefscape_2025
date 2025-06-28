@@ -42,20 +42,7 @@ void VisionSubsystem::AimAndRange() {
   if (latestResult.HasTargets())
   {
     std::cout << "LATEST RESULT HAS TARGET!!" << std::endl;
-  //}
-
-  //if (results.size() > 0) 
-  //{
-    // Camera processed a new frame since last
-    // Get the last one in the list.
-    //auto result = results[results.size() - 1];
-    //if (result.HasTargets()) 
-    //{
-
-      // At least one AprilTag was seen by the camera
-      //for (auto& target : result.GetTargets()) 
       auto target = latestResult.GetBestTarget();
-      //{
         if (aprilTagSet.contains(target.GetFiducialId())) 
         {
           std::cout << "TARGET HAS ID = " << target.GetFiducialId() << std::endl;
@@ -69,7 +56,6 @@ void VisionSubsystem::AimAndRange() {
               units::degree_t{target.GetPitch()});
           targetVisible = true;
         }
-      //}
     }
   
   units::meters_per_second_t xSpeed = 0_mps;
@@ -85,10 +71,10 @@ void VisionSubsystem::AimAndRange() {
     // And, tag x is in sight, so we can turn toward it.
     // Override the driver's turn command with an automatic one that turns
     // toward the tag and gets the range right.
-    rotSpeed = (reefDesiredAngle - targetYaw).value() * visionTurnKP *
-           DriveConstants::kMaxAngularSpeed;
-    xSpeed = (reefDesiredRange - targetRange).value() * visionStrafeKP *
-              DriveConstants::kMaxSpeed; //FIXME CHECK THIS IS RIGHT CONSTANT
+    rotSpeed = m_rotLimiter.Calculate((reefDesiredAngle - targetYaw).value() * visionTurnKP *
+           DriveConstants::kMaxAngularSpeed);
+    xSpeed = m_xLimiter.Calculate((reefDesiredRange - targetRange).value() * visionStrafeKP *
+              DriveConstants::kMaxSpeed); //FIXME CHECK THIS IS RIGHT CONSTANT
   }
 
   // Command drivetrain motors based on target speeds
