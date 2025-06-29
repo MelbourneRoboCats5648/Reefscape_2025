@@ -8,7 +8,7 @@
 #include <photon/PhotonCamera.h>
 #include <photon/PhotonPoseEstimator.h>
 #include <photon/PhotonCamera.h>
-#include "PhotonTrackedTarget.h"
+#include <photon/PhotonTrackedTarget.h>
 
 
 #include "subsystems/DriveSubsystem.h"

@@ -21,10 +21,14 @@ void VisionSubsystem::Periodic() {
                                      //GetEstimationStdDevs(visionEst->estimatedPose.ToPose2d()));
       }
        if (result.HasTargets()) {
-        auto targets = result.GetTargets();
-        frc::SmartDashboard::PutNumber("Vision/fiducial", targets);
-
-      
+         // At least one AprilTag was seen by the camera
+       for (auto& targets: result.GetTargets()) {
+        if (targets.GetFiducialId() == 19) {
+          // Found Tag 19, record its information -testing
+          double targetYaw = 0.0;
+          targetYaw= targets.GetYaw();
+          frc::SmartDashboard::PutNumber("Vision/fiducial19_yaw", targetYaw);  
+        }
     }
 }
 
