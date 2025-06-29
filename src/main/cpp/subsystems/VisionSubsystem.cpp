@@ -30,7 +30,8 @@ void VisionSubsystem::Periodic() {
           // Found april tags, record information -testing
           double targetYaw = 0.0;
           targetYaw= targets.GetYaw();
-          frc::SmartDashboard::PutNumber("Vision/fiducialaprilTagSet_yaw", targetYaw);  
+          frc::SmartDashboard::PutNumber("Vision/TagSet_ID", targets.GetFiducialId());
+          frc::SmartDashboard::PutNumber("Vision/TagSet_yaw", targetYaw); 
         }
        }
     }
