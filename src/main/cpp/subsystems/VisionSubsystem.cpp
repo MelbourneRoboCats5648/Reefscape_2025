@@ -71,9 +71,9 @@ void VisionSubsystem::AimAndRange() {
     // And, tag x is in sight, so we can turn toward it.
     // Override the driver's turn command with an automatic one that turns
     // toward the tag and gets the range right.
-    rotSpeed = m_rotLimiter.Calculate((reefDesiredAngle - targetYaw).value() * visionTurnKP *
+    rotSpeed = m_drive.m_rotLimiter.Calculate((reefDesiredAngle - targetYaw).value() * visionTurnKP *
            DriveConstants::kMaxAngularSpeed);
-    xSpeed = m_xLimiter.Calculate((reefDesiredRange - targetRange).value() * visionStrafeKP *
+    xSpeed = m_drive.m_xLimiter.Calculate((reefDesiredRange - targetRange).value() * visionStrafeKP *
               DriveConstants::kMaxSpeed); //FIXME CHECK THIS IS RIGHT CONSTANT
   }
 
