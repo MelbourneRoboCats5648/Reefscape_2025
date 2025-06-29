@@ -26,7 +26,7 @@
 enum Level {COLLECT, DEFAULT, L1, L2, L3};
 enum ClimbState {INITIAL, EXTENDED, RETRACTED};
 
-struct PIDConstants {
+struct PID_Constants {
   double kP, kI, kD;
 };
 
@@ -172,7 +172,7 @@ namespace ElevatorConstants {
   inline constexpr int kCurrentLimit = 50;
 
   //First Stage Controller
-  inline constexpr PIDConstants kFirstStagePID = {
+  inline constexpr PID_Constants kFirstStagePID = {
     /* kP */ 0.2,
     /* kI */ 0.0,
     /* kD */ 0.0
@@ -185,7 +185,7 @@ namespace ElevatorConstants {
   };
   
   //Second Stage Controller
-  inline constexpr PIDConstants kSecondStagePID = {
+  inline constexpr PID_Constants kSecondStagePID = {
     /* kP */ 0.2,
     /* kI */ 0.0,
     /* kD */ 0.0
