@@ -50,9 +50,9 @@ void VisionSubsystem::AimAndRange() {
           // Found Tag in the targeted apriltage set, record its information
           targetYaw = units::degree_t{target.GetYaw()};
           targetRange = photon::PhotonUtils::CalculateDistanceToTarget(
-              0.2_m,      // height of camera
-              1_m,    // height of april tage
-              -30.0_deg,  // camera pitch angle
+              0.22_m,      // height of camera
+              0.3_m, // height of april tag
+              -22_deg,  // camera pitch angle
               units::degree_t{target.GetPitch()});
           targetVisible = true;
         }
@@ -71,7 +71,17 @@ void VisionSubsystem::AimAndRange() {
     // And, tag x is in sight, so we can turn toward it.
     // Override the driver's turn command with an automatic one that turns
     // toward the tag and gets the range right.
-    units::angle::degree_t angleError = reefDesiredAngle - targetYaw;
+
+    units::meter_t centreOffset = 0.4_m;
+
+    
+
+    units::angle::radian_t radTargetYaw = targetYaw;
+    double centreYaw = std::atan(((centreOffset - (std::tan(radTargetYaw.value())*targetRange))/targetRange).value());
+    units::angle::degree_t degCentreYaw =  units::angle::degree_t(centreYaw/ M_PI);
+
+    units::angle::degree_t angleError = reefDesiredAngle - degCentreYaw;
+
     rotSpeed = angleError.value() * visionTurnKP * DriveConstants::kMaxAngularSpeed;
 
     units::meter_t distError = reefDesiredRange - targetRange;
