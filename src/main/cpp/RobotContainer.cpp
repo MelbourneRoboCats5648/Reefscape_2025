@@ -28,6 +28,7 @@ double RobotContainer::GetMechRightY() {
   return frc::ApplyDeadband(m_mechController.GetRightY(), kDeadband);
 }
 
+
 double RobotContainer::ScaleJoystickInput(double input) {
   /* no scaling */
   // return input;
@@ -109,6 +110,11 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.Y().OnTrue(m_climbSubsystem.MoveToAngleCommand(ClimbConstants::retractGoal));
 
   m_driverController.RightTrigger().OnTrue(m_drive.ToggleFieldRelativeCommand());
+
+  m_driverController.LeftTrigger().WhileTrue(
+    frc2::RunCommand([this] {
+      m_visionSubsystem.AimAndRange();
+    }, { &m_visionSubsystem }).ToPtr());
 }
 
 

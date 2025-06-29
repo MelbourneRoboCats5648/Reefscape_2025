@@ -9,9 +9,12 @@
 #include <photon/PhotonPoseEstimator.h>
 #include <photon/PhotonCamera.h>
 
-
+#include <frc/filter/SlewRateLimiter.h>
 
 #include "subsystems/DriveSubsystem.h"
+
+#include <photon/PhotonUtils.h>
+#include <set>
 
 class VisionSubsystem : public frc2::SubsystemBase {
   public:
@@ -20,16 +23,28 @@ class VisionSubsystem : public frc2::SubsystemBase {
   //Will be called periodically whenever the CommandScheduler runs.
   void Periodic() override;
 
+  void AimAndRange();
+
   //Will be called periodically whenever the CommandScheduler runs during simulation.
   void SimulationPeriodic() override;
 
+
   private:
-    photon::PhotonCamera camera{"photonvision"}; //check this name is what we gave it on the UI
-    photon::PhotonPoseEstimator photonEstimator{
+    photon::PhotonCamera camera{"photonvision"};
+    photon::PhotonPoseEstimator photonEstimator
+    {
       VisionConstants::kTagLayout,
       photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR,
-      VisionConstants::kRobotToCam};
+      VisionConstants::kRobotToCam //FIX ME CHECK THE ROBOT TO CAM MEASUREMENTS
+    };
     photon::PhotonPipelineResult m_latestResult;
 
     DriveSubsystem& m_drive;
+
+  //FIX THESE CONSTANTS AND MOVE TO CONSTANTS.H AFTER (when ove change to inline)
+  static constexpr double visionTurnKP = 0.01; 
+  static constexpr auto reefDesiredAngle = 0.0_deg;
+  static constexpr double visionStrafeKP = 0.5;
+  static constexpr units::meter_t reefDesiredRange = 0.1_m;
+
 };
