@@ -104,10 +104,9 @@ void ArmSubsystem::ResetEncoder() {
 }
 
 void ArmSubsystem::SetpointControl() {
-  units::turn_t position = GetArmAngle();
   double output = 
-    m_controller.Calculate(position) // profiled PID
-    + (m_armFeedforward.Calculate(position, m_controller.GetSetpoint().velocity) / frc::RobotController::GetBatteryVoltage()); // feedforward, normalised
+    m_controller.Calculate(GetArmAngle()) // profiled PID
+    + (m_armFeedforward.Calculate(GetArmAngle(), m_controller.GetSetpoint().velocity) / frc::RobotController::GetBatteryVoltage()); // feedforward, normalised
   output = std::clamp(output, -ArmConstants::maxOutput, ArmConstants::maxOutput); // clamp to [-maxOutput, maxOutput]
 
   m_armMotor.Set(output);
