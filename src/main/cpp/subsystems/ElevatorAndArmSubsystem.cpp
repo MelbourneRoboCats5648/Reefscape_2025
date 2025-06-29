@@ -78,7 +78,7 @@ frc2::CommandPtr ElevatorAndArmSubsystem::CollectCoral() {
   return
     DefaultPositionCommand() // ensure that we're in the default position before collecting
     .AndThen(
-      m_elevatorSubsystem.MoveToHeightCommand(ElevatorAndArmConstants::kCollectGoal.elevator)
+      m_elevatorSubsystem.m_secondStage.MoveToHeightCommand(ElevatorConstants::kInitSecondStageHeight)
     )
     .AndThen(
       DefaultPositionCommand()
