@@ -2,6 +2,14 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <iostream>
 
+#include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/config/RobotConfig.h>
+#include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
+#include <frc/geometry/Pose2d.h>
+#include <frc/kinematics/ChassisSpeeds.h>
+#include <frc/DriverStation.h>
+using namespace pathplanner;
+
 using namespace DriveConstants;
 using namespace CAN_Constants;
 using namespace ctre::phoenix6;
@@ -21,6 +29,39 @@ DriveSubsystem::DriveSubsystem()
       .GetStructTopic<frc::Rotation2d>("DriveTrain/Heading").Publish();
   m_fieldHeadingPublisher = nt::NetworkTableInstance::GetDefault()
       .GetStructTopic<frc::Rotation2d>("DriveTrain/FieldHeading").Publish();
+
+
+    //PathPlanner
+    // Load the RobotConfig from the GUI settings. You should probably
+    // store this in your Constants file
+    RobotConfig config = RobotConfig::fromGUISettings();
+
+    // Configure the AutoBuilder last
+    AutoBuilder::configure(
+        [this](){ return GetPosition(); }, // Robot pose supplier
+        [this](frc::Pose2d pose){ResetPosition(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
+        [this](){ return GetRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        [this](frc::ChassisSpeeds speeds /*,auto feedforwards*/){ 
+                Drive(speeds.vx, speeds.vy, speeds.omega, false); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+        std::make_shared<PPHolonomicDriveController>( // PPHolonomicController is the built in path following controller for holonomic drive trains
+            pathplanner::PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            pathplanner::PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+        ),
+        config, // The robot configuration
+        []() {
+            // Boolean supplier that controls when the path will be mirrored for the red alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+            auto alliance = frc::DriverStation::GetAlliance();
+            if (alliance) {
+                return alliance.value() == frc::DriverStation::Alliance::kRed;
+            }
+            return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
+
 
   /* Configure Pigeon2 */
   configs::Pigeon2Configuration toApply{};
