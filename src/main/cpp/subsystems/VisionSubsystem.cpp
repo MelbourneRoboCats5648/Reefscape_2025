@@ -77,7 +77,7 @@ void VisionSubsystem::AimAndRange() {
     
 
     units::angle::radian_t radTargetYaw = targetYaw;
-    double centreYaw = std::atan(((centreOffset - (std::tan(radTargetYaw.value())*targetRange))/targetRange).value());
+    double centreYaw = std::atan((((std::tan(radTargetYaw.value())*targetRange) - centreOffset)/targetRange).value());
     units::angle::degree_t degCentreYaw =  units::angle::degree_t(centreYaw/ M_PI);
 
     units::angle::degree_t angleError = reefDesiredAngle - degCentreYaw;

@@ -42,9 +42,9 @@ class VisionSubsystem : public frc2::SubsystemBase {
     DriveSubsystem& m_drive;
 
   //FIX THESE CONSTANTS AND MOVE TO CONSTANTS.H AFTER (when ove change to inline)
-  static constexpr double visionTurnKP = 0.5;
+  static constexpr double visionTurnKP = 0.05;
   static constexpr units::angle::degree_t reefDesiredAngle = 0.0_deg;
-  static constexpr double visionStrafeKP = 1.0;
+  static constexpr double visionStrafeKP = 0.2;
   static constexpr units::meter_t reefDesiredRange = 0.1_m;
 
 };
