@@ -29,7 +29,9 @@ void VisionSubsystem::Periodic() {
         if (aprilTagSet.contains(targets.GetFiducialId())) {
           // Found april tags, record information -testing
           double targetYaw = 0.0;
-          targetYaw= targets.GetYaw();
+          units::meter_t targetRange = 0.0_m;
+          targetYaw = targets.GetYaw();
+          targetRange = targets.
           frc::SmartDashboard::PutNumber("Vision/TagSet_ID", targets.GetFiducialId());
           frc::SmartDashboard::PutNumber("Vision/TagSet_yaw", targetYaw); 
         }
