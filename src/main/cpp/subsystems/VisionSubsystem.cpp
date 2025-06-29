@@ -71,15 +71,28 @@ void VisionSubsystem::AimAndRange() {
     // And, tag x is in sight, so we can turn toward it.
     // Override the driver's turn command with an automatic one that turns
     // toward the tag and gets the range right.
-    rotSpeed = m_drive.m_rotLimiter.Calculate((reefDesiredAngle - targetYaw).value() * visionTurnKP *
-           DriveConstants::kMaxAngularSpeed);
-    xSpeed = m_drive.m_xLimiter.Calculate((reefDesiredRange - targetRange).value() * visionStrafeKP *
-              DriveConstants::kMaxSpeed); //FIXME CHECK THIS IS RIGHT CONSTANT
+    units::angle::degree_t angleError = reefDesiredAngle - targetYaw;
+    rotSpeed = angleError.value() * visionTurnKP * DriveConstants::kMaxAngularSpeed;
+
+    units::meter_t distError = reefDesiredRange - targetRange;
+    xSpeed = distError.value() * visionStrafeKP * DriveConstants::kMaxSpeed;
+
+    std::cout << "angleError = " << angleError.value() << std::endl;
+    std::cout << "distError = " << distError.value() << std::endl;
   }
 
   // Command drivetrain motors based on target speeds
   std::cout << "xSpeed = " << xSpeed.value() << std::endl;
+  std::cout << "ySpeed = " << ySpeed.value() << std::endl;
   std::cout << "rotSpeed = " << rotSpeed.value() << std::endl;
+
+  //rotSpeed = m_drive.m_rotLimiter.Calculate(rotSpeed);
+  //xSpeed = m_drive.m_xLimiter.Calculate(xSpeed);
+  //ySpeed = m_drive.m_yLimiter.Calculate(ySpeed);
+
+  std::cout << "xSpeedLim = " << xSpeed.value() << std::endl;
+  std::cout << "ySpeedLim = " << ySpeed.value() << std::endl;
+  std::cout << "rotSpeedLim = " << rotSpeed.value() << std::endl;
 
   m_drive.Drive(xSpeed, ySpeed, rotSpeed);
 }
