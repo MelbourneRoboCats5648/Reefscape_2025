@@ -210,6 +210,8 @@ namespace ElevatorConstants {
   inline constexpr units::meter_t eLevel3Goal = 0.6_m;
   inline constexpr units::meter_t eLevel4Goal = 0.8_m;
 
+  inline const units::meter_t kFirstStageDefaultHeight = 0.3844355046749115_m;
+
   //Encoder Position
   inline constexpr units::meter_t resetEncoder = 0.0_m;
 
@@ -320,8 +322,7 @@ struct ElevatorArmGoal {
 };
 
 namespace ElevatorAndArmConstants {
-  inline constexpr ElevatorArmGoal kCollectGoal = {ElevatorConstants::kInitFirstStageHeight + ElevatorConstants::kInitSecondStageHeight, ArmConstants::retractSoftLimit};
-  inline constexpr ElevatorArmGoal kDefaultGoal = {ElevatorConstants::kMaxSecondStageHeight, ArmConstants::retractSoftLimit};
+  inline constexpr ElevatorArmGoal kDefaultGoal = {ElevatorConstants::kFirstStageDefaultHeight + ElevatorConstants::kMaxSecondStageHeight, ArmConstants::retractSoftLimit};
   inline constexpr ElevatorArmGoal kLevel1Goal = {0.21507354080677032_m + 0.0003047217323910445_m, 0.17623277008533478_tr};
   inline constexpr ElevatorArmGoal kLevel2Goal = {0.06033877283334732_m + 0.6304726004600525_m, 0.1756448596715927_tr};
   inline constexpr ElevatorArmGoal kLevel3Goal = {0.6771453022956848_m + 0.6319462656974792_m, 0.23_tr};
