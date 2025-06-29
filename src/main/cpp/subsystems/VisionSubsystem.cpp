@@ -14,7 +14,7 @@ void VisionSubsystem::Periodic() {
       // cache result and update pose estimator
       auto visionEst = photonEstimator.Update(result);
       m_latestResult = result;
-
+  
       if (visionEst) {
         m_drive.getPoseEstimator().AddVisionMeasurement(visionEst->estimatedPose.ToPose2d(),
                                                         visionEst->timestamp);
@@ -29,6 +29,8 @@ void VisionSubsystem::Periodic() {
           targetYaw= targets.GetYaw();
           frc::SmartDashboard::PutNumber("Vision/fiducial19_yaw", targetYaw);  
         }
+       }
+    }
     }
 }
 
