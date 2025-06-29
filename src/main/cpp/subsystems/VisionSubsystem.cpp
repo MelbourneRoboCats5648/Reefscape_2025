@@ -32,7 +32,7 @@ void VisionSubsystem::AimAndRange() {
   bool targetVisible = false;
   units::degree_t targetYaw = 0.0_deg;
   units::meter_t targetRange = 0.0_m;
-  std::set<int> aprilTagSet = {1, 2, 3, 4, 5}; // to be changed
+  std::set<int> aprilTagSet = {17, 18, 19, 20, 21, 22}; // to be changed
 
   //auto results = camera.GetAllUnreadResults();
   //std::cout << "CAMERA NAME = " << camera.GetCameraName() << std::endl;
