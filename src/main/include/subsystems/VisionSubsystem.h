@@ -16,6 +16,7 @@
 #include <photon/PhotonUtils.h>
 #include <set>
 #include <map>
+#include "frc/geometry/Rotation2d.h"
 
 
 class VisionSubsystem : public frc2::SubsystemBase {
@@ -42,7 +43,21 @@ class VisionSubsystem : public frc2::SubsystemBase {
     photon::PhotonPipelineResult m_latestResult;
 
     // Declare and initialize a map
-    std::map<int, int> myMap = {{1, 0}, {2, 1}, {3, 1}};
+
+    std::map<int, frc::Pose2d> myMap = {
+        {6, frc::Pose2d{ units::meter_t{530.49}, units::meter_t{130.17}, frc::Rotation2d{units::degree_t{300}} }},
+        {7, frc::Pose2d{ units::meter_t{546.87}, units::meter_t {158.50}, frc::Rotation2d{units::degree_t{0}} }},
+        {8, frc::Pose2d{ units::meter_t{530.49}, units::meter_t{186.83}, frc::Rotation2d{units::degree_t{60}} }},
+        {9, frc::Pose2d{ units::meter_t{497.77}, units::meter_t{186.83}, frc::Rotation2d{units::degree_t{120}} }},
+        {10, frc::Pose2d{ units::meter_t{481.39}, units::meter_t{158.50}, frc::Rotation2d{units::degree_t{180}} }},
+        {11, frc::Pose2d{ units::meter_t{497.77}, units::meter_t{130.17}, frc::Rotation2d{units::degree_t{240}} }},
+        {17, frc::Pose2d{ units::meter_t{160.39}, units::meter_t{130.17}, frc::Rotation2d{units::degree_t{240}} }},
+        {18, frc::Pose2d{ units::meter_t{144.00}, units::meter_t{158.50}, frc::Rotation2d{units::degree_t{180}} }},
+        {19, frc::Pose2d{ units::meter_t{160.39}, units::meter_t{186.83}, frc::Rotation2d{units::degree_t{120}} }},
+        {20, frc::Pose2d{ units::meter_t{193.10}, units::meter_t{186.83}, frc::Rotation2d{units::degree_t{60}} }},
+        {21, frc::Pose2d{ units::meter_t{209.49}, units::meter_t{158.50}, frc::Rotation2d{units::degree_t{0}} }},
+        {22, frc::Pose2d{ units::meter_t{193.10}, units::meter_t{130.17}, frc::Rotation2d{units::degree_t{300}} }}
+      };
 
 
     DriveSubsystem& m_drive;
