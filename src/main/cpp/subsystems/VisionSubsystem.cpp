@@ -31,6 +31,7 @@ void VisionSubsystem::Periodic() {
           double targetYaw = 0.0;
           units::meter_t targetRange = 0.0_m;
           double targetPitch = 0.0;
+
           targetYaw = targets.GetYaw();
           targetRange = photon::PhotonUtils::CalculateDistanceToTarget(
               0.22_m,      // height of camera
@@ -38,6 +39,7 @@ void VisionSubsystem::Periodic() {
               -22_deg,  // camera pitch angle
               units::degree_t{targets.GetPitch()});
           targetPitch = targets.GetPitch();
+
           frc::SmartDashboard::PutNumber("Vision/TagSet_ID", targets.GetFiducialId());
           frc::SmartDashboard::PutNumber("Vision/TagSet_yaw", targetYaw); 
           frc::SmartDashboard::PutNumber("Vision/TagSet_range",targetRange.value()); 
