@@ -28,9 +28,10 @@ class VisionSubsystem : public frc2::SubsystemBase {
 
   void AimAndRange();
 
+  frc::Pose2d GetPoseAtTag(int tagID);
+
   //Will be called periodically whenever the CommandScheduler runs during simulation.
   void SimulationPeriodic() override;
-
 
   private:
     photon::PhotonCamera camera{"photonvision"};
@@ -44,7 +45,7 @@ class VisionSubsystem : public frc2::SubsystemBase {
 
     // Declare and initialize a map
 
-    std::map<int, frc::Pose2d> myMap = {
+    std::map<int, frc::Pose2d> poseMap = {
         {6, frc::Pose2d{ units::meter_t{530.49}, units::meter_t{130.17}, frc::Rotation2d{units::degree_t{300}} }},
         {7, frc::Pose2d{ units::meter_t{546.87}, units::meter_t {158.50}, frc::Rotation2d{units::degree_t{0}} }},
         {8, frc::Pose2d{ units::meter_t{530.49}, units::meter_t{186.83}, frc::Rotation2d{units::degree_t{60}} }},
