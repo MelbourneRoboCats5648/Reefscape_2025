@@ -111,10 +111,12 @@ void RobotContainer::ConfigureBindings() {
 
   m_driverController.RightTrigger().OnTrue(m_drive.ToggleFieldRelativeCommand());
 
-  m_driverController.LeftTrigger().WhileTrue(
-    frc2::RunCommand([this] {
-      m_visionSubsystem.AimAndRange();
+  /*
+    m_driverController.LeftTrigger().WhileTrue(
+      frc2::RunCommand([this] {
+      m_visionSubsystem.CreateTrajectory();
     }, { &m_visionSubsystem }).ToPtr());
+  */
 }
 
 

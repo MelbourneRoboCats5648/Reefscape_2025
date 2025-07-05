@@ -8,7 +8,7 @@ using namespace ctre::phoenix6;
 
 DriveSubsystem::DriveSubsystem()
   : m_gyro(kGyroDeviceID, kCanId),
-    m_poseEstimator{kinematics,
+    m_poseEstimator{m_kinematics,
       frc::Rotation2d{GetHeading()},
       {m_frontLeftModule.GetPosition(), m_frontRightModule.GetPosition(),
        m_backLeftModule.GetPosition(), m_backRightModule.GetPosition()},
@@ -99,13 +99,13 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
 //  std::cout << "x=" << xSpeed.value() << " y=" << ySpeed.value() << " rot=" << rot.value() << std::endl;
 
    auto states =
-       kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
+       m_kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
            fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
                                xSpeed, ySpeed, rot, frc::Rotation2d{GetFieldHeading()})
                          : frc::ChassisSpeeds{xSpeed, ySpeed, rot},
            period));
 
-  kinematics.DesaturateWheelSpeeds(&states, kMaxSpeed);
+  m_kinematics.DesaturateWheelSpeeds(&states, kMaxSpeed);
 
   auto [fl, fr, bl, br] = states;
 
@@ -130,7 +130,7 @@ frc2::CommandPtr DriveSubsystem::ToggleFieldRelativeCommand() {
 
 void DriveSubsystem::SetModuleStates(
     wpi::array<frc::SwerveModuleState, 4> desiredStates) {
-  kinematics.DesaturateWheelSpeeds(&desiredStates,
+  m_kinematics.DesaturateWheelSpeeds(&desiredStates,
                                          DriveConstants::kMaxSpeed);
   m_frontLeftModule.SetModule(desiredStates[0]);
   m_frontRightModule.SetModule(desiredStates[1]);
@@ -143,7 +143,7 @@ frc::ChassisSpeeds DriveSubsystem::GetRobotRelativeSpeeds() {
   auto fr = m_frontRightModule.GetState();
   auto bl = m_backLeftModule.GetState();
   auto br = m_backRightModule.GetState();
-  return kinematics.ToChassisSpeeds(fl, fr, bl, br);
+  return m_kinematics.ToChassisSpeeds(fl, fr, bl, br);
 }
 
 
@@ -194,4 +194,8 @@ return Run([this] {m_frontLeftModule.OutputPositionToDashboard();
 frc::SwerveDrivePoseEstimator<4>& DriveSubsystem::getPoseEstimator()
 {
   return m_poseEstimator;
+}
+
+frc::SwerveDriveKinematics<4>& DriveSubsystem::getDriveKinematics(){
+  return m_kinematics;
 }

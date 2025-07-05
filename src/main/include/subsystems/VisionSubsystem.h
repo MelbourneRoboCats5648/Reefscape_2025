@@ -16,6 +16,11 @@
 #include <photon/PhotonUtils.h>
 #include <set>
 
+#include <frc/trajectory/Trajectory.h>
+#include <frc/trajectory/TrajectoryConfig.h>
+#include <frc/trajectory/TrajectoryGenerator.h>
+
+
 class VisionSubsystem : public frc2::SubsystemBase {
   public:
   VisionSubsystem(DriveSubsystem& driveSub);
@@ -23,7 +28,7 @@ class VisionSubsystem : public frc2::SubsystemBase {
   //Will be called periodically whenever the CommandScheduler runs.
   void Periodic() override;
 
-  void AimAndRange();
+  frc::Trajectory CreateTrajectory(frc::Pose2d targetPose);
 
   //Will be called periodically whenever the CommandScheduler runs during simulation.
   void SimulationPeriodic() override;

@@ -25,87 +25,28 @@ void VisionSubsystem::Periodic() {
   }
 }
 
-void VisionSubsystem::AimAndRange() {
-  std::cout << "AIMING AND RANGING" << std::endl;
+frc::Trajectory VisionSubsystem::CreateTrajectory(frc::Pose2d targetPose) {
+  // Set up config for trajectory
+  frc::TrajectoryConfig config{DriveConstants::kMaxSpeed,
+                               DriveConstants::kMaxAcceleration};
+  // Add kinematics to ensure max speed is actually obeyed
+  config.SetKinematics(m_drive.getDriveKinematics());
+  // Apply the voltage constraint
+  //config.AddConstraint(autoVoltageConstraint);  //CHECK THIS LATER
 
-  //so this will be called by a button.
-  bool targetVisible = false;
-  units::degree_t targetYaw = 0.0_deg;
-  units::meter_t targetRange = 0.0_m;
-  std::set<int> aprilTagSet = {17, 18, 19, 20, 21, 22}; // to be changed
+  auto currentPose = m_drive.getPoseEstimator().GetEstimatedPosition();
 
-  //auto results = camera.GetAllUnreadResults();
-  //std::cout << "CAMERA NAME = " << camera.GetCameraName() << std::endl;
-  //std::cout << "RESULT SIZE = " << results.size() << std::endl;
-  
-  auto latestResult = camera.GetLatestResult();
-  if (latestResult.HasTargets())
-  {
-    std::cout << "LATEST RESULT HAS TARGET!!" << std::endl;
-      auto target = latestResult.GetBestTarget();
-        if (aprilTagSet.contains(target.GetFiducialId())) 
-        {
-          std::cout << "TARGET HAS ID = " << target.GetFiducialId() << std::endl;
+    // An example trajectory to follow.  All units in meters.
+  auto traj = frc::TrajectoryGenerator::GenerateTrajectory(
+      currentPose, //current pose from pose estimatior
+      {}, //check this
+      targetPose, //from the map
+      // Pass the config
+      config);
 
-          // Found Tag in the targeted apriltage set, record its information
-          targetYaw = units::degree_t{target.GetYaw()};
-          targetRange = photon::PhotonUtils::CalculateDistanceToTarget(
-              0.22_m,      // height of camera
-              0.3_m, // height of april tag
-              -22_deg,  // camera pitch angle
-              units::degree_t{target.GetPitch()});
-          targetVisible = true;
-        }
-    }
-  
-  units::meters_per_second_t xSpeed = 0_mps;
-  units::meters_per_second_t ySpeed = 0_mps;
-  units::radians_per_second_t rotSpeed = 0_rad_per_s;
-
-    // Auto-align
-  if (targetVisible) 
-  {
-    std::cout << "TARGET VISIBLE" << std::endl;
-
-    // Driver wants auto-alignment to tag x
-    // And, tag x is in sight, so we can turn toward it.
-    // Override the driver's turn command with an automatic one that turns
-    // toward the tag and gets the range right.
-
-    units::meter_t centreOffset = 0.4_m;
-
-    
-
-    units::angle::radian_t radTargetYaw = targetYaw;
-    double centreYaw = std::atan((((std::tan(radTargetYaw.value())*targetRange) - centreOffset)/targetRange).value());
-    units::angle::degree_t degCentreYaw =  units::angle::degree_t(centreYaw/ M_PI);
-
-    units::angle::degree_t angleError = reefDesiredAngle - degCentreYaw;
-
-    rotSpeed = angleError.value() * visionTurnKP * DriveConstants::kMaxAngularSpeed;
-
-    units::meter_t distError = reefDesiredRange - targetRange;
-    xSpeed = distError.value() * visionStrafeKP * DriveConstants::kMaxSpeed;
-
-    std::cout << "angleError = " << angleError.value() << std::endl;
-    std::cout << "distError = " << distError.value() << std::endl;
-  }
-
-  // Command drivetrain motors based on target speeds
-  std::cout << "xSpeed = " << xSpeed.value() << std::endl;
-  std::cout << "ySpeed = " << ySpeed.value() << std::endl;
-  std::cout << "rotSpeed = " << rotSpeed.value() << std::endl;
-
-  //rotSpeed = m_drive.m_rotLimiter.Calculate(rotSpeed);
-  //xSpeed = m_drive.m_xLimiter.Calculate(xSpeed);
-  //ySpeed = m_drive.m_yLimiter.Calculate(ySpeed);
-
-  std::cout << "xSpeedLim = " << xSpeed.value() << std::endl;
-  std::cout << "ySpeedLim = " << ySpeed.value() << std::endl;
-  std::cout << "rotSpeedLim = " << rotSpeed.value() << std::endl;
-
-  m_drive.Drive(xSpeed, ySpeed, rotSpeed);
+  return traj;
 }
+
 
 
 void VisionSubsystem::SimulationPeriodic() {

@@ -96,6 +96,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
       frc::SwerveDrivePoseEstimator<4>& getPoseEstimator();
 
+      frc::SwerveDriveKinematics<4>& getDriveKinematics();
+
  private:
     //Gyro
     Pigeon2 m_gyro{kGyroDeviceID, kCanId};
@@ -110,7 +112,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
     DriveModule m_backRightModule{kBackRightSpeedMotorID, kBackRightDirectionMotorID, 
                                    kBackRightDirectionEncoderID, kBackRightMagOffset, "Back Right"};
     
-    frc::SwerveDriveKinematics<4> kinematics{kFrontLeftLocation, 
+    frc::SwerveDriveKinematics<4> m_kinematics{kFrontLeftLocation, 
                                             kFrontRightLocation, 
                                             kBackLeftLocation,
                                             kBackRightLocation};
@@ -123,7 +125,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     // PoseEstimator class for tracking robot pose
     // 4 defines the number of modules
-    frc::SwerveDrivePoseEstimator<4> m_poseEstimator{kinematics, frc::Rotation2d{GetHeading()},
+    frc::SwerveDrivePoseEstimator<4> m_poseEstimator{m_kinematics, frc::Rotation2d{GetHeading()},
                                 {m_frontLeftModule.GetPosition(), m_frontRightModule.GetPosition(),
                                   m_backLeftModule.GetPosition(), m_backRightModule.GetPosition()}, 
                                    frc::Pose2d{}, 
