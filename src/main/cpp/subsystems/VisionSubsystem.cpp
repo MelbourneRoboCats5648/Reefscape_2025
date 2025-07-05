@@ -107,6 +107,13 @@ void VisionSubsystem::AimAndRange() {
   m_drive.Drive(xSpeed, ySpeed, rotSpeed);
 }
 
+frc::Pose2d VisionSubsystem::GetPoseAtTag(int tagID){
+  std::cout << "X at" << tagID << "=" << poseMap.at(tagID).X().value() << std::endl;
+  std::cout << "Y at" << tagID << "=" << poseMap.at(tagID).Y().value() << std::endl;
+  std::cout << "Z Rot at" << tagID << "=" << poseMap.at(tagID).Rotation().Degrees().value() << std::endl;
+  return poseMap.at(tagID);
+}
+
 
 void VisionSubsystem::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.
