@@ -30,17 +30,18 @@ void VisionSubsystem::Periodic() {
           // Found april tags, record information -testing
           double targetYaw = 0.0;
           units::meter_t targetRange = 0.0_m;
+          double targetPitch = 0.0;
           targetYaw = targets.GetYaw();
-          targetPitch = targets.GetPitch();
           targetRange = photon::PhotonUtils::CalculateDistanceToTarget(
               0.22_m,      // height of camera
               0.3_m, // height of april tag
               -22_deg,  // camera pitch angle
               units::degree_t{targets.GetPitch()});
+          targetPitch = targets.GetPitch();
           frc::SmartDashboard::PutNumber("Vision/TagSet_ID", targets.GetFiducialId());
           frc::SmartDashboard::PutNumber("Vision/TagSet_yaw", targetYaw); 
           frc::SmartDashboard::PutNumber("Vision/TagSet_range",targetRange.value()); 
-      
+          frc::SmartDashboard::PutNumber("Vision/TagSet_pitch",targetPitch); 
         }
        }
     }
