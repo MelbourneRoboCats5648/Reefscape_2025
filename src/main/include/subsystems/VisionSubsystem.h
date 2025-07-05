@@ -15,6 +15,8 @@
 
 #include <photon/PhotonUtils.h>
 #include <set>
+#include <map>
+
 
 class VisionSubsystem : public frc2::SubsystemBase {
   public:
@@ -38,6 +40,10 @@ class VisionSubsystem : public frc2::SubsystemBase {
       VisionConstants::kRobotToCam //FIX ME CHECK THE ROBOT TO CAM MEASUREMENTS
     };
     photon::PhotonPipelineResult m_latestResult;
+
+    // Declare and initialize a map
+    std::map<int, int> myMap = {{1, 0}, {2, 1}, {3, 1}};
+
 
     DriveSubsystem& m_drive;
 
