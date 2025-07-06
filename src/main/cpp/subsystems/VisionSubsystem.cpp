@@ -108,10 +108,10 @@ void VisionSubsystem::AimAndRange() {
 }  
 
 std::optional<frc::Pose2d> VisionSubsystem::GetPoseAtTag(const int& reefTagID) {
-  std::set <int> reefTagIDtoCheck = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
-
-  if (reefTagIDtoCheck.contains(reefTagID)) {
+  if (poseMap.contains(reefTagID)) {
     std::cout << "ReefTagId:" << reefTagID << " has Pose2D" << std::endl;
+
+    if (!poseMap.contains(reefTagID)) return {};
 
     std::cout << "X at" << reefTagID << "=" << poseMap.at(reefTagID).X().value() << std::endl;
     std::cout << "Y at" << reefTagID << "=" << poseMap.at(reefTagID).Y().value() << std::endl;
