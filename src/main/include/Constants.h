@@ -385,8 +385,8 @@ namespace VisionConstants {
     frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::kDefaultField)};
 
   inline const frc::Transform3d kRobotToCam{
-    frc::Translation3d{0.5_m, 0.0_m, 0.5_m},
-    frc::Rotation3d{0_rad, -30_deg, 0_rad}};
+    frc::Translation3d{0.35_m, 0.25_m, 0.2_m},
+    frc::Rotation3d{0_rad, -20_deg, 180_deg}};
 
   // TODO
   inline const units::meter_t kTagDistance = 0.7_m; // desired distance from tag
