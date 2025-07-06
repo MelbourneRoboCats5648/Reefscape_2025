@@ -125,6 +125,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
     nt::StructArrayPublisher<frc::SwerveModuleState> m_statePublisher; 
     nt::StructPublisher<frc::Rotation2d> m_headingPublisher;
     nt::StructPublisher<frc::Rotation2d> m_fieldHeadingPublisher;
+    nt::StructPublisher<frc::Pose2d> m_posePublisher;
 
     units::degree_t m_fieldGyroOffset = 0.0_deg;
 

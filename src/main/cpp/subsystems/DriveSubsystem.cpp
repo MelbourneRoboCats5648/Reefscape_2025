@@ -21,6 +21,8 @@ DriveSubsystem::DriveSubsystem()
       .GetStructTopic<frc::Rotation2d>("DriveTrain/Heading").Publish();
   m_fieldHeadingPublisher = nt::NetworkTableInstance::GetDefault()
       .GetStructTopic<frc::Rotation2d>("DriveTrain/FieldHeading").Publish();
+  m_posePublisher = nt::NetworkTableInstance::GetDefault()
+      .GetStructTopic<frc::Pose2d>("DriveTrain/Pose").Publish();
 
   /* Configure Pigeon2 */
   configs::Pigeon2Configuration toApply{};
@@ -58,6 +60,8 @@ void DriveSubsystem::Periodic() {
   m_poseEstimator.Update(frc::Rotation2d{GetHeading()}, //idk if this should be m_odometry and m_poseestimator https://github.com/LimelightVision/limelight-examples/blob/main/java-wpilib/swerve-megatag-odometry/src/main/java/frc/robot/Drivetrain.java#L88
       {m_frontLeftModule.GetPosition(), m_frontRightModule.GetPosition(),
        m_backLeftModule.GetPosition(), m_backRightModule.GetPosition()});
+  
+  m_posePublisher.Set(m_poseEstimator.GetEstimatedPosition());
 
   //Then do the addvision measurement stuff around here??
 
