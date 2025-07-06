@@ -7,14 +7,22 @@ using namespace CAN_Constants;
 using namespace ctre::phoenix6;
 
 DriveSubsystem::DriveSubsystem()
-  : m_gyro(kGyroDeviceID, kCanId)
+  : m_gyro(kGyroDeviceID, kCanId),
+    m_poseEstimator{m_kinematics,
+      frc::Rotation2d{GetHeading()},
+      {m_frontLeftModule.GetPosition(), m_frontRightModule.GetPosition(),
+       m_backLeftModule.GetPosition(), m_backRightModule.GetPosition()},
+       frc::Pose2d{}}
    {
+
   m_statePublisher = nt::NetworkTableInstance::GetDefault()
       .GetStructArrayTopic<frc::SwerveModuleState>("DriveTrain/SwerveStates").Publish();
   m_headingPublisher = nt::NetworkTableInstance::GetDefault()
       .GetStructTopic<frc::Rotation2d>("DriveTrain/Heading").Publish();
   m_fieldHeadingPublisher = nt::NetworkTableInstance::GetDefault()
       .GetStructTopic<frc::Rotation2d>("DriveTrain/FieldHeading").Publish();
+  m_posePublisher = nt::NetworkTableInstance::GetDefault()
+      .GetStructTopic<frc::Pose2d>("DriveTrain/Pose").Publish();
 
   /* Configure Pigeon2 */
   configs::Pigeon2Configuration toApply{};
@@ -48,6 +56,15 @@ void DriveSubsystem::Periodic() {
     m_fieldHeadingPublisher.Set(
       GetFieldHeading()
     );
+
+  m_poseEstimator.Update(frc::Rotation2d{GetHeading()}, //idk if this should be m_odometry and m_poseestimator https://github.com/LimelightVision/limelight-examples/blob/main/java-wpilib/swerve-megatag-odometry/src/main/java/frc/robot/Drivetrain.java#L88
+      {m_frontLeftModule.GetPosition(), m_frontRightModule.GetPosition(),
+       m_backLeftModule.GetPosition(), m_backRightModule.GetPosition()});
+  
+  m_posePublisher.Set(m_poseEstimator.GetEstimatedPosition());
+
+  //Then do the addvision measurement stuff around here??
+
 }
 
 void DriveSubsystem::SimulationPeriodic() {
@@ -82,17 +99,17 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
                            units::radians_per_second_t rot, bool fieldRelative,
                            units::second_t period) {
   
-  if (fieldRelative) std::cout << "FIELD CENTRIC "; else std::cout << "ROBOT CENTRIC ";
-  std::cout << "x=" << xSpeed.value() << " y=" << ySpeed.value() << " rot=" << rot.value() << std::endl;
+//  if (fieldRelative) std::cout << "FIELD CENTRIC "; else std::cout << "ROBOT CENTRIC ";
+//  std::cout << "x=" << xSpeed.value() << " y=" << ySpeed.value() << " rot=" << rot.value() << std::endl;
 
    auto states =
-       kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
+       m_kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
            fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
                                xSpeed, ySpeed, rot, frc::Rotation2d{GetFieldHeading()})
                          : frc::ChassisSpeeds{xSpeed, ySpeed, rot},
            period));
 
-  kinematics.DesaturateWheelSpeeds(&states, kMaxSpeed);
+  m_kinematics.DesaturateWheelSpeeds(&states, kMaxSpeed);
 
   auto [fl, fr, bl, br] = states;
 
@@ -114,6 +131,26 @@ frc2::CommandPtr DriveSubsystem::ToggleFieldRelativeCommand() {
   return RunOnce([this] { m_fieldRelative = !m_fieldRelative; });
 }
 
+
+void DriveSubsystem::SetModuleStates(
+    wpi::array<frc::SwerveModuleState, 4> desiredStates) {
+  m_kinematics.DesaturateWheelSpeeds(&desiredStates,
+                                         DriveConstants::kMaxSpeed);
+  m_frontLeftModule.SetModule(desiredStates[0]);
+  m_frontRightModule.SetModule(desiredStates[1]);
+  m_backLeftModule.SetModule(desiredStates[2]);
+  m_backRightModule.SetModule(desiredStates[3]);
+}
+
+frc::ChassisSpeeds DriveSubsystem::GetRobotRelativeSpeeds() {
+  auto fl = m_frontLeftModule.GetState();
+  auto fr = m_frontRightModule.GetState();
+  auto bl = m_backLeftModule.GetState();
+  auto br = m_backRightModule.GetState();
+  return m_kinematics.ToChassisSpeeds(fl, fr, bl, br);
+}
+
+
 void DriveSubsystem::StopAllModules()
 {
   m_frontLeftModule.StopMotors();
@@ -127,6 +164,28 @@ frc2::CommandPtr DriveSubsystem::StopCommand()
 return Run([this] {StopAllModules(); });
 }
 
+
+//Pose Estimation
+frc::Pose2d DriveSubsystem::GetPosition() {
+  return m_poseEstimator.GetEstimatedPosition();
+}
+
+void DriveSubsystem::ResetPosition(frc::Pose2d pose) {
+  m_poseEstimator.ResetPosition(frc::Rotation2d{GetHeading()},
+                  {m_frontLeftModule.GetPosition(), m_frontRightModule.GetPosition(),
+                  m_backLeftModule.GetPosition(), m_backRightModule.GetPosition()}, 
+                  pose);
+}
+
+//Reset Encoders               
+void DriveSubsystem::SetPositionToZeroDistance() {
+  m_frontLeftModule.SetModulePositionToZeroDistance();
+  m_frontRightModule.SetModulePositionToZeroDistance();
+  m_backLeftModule.SetModulePositionToZeroDistance();
+  m_backRightModule.SetModulePositionToZeroDistance();
+}   
+
+
 frc2::CommandPtr DriveSubsystem::SmartDashboardOutputCommand() 
 {
 return Run([this] {m_frontLeftModule.OutputPositionToDashboard();
@@ -135,3 +194,16 @@ return Run([this] {m_frontLeftModule.OutputPositionToDashboard();
                    m_backRightModule.OutputPositionToDashboard(); });
 }
 
+
+frc::SwerveDrivePoseEstimator<4>& DriveSubsystem::getPoseEstimator()
+{
+  return m_poseEstimator;
+}
+
+frc::SwerveDriveKinematics<4>& DriveSubsystem::getDriveKinematics(){
+  return m_kinematics;
+}
+
+frc::HolonomicDriveController& DriveSubsystem::getHolonomicController(){
+  return m_holonomicController;
+}

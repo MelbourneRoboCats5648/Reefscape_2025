@@ -20,9 +20,12 @@
 #include <frc/TimedRobot.h>
 #include <frc/geometry/Translation2d.h>
 
+#include <frc/apriltag/AprilTagFieldLayout.h>
+
 
 enum Level {COLLECT, DEFAULT, L1, L2, L3};
 enum ClimbState {INITIAL, EXTENDED, RETRACTED};
+enum ReefPosition {Left, Right};
 
 struct PIDConstants {
   double kP, kI, kD;
@@ -375,4 +378,20 @@ namespace ClimbConstants {
 
   inline constexpr double kClimbOverrideSpeed = 0.3;
   inline constexpr units::second_t kServoActuationTime = 0.2_s;
+}
+
+namespace VisionConstants {
+  inline const frc::AprilTagFieldLayout kTagLayout{
+    frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::kDefaultField)};
+
+  inline const frc::Transform3d kRobotToCam{
+    frc::Translation3d{0.35_m, 0.25_m, 0.2_m},
+    frc::Rotation3d{0_rad, -20_deg, 180_deg}};
+
+  // TODO
+  inline const units::meter_t kTagDistance = 0.7_m; // desired distance from tag
+  inline const units::meter_t kTagSideOffset = 0.2_m; // offset from tag on each side (left/right)
+
+  inline const Eigen::Matrix<double, 3, 1> kSingleTagStdDevs{4, 4, 8};
+  inline const Eigen::Matrix<double, 3, 1> kMultiTagStdDevs{0.5, 0.5, 1};
 }

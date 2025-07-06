@@ -28,6 +28,7 @@ double RobotContainer::GetMechRightY() {
   return frc::ApplyDeadband(m_mechController.GetRightY(), kDeadband);
 }
 
+
 double RobotContainer::ScaleJoystickInput(double input) {
   /* no scaling */
   // return input;
@@ -41,9 +42,11 @@ double RobotContainer::ScaleJoystickInput(double input) {
 }
 
 RobotContainer::RobotContainer()
-   :m_elevatorSubsystem(),
+   :m_drive(),
+    m_elevatorSubsystem(),
     m_armSubsystem(),
-    m_elevatorAndArmSubsystem(m_elevatorSubsystem, m_armSubsystem)
+    m_elevatorAndArmSubsystem(m_elevatorSubsystem, m_armSubsystem),
+    m_visionSubsystem(m_drive)
 {
   // Initialize all of your commands and subsystems here
 
@@ -52,14 +55,19 @@ RobotContainer::RobotContainer()
 
   m_drive.SetDefaultCommand(frc2::RunCommand(
     [this] {
-      units::velocity::meters_per_second_t yspeed = -m_drive.m_yLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband)) * kMaxSpeed);
-      units::velocity::meters_per_second_t xspeed = -m_drive.m_xLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetLeftX(), kDeadband)) * kMaxSpeed);
+      units::velocity::meters_per_second_t xspeed = -m_drive.m_xLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband)) * kMaxSpeed);
+      units::velocity::meters_per_second_t yspeed = -m_drive.m_yLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetLeftX(), kDeadband)) * kMaxSpeed);
       units::angular_velocity::radians_per_second_t rotspeed = -m_drive.m_rotLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetRightX(), kDeadband)) * kMaxAngularSpeed);
+      
+      frc::SmartDashboard::PutNumber("xspeed", xspeed.value());
+      frc::SmartDashboard::PutNumber("yspeed", yspeed.value());
+      frc::SmartDashboard::PutNumber("rotspeed", rotspeed.value());
+
       m_drive.Drive(
           // Multiply by max speed to map the joystick unitless inputs to
           // actual units. This will map the [-1, 1] to [max speed backwards,
           // max speed forwards], converting them to actual units.
-          yspeed, xspeed, rotspeed);
+          xspeed, yspeed, rotspeed);
     },
     {&m_drive}));
 
@@ -107,6 +115,11 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.Y().OnTrue(m_climbSubsystem.MoveToAngleCommand(ClimbConstants::retractGoal));
 
   m_driverController.RightTrigger().OnTrue(m_drive.ToggleFieldRelativeCommand());
+
+
+  m_driverController.LeftBumper().OnTrue(m_visionSubsystem.MoveToTarget(ReefPosition::Left));
+  m_driverController.RightBumper().OnTrue(m_visionSubsystem.MoveToTarget(ReefPosition::Right));
+      
 }
 
 
