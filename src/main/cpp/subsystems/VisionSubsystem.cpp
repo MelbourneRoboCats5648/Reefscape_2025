@@ -47,7 +47,18 @@ frc::Trajectory VisionSubsystem::CreateTrajectory(frc::Pose2d targetPose) {
   return traj;
 }
 
-
+  frc2::CommandPtr VisionSubsystem::SwerveCommand(frc::Trajectory trajectory) {
+    frc2::SwerveControllerCommand<4>(
+      trajectory, 
+      [this] { return m_drive.GetPosition(); },
+      m_drive.getDriveKinematics(),
+      m_drive.getHolonomicController(),
+      [this](std::array<frc::SwerveModuleState, 4> states) {
+        m_drive.SetModuleStates(states);
+      },
+      {&m_drive}
+      );
+  }
 
 void VisionSubsystem::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.

@@ -20,6 +20,8 @@
 #include <frc/trajectory/TrajectoryConfig.h>
 #include <frc/trajectory/TrajectoryGenerator.h>
 
+#include <frc2/command/SwerveControllerCommand.h>
+
 
 class VisionSubsystem : public frc2::SubsystemBase {
   public:
@@ -29,6 +31,7 @@ class VisionSubsystem : public frc2::SubsystemBase {
   void Periodic() override;
 
   frc::Trajectory CreateTrajectory(frc::Pose2d targetPose);
+  frc2::CommandPtr SwerveCommand(frc::Trajectory trajectory);
 
   //Will be called periodically whenever the CommandScheduler runs during simulation.
   void SimulationPeriodic() override;

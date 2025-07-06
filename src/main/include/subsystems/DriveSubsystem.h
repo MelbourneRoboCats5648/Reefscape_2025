@@ -33,6 +33,8 @@
 
 #include <wpi/array.h>
 
+#include <frc/controller/HolonomicDriveController.h>
+
 //PhotonVision
 
 using namespace ctre::phoenix6::hardware;
@@ -98,6 +100,9 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
       frc::SwerveDriveKinematics<4>& getDriveKinematics();
 
+      frc::HolonomicDriveController& getHolonomicController();
+
+
  private:
     //Gyro
     Pigeon2 m_gyro{kGyroDeviceID, kCanId};
@@ -132,6 +137,13 @@ class DriveSubsystem : public frc2::SubsystemBase {
                                   // ( double 0.5, double 0.5, units::radian_t(1)), 
                                   // ( double 0.5, double 0.5, units::radian_t(1))
                                   };
+
+    frc::HolonomicDriveController m_holonomicController{
+      frc::PIDController{1, 0, 0}, frc::PIDController{1, 0, 0},
+      frc::ProfiledPIDController<units::radian>{
+        1, 0, 0, frc::TrapezoidProfile<units::radian>::Constraints{
+        6.28_rad_per_s, 3.14_rad_per_s / 1_s}}}; //CHECK CONSTANTS
+
                                             
   public:
   frc::SlewRateLimiter<units::meters_per_second> m_xLimiter{kSlewRateTranslation};

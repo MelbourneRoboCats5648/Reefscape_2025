@@ -199,3 +199,7 @@ frc::SwerveDrivePoseEstimator<4>& DriveSubsystem::getPoseEstimator()
 frc::SwerveDriveKinematics<4>& DriveSubsystem::getDriveKinematics(){
   return m_kinematics;
 }
+
+frc::HolonomicDriveController& DriveSubsystem::getHolonomicController(){
+  return m_holonomicController;
+}
