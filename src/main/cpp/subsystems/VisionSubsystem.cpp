@@ -102,6 +102,19 @@ std::optional<frc::Pose2d> VisionSubsystem::GetPoseAtTag(const int& reefTagID) {
   }, {&m_drive}).ToPtr();
 }
 
+frc::Pose2d VisionSubsystem::GetLeftPose(const frc::Pose2d& tagPose) {
+  return tagPose.TransformBy(frc::Transform2d(
+    frc::Translation2d(VisionConstants::kTagDistance, -VisionConstants::kTagSideOffset),
+    frc::Rotation2d(180.0_deg) // face the tag
+  ));
+}
+
+frc::Pose2d VisionSubsystem::GetRightPose(const frc::Pose2d& tagPose) {
+  return tagPose.TransformBy(frc::Transform2d(
+    frc::Translation2d(VisionConstants::kTagDistance, VisionConstants::kTagSideOffset),
+    frc::Rotation2d(180.0_deg) // face the tag
+  ));
+}
 
 void VisionSubsystem::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.

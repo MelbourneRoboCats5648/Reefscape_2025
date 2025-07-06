@@ -387,4 +387,7 @@ namespace VisionConstants {
     frc::Translation3d{0.5_m, 0.0_m, 0.5_m},
     frc::Rotation3d{0_rad, -30_deg, 0_rad}};
 
+  // TODO
+  inline const units::meter_t kTagDistance = 0.7_m; // desired distance from tag
+  inline const units::meter_t kTagSideOffset = 0.2_m; // offset from tag on each side (left/right)
 }
