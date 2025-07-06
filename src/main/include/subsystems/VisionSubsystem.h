@@ -28,7 +28,7 @@ class VisionSubsystem : public frc2::SubsystemBase {
 
   void AimAndRange();
 
-  frc::Pose2d GetPoseAtTag(int tagID);
+  frc::Pose2d GetPoseAtTag(int reefTagID);
 
   //Will be called periodically whenever the CommandScheduler runs during simulation.
   void SimulationPeriodic() override;
