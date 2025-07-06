@@ -279,9 +279,9 @@ namespace ArmConstants {
   inline constexpr double maxOutput = 1.0;
 
   //Arm feedforward
-  inline constexpr units::volt_t kS = 0.0_V;
-  inline constexpr units::volt_t kG = 0.0_V;
-  inline constexpr auto kV = 0.0_V / 1_tps;
+  inline constexpr units::volt_t kS = 0.12_V;
+  inline constexpr units::volt_t kG = 0.25_V;
+  inline constexpr auto kV = 4.7_V / 1_tps;
   inline constexpr auto kA = 0.0_V / 1_tr_per_s_sq;
 
   // Arm limits
@@ -341,7 +341,7 @@ namespace ClimbConstants {
   inline constexpr double kD = 0.0;
   inline constexpr double maxOutput = 1.0;
 
-  //Climb feedforward
+  //Climb feedforward - TODO
   inline constexpr units::volt_t kS = 0.0_V;
   inline constexpr units::volt_t kG = 0.0_V;
   inline constexpr auto kV = 0.0_V / 1_tps;
