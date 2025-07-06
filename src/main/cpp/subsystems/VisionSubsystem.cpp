@@ -1,5 +1,7 @@
 #include "subsystems/VisionSubsystem.h"
 
+#include <frc2/command/DeferredCommand.h>
+
 VisionSubsystem::VisionSubsystem(DriveSubsystem& driveSub)
   : m_drive(driveSub)
 {
@@ -47,28 +49,25 @@ frc::Trajectory VisionSubsystem::CreateTrajectory(frc::Pose2d targetPose) {
   return traj;
 }
 
-  frc2::CommandPtr VisionSubsystem::SwerveCommand(frc::Trajectory trajectory) {
-    return frc2::SwerveControllerCommand<4>(
-      trajectory, 
-      [this] { return m_drive.GetPosition(); },
-      m_drive.getDriveKinematics(),
-      m_drive.getHolonomicController(),
-      [this](std::array<frc::SwerveModuleState, 4> states) {
-        m_drive.SetModuleStates(states);
-      },
-      {&m_drive}
-      ).ToPtr();
-  }
-
   // Reset odometry to the initial pose of the trajectory, run path following
   // command, then stop at the end.
   frc2::CommandPtr VisionSubsystem::Followtrajectory(frc::Trajectory trajectory) {
     return RunOnce([this, initialPose = trajectory.InitialPose()] {
                m_drive.getPoseEstimator().ResetPose(initialPose);  //I have no idea if its doing this reset right.
                })
-      .AndThen(SwerveCommand(trajectory))
       .AndThen(
-          frc2::cmd::RunOnce([this] { m_drive.StopAllModules(); }, {}));
+        frc2::SwerveControllerCommand<4>(
+              trajectory, 
+              [this] { return m_drive.GetPosition(); },
+              m_drive.getDriveKinematics(),
+              m_drive.getHolonomicController(),
+              [this](std::array<frc::SwerveModuleState, 4> states) {
+                m_drive.SetModuleStates(states);
+              },
+              {&m_drive}
+              ).ToPtr()
+      )
+      .FinallyDo([this] { m_drive.StopAllModules(); });
   }
 
 std::optional<frc::Pose2d> VisionSubsystem::GetPoseAtTag(const int& reefTagID) {
@@ -88,18 +87,19 @@ std::optional<frc::Pose2d> VisionSubsystem::GetPoseAtTag(const int& reefTagID) {
 }
 
  frc2::CommandPtr VisionSubsystem::MoveToTarget() {
-  return RunOnce([this]
-  {
+  return frc2::DeferredCommand([this]{
     auto latestResult = camera.GetLatestResult();
     if (latestResult.HasTargets()){
       int targetID = latestResult.GetBestTarget().GetFiducialId(); 
       std::optional<frc::Pose2d> targetPose = GetPoseAtTag(targetID);
       if (targetPose) {
         frc::Trajectory trajectory = CreateTrajectory(targetPose.value());
-        Followtrajectory(trajectory);
+        return Followtrajectory(trajectory);
       }
     }
-  });
+
+    return RunOnce([this]{}); // do nothing
+  }, {&m_drive}).ToPtr();
 }
 
 

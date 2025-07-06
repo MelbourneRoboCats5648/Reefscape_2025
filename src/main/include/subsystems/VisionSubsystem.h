@@ -34,7 +34,6 @@ class VisionSubsystem : public frc2::SubsystemBase {
   void Periodic() override;
 
   frc::Trajectory CreateTrajectory(frc::Pose2d targetPose);
-  frc2::CommandPtr SwerveCommand(frc::Trajectory trajectory);
 
   frc2::CommandPtr Followtrajectory(frc::Trajectory trajectory);
 
