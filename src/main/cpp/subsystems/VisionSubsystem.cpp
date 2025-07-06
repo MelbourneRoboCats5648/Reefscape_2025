@@ -7,6 +7,8 @@ VisionSubsystem::VisionSubsystem(DriveSubsystem& driveSub)
 {
   photonEstimator.SetMultiTagFallbackStrategy(
     photon::PoseStrategy::LOWEST_AMBIGUITY);
+
+  m_posePublisher = nt::NetworkTableInstance::GetDefault().GetStructTopic<frc::Pose2d>("vision/pose").Publish();
 }
 
 void VisionSubsystem::Periodic() {
@@ -19,12 +21,48 @@ void VisionSubsystem::Periodic() {
       m_latestResult = result;
 
       if (visionEst) {
-        m_drive.getPoseEstimator().AddVisionMeasurement(visionEst->estimatedPose.ToPose2d(),
-                                                        visionEst->timestamp);
-                                     //GetEstimationStdDevs(visionEst->estimatedPose.ToPose2d()));
+        auto pose = visionEst->estimatedPose.ToPose2d();
+        m_posePublisher.Set(pose);
+        auto stddevs = GetEstimationStdDevs(pose);
+        m_drive.getPoseEstimator().AddVisionMeasurement(pose,
+                                                        visionEst->timestamp,
+                                                        {stddevs(0), stddevs(1), stddevs(2)});
       }
     }
   }
+}
+
+Eigen::Matrix<double, 3, 1> VisionSubsystem::GetEstimationStdDevs(frc::Pose2d estimatedPose) {
+  Eigen::Matrix<double, 3, 1> estStdDevs =
+      VisionConstants::kSingleTagStdDevs;
+  auto targets = camera.GetLatestResult().GetTargets();
+  int numTags = 0;
+  units::meter_t avgDist = 0_m;
+  for (const auto& tgt : targets) {
+    auto tagPose =
+        photonEstimator.GetFieldLayout().GetTagPose(tgt.GetFiducialId());
+    if (tagPose) {
+      numTags++;
+      avgDist += tagPose->ToPose2d().Translation().Distance(
+          estimatedPose.Translation());
+    }
+  }
+  if (numTags == 0) {
+    return estStdDevs;
+  }
+  avgDist /= numTags;
+  if (numTags > 1) {
+    estStdDevs = VisionConstants::kMultiTagStdDevs;
+  }
+  if (numTags == 1 && avgDist > 4_m) {
+    estStdDevs = (Eigen::MatrixXd(3, 1) << std::numeric_limits<double>::max(),
+                  std::numeric_limits<double>::max(),
+                  std::numeric_limits<double>::max())
+                      .finished();
+  } else {
+    estStdDevs = estStdDevs * (1 + (avgDist.value() * avgDist.value() / 30));
+  }
+  return estStdDevs;
 }
 
 frc::Trajectory VisionSubsystem::CreateTrajectory(frc::Pose2d targetPose) {

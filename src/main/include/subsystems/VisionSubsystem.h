@@ -27,6 +27,7 @@
 
 
 #include <frc/geometry/Pose2d.h>
+#include <networktables/StructTopic.h>
 
 class VisionSubsystem : public frc2::SubsystemBase {
   public:
@@ -87,5 +88,9 @@ class VisionSubsystem : public frc2::SubsystemBase {
   static constexpr units::angle::degree_t reefDesiredAngle = 0.0_deg;
   static constexpr double visionStrafeKP = 0.2;
   static constexpr units::meter_t reefDesiredRange = 0.1_m;
+
+  nt::StructPublisher<frc::Pose2d> m_posePublisher;
+
+  Eigen::Matrix<double, 3, 1> GetEstimationStdDevs(frc::Pose2d estimatedPose);
 
 };

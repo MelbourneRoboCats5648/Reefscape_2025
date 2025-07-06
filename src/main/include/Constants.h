@@ -391,4 +391,7 @@ namespace VisionConstants {
   // TODO
   inline const units::meter_t kTagDistance = 0.7_m; // desired distance from tag
   inline const units::meter_t kTagSideOffset = 0.2_m; // offset from tag on each side (left/right)
+
+  inline const Eigen::Matrix<double, 3, 1> kSingleTagStdDevs{4, 4, 8};
+  inline const Eigen::Matrix<double, 3, 1> kMultiTagStdDevs{0.5, 0.5, 1};
 }
