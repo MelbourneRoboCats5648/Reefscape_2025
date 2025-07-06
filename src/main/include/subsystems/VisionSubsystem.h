@@ -39,6 +39,8 @@ class VisionSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr Followtrajectory(frc::Trajectory trajectory);
 
   std::optional<frc::Pose2d> GetPoseAtTag(const int& reefTagID);
+  
+  frc2::CommandPtr MoveToTarget();
 
   //Will be called periodically whenever the CommandScheduler runs during simulation.
   void SimulationPeriodic() override;

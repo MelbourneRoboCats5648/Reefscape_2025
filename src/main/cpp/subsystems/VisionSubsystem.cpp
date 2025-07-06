@@ -87,6 +87,21 @@ std::optional<frc::Pose2d> VisionSubsystem::GetPoseAtTag(const int& reefTagID) {
   
 }
 
+ frc2::CommandPtr VisionSubsystem::MoveToTarget() {
+  return RunOnce([this]
+  {
+    auto latestResult = camera.GetLatestResult();
+    if (latestResult.HasTargets()){
+      int targetID = latestResult.GetBestTarget().GetFiducialId(); 
+      std::optional<frc::Pose2d> targetPose = GetPoseAtTag(targetID);
+      if (targetPose) {
+        frc::Trajectory trajectory = CreateTrajectory(targetPose.value());
+        Followtrajectory(trajectory);
+      }
+    }
+  });
+}
+
 
 void VisionSubsystem::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.
