@@ -141,10 +141,11 @@ namespace DriveConstants {
       std::numbers::pi * 8_rad_per_s / 1_s;  // radians per second^2
 
   //Speed Motor Config PID
-  inline constexpr double kSpeedMotorKP = 0.3;
+  inline constexpr double kSpeedMotorKP = 0.005;
   inline constexpr double kSpeedMotorKI = 0.0;
   inline constexpr double kSpeedMotorKD = 0.0;
-  inline constexpr double kSpeedMotorkV = 0.1;
+  inline constexpr double kSpeedMotorkS = 0.0;
+  inline constexpr double kSpeedMotorkV = 0.12; // 0.12
 
   //Turn PID
   inline constexpr double kTurnKP = 6.0;

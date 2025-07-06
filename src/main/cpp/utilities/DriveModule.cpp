@@ -36,6 +36,7 @@ void DriveModule::SetSpeedMotorConfig(){
     speedMotorConfig.Slot0.kP = kSpeedMotorKP;
     speedMotorConfig.Slot0.kI = kSpeedMotorKI;
     speedMotorConfig.Slot0.kD = kSpeedMotorKD;
+    speedMotorConfig.Slot0.kS = kSpeedMotorkS;
     speedMotorConfig.Slot0.kV = kSpeedMotorkV;
     speedMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     speedMotorConfig.CurrentLimits.SupplyCurrentLimit = 50_A;
