@@ -33,6 +33,8 @@ class VisionSubsystem : public frc2::SubsystemBase {
   frc::Trajectory CreateTrajectory(frc::Pose2d targetPose);
   frc2::CommandPtr SwerveCommand(frc::Trajectory trajectory);
 
+  frc2::CommandPtr Followtrajectory(frc::Trajectory trajectory);
+
   //Will be called periodically whenever the CommandScheduler runs during simulation.
   void SimulationPeriodic() override;
 

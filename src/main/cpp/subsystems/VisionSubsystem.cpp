@@ -48,7 +48,7 @@ frc::Trajectory VisionSubsystem::CreateTrajectory(frc::Pose2d targetPose) {
 }
 
   frc2::CommandPtr VisionSubsystem::SwerveCommand(frc::Trajectory trajectory) {
-    frc2::SwerveControllerCommand<4>(
+    return frc2::SwerveControllerCommand<4>(
       trajectory, 
       [this] { return m_drive.GetPosition(); },
       m_drive.getDriveKinematics(),
@@ -57,8 +57,20 @@ frc::Trajectory VisionSubsystem::CreateTrajectory(frc::Pose2d targetPose) {
         m_drive.SetModuleStates(states);
       },
       {&m_drive}
-      );
+      ).ToPtr();
   }
+
+  // Reset odometry to the initial pose of the trajectory, run path following
+  // command, then stop at the end.
+  frc2::CommandPtr VisionSubsystem::Followtrajectory(frc::Trajectory trajectory) {
+    return RunOnce([this, initialPose = trajectory.InitialPose()] {
+               m_drive.getPoseEstimator().ResetPose(initialPose);  //I have no idea if its doing this reset right.
+               })
+      .AndThen(SwerveCommand(trajectory))
+      .AndThen(
+          frc2::cmd::RunOnce([this] { m_drive.StopAllModules(); }, {}));
+  }
+
 
 void VisionSubsystem::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.
