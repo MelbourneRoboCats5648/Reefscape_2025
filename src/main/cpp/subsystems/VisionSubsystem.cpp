@@ -86,14 +86,25 @@ std::optional<frc::Pose2d> VisionSubsystem::GetPoseAtTag(const int& reefTagID) {
   
 }
 
- frc2::CommandPtr VisionSubsystem::MoveToTarget() {
-  return frc2::DeferredCommand([this]{
+ frc2::CommandPtr VisionSubsystem::MoveToTarget(ReefPosition position) {
+  return frc2::DeferredCommand([this, position]{
     auto latestResult = camera.GetLatestResult();
     if (latestResult.HasTargets()){
       int targetID = latestResult.GetBestTarget().GetFiducialId(); 
       std::optional<frc::Pose2d> targetPose = GetPoseAtTag(targetID);
       if (targetPose) {
-        frc::Trajectory trajectory = CreateTrajectory(targetPose.value());
+        frc::Pose2d transformedPose;
+        switch (position) {
+          case ReefPosition::Left: 
+          {
+            transformedPose = GetLeftPose(targetPose.value());
+          }
+          case ReefPosition::Right: 
+          {
+            transformedPose = GetRightPose(targetPose.value());
+          }
+        }
+        frc::Trajectory trajectory = CreateTrajectory(transformedPose);
         return Followtrajectory(trajectory);
       }
     }

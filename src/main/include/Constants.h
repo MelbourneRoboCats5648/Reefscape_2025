@@ -25,6 +25,7 @@
 
 enum Level {COLLECT, DEFAULT, L1, L2, L3};
 enum ClimbState {INITIAL, EXTENDED, RETRACTED};
+enum ReefPosition {Left, Right};
 
 struct PIDConstants {
   double kP, kI, kD;
