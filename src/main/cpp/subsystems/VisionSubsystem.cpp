@@ -105,6 +105,22 @@ void VisionSubsystem::AimAndRange() {
   std::cout << "rotSpeedLim = " << rotSpeed.value() << std::endl;
 
   m_drive.Drive(xSpeed, ySpeed, rotSpeed);
+}  
+
+std::optional<frc::Pose2d> VisionSubsystem::GetPoseAtTag(const int& reefTagID) {
+  if (poseMap.contains(reefTagID)) {
+    std::cout << "ReefTagId:" << reefTagID << " has Pose2D" << std::endl;
+    
+    std::cout << "X at" << reefTagID << "=" << poseMap.at(reefTagID).X().value() << std::endl;
+    std::cout << "Y at" << reefTagID << "=" << poseMap.at(reefTagID).Y().value() << std::endl;
+    std::cout << "Z Rot at" << reefTagID << "=" << poseMap.at(reefTagID).Rotation().Degrees().value() << std::endl;
+
+    return {poseMap.at(reefTagID)};
+  }
+  else {
+    return {};
+  }
+  
 }
 
 
