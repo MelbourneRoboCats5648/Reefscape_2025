@@ -16,6 +16,8 @@
 #include <photon/PhotonUtils.h>
 #include <set>
 
+#include <frc/geometry/Pose2d.h>
+
 class VisionSubsystem : public frc2::SubsystemBase {
   public:
   VisionSubsystem(DriveSubsystem& driveSub);
@@ -28,6 +30,8 @@ class VisionSubsystem : public frc2::SubsystemBase {
   //Will be called periodically whenever the CommandScheduler runs during simulation.
   void SimulationPeriodic() override;
 
+  frc::Pose2d GetLeftPose(const frc::Pose2d& tagPose); // get robot's pose to the left of a tag given its outward-facing pose
+  frc::Pose2d GetRightPose(const frc::Pose2d& tagPose); // get robot's pose to the right of a tag given its outward-facing pose
 
   private:
     photon::PhotonCamera camera{"photonvision"};
