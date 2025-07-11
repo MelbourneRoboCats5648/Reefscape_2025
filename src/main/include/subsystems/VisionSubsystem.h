@@ -41,6 +41,8 @@ class VisionSubsystem : public frc2::SubsystemBase {
   frc2::CommandPtr Followtrajectory(frc::Trajectory trajectory);
 
   std::optional<frc::Pose2d> GetPoseAtTag(const int& reefTagID);
+
+  frc::Pose2d GetPose(const int& reefTagID);
   
   frc2::CommandPtr MoveToTarget(ReefPosition position);
 
