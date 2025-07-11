@@ -90,6 +90,8 @@ class VisionSubsystem : public frc2::SubsystemBase {
   static constexpr units::meter_t reefDesiredRange = 0.1_m;
 
   nt::StructPublisher<frc::Pose2d> m_posePublisher;
+  nt::StructPublisher<frc::Pose2d> m_tagPublisher;
+  nt::StructPublisher<frc::Pose2d> m_destinationPublisher;
 
   Eigen::Matrix<double, 3, 1> GetEstimationStdDevs(frc::Pose2d estimatedPose);
 

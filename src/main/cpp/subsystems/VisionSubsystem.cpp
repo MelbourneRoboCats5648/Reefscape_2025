@@ -9,6 +9,8 @@ VisionSubsystem::VisionSubsystem(DriveSubsystem& driveSub)
     photon::PoseStrategy::LOWEST_AMBIGUITY);
 
   m_posePublisher = nt::NetworkTableInstance::GetDefault().GetStructTopic<frc::Pose2d>("vision/pose").Publish();
+  m_tagPublisher = nt::NetworkTableInstance::GetDefault().GetStructTopic<frc::Pose2d>("vision/tag").Publish();
+  m_destinationPublisher = nt::NetworkTableInstance::GetDefault().GetStructTopic<frc::Pose2d>("vision/destination").Publish();
 }
 
 void VisionSubsystem::Periodic() {
@@ -109,19 +111,20 @@ frc::Trajectory VisionSubsystem::CreateTrajectory(frc::Pose2d targetPose) {
   }
 
 std::optional<frc::Pose2d> VisionSubsystem::GetPoseAtTag(const int& reefTagID) {
-  if (poseMap.contains(reefTagID)) {
-    std::cout << "ReefTagId:" << reefTagID << " has Pose2D" << std::endl;
+  // if (poseMap.contains(reefTagID)) {
+  //   std::cout << "ReefTagId:" << reefTagID << " has Pose2D" << std::endl;
     
-    std::cout << "X at" << reefTagID << "=" << poseMap.at(reefTagID).X().value() << std::endl;
-    std::cout << "Y at" << reefTagID << "=" << poseMap.at(reefTagID).Y().value() << std::endl;
-    std::cout << "Z Rot at" << reefTagID << "=" << poseMap.at(reefTagID).Rotation().Degrees().value() << std::endl;
+  //   std::cout << "X at" << reefTagID << "=" << poseMap.at(reefTagID).X().value() << std::endl;
+  //   std::cout << "Y at" << reefTagID << "=" << poseMap.at(reefTagID).Y().value() << std::endl;
+  //   std::cout << "Z Rot at" << reefTagID << "=" << poseMap.at(reefTagID).Rotation().Degrees().value() << std::endl;
 
-    return {poseMap.at(reefTagID)};
-  }
-  else {
-    return {};
-  }
+  //   return {poseMap.at(reefTagID)};
+  // }
+  // else {
+  //   return {};
+  // }
   
+  return VisionConstants::kTagLayout.GetTagPose(reefTagID).value().ToPose2d();
 }
 
  frc2::CommandPtr VisionSubsystem::MoveToTarget(ReefPosition position) {
@@ -131,18 +134,22 @@ std::optional<frc::Pose2d> VisionSubsystem::GetPoseAtTag(const int& reefTagID) {
       int targetID = latestResult.GetBestTarget().GetFiducialId(); 
       std::optional<frc::Pose2d> targetPose = GetPoseAtTag(targetID);
       if (targetPose) {
+        m_tagPublisher.Set(targetPose.value());
         frc::Pose2d transformedPose;
         switch (position) {
           case ReefPosition::Left: 
           {
             transformedPose = GetLeftPose(targetPose.value());
+            break;
           }
           case ReefPosition::Right: 
           {
             transformedPose = GetRightPose(targetPose.value());
+            break;
           }
         }
         frc::Trajectory trajectory = CreateTrajectory(transformedPose);
+        m_destinationPublisher.Set(transformedPose);
         return Followtrajectory(trajectory);
       }
     }
