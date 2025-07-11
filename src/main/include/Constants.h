@@ -22,6 +22,8 @@
 
 #include <frc/apriltag/AprilTagFieldLayout.h>
 
+#include <set>
+
 
 enum Level {COLLECT, DEFAULT, L1, L2, L3};
 enum ClimbState {INITIAL, EXTENDED, RETRACTED};
@@ -394,4 +396,9 @@ namespace VisionConstants {
 
   inline const Eigen::Matrix<double, 3, 1> kSingleTagStdDevs{4, 4, 8};
   inline const Eigen::Matrix<double, 3, 1> kMultiTagStdDevs{0.5, 0.5, 1};
+
+  inline const std::set<int> kReefTagIDs = { 
+    6, 7, 8, 9, 10, 11, // red
+    17, 18, 19, 20, 21, 22 // blue
+  };
 }

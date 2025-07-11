@@ -124,7 +124,8 @@ std::optional<frc::Pose2d> VisionSubsystem::GetPoseAtTag(const int& reefTagID) {
   //   return {};
   // }
   
-  return VisionConstants::kTagLayout.GetTagPose(reefTagID).value().ToPose2d();
+  if (!VisionConstants::kReefTagIDs.contains(reefTagID)) return {};
+  return {VisionConstants::kTagLayout.GetTagPose(reefTagID).value().ToPose2d()};
 }
 
  frc2::CommandPtr VisionSubsystem::MoveToTarget(ReefPosition position) {
