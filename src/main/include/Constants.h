@@ -203,7 +203,7 @@ namespace ElevatorConstants {
   inline constexpr double maxOutput = 1.0;
 
   //PID Profile
-  inline constexpr frc::TrapezoidProfile<units::meter>::Constraints trapezoidProfileFirstStage{0.5_mps, 2.0_mps_sq};
+  inline constexpr frc::TrapezoidProfile<units::meter>::Constraints trapezoidProfileFirstStage{0.6_mps, 2.0_mps_sq};
   inline constexpr frc::TrapezoidProfile<units::meter>::Constraints trapezoidProfileSecondStage{0.3_mps, 1.0_mps_sq};
 
   //Elevator Goals
