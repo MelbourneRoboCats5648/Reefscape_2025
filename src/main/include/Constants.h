@@ -386,7 +386,7 @@ namespace VisionConstants {
 
   inline const frc::Transform3d kRobotToCam{
     frc::Translation3d{0.35_m, 0.25_m, 0.2_m},
-    frc::Rotation3d{0_rad, -20_deg, 180_deg}};
+    frc::Rotation3d{0_rad, -20_deg, 0_deg}};
 
   // TODO
   inline const units::meter_t kTagDistance = 0.7_m; // desired distance from tag
