@@ -357,16 +357,16 @@ namespace ClimbConstants {
 
   // Climb limits
   inline constexpr units::turn_t extendSoftLimit = 0.5254823565483093_tr;   // climb is extended out
-  inline constexpr units::turn_t retractSoftLimit = 0.1727856546640396_tr + 3_deg;  // issue 119 - check this prior to test
+  inline constexpr units::turn_t retractSoftLimit = -0.33097201585769653_tr;  // issue 119 - check this prior to test
 
   // issue 119 - check all these values
   inline constexpr units::turn_t extendGoal = extendSoftLimit;
   inline constexpr units::turn_t retractGoal = retractSoftLimit;
 
   // issue 119 - check all the below
-  inline constexpr double gearBoxGearRatio = 1.0 / (36.0 * 4.0);
+  inline constexpr double gearBoxGearRatio = 1.0 / (48.0 * 4.0);
   // this is the ratio between the motor sprocket teeth and the teeth on sprocket connected to the climb
-  inline constexpr double motorSprocketRatio = 1.0 / 1.0;
+  inline constexpr double motorSprocketRatio = 20.0 / 12.0;
   inline constexpr double gearRatio = gearBoxGearRatio * motorSprocketRatio;
 
   inline constexpr units::turn_t kClimbPositionTolerance = 5_deg;
