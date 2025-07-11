@@ -53,7 +53,9 @@ namespace OperatorConstants {
   inline constexpr int kMechControllerPort = 1;
   inline constexpr units::meters_per_second_squared_t kSlewRateTranslation = 6_mps_sq; //increase to reduce lag
   inline constexpr units::radians_per_second_squared_t kSlewRateRotation = 6_rad_per_s_sq;
-  inline constexpr double kDeadband = 0.1;
+  inline constexpr double kMechDeadband = 0.1;
+  inline constexpr double kDriverDeadband = 0.05;
+
 }  
 
 // namespace CAN Constants
