@@ -21,11 +21,11 @@
 using namespace DriveConstants;
 
 double RobotContainer::GetMechLeftY() {
-  return frc::ApplyDeadband(m_mechController.GetLeftY(), kDeadband);
+  return frc::ApplyDeadband(m_mechController.GetLeftY(), kMechDeadband);
 }
 
 double RobotContainer::GetMechRightY() {
-  return frc::ApplyDeadband(m_mechController.GetRightY(), kDeadband);
+  return frc::ApplyDeadband(m_mechController.GetRightY(), kMechDeadband);
 }
 
 
@@ -55,9 +55,9 @@ RobotContainer::RobotContainer()
 
   m_drive.SetDefaultCommand(frc2::RunCommand(
     [this] {
-      units::velocity::meters_per_second_t xspeed = -m_drive.m_xLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetLeftY(), kDeadband)) * kMaxSpeed);
-      units::velocity::meters_per_second_t yspeed = -m_drive.m_yLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetLeftX(), kDeadband)) * kMaxSpeed);
-      units::angular_velocity::radians_per_second_t rotspeed = -m_drive.m_rotLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetRightX(), kDeadband)) * kMaxAngularSpeed);
+      units::velocity::meters_per_second_t xspeed = -m_drive.m_xLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetLeftY(), kDriverDeadband)) * kMaxSpeed);
+      units::velocity::meters_per_second_t yspeed = -m_drive.m_yLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetLeftX(), kDriverDeadband)) * kMaxSpeed);
+      units::angular_velocity::radians_per_second_t rotspeed = -m_drive.m_rotLimiter.Calculate(ScaleJoystickInput(frc::ApplyDeadband(m_driverController.GetRightX(), kDriverDeadband)) * kMaxAngularSpeed);
       
       frc::SmartDashboard::PutNumber("xspeed", xspeed.value());
       frc::SmartDashboard::PutNumber("yspeed", yspeed.value());
@@ -117,8 +117,8 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.RightTrigger().OnTrue(m_drive.ToggleFieldRelativeCommand());
 
 
-  m_driverController.LeftBumper().OnTrue(m_visionSubsystem.MoveToTarget(ReefPosition::Left));
-  m_driverController.RightBumper().OnTrue(m_visionSubsystem.MoveToTarget(ReefPosition::Right));
+  // m_driverController.LeftBumper().OnTrue(m_visionSubsystem.MoveToTarget(ReefPosition::Left));
+  // m_driverController.RightBumper().OnTrue(m_visionSubsystem.MoveToTarget(ReefPosition::Right));
       
 }
 

@@ -55,7 +55,9 @@ namespace OperatorConstants {
   inline constexpr int kMechControllerPort = 1;
   inline constexpr units::meters_per_second_squared_t kSlewRateTranslation = 6_mps_sq; //increase to reduce lag
   inline constexpr units::radians_per_second_squared_t kSlewRateRotation = 6_rad_per_s_sq;
-  inline constexpr double kDeadband = 0.1;
+  inline constexpr double kMechDeadband = 0.1;
+  inline constexpr double kDriverDeadband = 0.05;
+
 }  
 
 // namespace CAN Constants
@@ -206,7 +208,7 @@ namespace ElevatorConstants {
   inline constexpr double maxOutput = 1.0;
 
   //PID Profile
-  inline constexpr frc::TrapezoidProfile<units::meter>::Constraints trapezoidProfileFirstStage{0.5_mps, 2.0_mps_sq};
+  inline constexpr frc::TrapezoidProfile<units::meter>::Constraints trapezoidProfileFirstStage{0.6_mps, 2.0_mps_sq};
   inline constexpr frc::TrapezoidProfile<units::meter>::Constraints trapezoidProfileSecondStage{0.3_mps, 1.0_mps_sq};
 
   //Elevator Goals
@@ -361,17 +363,17 @@ namespace ClimbConstants {
   //Climb Goals - this is the output of the gearbox (not the motor)
 
   // Climb limits
-  inline constexpr units::turn_t extendSoftLimit = 0.5254823565483093_tr;   // climb is extended out
-  inline constexpr units::turn_t retractSoftLimit = 0.1727856546640396_tr + 3_deg;  // issue 119 - check this prior to test
+  inline constexpr units::turn_t extendSoftLimit = 0.8487802743911743_tr;   // climb is extended out
+  inline constexpr units::turn_t retractSoftLimit = -0.33097201585769653_tr;  // issue 119 - check this prior to test
 
   // issue 119 - check all these values
   inline constexpr units::turn_t extendGoal = extendSoftLimit;
   inline constexpr units::turn_t retractGoal = retractSoftLimit;
 
   // issue 119 - check all the below
-  inline constexpr double gearBoxGearRatio = 1.0 / (36.0 * 4.0);
+  inline constexpr double gearBoxGearRatio = 1.0 / (48.0 * 4.0);
   // this is the ratio between the motor sprocket teeth and the teeth on sprocket connected to the climb
-  inline constexpr double motorSprocketRatio = 1.0 / 1.0;
+  inline constexpr double motorSprocketRatio = 20.0 / 12.0;
   inline constexpr double gearRatio = gearBoxGearRatio * motorSprocketRatio;
 
   inline constexpr units::turn_t kClimbPositionTolerance = 5_deg;
