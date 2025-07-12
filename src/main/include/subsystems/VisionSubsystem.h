@@ -63,25 +63,7 @@ class VisionSubsystem : public frc2::SubsystemBase {
       VisionConstants::kRobotToCam //FIX ME CHECK THE ROBOT TO CAM MEASUREMENTS
     };
     photon::PhotonPipelineResult m_latestResult;
-
-    // Declare and initialize a map
-
-    std::map<int, frc::Pose2d> poseMap = {
-        {6, frc::Pose2d{ units::centimeter_t{530.49}, units::centimeter_t{130.17}, frc::Rotation2d{units::degree_t{300}} }},
-        {7, frc::Pose2d{ units::centimeter_t{546.87}, units::centimeter_t {158.50}, frc::Rotation2d{units::degree_t{0}} }},
-        {8, frc::Pose2d{ units::centimeter_t{530.49}, units::centimeter_t{186.83}, frc::Rotation2d{units::degree_t{60}} }},
-        {9, frc::Pose2d{ units::centimeter_t{497.77}, units::centimeter_t{186.83}, frc::Rotation2d{units::degree_t{120}} }},
-        {10, frc::Pose2d{ units::centimeter_t{481.39}, units::centimeter_t{158.50}, frc::Rotation2d{units::degree_t{180}} }},
-        {11, frc::Pose2d{ units::centimeter_t{497.77}, units::centimeter_t{130.17}, frc::Rotation2d{units::degree_t{240}} }},
-        {17, frc::Pose2d{ units::centimeter_t{160.39}, units::centimeter_t{130.17}, frc::Rotation2d{units::degree_t{240}} }},
-        {18, frc::Pose2d{ units::centimeter_t{144.00}, units::centimeter_t{158.50}, frc::Rotation2d{units::degree_t{180}} }},
-        {19, frc::Pose2d{ units::centimeter_t{160.39}, units::centimeter_t{186.83}, frc::Rotation2d{units::degree_t{120}} }},
-        {20, frc::Pose2d{ units::centimeter_t{193.10}, units::centimeter_t{186.83}, frc::Rotation2d{units::degree_t{60}} }},
-        {21, frc::Pose2d{ units::centimeter_t{209.49}, units::centimeter_t{158.50}, frc::Rotation2d{units::degree_t{0}} }},
-        {22, frc::Pose2d{ units::centimeter_t{193.10}, units::centimeter_t{130.17}, frc::Rotation2d{units::degree_t{300}} }}
-      };
-
-
+    
     DriveSubsystem& m_drive;
 
   //FIX THESE CONSTANTS AND MOVE TO CONSTANTS.H AFTER (when ove change to inline)
