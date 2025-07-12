@@ -358,7 +358,7 @@ namespace ClimbConstants {
   //Climb Goals - this is the output of the gearbox (not the motor)
 
   // Climb limits
-  inline constexpr units::turn_t extendSoftLimit = 0.5254823565483093_tr;   // climb is extended out
+  inline constexpr units::turn_t extendSoftLimit = 0.8487802743911743_tr;   // climb is extended out
   inline constexpr units::turn_t retractSoftLimit = -0.33097201585769653_tr;  // issue 119 - check this prior to test
 
   // issue 119 - check all these values
