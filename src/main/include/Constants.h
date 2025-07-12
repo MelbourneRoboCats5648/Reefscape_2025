@@ -396,8 +396,8 @@ namespace VisionConstants {
     frc::Rotation3d{0_rad, -20_deg, 0_deg}};
 
   // TODO
-  inline const units::meter_t kTagDistance = 1.7_m; // desired distance from tag
-  inline const units::meter_t kTagSideOffset = 0.2_m; // offset from tag on each side (left/right)
+  inline const units::meter_t kTagDistance = 0.800_m; // desired distance from tag
+  inline const units::meter_t kTagSideOffset = 0.165_m; // offset from tag on each side (left/right)
 
   inline const Eigen::Matrix<double, 3, 1> kSingleTagStdDevs{4, 4, 8};
   inline const Eigen::Matrix<double, 3, 1> kMultiTagStdDevs{0.5, 0.5, 1};
