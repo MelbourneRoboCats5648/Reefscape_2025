@@ -140,9 +140,9 @@ class DriveSubsystem : public frc2::SubsystemBase {
                                   };
 
     frc::HolonomicDriveController m_holonomicController{
-      frc::PIDController{0.05, 0, 0}, frc::PIDController{0.05, 0, 0},
+      frc::PIDController{0.8, 0, 0}, frc::PIDController{0.8, 0, 0},
       frc::ProfiledPIDController<units::radian>{
-        0.2, 0, 0, frc::TrapezoidProfile<units::radian>::Constraints{
+        0.4, 0, 0, frc::TrapezoidProfile<units::radian>::Constraints{
         6.28_rad_per_s, 3.14_rad_per_s / 1_s}}}; //CHECK CONSTANTS
 
                                             

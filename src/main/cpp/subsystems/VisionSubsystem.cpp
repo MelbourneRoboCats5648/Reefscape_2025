@@ -69,8 +69,8 @@ Eigen::Matrix<double, 3, 1> VisionSubsystem::GetEstimationStdDevs(frc::Pose2d es
 
 frc::Trajectory VisionSubsystem::CreateTrajectory(frc::Pose2d targetPose) {
   // Set up config for trajectory
-  frc::TrajectoryConfig config{DriveConstants::kMaxSpeed,
-                               DriveConstants::kMaxAcceleration};
+  frc::TrajectoryConfig config{DriveConstants::kMaxAutoSpeed,
+                               DriveConstants::kMaxAutoAcceleration};
   // Add kinematics to ensure max speed is actually obeyed
   config.SetKinematics(m_drive.getDriveKinematics());
   // Apply the voltage constraint

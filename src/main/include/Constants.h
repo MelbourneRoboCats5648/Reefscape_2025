@@ -127,6 +127,9 @@ namespace DriveConstants {
   inline constexpr auto kMaxAngularSpeed = 3.142_rad_per_s;
   inline constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;
 
+  inline constexpr auto kMaxAutoSpeed = 1.0_mps; // TODO: test (was working with 0.5_mps and 0.2_mps_sq)
+  inline constexpr auto kMaxAutoAcceleration = 0.8_mps_sq;
+
   inline constexpr units::second_t kDrivePeriod = frc::TimedRobot::kDefaultPeriod;
 
   // Mechanical Constants
