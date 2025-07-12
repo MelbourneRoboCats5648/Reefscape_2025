@@ -16,5 +16,5 @@ namespace autos {
  * Example static factory for an autonomous command.
  */
 frc2::CommandPtr ExampleAuto(ArmSubsystem* subsystem);
-frc2::CommandPtr Auto_1(VisionSubsystem* visionSubsystem, DriveSubsystem* driveSubsystem, ElevatorAndArmSubsystem* elevatorAndArmSubsystem);
+frc2::CommandPtr Auto_1(VisionSubsystem* visionSubsystem, ElevatorAndArmSubsystem* elevatorAndArmSubsystem);
 }  // namespace autos

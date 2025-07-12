@@ -128,7 +128,7 @@ std::optional<frc::Pose2d> VisionSubsystem::GetPoseAtTag(const int& reefTagID) {
   return {VisionConstants::kTagLayout.GetTagPose(reefTagID).value().ToPose2d()};
 }
 
-frc::Pose2d VisionSubsystem::GetPose(const int& reefTagID) {
+frc::Pose2d VisionSubsystem::GetTagPose(const int& reefTagID) {
   return VisionConstants::kTagLayout.GetTagPose(reefTagID).value().ToPose2d();
 }
 
@@ -161,6 +161,15 @@ frc2::CommandPtr VisionSubsystem::MoveToTarget(ReefPosition position) {
 
     return RunOnce([this]{}); // do nothing
   }, {&m_drive}).ToPtr();
+}
+
+frc2::CommandPtr VisionSubsystem::MoveToPose(frc::Pose2d pose) {
+  return frc2::DeferredCommand([this, pose]{
+        frc::Trajectory trajectory = CreateTrajectory(pose);
+        m_destinationPublisher.Set(pose);
+        return Followtrajectory(trajectory);
+      
+    }, {&m_drive}).ToPtr();
 }
 
 frc::Pose2d VisionSubsystem::GetLeftPose(const frc::Pose2d& tagPose) {
