@@ -117,8 +117,11 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.RightTrigger().OnTrue(m_drive.ToggleFieldRelativeCommand());
 
 
-  // m_driverController.LeftBumper().OnTrue(m_visionSubsystem.MoveToTarget(ReefPosition::Left));
-  // m_driverController.RightBumper().OnTrue(m_visionSubsystem.MoveToTarget(ReefPosition::Right));
+  m_driverController.LeftBumper().OnTrue(m_visionSubsystem.MoveToTarget(ReefPosition::Left));
+  m_driverController.RightBumper().OnTrue(m_visionSubsystem.MoveToTarget(ReefPosition::Right));
+
+  m_mechController.LeftBumper().OnTrue(m_visionSubsystem.MoveToTarget(ReefPosition::Left));
+  m_mechController.RightBumper().OnTrue(m_visionSubsystem.MoveToTarget(ReefPosition::Right));
       
 }
 
