@@ -13,6 +13,7 @@
 #include <frc2/command/Commands.h>
 #include <frc2/command/RunCommand.h>
 #include <frc2/command/InstantCommand.h>
+#include <frc2/command/WaitCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include "commands/Autos.h"
 
@@ -133,10 +134,12 @@ frc2::CommandPtr RobotContainer::GetInitCommand() {
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
   return frc2::RunCommand([this] {
-    m_drive.Drive(-0.75_mps, 0.0_mps, 0.0_rad_per_s);
+    m_drive.Drive(0.5_mps, 0.0_mps, 0.0_rad_per_s); // robot facing driver station
   }, {&m_drive}).FinallyDo([this] {
     m_drive.Drive(0.0_mps, 0.0_mps, 0.0_rad_per_s);
-  }).WithTimeout(2_s);
+  }).WithTimeout(1.0_s)
+  .AndThen(frc2::WaitCommand(1.0_s).ToPtr())
+  .AndThen(autos::Auto_1(&m_visionSubsystem, &m_elevatorAndArmSubsystem));
 }
 
 frc2::CommandPtr RobotContainer::GetTestCommand() {

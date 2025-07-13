@@ -127,7 +127,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
     nt::StructPublisher<frc::Rotation2d> m_fieldHeadingPublisher;
     nt::StructPublisher<frc::Pose2d> m_posePublisher;
 
-    units::degree_t m_fieldGyroOffset = 0.0_deg;
+    units::degree_t m_fieldGyroOffset = 180.0_deg; // robot initially facing driver station
 
     // PoseEstimator class for tracking robot pose
     // 4 defines the number of modules
